@@ -11,3 +11,29 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+body.theme-light {
+  --primary-color: #e6e1dd;
+  --secondary-color: rgb(255, 255, 255, 0.111);
+  --tertiary-color: rgb(255, 255, 255, 0.111);
+  --quaternary-color: #5a7d9a;
+  --quinary-color: rgb(255, 255, 255, 1);
+  --header-color: rgba(5, 16, 46, 0.9);
+  --background-color: #dcc6bc;
+  --text-color: rgb(0, 0, 0, 1);
+  --text-color2: rgb(255, 255, 255, 1);
+  --text-color3: rgb(0, 0, 0, 1);
+}
+
+body.theme-dark {
+  --primary-color: #e6e1dd;
+  --secondary-color: rgb(255, 255, 255, 0.111);
+  --tertiary-color: rgb(255, 255, 255, 0.111);
+  --quaternary-color: #5a7d9a;
+  --quinary-color: rgb(255, 255, 255, 1);
+  --header-color: rgba(5, 16, 46, 0.9);
+  --background-color: #dcc6bc;
+  --text-color: rgb(0, 0, 0, 1);
+  --text-color2: rgb(255, 255, 255, 1);
+  --text-color3: rgb(0, 0, 0, 1);
+}
