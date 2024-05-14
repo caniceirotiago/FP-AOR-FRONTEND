@@ -15,8 +15,8 @@ function App() {
               <Route path="/" element={<InitialPage />} />
           </Routes>
         </Router>
-    </IntlProvider>
-  </>
+      </IntlProvider>
+    </>
   );
 }
 
