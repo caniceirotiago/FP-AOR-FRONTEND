@@ -18,6 +18,8 @@
     "laboratoryId": "Laboratory",
     "laboratoryIdPlaceholder": "Select your laboratory",
     "registration": "Register",
-    "back": "Back"
+    "back": "Back",
+    "enterTheApplication": "Enter the application",
+    "signUp": "Sign Up"
   }
   

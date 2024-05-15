@@ -1,0 +1,444 @@
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-color2);
+    text-align: center;
+    width: 100%;
+    height: 40px;
+    padding: 0px;
+    background-color: var(--header-color);
+    position: relative;
+    top: 0;
+    z-index: 2;
+  }
+  
+  .rightAligned {
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
+    margin-left: auto;
+  }
+  
+  .header h1 {
+    margin: 0px;
+    padding: 0px;
+    align-content: center;
+  }
+  
+  .logo {
+    max-width: 88px;
+    height: auto;
+    display: flex;
+    margin-right: 20px;
+    margin-left: 20px;
+    cursor: pointer;
+  }
+  
+  .topRightFlags li {
+    display: inline;
+    margin-right: 10px;
+  }
+  
+  .topRightFlags a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .topRightFlags a:hover {
+    color: #bcc6db;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  
+  .topRightFlags a.active {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+  
+  .noFunction {
+    visibility: hidden;
+  }
+  
+  .menuItem {
+    margin-bottom: 7px;
+    padding: 1.5px;
+  }
+  
+  .menuItem:hover {
+    background-color: var(--menu-hover);
+  }
+  
+  .navExit {
+    cursor: pointer;
+  }
+  
+  .usernameDisplay {
+    padding: 0px 15px;
+    font-size: 20px;
+    align-content: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+
+
+  .topnav {
+    display: flex; 
+    justify-content: center; 
+    padding: 0.5em 0; 
+ }
+ 
+
+.topnav button {
+  background: none; 
+  color: var(--text-color2); 
+  padding: 5px 5px; 
+  border: none; 
+  cursor: pointer; 
+  font-size: 16px; 
+  transition: background-color 0.1s;
+  border-radius: 5px; 
+  margin: 0 5px; 
+  text-decoration: none; 
+  font-family: inherit; 
+}
+
+.topnav button:hover {
+  background-color: #9f9e9e; 
+}
+
+.topnav button.active {
+  background-color: #a6a7a2; 
+  text-decoration: none; 
+}
+
+
+.userPhoto {
+  background-color: #accae9;
+  width: 32px;
+  height: 32px;
+  border: 0px;
+  padding: 0px;
+  border-radius: 25px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: baseline;
+}
+.userImage {
+  width: 32px;
+  height: auto;
+  border-radius: 25px;
+}
+#userPhotolink {
+  margin: 0px 15px;
+}
+.notificationSection {
+  align-items: center;
+
+}
+.menuBurger {
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  margin-left: 15px;
+}
+.notificationBell {
+  position: relative; 
+  display: flex;
+  cursor: pointer;
+  font-size: 24px;
+  padding: 5px;
+  margin-left: 15px;
+  align-items: center;
+  justify-content: center;
+}  
+.notificationNumber {
+  position: absolute; 
+  top: 10px; 
+  right: 11px; 
+  background-color: #ff0000;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 9px;
+  padding: 0px 0px; 
+  min-width: 10px; 
+  height: 10px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdownContent {
+  position: absolute;
+  right: 0;
+  top: 100%; 
+  background-color: var(--quaternary-color);
+  border-radius: 5px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  display: none; 
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-color2);
+  text-align: center;
+  width: 100%;
+  height: 40px;
+  padding: 0px;
+  background-color: var(--header-color);
+  position: relative;
+  top: 0;
+  z-index: 2;
+}
+
+.rightAligned {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+  margin-left: auto;
+}
+
+.header h1 {
+  margin: 0px;
+  padding: 0px;
+  align-content: center;
+}
+
+.logo {
+  max-width: 88px;
+  height: auto;
+  display: flex;
+  margin-right: 20px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.topRightFlags li {
+  display: inline;
+  margin-right: 10px;
+}
+
+.topRightFlags a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.topRightFlags a:hover {
+  color: #bcc6db;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.topRightFlags a.active {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.noFunction {
+  visibility: hidden;
+}
+
+.menuItem {
+  margin-bottom: 7px;
+  padding: 1.5px;
+}
+
+.menuItem:hover {
+  background-color: var(--menu-hover);
+}
+
+.navExit {
+  cursor: pointer;
+}
+
+.usernameDisplay {
+  padding: 0px 15px;
+  font-size: 20px;
+  align-content: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+
+.topnav {
+  display: flex; 
+  justify-content: center; 
+  padding: 0.5em 0; 
+}
+
+.topnav button {
+background: none; 
+color: var(--text-color2); 
+padding: 5px 5px; 
+border: none; 
+cursor: pointer; 
+font-size: 16px; 
+transition: background-color 0.1s; 
+border-radius: 5px; 
+margin: 0 5px; 
+text-decoration: none;
+font-family: inherit; 
+}
+
+
+.topnav button:hover {
+background-color: #9f9e9e; 
+}
+
+
+.topnav button.active {
+background-color: #a6a7a2; 
+text-decoration: none;
+}
+
+
+.userPhoto {
+background-color: #accae9;
+width: 32px;
+height: 32px;
+border: 0px;
+padding: 0px;
+border-radius: 25px;
+overflow: hidden;
+display: flex;
+align-items: center;
+justify-content: center;
+justify-self: baseline;
+}
+.userImage {
+width: 32px;
+height: auto;
+border-radius: 25px;
+}
+#userPhotolink {
+margin: 0px 15px;
+}
+
+.menuBurger {
+cursor: pointer;
+font-size: 24px;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 5px;
+margin-left: 15px;
+}
+
+.dropdownContent {
+  position: absolute;
+  right: 0;
+  top: 100%; 
+  background-color: var(--quaternary-color);
+  border-radius: 5px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 100; 
+  display: none;
+  flex-direction: column;
+  width: 280px; 
+}
+.menuBurger:hover, .dropdownContent, .dropdownContent:hover {
+display: flex; 
+}
+
+.dropdownContent div {
+padding: 10px 20px;
+text-align: left;
+border-bottom: 1px solid #ddd;
+cursor: pointer;
+}
+
+.dropdownContent div:last-child {
+border-bottom: none;
+}
+
+.dropdownContent div:hover {
+background-color: var(--secondary-color);
+}
+
+
+.dropdownContent div {
+  padding: 10px 20px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.dropdownContent div:last-child {
+  border-bottom: none;
+}
+.languageSelection{
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 10px;
+  margin-right: 20px;
+  
+}
+.notificationItem {
+  display: flex;
+  flex-direction: row;
+  padding: 0px;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: background-color 0.3s;
+  gap: 05px;
+  width: 85%;
+  border-bottom: 1px solid var(--divider-color);
+  align-items: center;
+}
+
+.notificationItem:last-child {
+  border-bottom: none;
+}
+
+.notificationItem:hover {
+  background-color: var(--hover-background-color);
+}
+
+.notificationHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notificationDate {
+  font-size: 0.85rem;
+  color: var(--secondary-text-color);
+}
+
+.notificationCount {
+  background-color: #ff0000;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  padding: 4px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  height: 10px;
+}
+
+.userImage {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.userName {
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+

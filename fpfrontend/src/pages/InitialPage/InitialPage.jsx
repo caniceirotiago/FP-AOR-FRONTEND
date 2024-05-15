@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './InitialPage.module.css';
 import background from '../../assets/background.jpg';
 import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 
 
@@ -16,8 +17,8 @@ const InitialPage = () => {
           <h1 className={styles.title}>Welcome to Critical Lab!</h1>
           <p className={styles.subtitle}>Explore. Inove. Avance.</p>
           <div className={styles.buttons}>
-            <button className={styles.button} onClick={() => alert("Ir para a aplicação!")}>Entrar na Aplicação</button>
-            <Link to="/register" className={styles.button}>Registar</Link>
+            <Link to="/homepage" className={styles.button}><FormattedMessage id="enterTheApplication">Entrar na aplicação</FormattedMessage></Link>
+            <Link to="/register" className={styles.button}><FormattedMessage id="signUp">Registar</FormattedMessage></Link>
           </div>
         </div>
       </div>

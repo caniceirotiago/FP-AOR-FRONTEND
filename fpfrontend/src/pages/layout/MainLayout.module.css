@@ -1,0 +1,23 @@
+.main{
+  height: calc(100% - 90px); 
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-self: center;
+  margin: 5px 0px;
+  display: flex;
+  flex-direction: row; 
+  padding: 0; 
+  gap: 15px; 
+  height: 100%;
+  width: 100%;
+  flex-grow: 1;
+}
+.rightContainer {
+  display: flex;
+  flex-grow: 1;
+
+}
