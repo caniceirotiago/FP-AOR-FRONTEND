@@ -6,6 +6,7 @@ import languages from './translations';
 import  useTranslationsStore  from './stores/useTranslationsStore';
 import DialogModal from './components/dialogAlertError/dialogModal/DialogModal.jsx';
 import DialogMultipleMessagesModal from './components/dialogAlertError/dialogModal/DialogMultipleMessagesModal.jsx';
+import EmailConfirmationPage from './pages/EmailConfirmationPage/EmailConfirmationPage';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Routes>
               <Route path="/" element={<InitialPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/confirm" element={<EmailConfirmationPage />} />
           </Routes>
         </Router>
       </IntlProvider>
