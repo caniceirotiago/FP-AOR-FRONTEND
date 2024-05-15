@@ -7,11 +7,11 @@ import DialogModalStore from '../../stores/useDialogModalStore';
 const EmailConfirmationPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm} = DialogModalStore();
 
   useEffect(() => {
       const searchParams = new URLSearchParams(location.search);
       const token = searchParams.get('token'); 
-      const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm} = DialogModalStore
 
       if (!token) {
           console.error('Token not received');

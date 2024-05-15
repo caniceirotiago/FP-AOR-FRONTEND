@@ -56,6 +56,17 @@ const userService = {
             throw error;
         }
     },
+    confirmAccount: async (token) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/confirm?token=${token}`, {
+                method: "PUT",
+            });
+            return response;
+        } catch (error) {
+            console.error("Error confirming account:", error.message);
+            throw error;
+        }
+    },
     
 };
 
