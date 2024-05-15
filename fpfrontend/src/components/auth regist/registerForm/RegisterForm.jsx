@@ -14,7 +14,6 @@ const RegisterForm = ( ) => {
    const [loading, setLoading] = useState(false);
    const navigate = useNavigate();
    const [laboratories, setLaboratories] = useState([]);
-   const [selectedLaboratory, setSelectedLaboratory] = useState('');
    const [user, setUser] = useState({
       email: '',
       password: '',
@@ -33,12 +32,10 @@ const RegisterForm = ( ) => {
         const data = await response.json();
         console.log(data);
         setLaboratories(data);
-         setSelectedLaboratory(data[0]);
       } catch (error) {
-        console.error('Erro ao buscar laboratórios:', error);
+        console.error('Error fetching labs:', error);
       }
     };
-
     fetchLaboratories();
   }, []);
    
@@ -106,122 +103,125 @@ const RegisterForm = ( ) => {
       <div className={styles.mainContent}>
          {loading && <div className="spinner"></div>}
          <form className={styles.registrationForm} onSubmit={handleSubmit}>
-            <div className={styles.banner}>
-               <p id="member-registration-banner"><FormattedMessage id="memberRegistration">Member Registration</FormattedMessage></p>
-            </div>
-            <div className={styles.content}>
-               <label className={styles.label} id="email-label" htmlFor="email-field"><FormattedMessage id="email">Email</FormattedMessage></label>
-               <FormattedMessage id="emailPlaceholder">{(value) => (<input
-                    className={styles.input} 
-                    type="email"
-                    name="email"
-                    value={user.email}
-                    onChange={handleChange}
-                    id="email-field" 
-                    maxLength="60" 
-                    placeholder={value} 
-                />)}</FormattedMessage>
-               <label className={styles.label} id="password-label" htmlFor="password-field">Password</label>
-               <FormattedMessage id="passwordPlaceholder">{(value) => (<input
-                    className={styles.input}
-                    type="password"
-                    name="password"
-                    value={user.password}
-                    onChange={handleChange}
-                    id="password-field"
-                    maxLength="25"
-                    placeholder={value}
-               />)}</FormattedMessage>
-               <label className={styles.label} id="password-label2" htmlFor="password2-field">Repeat Password</label>
-               <FormattedMessage id="passwordPlaceholder">{(value) => (<input
-                    className={styles.input}
-                    type="password"
-                    name="confirmPassword"
-                    value={user.confirmPassword}
-                    onChange={handleChange}
-                    id="password2-field"
-                    maxLength="25"
-                    placeholder={value}
-               />)}</FormattedMessage>
-               <label className={styles.label} id="nickname-label" htmlFor="nickname-field">Nickname</label>
-               <FormattedMessage id="passwordPlaceholder">{(value) => (<input
-                    className={styles.input}
-                    type="text"
-                    name="nickname"
-                    value={user.nickname}
-                    onChange={handleChange}
-                    id="nickname-field"
-                    maxLength="25"
-                    placeholder={value}
-               />)}</FormattedMessage>
-               <label className={styles.label} id="first-name-label" htmlFor="firstname-field"><FormattedMessage id="firstName">First Name</FormattedMessage></label>
-               <FormattedMessage id="firstNamePlaceholder">{(value) => (<input
-                    className={styles.input}
-                    type="text"
-                    name="firstName"
-                    value={user.firstName}
-                    onChange={handleChange}
-                    id="firstname-field"
-                    maxLength="35"
-                    placeholder={value}
-               />)}</FormattedMessage>
-               <label  className={styles.label} id="last-name-label" htmlFor="lastname-field"><FormattedMessage id="lastName">Last Name</FormattedMessage></label>
-               <FormattedMessage id="lastNamePlaceholder">{(value) => (<input
-                    className={styles.input}
-                    type="text"
-                    name="lastName"
-                    value={user.lastName}
-                    onChange={handleChange}
-                    id="lastname-field"
-                    maxLength="35"
-                    placeholder={value}
-               />)}</FormattedMessage>
-               <label className={styles.label} id="photo" htmlFor="photo-field"><FormattedMessage id="photo">Photo </FormattedMessage></label>
-               <FormattedMessage id="photoURLPlaceholder">{(value) => (<input
-                  className={styles.input}
-                  type="text"
-                  name="photo" 
-                  value={user.photo}
-                  onChange={handleChange}
-                  id="photo-field" 
-                  maxLength="400" 
-                  placeholder={value}
+            <div className={styles.formContent}>
+               <div className={styles.formSection1}>
+                  <label className={styles.label} id="email-label" htmlFor="email-field"><FormattedMessage id="email">Email</FormattedMessage></label>
+                  <FormattedMessage id="emailPlaceholder">{(value) => (<input
+                     className={styles.input} 
+                     type="email"
+                     name="email"
+                     value={user.email}
+                     onChange={handleChange}
+                     id="email-field" 
+                     maxLength="60" 
+                     placeholder={value} 
                   />)}</FormattedMessage>
-                <label className={styles.label} id="biography" htmlFor="biography-field"><FormattedMessage id="biography">Biography</FormattedMessage></label>
-                <FormattedMessage id="biographyPlaceholder">{(value) => (<input
-                  className={styles.input}
-                  type="text"
-                  name="biography" 
-                  value={user.biography}
-                  onChange={handleChange}
-                  id="biography-field" 
-                  maxLength="1000" 
-                  placeholder={value}
+                  <label className={styles.label} id="password-label" htmlFor="password-field">Password</label>
+                  <FormattedMessage id="passwordPlaceholder">{(value) => (<input
+                     className={styles.input}
+                     type="password"
+                     name="password"
+                     value={user.password}
+                     onChange={handleChange}
+                     id="password-field"
+                     maxLength="25"
+                     placeholder={value}
                   />)}</FormattedMessage>
-                <div>
-                    <label className={styles.label} htmlFor="laboratoryId-field">
-                        <FormattedMessage id="laboratoryId" defaultMessage="Laboratory" />
-                    </label>
-                    <FormattedMessage id="laboratoryPlaceholder" defaultMessage="Select your laboratory">
-                        {(placeholder) => (
-                        <select
-                            className={styles.input}
-                            name="laboratoryId"
-                            onChange={handleChange}
-                            id="laboratoryId-field"
-                        >
-                           <option value="">{placeholder}</option>
-                            {laboratories.map((lab) => (
-                            <option key={lab.id} value={lab.id}>
-                                {lab.location}
-                            </option>
-                            ))}
-                        </select>
-                        )}
-                    </FormattedMessage>
-                </div>
+                  <label className={styles.label} id="password-label2" htmlFor="password2-field">Repeat Password</label>
+                  <FormattedMessage id="passwordPlaceholder">{(value) => (<input
+                     className={styles.input}
+                     type="password"
+                     name="confirmPassword"
+                     value={user.confirmPassword}
+                     onChange={handleChange}
+                     id="password2-field"
+                     maxLength="25"
+                     placeholder={value}
+                  />)}</FormattedMessage>
+                  <label className={styles.label} id="nickname-label" htmlFor="nickname-field">Nickname</label>
+                  <FormattedMessage id="nicknamePlaceholder">{(value) => (<input
+                     className={styles.input}
+                     type="text"
+                     name="nickname"
+                     value={user.nickname}
+                     onChange={handleChange}
+                     id="nickname-field"
+                     maxLength="25"
+                     placeholder={value}
+                  />)}</FormattedMessage>
+                  <label className={styles.label} id="first-name-label" htmlFor="firstname-field"><FormattedMessage id="firstName">First Name</FormattedMessage></label>
+                  <FormattedMessage id="firstNamePlaceholder">{(value) => (<input
+                     className={styles.input}
+                     type="text"
+                     name="firstName"
+                     value={user.firstName}
+                     onChange={handleChange}
+                     id="firstname-field"
+                     maxLength="35"
+                     placeholder={value}
+                  />)}</FormattedMessage>
+                  <label  className={styles.label} id="last-name-label" htmlFor="lastname-field"><FormattedMessage id="lastName">Last Name</FormattedMessage></label>
+                  <FormattedMessage id="lastNamePlaceholder">{(value) => (<input
+                     className={styles.input}
+                     type="text"
+                     name="lastName"
+                     value={user.lastName}
+                     onChange={handleChange}
+                     id="lastname-field"
+                     maxLength="35"
+                     placeholder={value}
+                  />)}</FormattedMessage>
+                  
+               </div>
+               <div className={styles.formSection2}>
+                  <label className={styles.label} id="photo" htmlFor="photo-field"><FormattedMessage id="photoURL">Photo </FormattedMessage></label>
+                  <FormattedMessage id="photoURLPlaceholder">{(value) => (<input
+                     className={styles.input}
+                     type="text"
+                     name="photo" 
+                     value={user.photo}
+                     onChange={handleChange}
+                     id="photo-field" 
+                     maxLength="400" 
+                     placeholder={value}
+                     />)}</FormattedMessage>
+                  <label className={styles.label} id="biography" htmlFor="biography-field"><FormattedMessage id="biography">Biography</FormattedMessage></label>
+                  <FormattedMessage id="biographyPlaceholder">{(value) => (<input
+                     className={styles.input}
+                     type="text"
+                     name="biography" 
+                     value={user.biography}
+                     onChange={handleChange}
+                     id="biography-field" 
+                     maxLength="1000" 
+                     placeholder={value}
+                     />)}</FormattedMessage>
+                  <div>
+                     <label className={styles.label} htmlFor="laboratoryId-field">
+                           <FormattedMessage id="laboratoryId" defaultMessage="Laboratory" />
+                     </label>
+                     <FormattedMessage id="laboratoryPlaceholder" defaultMessage="Select your laboratory">
+                           {(placeholder) => (
+                           <select
+                              className={styles.select}
+                              name="laboratoryId"
+                              onChange={handleChange}
+                              id="laboratoryId-field"
+                           >
+                              <option value="">{placeholder}</option>
+                              {laboratories.map((lab) => (
+                              <option key={lab.id} value={lab.id}>
+                                 {lab.location}
+                              </option>
+                              ))}
+                           </select>
+                           )}
+                     </FormattedMessage>
+                  </div>  
                <FormattedMessage id="registration">{(value) => (<input type="submit" id="registration" value={value}/>)}</FormattedMessage>
-               <button className={styles.backButton} onClick={() => navigate('/')}><FormattedMessage id="back">Back</FormattedMessage></button>
+               <button className={styles.backButton} onClick={() => navigate('/')}><FormattedMessage id="back">Back</FormattedMessage></button>                
+               </div>
+               
             </div>
          </form>
       </div>    

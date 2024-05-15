@@ -1,58 +1,31 @@
-
 .mainContent {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 2px);
-    flex-direction: column;
-    margin-top: 50px;
-  }
-
-.banner {
-    background-color: rgba(231, 237, 242, 0.2); 
-    padding: 15px;
-    text-align: center;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    margin-bottom: 10px; 
-    display: flex; 
-    align-items: center; 
-  }
-
-.loginIcon,
-.loginIcon2 {
-  max-width: 36px; 
-  height: auto;
-  display: FLEX; 
-  margin-right: 20px; 
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-self: center;
+  justify-self: center;
 }
-  
-
-.content {
+.formContent {
   padding: 25px;
+  display: flex;
 }
-.memberLoginBanner {
-  margin: 0;
-}
-
 .registrationForm {
   background-color: rgba(255, 255, 255, 0.3); 
-  width: 300px;
-  padding: 0px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   animation: slide-in 0.5s ease-out;
   transition: transform 0.2s ease;
 }
-
-.editPasswordForm {
-  margin-left: 10px;
+.formSection1{
+  width: 50%;
+  display: flex;
+  flex-direction: column;
 }
-
-.form:hover {
-  transform: scale(1.02); 
-  box-shadow: -3px 3px 30px rgba(0, 0, 0, 0.2);
+.formSection2{
+  width: 50%;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
 }
 
 .input[type="text"],
@@ -61,7 +34,8 @@
 .input[type="number"],
 .input[type="date"],
 .input[type="submit"],
-.input[type="tel"]{
+.input[type="tel"],
+.select {
   width: calc(100% - 20px); 
   padding: 10px;
   margin: 10px 0;
@@ -69,37 +43,6 @@
   border-radius: 4px;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
-
-.input[type="submit"] {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  background-color: #9cc1e8;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.input[type="submit"]:hover {
-  background-color: #d7e2ef;
-}
-
-
-.errorLogin {
-  color: red;
-}
-.errorMessage {
-  color: red;
-  font-size: 0.8rem; 
-}
-
-.registrationForm .content *,
-.editProfileForm .content * {
-  padding: 4px;
-  margin: 4px;
-}
-.error-message {
-  color: red;
-  font-size: 0.8rem; 
+.select{
+  width: 100%
 }
