@@ -1,3 +1,23 @@
 {
-
-}
+    "memberRegistration": "Member Registration",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "nickname": "Nickname",
+    "nicknamePlaceholder": "Enter your nickname",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Enter your first name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Enter your last name",
+    "photoURL": "Photo URL",
+    "photoURLPlaceholder": "Enter the URL of your photo",
+    "biography": "Biography",
+    "biographyPlaceholder": "Write your biography here...",
+    "laboratoryId": "Laboratory",
+    "laboratoryIdPlaceholder": "Select your laboratory",
+    "registration": "Register",
+    "back": "Back"
+  }
+  

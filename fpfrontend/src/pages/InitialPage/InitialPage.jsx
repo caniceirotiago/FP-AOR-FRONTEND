@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './InitialPage.module.css';
 import background from '../../assets/background.jpg';
+import { Link } from 'react-router-dom';
 
 
 
@@ -16,7 +17,7 @@ const InitialPage = () => {
           <p className={styles.subtitle}>Explore. Inove. Avance.</p>
           <div className={styles.buttons}>
             <button className={styles.button} onClick={() => alert("Ir para a aplicação!")}>Entrar na Aplicação</button>
-            <button className={styles.button} onClick={() => alert("Ir para o registo!")}>Registar</button>
+            <Link to="/register" className={styles.button}>Registar</Link>
           </div>
         </div>
       </div>
