@@ -6,11 +6,14 @@ import labService from '../../../services/labService';
 import userService from '../../../services/userService';
 import  DialogModalStore  from '../../../stores/useDialogModalStore';
 import  DialogMultipleMessagesModalStore  from '../../../stores/useDialogMultipleMessagesModalStore';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from '../../../firebase';
 
 const RegisterForm = ( ) => {
    const { setDialogMultipleMessages, setDialogMultipleMessagesTitle, setIsDialogMultipleMessagesOpen } = DialogMultipleMessagesModalStore();
    const {setIsDialogOpen, setDialogMessage, setAlertType, setOnConfirm} = DialogModalStore();
-
+   const [profileImage, setProfileImage] = useState(null);
+   const [imagePreview, setImagePreview] = useState(null);
    const [loading, setLoading] = useState(false);
    const navigate = useNavigate();
    const [laboratories, setLaboratories] = useState([]);
@@ -46,6 +49,17 @@ const RegisterForm = ( ) => {
          [name]: value
       }));
    };
+   const handleImageChange = (e) => {
+      if (e.target.files[0]) {
+        const file = e.target.files[0];
+        setProfileImage(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview(reader.result); 
+        };
+        reader.readAsDataURL(file);
+      }
+    };
 
    const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,6 +78,12 @@ const RegisterForm = ( ) => {
     if (isValid) {
        try {
           setLoading(true);
+          if (profileImage) {
+            const storageRef = ref(storage, `profile_images/${profileImage.name}`);
+            const snapshot = await uploadBytes(storageRef, profileImage);
+            const downloadURL = await getDownloadURL(snapshot.ref);
+            userData.photo = downloadURL;
+          }
           console.log(userData);
           const response = await userService.registerUser(userData);
          if (response.status !== 204) {
@@ -174,17 +194,22 @@ const RegisterForm = ( ) => {
                   
                </div>
                <div className={styles.formSection2}>
-                  <label className={styles.label} id="photo" htmlFor="photo-field"><FormattedMessage id="photoURL">Photo </FormattedMessage></label>
-                  <FormattedMessage id="photoURLPlaceholder">{(value) => (<input
-                     className={styles.input}
-                     type="text"
-                     name="photo" 
-                     value={user.photo}
-                     onChange={handleChange}
-                     id="photo-field" 
-                     maxLength="400" 
-                     placeholder={value}
-                     />)}</FormattedMessage>
+                  <div className={styles.imageContainer}>
+                     <img
+                     src={imagePreview || 'default-profile.png'} // Imagem padrão ou pré-visualização
+                     alt="Profile Preview"
+                     className={styles.imagePreview}
+                     />
+                     <label htmlFor="profileImage" className={styles.labelButton}>
+                     <FormattedMessage id="uploadImage" defaultMessage="Upload Image" />
+                     </label>
+                     <input
+                     type="file"
+                     id="profileImage"
+                     className={styles.fileInput}
+                     onChange={handleImageChange}
+                     />
+                  </div>
                   <label className={styles.label} id="biography" htmlFor="biography-field"><FormattedMessage id="biography">Biography</FormattedMessage></label>
                   <FormattedMessage id="biographyPlaceholder">{(value) => (<input
                      className={styles.input}
