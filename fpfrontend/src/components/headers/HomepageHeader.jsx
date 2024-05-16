@@ -5,8 +5,9 @@ import styles from './HomepageHeader.module.css';
 import { useLocation } from 'react-router-dom';
 import { FaBars, FaMoon, FaSun, FaSignOutAlt, FaBell } from 'react-icons/fa';
 import useTranslationStore from '../../stores/useTranslationsStore';
-import {IntlProvider, FormattedMessage} from "react-intl";
+import { FormattedMessage } from "react-intl";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
+import useLoginModalStore from '../../stores/useLoginModalStore.jsx'
 
 
 const HomepageHeader = () => {
@@ -18,6 +19,7 @@ const HomepageHeader = () => {
   const notificationToggleButtonRef = useRef(null);
   const navigate = useNavigate();
   const { theme, toggleTheme } = useThemeStore();
+  const { isLoginModalOpen , setIsLoginModalOpen} = useLoginModalStore();
   //const { notificationMap, setNotificationMap } = notificationStore();
   //const totalNotifications = Array.from(notificationMap.values()).reduce((acc, list) => acc + list.length, 0);
   //const { logout, userBasicInfo, fetchUserBasicInfo, token } = useAuthStore(state => ({
@@ -130,6 +132,9 @@ const HomepageHeader = () => {
     event.stopPropagation(); 
     setIsNotificationListOpen(!isNotificationListOpen);
   };
+  const handleOpenLoginModal = (event) => {
+    setIsLoginModalOpen(true);
+  }
 
   return (
     <header className={styles.header}>
@@ -162,6 +167,9 @@ const HomepageHeader = () => {
         </div>
         {isMenuOpen && (
           <div  ref={navMenuRef} className={styles.dropdownContent}>
+            <div onClick={handleOpenLoginModal}>
+              Access
+            </div>
             <div onClick={toggleTheme}>
               {theme === 'dark' ? <FaSun /> : <FaMoon />} {theme === 'dark' ? <FormattedMessage id="lightMode">Light Mode</FormattedMessage> : <FormattedMessage id="darkMode">Dark Mode</FormattedMessage>}
             </div>

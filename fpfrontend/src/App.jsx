@@ -9,6 +9,7 @@ import DialogMultipleMessagesModal from './components/dialogAlertError/dialogMod
 import EmailConfirmationPage from './pages/EmailConfirmationPage/EmailConfirmationPage';
 import HomePage from './pages/HomePage/HomePage';
 import MainLayout from './pages/layout/MainLayout.jsx';
+import LoginModal from './components/modals/LoginModal.jsx';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <IntlProvider locale={locale} messages={languages[locale]}>
         <DialogModal/>
         <DialogMultipleMessagesModal/>
+        <LoginModal />
         <Router>
           <Routes>
               <Route path="/" element={<InitialPage />} />
