@@ -2,16 +2,26 @@ import React, {useState} from 'react'
 import useLoginModalStore from '../../stores/useLoginModalStore.jsx'
 import styles from './LoginModal.module.css'
 import { FormattedMessage } from 'react-intl'
+import { useNavigate } from 'react-router-dom'
 
 
 const LoginModal = () => {
     const {isLoginModalOpen, setIsLoginModalOpen} = useLoginModalStore();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
 
     const handleLogin = (event) => {
 
+    }
+    const handleSignUpNavigation = (event) => {
+        setIsLoginModalOpen(false);
+        navigate('/register');
+    }
+    const handleForgotPasswordNavigation = (event) => {
+        setIsLoginModalOpen(false);
+        navigate('/forgot-password');
     }
     const handleOnClose = (event) => {
         setIsLoginModalOpen(false);
@@ -35,8 +45,8 @@ const LoginModal = () => {
                     </div>
                 </form>
                 <div className={styles.otherOptions}>
-                    {/* <div className={styles.signup}><FormattedMessage id="dontHaveAnAccount">Don't have an account?</FormattedMessage><Link to="/register"><FormattedMessage id="signUp">Sign up</FormattedMessage></Link></div> */}
-                    {/* <div className={styles.forgotPassword}><Link to="/forgot-password"><FormattedMessage id="forgotThePassword">Forgot the password?</FormattedMessage></Link></div> */}
+                    <div className={styles.signup}><FormattedMessage id="dontHaveAnAccount">Don't have an account?</FormattedMessage><button onClick={handleSignUpNavigation}><FormattedMessage id="signUp">Sign up</FormattedMessage></button></div>
+                    <div className={styles.forgotPassword}><button onClick={handleForgotPasswordNavigation}><FormattedMessage id="forgotThePassword">Forgot the password?</FormattedMessage></button></div>
                     <div className={styles.resendConfirmation}>
                         <FormattedMessage id="didntReceiveConfirmationEmail">
                             <span>Didn't receive the confirmation email? </span>

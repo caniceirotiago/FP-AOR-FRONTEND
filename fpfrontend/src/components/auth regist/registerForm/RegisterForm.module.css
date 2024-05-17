@@ -78,3 +78,16 @@
 .labelButton:hover {
   background-color: #0056b3;
 }
+.passwordStrength {
+  margin-top: 5px;
+}
+.spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.infoIcon {
+  margin-left: 5px;
+  cursor: pointer;
+}

@@ -8,6 +8,8 @@ import  DialogModalStore  from '../../../stores/useDialogModalStore';
 import  DialogMultipleMessagesModalStore  from '../../../stores/useDialogMultipleMessagesModalStore';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../firebase';
+import placeHolderProfileImage from '../../../assets/profilePhotoPlaceholder.png'
+import { useIntl } from 'react-intl';
 
 const RegisterForm = ( ) => {
    const { setDialogMultipleMessages, setDialogMultipleMessagesTitle, setIsDialogMultipleMessagesOpen } = DialogMultipleMessagesModalStore();
@@ -28,6 +30,10 @@ const RegisterForm = ( ) => {
       biography: '',
       laboratoryId: '',
    });
+   const [passwordStrength, setPasswordStrength] = useState(0);
+   const [passwordError, setPasswordError] = useState('');
+   const intl = useIntl();
+
    useEffect(() => {
     const fetchLaboratories = async () => {
       try {
@@ -37,18 +43,42 @@ const RegisterForm = ( ) => {
         setLaboratories(data);
       } catch (error) {
         console.error('Error fetching labs:', error);
+        setLaboratories([]);
       }
     };
     fetchLaboratories();
   }, []);
+
+   const validatePassword = (password) => {
+      const regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&amp;*(),.?\":{}|&lt;&gt;])[A-Za-z\\d!@#$%^&*(),.?\":{}|<>]{8,128}$");
+      return regex.test(password);
+   };
+   const checkPasswordStrength = (password) => {
+      if (!password) {
+        setPasswordStrength(0);
+      } else if (validatePassword(password)) {
+        setPasswordStrength(3);
+      } else {
+        setPasswordStrength(2);
+      }
+    };
    
    const handleChange = (e) => {
       const { name, value } = e.target;
+      if (name === 'password') {
+         checkPasswordStrength(value);
+        if (!validatePassword(value)) {
+          setPasswordError('Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.');
+        } else {
+          setPasswordError('');
+        }
+      }
       setUser(prevUser => ({
-         ...prevUser,
-         [name]: value
+        ...prevUser,
+        [name]: value
       }));
-   };
+    };
+
    const handleImageChange = (e) => {
       if (e.target.files[0]) {
         const file = e.target.files[0];
@@ -63,15 +93,17 @@ const RegisterForm = ( ) => {
 
    const handleSubmit = async (e) => {
     e.preventDefault();
+
     const { confirmPassword, ...userData } = user;
     const newErrors = {
-         email: !user.email ? 'Email is required' : '',
-         password: !user.password ? 'Password is required' : '',
-         confirmPassword: user.password !== user.confirmPassword ? 'Passwords do not match' : '',
-         nickname: !user.nickname ? 'Nickname is required' : '',
-         firstName: !user.firstName ? 'First name is required' : '',
-         lastName: !user.lastName ? 'Last name is required' : '',
-         laboratoryId: !user.laboratoryId ? 'Laboratory is required' : '',
+         Email: !user.email ? 'Email is required' : '',
+         Password: !user.password ? ' is required' : '',
+         Confirmation: user.password !== user.confirmPassword ? ' passwords do not match' : '',
+         Passwords: passwordError !=='' ? passwordError : '',
+         Nickname: !user.nickname ? ' is required' : '',
+         Name: !user.firstName || !user.lastName ? 'First name and last name are required' : '',
+         Laboratory: !user.laboratoryId ? ' is required' : '',
+         Photo: !imagePreview ? ' is required' : '',
     };
     const isValid = Object.keys(newErrors).every((key) => !newErrors[key]);
     console.log(isValid);
@@ -86,7 +118,7 @@ const RegisterForm = ( ) => {
           }
           console.log(userData);
           const response = await userService.registerUser(userData);
-         if (response.status !== 204) {
+         if (response.status !== 200) {
                setLoading(false);
              const responseBody = await response.json();
              setDialogMessage(responseBody.errorMessage);
@@ -136,7 +168,9 @@ const RegisterForm = ( ) => {
                      maxLength="60" 
                      placeholder={value} 
                   />)}</FormattedMessage>
-                  <label className={styles.label} id="password-label" htmlFor="password-field">Password</label>
+                  <label className={styles.label} id="password-label" htmlFor="password-field">
+                     Password
+                  </label>
                   <FormattedMessage id="passwordPlaceholder">{(value) => (<input
                      className={styles.input}
                      type="password"
@@ -147,6 +181,16 @@ const RegisterForm = ( ) => {
                      maxLength="25"
                      placeholder={value}
                   />)}</FormattedMessage>
+                  {passwordStrength === 2 && (
+                     <div className={styles.passwordStrength} style={{ color: 'yellow' }}>
+                        <FormattedMessage id="weakPassword" />
+                     </div>
+                     )}
+                     {passwordStrength === 3 && (
+                     <div className={styles.passwordStrength} style={{ color: 'green' }}>
+                        <FormattedMessage id="strongPassword" />
+                     </div>
+                     )}
                   <label className={styles.label} id="password-label2" htmlFor="password2-field">Repeat Password</label>
                   <FormattedMessage id="passwordPlaceholder">{(value) => (<input
                      className={styles.input}
@@ -196,7 +240,7 @@ const RegisterForm = ( ) => {
                <div className={styles.formSection2}>
                   <div className={styles.imageContainer}>
                      <img
-                     src={imagePreview || 'default-profile.png'} // Imagem padrão ou pré-visualização
+                     src={imagePreview || placeHolderProfileImage} 
                      alt="Profile Preview"
                      className={styles.imagePreview}
                      />

@@ -67,6 +67,37 @@ const userService = {
             throw error;
         }
     },
+    requestPasswordReset: async (email) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/request/password/reset`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email }),
+            });
+            return response;
+        } catch (error) {
+            console.error("Error fetching new password:", error);
+            throw error;
+        }
+    },
+    resetPassword: async (resetToken, newPassword) => {
+        console.log(JSON.stringify({ resetToken, newPassword }))
+        try {
+            const response = await fetch(`${API_BASE_URL}/password/reset`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ resetToken, newPassword }),
+            });
+            return response;
+        } catch (error) {
+            console.error("Erro na redefinição de senha:", error);
+            throw error;
+        }
+    },
     
 };
 

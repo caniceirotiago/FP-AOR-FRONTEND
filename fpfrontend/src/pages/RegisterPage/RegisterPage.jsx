@@ -7,11 +7,9 @@ import RegisterForm from '../../components/auth regist/registerForm/RegisterForm
 
 const RegisterPage = () => {
   return (
-    <div className={styles.registerPage} >
-      <div className={styles.content}>
-        <RegisterForm />
-      </div>
-    </div>
+    <>
+    <RegisterForm />
+    </>
   );
 };
 
