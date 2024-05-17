@@ -118,7 +118,7 @@ const RegisterForm = ( ) => {
           }
           console.log(userData);
           const response = await userService.registerUser(userData);
-         if (response.status !== 200) {
+         if (response.status !== 204) {
                setLoading(false);
              const responseBody = await response.json();
              setDialogMessage(responseBody.errorMessage);

@@ -98,6 +98,39 @@ const userService = {
             throw error;
         }
     },
+    login : async (email, password) => {
+        let userLogin = { email, password };
+        try {
+            const response = await fetch(`${API_BASE_URL}/login`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userLogin),
+            credentials: 'include'
+            });
+            return response;
+        } catch (error) {
+            throw error;
+        }
+        },
+        fetchUserBasicInfo: async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/userBasicInfo`, {
+                    method: "GET",
+                    headers: getAuthHeaders(),
+                    credentials: 'include'
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user basic info');
+                }
+                return response;
+            } catch (error) {
+                console.error("Error fetching user basic info:", error.message);
+                throw error;
+            }
+        },
     
 };
 

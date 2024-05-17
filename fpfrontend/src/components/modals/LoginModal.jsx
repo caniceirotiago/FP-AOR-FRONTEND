@@ -3,17 +3,38 @@ import useLoginModalStore from '../../stores/useLoginModalStore.jsx'
 import styles from './LoginModal.module.css'
 import { FormattedMessage } from 'react-intl'
 import { useNavigate } from 'react-router-dom'
+import userService from '../../services/userService'
 
 
 const LoginModal = () => {
     const {isLoginModalOpen, setIsLoginModalOpen} = useLoginModalStore();
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
 
-    const handleLogin = (event) => {
-
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await userService.login(email, password);
+            if(response.status === 200){
+                handleSussefulLogin();
+            } else {
+                console.error('Login failed:', response);
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+        }
+    };
+    const handleSussefulLogin = async () => {
+        const response = await userService.fetchUserBasicInfo();
+        const data = await response.json();
+        if(data){
+            sessionStorage.setItem('photo', data.photo);
+            sessionStorage.setItem('nickname', data.nickname);
+            sessionStorage.setItem('role', data.role);
+            setIsLoginModalOpen(false);          
+        }
     }
     const handleSignUpNavigation = (event) => {
         setIsLoginModalOpen(false);
@@ -37,8 +58,8 @@ const LoginModal = () => {
                         <button  onClick={handleOnClose} className={styles.closeButton}>X</button>
                     </div>
                     <div className={styles.content}>
-                        <label htmlFor="username" className={styles.label}><FormattedMessage id="username">Username</FormattedMessage></label>
-                        <input className={styles.input} type="text" name="username" id="username" maxLength="25" placeholder="Enter your username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                        <label htmlFor="email" className={styles.label}><FormattedMessage id="email">Email</FormattedMessage></label>
+                        <input className={styles.input} type="email" name="email" id="email" maxLength="100" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         <label htmlFor="password" className={styles.label}><FormattedMessage id="password">Password</FormattedMessage></label>
                         <input className={styles.input} type="password" name="password" id="password" maxLength="25" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         <input className={styles.submit} type="submit" id="login" value="Login" />
