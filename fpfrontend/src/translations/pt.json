@@ -42,6 +42,20 @@
     "backToLogin": "Back to Login",
     "photo": "Foto",
     "private": "Privado",
-    "public": "Público"
+    "public": "Público",
+    "homePage": "Página Inicial",
+    "users": "Usuários",
+    "deletedTasks": "Tarefas Excluídas",
+    "categories": "Categorias",
+    "dashboard": "Painel de Controle",
+    "settings": "Configurações",
+    "projectFolder": "Pasta do Projeto",
+    "projectList": "Lista de Projetos",
+    "gantt": "Gráfico de Gantt",
+    "report": "Relatório",
+    "inventory": "Inventário",
+    "selectProject": "Selecionar Projeto",
+    "projectPlanning": "Planejamento do Projeto",
+    "messages": "Mensagens"
   }
   

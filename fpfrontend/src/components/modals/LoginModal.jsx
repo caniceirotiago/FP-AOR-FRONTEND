@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl'
 import { useNavigate } from 'react-router-dom'
 import userService from '../../services/userService'
 import useAuthStore from '../../stores/useAuthStore.jsx'
+import useDialogModalStore from  '../../stores/useDialogModalStore.jsx'
 
 
 const LoginModal = () => {
@@ -13,7 +14,7 @@ const LoginModal = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const {login} = useAuthStore();
-
+    const { setIsDialogOpen, setDialogMessage, setAlertType, setOnConfirm} = useDialogModalStore();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -23,6 +24,10 @@ const LoginModal = () => {
                 handleSussefulLogin();
             } else {
                 console.error('Login failed:', response);
+                setDialogMessage('Invalid Credentials. Please try again.');
+                setAlertType(true);
+                setIsDialogOpen(true);
+                setOnConfirm(() => setIsDialogOpen(false));
             }
         } catch (error) {
             console.error('Login failed:', error);
@@ -37,6 +42,7 @@ const LoginModal = () => {
             localStorage.setItem('role', data.role);
             setIsLoginModalOpen(false); 
             login();
+            navigate(0);
         }
     }
     const handleSignUpNavigation = (event) => {

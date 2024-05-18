@@ -132,6 +132,10 @@ const HomepageHeader = () => {
   const handleOpenLoginModal = (event) => {
     setIsLoginModalOpen(true);
   }
+  const handleLogout = (event) => {
+    logout(); 
+    navigate('/homepage');
+  }
 
   return (
     <header className={styles.header}>
@@ -179,7 +183,7 @@ const HomepageHeader = () => {
               {locale === "en" && <span className={styles.flag} class="fi fi-gb"></span> }
             </div>
             {isAuthenticated ? (
-            <div onClick={() => { logout(); navigate('/homepage'); }}>
+            <div onClick={handleLogout}>
               <FaSignOutAlt /> <FormattedMessage id="logout">Logout</FormattedMessage>
             </div>)
             :

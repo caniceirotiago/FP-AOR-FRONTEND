@@ -42,7 +42,20 @@
     "backToLogin": "Back to Login",
     "photo": "Photo",
     "private": "Private",
-    "public": "Public"
-
+    "public": "Public",
+    "homePage": "Home Page",
+    "users": "Users",
+    "deletedTasks": "Deleted Tasks",
+    "categories": "Categories",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "projectFolder": "Project Folder",
+    "projectList": "Project List",
+    "gantt": "Gantt Chart",
+    "report": "Report",
+    "inventory": "Inventory",
+    "selectProject": "Select Project",
+    "projectPlanning": "Project Planning",
+    "messages": "Messages"
   }
   

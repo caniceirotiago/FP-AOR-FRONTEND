@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import HomepageHeader from '../../components/headers/HomepageHeader';
 import styles from './MainLayout.module.css';
+import HomepageAside from '../../components/asides/HomepageAside';
 
 
 const MainLayout = ({ children }) => {
@@ -29,7 +30,7 @@ const MainLayout = ({ children }) => {
         <div className={styles.main}>
          <HomepageHeader />
          <div className={styles.board}>
-            {/* {dimensions.width >= 768 && <HomepageAside />} */}
+            {true && <HomepageAside />}
             <div className={`${styles.rightContainer} ${false ? '' : styles.expandedRightContainer}`}>
                 {children}
             </div>               

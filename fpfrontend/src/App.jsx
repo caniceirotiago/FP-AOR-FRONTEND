@@ -14,7 +14,12 @@ import LoginModal from './components/modals/LoginModal.jsx';
 import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage.jsx';
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage.jsx';
 import UserProfilePage from './pages/UserProfilePage/UserProfilePage.jsx';
-
+import ProjectPlanningPage from './pages/ProjectPlanningPage/ProjectPlanningPage.jsx';
+import MessagesPage from './pages/MessagesPage/MessagesPage.jsx';
+import ReportPage from './pages/ReportPage/ReportPage.jsx';
+import InventoryPage from './pages/InventoryPage/InventoryPage.jsx';
+import SettingsPage from './pages/SettingsPage/SettingsPage.jsx';
+import ProtectedRoute from './components/auth regist/ProtecterRoute.jsx';
 
 function App() {
   const { locale } = useTranslationsStore();
@@ -32,6 +37,11 @@ function App() {
               <Route path='/forgot-password' element={<AuthLayout><ForgotPasswordPage/></AuthLayout>}/>
               <Route path="/reset-password" element={<AuthLayout><ResetPasswordPage/></AuthLayout>}/>
               <Route path="/homepage" element={<MainLayout><HomePage /></MainLayout>} />
+              <Route path="/projectplanning" element={<ProtectedRoute><MainLayout><ProjectPlanningPage /></MainLayout></ProtectedRoute>} />
+              <Route path="/messages" element={<ProtectedRoute><MainLayout><MessagesPage /></MainLayout></ProtectedRoute>} />
+              <Route path="/report" element={<ProtectedRoute><MainLayout><ReportPage /></MainLayout></ProtectedRoute>} />
+              <Route path="/inventory" element={<ProtectedRoute><MainLayout><InventoryPage /></MainLayout></ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute><MainLayout><SettingsPage /></MainLayout></ProtectedRoute>} />
               <Route path="/userprofile/:nickname" element={<MainLayout><UserProfilePage /></MainLayout>} />
           </Routes>
         </Router>
