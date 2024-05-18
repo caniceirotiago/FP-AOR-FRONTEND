@@ -31,7 +31,12 @@
     "notAbleToChangePasswordContactSupport": "Not able to change password, contact support.",
     "weakPassword": "Weak Password",
     "strongPassword": "Strong Password",
-    "passwordInstructions": "A senha deve ter pelo menos 8 caracteres, <br /> incluindo uma letra maiúscula, uma letra minúscula, um número e um caractere especial."
+    "memberLogin": "Member Login",
+    "dontHaveAnAccount": "Don't have an account?",
+    "forgotThePassword": "Forgot the password?",
+    "didntReceiveConfirmationEmail": "Didn't receive confirmation email?",
+    "logout": "Logout",
+    "access": "Access"
 
   }
   

@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import useThemeStore from '../../stores/useThemeStore.jsx';
 import styles from './HomepageHeader.module.css'; 
 import { useLocation } from 'react-router-dom';
-import { FaBars, FaMoon, FaSun, FaSignOutAlt, FaBell } from 'react-icons/fa';
+import { FaBars, FaMoon, FaSun, FaSignOutAlt, FaBell, FaSignInAlt } from 'react-icons/fa';
 import useTranslationStore from '../../stores/useTranslationsStore';
 import { FormattedMessage } from "react-intl";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
 import useLoginModalStore from '../../stores/useLoginModalStore.jsx'
+import useAuthStore from '../../stores/useAuthStore.jsx'
 
 
 const HomepageHeader = () => {
@@ -20,14 +21,9 @@ const HomepageHeader = () => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useThemeStore();
   const { isLoginModalOpen , setIsLoginModalOpen} = useLoginModalStore();
+  const { logout, isAuthenticated } = useAuthStore();
   //const { notificationMap, setNotificationMap } = notificationStore();
   //const totalNotifications = Array.from(notificationMap.values()).reduce((acc, list) => acc + list.length, 0);
-  //const { logout, userBasicInfo, fetchUserBasicInfo, token } = useAuthStore(state => ({
-  //  logout: state.logout,
-  //  userBasicInfo: state.userBasicInfo,
-  //  fetchUserBasicInfo: state.fetchUserBasicInfo,
-  //  token: state.token
-  //}));
   //const { openChatModal } = useChatModalStore();
   const locale = useTranslationStore((state) => state.locale);
   const handleSelectLanguage = (event) => {
@@ -112,8 +108,8 @@ const HomepageHeader = () => {
 //     await notificationService.markMessageNotificationsAsRead(userId);
 //     fetchNotifications();
 //   };
-//   const username = sessionStorage.getItem("username");
-//   const photoUrl = sessionStorage.getItem("photoUrl") ; 
+  const nickname = sessionStorage.getItem("nickname");
+  const photo = sessionStorage.getItem("photo") ; 
 //   const handleNotificationClick = (type, userId) => {
 //     if (type === 'message') {
 //       const user = { username: userId };
@@ -143,14 +139,16 @@ const HomepageHeader = () => {
       </div> */}
       
       <div className={styles.rightAligned}>
-        {/* {dimensions.width >= 768 && 
-          <div className={styles.usernameDisplay} onClick={() => navigate(`/userProfile/${loggedUser}`)}>
-            {username}
+        {isAuthenticated ? (
+          <>
+          <div className={styles.usernameDisplay} >
+            {nickname}
           </div>
-        }
-        <div className={styles.userPhoto} onClick={() => navigate(`/userProfile/${loggedUser}`)}>
-          <img src={photoUrl} alt="User" className={styles.userImage} /> 
-        </div> */}
+          <div className={styles.userPhoto} >
+            <img src={photo} alt="User" className={styles.userImage} /> 
+          </div>
+          </>) : 
+        null}
         <div className={styles.notificationSection}>
           <div  ref={notificationToggleButtonRef} className={styles.notificationBell} onClick = {handleToggleNotificationMenu}>
             <FaBell />
@@ -167,9 +165,7 @@ const HomepageHeader = () => {
         </div>
         {isMenuOpen && (
           <div  ref={navMenuRef} className={styles.dropdownContent}>
-            <div onClick={handleOpenLoginModal}>
-              Access
-            </div>
+            
             <div onClick={toggleTheme}>
               {theme === 'dark' ? <FaSun /> : <FaMoon />} {theme === 'dark' ? <FormattedMessage id="lightMode">Light Mode</FormattedMessage> : <FormattedMessage id="darkMode">Dark Mode</FormattedMessage>}
             </div>
@@ -181,9 +177,15 @@ const HomepageHeader = () => {
               {locale === "pt" && <span className={styles.flag} class="fi fi-pt"></span> }
               {locale === "en" && <span className={styles.flag} class="fi fi-gb"></span> }
             </div>
-            {/* <div onClick={() => { logout(); navigate('/'); }}>
+            {isAuthenticated ? (
+            <div onClick={() => { logout(); navigate('/'); }}>
               <FaSignOutAlt /> <FormattedMessage id="logout">Logout</FormattedMessage>
-            </div> */}
+            </div>)
+            :
+            (<div onClick={handleOpenLoginModal}>
+              <FaSignInAlt /> <FormattedMessage id="access">Access</FormattedMessage>
+            </div>)
+            }         
           </div>
         )}
       </div>

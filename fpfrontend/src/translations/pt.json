@@ -2,9 +2,9 @@
     "memberRegistration": "Registro de Membro",
     "email": "Email",
     "emailPlaceholder": "Digite seu email",
-    "password": "Senha",
-    "passwordPlaceholder": "Digite sua senha",
-    "confirmPasswordPlaceholder": "Confirme sua senha",
+    "password": "Palavra-passe",
+    "passwordPlaceholder": "Digite sua palavra-passe",
+    "confirmPasswordPlaceholder": "Confirme sua palavra-passe",
     "nickname": "Apelido",
     "nicknamePlaceholder": "Digite seu apelido",
     "firstName": "Nome",
@@ -31,7 +31,12 @@
     "notAbleToChangePasswordContactSupport": "Não foi possível alterar a palavra-passe, entre em contato com o suporte.",
     "weakPassword": "Palavra-passe Fraca",
     "strongPassword": "Palavra-passe Forte",
-    "passwordInstructions": "A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula, um número e um caractere especial."
+    "memberLogin": "Login de Membro",
+    "dontHaveAnAccount": "Não tem uma conta?",
+    "forgotThePassword": "Esqueceu a palavra-passe?",
+    "didntReceiveConfirmationEmail": "Não recebeu o email de confirmação?",
+    "logout": "Sair",
+    "access": "Iniciar Sessão"
 
   }
   

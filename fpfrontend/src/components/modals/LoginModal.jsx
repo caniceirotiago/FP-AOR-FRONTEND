@@ -4,6 +4,7 @@ import styles from './LoginModal.module.css'
 import { FormattedMessage } from 'react-intl'
 import { useNavigate } from 'react-router-dom'
 import userService from '../../services/userService'
+import useAuthStore from '../../stores/useAuthStore.jsx'
 
 
 const LoginModal = () => {
@@ -11,6 +12,7 @@ const LoginModal = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const {login} = useAuthStore();
 
 
     const handleLogin = async (e) => {
@@ -33,7 +35,8 @@ const LoginModal = () => {
             sessionStorage.setItem('photo', data.photo);
             sessionStorage.setItem('nickname', data.nickname);
             sessionStorage.setItem('role', data.role);
-            setIsLoginModalOpen(false);          
+            setIsLoginModalOpen(false); 
+            login();
         }
     }
     const handleSignUpNavigation = (event) => {
@@ -55,7 +58,7 @@ const LoginModal = () => {
                 <form id="loginForm" onSubmit={handleLogin} className={styles.form}>
                     <div className={styles.banner}>
                         <p className={styles.memberLoginBanner}><FormattedMessage id="memberLogin">Member Login</FormattedMessage></p>
-                        <button  onClick={handleOnClose} className={styles.closeButton}>X</button>
+                        <button  type="button" onClick={handleOnClose} className={styles.closeButton}>X</button>
                     </div>
                     <div className={styles.content}>
                         <label htmlFor="email" className={styles.label}><FormattedMessage id="email">Email</FormattedMessage></label>
