@@ -36,7 +36,12 @@
     "forgotThePassword": "Esqueceu a palavra-passe?",
     "didntReceiveConfirmationEmail": "Não recebeu o email de confirmação?",
     "logout": "Sair",
-    "access": "Iniciar Sessão"
-
+    "access": "Iniciar Sessão",
+    "recoverPassword": "Recuperar Palavra-passe",
+    "askForNewPassword": "Solicitar Nova Palavra-passe",
+    "backToLogin": "Back to Login",
+    "photo": "Foto",
+    "private": "Privado",
+    "public": "Público"
   }
   

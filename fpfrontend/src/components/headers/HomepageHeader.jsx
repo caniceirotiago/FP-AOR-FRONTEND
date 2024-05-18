@@ -9,6 +9,7 @@ import { FormattedMessage } from "react-intl";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
 import useLoginModalStore from '../../stores/useLoginModalStore.jsx'
 import useAuthStore from '../../stores/useAuthStore.jsx'
+import { Link } from 'react-router-dom';
 
 
 const HomepageHeader = () => {
@@ -108,8 +109,8 @@ const HomepageHeader = () => {
 //     await notificationService.markMessageNotificationsAsRead(userId);
 //     fetchNotifications();
 //   };
-  const nickname = sessionStorage.getItem("nickname");
-  const photo = sessionStorage.getItem("photo") ; 
+  const nickname = localStorage.getItem("nickname");
+  const photo = localStorage.getItem("photo") ; 
 //   const handleNotificationClick = (type, userId) => {
 //     if (type === 'message') {
 //       const user = { username: userId };
@@ -141,11 +142,11 @@ const HomepageHeader = () => {
       <div className={styles.rightAligned}>
         {isAuthenticated ? (
           <>
-          <div className={styles.usernameDisplay} >
+          <div className={styles.usernameDisplay} onClick={() => navigate(`/userProfile/${nickname}`)}>
             {nickname}
           </div>
           <div className={styles.userPhoto} >
-            <img src={photo} alt="User" className={styles.userImage} /> 
+            <img src={photo} alt="User" className={styles.userImage} onClick={() => navigate(`/userProfile/${nickname}`)}/>
           </div>
           </>) : 
         null}
@@ -178,7 +179,7 @@ const HomepageHeader = () => {
               {locale === "en" && <span className={styles.flag} class="fi fi-gb"></span> }
             </div>
             {isAuthenticated ? (
-            <div onClick={() => { logout(); navigate('/'); }}>
+            <div onClick={() => { logout(); navigate('/homepage'); }}>
               <FaSignOutAlt /> <FormattedMessage id="logout">Logout</FormattedMessage>
             </div>)
             :

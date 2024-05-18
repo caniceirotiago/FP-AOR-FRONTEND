@@ -32,9 +32,9 @@ const LoginModal = () => {
         const response = await userService.fetchUserBasicInfo();
         const data = await response.json();
         if(data){
-            sessionStorage.setItem('photo', data.photo);
-            sessionStorage.setItem('nickname', data.nickname);
-            sessionStorage.setItem('role', data.role);
+            localStorage.setItem('photo', data.photo);
+            localStorage.setItem('nickname', data.nickname);
+            localStorage.setItem('role', data.role);
             setIsLoginModalOpen(false); 
             login();
         }

@@ -1,0 +1,60 @@
+.formProfile {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 1px;
+    max-width: 600px;
+    width: 100%;
+  }
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  color: var(--text-color);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.input[type="text"],
+.input[type="email"],
+.input[type="tel"],
+.input[type="submit"] {
+  padding: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  color: var(--text-color);
+  width: 100%; 
+  background-color: transparent; 
+  border: none; 
+  border-bottom: 2px solid #e0e0e0; 
+}
+
+.input[type="submit"], .editButton[type="button"] {
+  border-radius: 5px;
+  overflow: hidden;
+  width: 33%; 
+  height: 36px; 
+  padding: 0 10px; 
+  font-size: 14px; 
+  background-color: var(--tertiary-color);
+  color: var(--text-color); 
+  border: none; 
+  white-space: nowrap;
+  transition: background-color 0.3s, color 0.3s, transform 0.2s; 
+}
+
+.input[type="submit"]:hover, .editButton[type="button"]:hover {
+  background-color: var(--quaternary-color); 
+  color: var(--text-color2); 
+  transform: scale(1.03); 
+}
+
+.formProfile:hover {
+  transform: scale(1) !important;
+  box-shadow: none;
+}
+
+  

@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 
 const useTranslationsStore = create((set) => ({
-    locale: sessionStorage.getItem('locale') || "en",
+    locale: localStorage.getItem('locale') || "en",
 
     updateLocale: (locale) => {
-        sessionStorage.setItem('locale', locale); 
+        localStorage.setItem('locale', locale); 
         set({ locale }); 
     }
 }));

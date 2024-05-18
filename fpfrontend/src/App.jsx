@@ -13,6 +13,7 @@ import AuthLayout from './pages/layout/AuthLayout.jsx';
 import LoginModal from './components/modals/LoginModal.jsx';
 import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage.jsx';
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage.jsx';
+import UserProfilePage from './pages/UserProfilePage/UserProfilePage.jsx';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
               <Route path='/forgot-password' element={<AuthLayout><ForgotPasswordPage/></AuthLayout>}/>
               <Route path="/reset-password" element={<AuthLayout><ResetPasswordPage/></AuthLayout>}/>
               <Route path="/homepage" element={<MainLayout><HomePage /></MainLayout>} />
+              <Route path="/userprofile/:nickname" element={<MainLayout><UserProfilePage /></MainLayout>} />
           </Routes>
         </Router>
       </IntlProvider>

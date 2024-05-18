@@ -1,0 +1,106 @@
+.profileContainer {
+    display: flex;
+    width: 100%;
+   
+  }
+  
+  
+  .userHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    width: 50%;
+  }
+  .userStats {
+    align-items: center;
+    width: 100%;
+  }
+  
+  .userPhoto {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 50%;
+  }
+  
+  .username {
+    font-size: 24px;
+    color: var(--text-color);
+  }
+  
+  .formsContainer {
+    margin: 30px;
+    flex: 2 1 600px; 
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  .chatbtn {
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: var(--todo-color2);  
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .chatbtn:hover, .chatbtn:focus {
+    background-color: var(--todo-color); 
+    transform: scale(1.05);
+    outline: none; 
+  }
+  
+  .chatbtn:active {
+    background-color: #397d34; 
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+    transform: scale(0.98); 
+  }
+  
+  
+  
+  .toggleFormButton {
+    margin-top: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 36px; 
+    padding: 0 10px; 
+    font-size: 14px; 
+    background-color: var(--tertiary-color); 
+    color: var(--text-color); 
+    border: none; 
+    white-space: nowrap; 
+    transition: background-color 0.3s, color 0.3s, transform 0.2s; 
+  }
+  .toggleFormButton:hover {
+    background-color: var(--quaternary-color); 
+    color: var(--text-color2); 
+    transform: scale(1.03); 
+  }
+  
+  @media (max-width: 768px) {
+    .profileContainer {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .userHeader {
+      align-items: center;
+      margin-right: 0;
+    }
+  
+    .formsContainer {
+      margin: 30px;
+      padding: 30px;
+      align-items: center;
+      width: 80%; 
+    }
+  
+  
+  }
+  

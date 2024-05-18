@@ -9,7 +9,7 @@ import  DialogMultipleMessagesModalStore  from '../../../stores/useDialogMultipl
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../firebase';
 import placeHolderProfileImage from '../../../assets/profilePhotoPlaceholder.png'
-import { useIntl } from 'react-intl';
+import { validatePassword } from '../../../utils/validators/userValidators';
 
 const RegisterForm = ( ) => {
    const { setDialogMultipleMessages, setDialogMultipleMessagesTitle, setIsDialogMultipleMessagesOpen } = DialogMultipleMessagesModalStore();
@@ -32,7 +32,6 @@ const RegisterForm = ( ) => {
    });
    const [passwordStrength, setPasswordStrength] = useState(0);
    const [passwordError, setPasswordError] = useState('');
-   const intl = useIntl();
 
    useEffect(() => {
     const fetchLaboratories = async () => {
@@ -49,19 +48,16 @@ const RegisterForm = ( ) => {
     fetchLaboratories();
   }, []);
 
-   const validatePassword = (password) => {
-      const regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&amp;*(),.?\":{}|&lt;&gt;])[A-Za-z\\d!@#$%^&*(),.?\":{}|<>]{8,128}$");
-      return regex.test(password);
-   };
    const checkPasswordStrength = (password) => {
       if (!password) {
-        setPasswordStrength(0);
+      setPasswordStrength(0);
       } else if (validatePassword(password)) {
-        setPasswordStrength(3);
+      setPasswordStrength(3);
       } else {
-        setPasswordStrength(2);
+      setPasswordStrength(2);
       }
-    };
+   };
+
    
    const handleChange = (e) => {
       const { name, value } = e.target;

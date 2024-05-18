@@ -1,20 +1,11 @@
 import useDomainStore from "../stores/useDomainStore";
 const API_BASE_URL = "http://" + useDomainStore.getState().domain + "/rest/users";
-/**
- * userService
- * Provides an interface to interact with the user-related backend services. It encapsulates
- * the API calls for various user operations such as fetching basic user information, fetching users with tasks,
- * updating user data, changing user passwords, and more. Each method in this service handles the
- * request to the specific endpoint, processes the response, and manages errors appropriately.
- * Note: All requests are authenticated using a token stored in sessionStorage.
- */
+
 
 const getAuthHeaders = () => {
-    const token = sessionStorage.getItem('token');
     return {
       Accept: "application/json",
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
     };
   };
 
@@ -128,6 +119,26 @@ const userService = {
                 return response;
             } catch (error) {
                 console.error("Error fetching user basic info:", error.message);
+                throw error;
+            }
+        },
+        fetchUserInfo: async (profileNickname) => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/info/${profileNickname}`, {
+                    method: "GET",
+                    headers: getAuthHeaders(),
+                    credentials: 'include'
+                });
+    
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to fetch user info: ${errorText}`);
+                }
+    
+                const userInfo = await response.json();
+                return userInfo;
+            } catch (error) {
+                console.error("Error fetching user info:", error.message);
                 throw error;
             }
         },

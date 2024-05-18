@@ -36,7 +36,13 @@
     "forgotThePassword": "Forgot the password?",
     "didntReceiveConfirmationEmail": "Didn't receive confirmation email?",
     "logout": "Logout",
-    "access": "Access"
+    "access": "Access",
+    "recoverPassword": "Recover Password",
+    "askForNewPassword": "Ask for a new password",
+    "backToLogin": "Back to Login",
+    "photo": "Photo",
+    "private": "Private",
+    "public": "Public"
 
   }
   

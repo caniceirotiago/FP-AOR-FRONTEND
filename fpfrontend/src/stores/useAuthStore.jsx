@@ -10,7 +10,7 @@ const useAuthStore = create((set) => ({
   logout: () => {
     Cookies.remove('authToken', { path: '/' }); 
     set({ isAuthenticated: false });
-    sessionStorage.clear();
+    localStorage.clear();
     console.log("User logged out");
   },
 }));
