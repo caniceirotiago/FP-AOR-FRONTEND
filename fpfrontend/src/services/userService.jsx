@@ -129,14 +129,7 @@ const userService = {
                     headers: getAuthHeaders(),
                     credentials: 'include'
                 });
-    
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Failed to fetch user info: ${errorText}`);
-                }
-    
-                const userInfo = await response.json();
-                return userInfo;
+                return response;
             } catch (error) {
                 console.error("Error fetching user info:", error.message);
                 throw error;

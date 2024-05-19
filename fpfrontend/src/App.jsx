@@ -37,6 +37,7 @@ function App() {
               <Route path='/forgot-password' element={<AuthLayout><ForgotPasswordPage/></AuthLayout>}/>
               <Route path="/reset-password" element={<AuthLayout><ResetPasswordPage/></AuthLayout>}/>
               <Route path="/homepage" element={<MainLayout><HomePage /></MainLayout>} />
+              <Route path="/authenticatedhomepage" element={<ProtectedRoute><MainLayout><HomePage /></MainLayout></ProtectedRoute>} />
               <Route path="/projectplanning" element={<ProtectedRoute><MainLayout><ProjectPlanningPage /></MainLayout></ProtectedRoute>} />
               <Route path="/messages" element={<ProtectedRoute><MainLayout><MessagesPage /></MainLayout></ProtectedRoute>} />
               <Route path="/report" element={<ProtectedRoute><MainLayout><ReportPage /></MainLayout></ProtectedRoute>} />

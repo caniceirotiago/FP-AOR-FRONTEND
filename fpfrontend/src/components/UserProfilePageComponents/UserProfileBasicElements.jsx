@@ -6,42 +6,7 @@ import { useEffect } from "react";
 import ProfileForm from "../forms/profileForm/ProfileForm.jsx";
 import styles from "./UserProfileBasicElements.module.css";
 
-const UserProfileBasicElements = () => {
-  const { nickname: profileNickname } = useParams();
-  const [isOwnProfile, setIsOwnProfile] = useState();
-  const [userProfileInfo, setUserProfileInfo] = useState({
-    email: '',
-    firstName: '',
-    lastName: '',
-    photo: '',
-    biography: '',
-    laboratoryId: '',
-    private: '',
-  });
-
-  useEffect(() => {
-    const checkIfOwnProfile = () => {
-      const loggedInNickname = localStorage.getItem('nickname');
-      setIsOwnProfile(loggedInNickname === profileNickname);
-    };
-
-    checkIfOwnProfile();
-  }, []);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-        try {
-          const data = await userService.fetchUserInfo(profileNickname);
-          console.log('data:', data);
-          setUserProfileInfo(data);
-        } catch (error) {
-          console.error("Failed to fetch user data:", error);
-        }
-    };
-
-    fetchUserData();
-  }, [profileNickname]);
-
+const UserProfileBasicElements = ({isOwnProfile, userProfileInfo}) => {
 
 
     return(
