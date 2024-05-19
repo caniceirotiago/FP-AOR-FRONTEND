@@ -26,7 +26,8 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile }) => {
     setProfile(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleUpdateUserProfile = async (profile) => {
+  const handleUpdateUserProfile = async () => {
+    console.log('profile:', profile);
     try {
       const { email, ...profileData } = profile;
       const result = await userService.updateUser(profileData);
@@ -136,7 +137,9 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile }) => {
       </div>
 
       {isEditing ? (
-          <FormattedMessage id="saveChangesUserProfForm">{(value) => (<input className={styles.input} type="submit" value={"Save Changes"} />)}</FormattedMessage>
+        <button className={styles.input} type="button" value={"Save Changes"} onClick={() => handleUpdateUserProfile()}>
+          <FormattedMessage id="saveChangesUserProfForm"></FormattedMessage>
+        </button>
         ) : (
           isOwnProfile && (
             <button type="button" onClick={() => setIsEditing(true)} className={styles.editButton} >

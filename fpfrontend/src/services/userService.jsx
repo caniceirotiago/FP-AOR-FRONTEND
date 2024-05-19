@@ -10,28 +10,7 @@ const getAuthHeaders = () => {
   };
 
 const userService = {
-    fetchUserBasicInfo: async () => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/photoandname`, {
-                method: "GET",
-                headers: getAuthHeaders(),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to fetch user basic info');
-            }
 
-            const data = await response.json();
-            return {
-                photoUrl: data.photoUrl,
-                name: data.name,
-                role: data.role,
-                username: data.username,
-            };
-        } catch (error) {
-            console.error("Error fetching user basic info:", error.message);
-            throw error;
-        }
-    },
     registerUser: async (userData) => {
         try {
             const response = await fetch(`${API_BASE_URL}/register`, {
@@ -105,36 +84,55 @@ const userService = {
         } catch (error) {
             throw error;
         }
-        },
-        fetchUserBasicInfo: async () => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/userBasicInfo`, {
-                    method: "GET",
-                    headers: getAuthHeaders(),
-                    credentials: 'include'
-                });
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user basic info');
-                }
-                return response;
-            } catch (error) {
-                console.error("Error fetching user basic info:", error.message);
-                throw error;
+    },
+    fetchUserBasicInfo: async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/userBasicInfo`, {
+                method: "GET",
+                headers: getAuthHeaders(),
+                credentials: 'include'
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch user basic info');
             }
-        },
-        fetchUserInfo: async (profileNickname) => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/info/${profileNickname}`, {
-                    method: "GET",
-                    headers: getAuthHeaders(),
-                    credentials: 'include'
-                });
-                return response;
-            } catch (error) {
-                console.error("Error fetching user info:", error.message);
-                throw error;
-            }
-        },
+            return response;
+        } catch (error) {
+            console.error("Error fetching user basic info:", error.message);
+            throw error;
+        }
+    },
+    fetchUserInfo: async (profileNickname) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/info/${profileNickname}`, {
+                method: "GET",
+                headers: getAuthHeaders(),
+                credentials: 'include'
+            });
+            return response;
+        } catch (error) {
+            console.error("Error fetching user info:", error.message);
+            throw error;
+        }
+    },
+    updateUser: async (updatedUser) => {
+        console.log(updatedUser);
+        try {
+            const response = await fetch(`${API_BASE_URL}/profile`, {
+                method: "PUT",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(updatedUser)
+            });
+            console.log(response);
+            return response; 
+        } catch (error) {
+            console.error("Error updating user info:", error.message);
+            throw error;
+        }
+    },
     
 };
 
