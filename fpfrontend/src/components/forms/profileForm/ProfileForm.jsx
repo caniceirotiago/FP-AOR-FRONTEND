@@ -1,8 +1,11 @@
 import React, { useState , useEffect } from 'react';
 import styles from './ProfileForm.module.css';
 import { FormattedMessage} from 'react-intl';
+import userService from '../../../services/userService';
 
-const ProfileForm = ({ userProfileInfo }) => {
+const ProfileForm = ({ userProfileInfo, isOwnProfile }) => {
+  const [isEditing, setIsEditing] = useState(false); 
+
 
   const [profile, setProfile] = useState({
     email: '',
@@ -22,6 +25,21 @@ const ProfileForm = ({ userProfileInfo }) => {
     const { name, value } = event.target;
     setProfile(prev => ({ ...prev, [name]: value }));
   };
+
+  const handleUpdateUserProfile = async (profile) => {
+    try {
+      const { email, ...profileData } = profile;
+      const result = await userService.updateUser(profileData);
+      if(result.status === 204){
+        //notify('Profile updated successfully');
+        //onUpdateSuccess(); to fetch again the user profile
+      }
+      else console.log("Failed to update profile")//notify('Failed to update profile. Please try again.');
+    } catch (error) {
+      console.error("Failed to update user profile:", error);
+      console.log("Failed to update profile") //notify('Failed to update profile. Please try again.');
+    }
+  };  
 
   
   return (
@@ -50,6 +68,7 @@ const ProfileForm = ({ userProfileInfo }) => {
           value={profile.firstName}
           onChange={handleInputChange}
           placeholder="Enter your first name"
+          disabled={!isEditing}
         />
       </div>
 
@@ -63,6 +82,7 @@ const ProfileForm = ({ userProfileInfo }) => {
           value={profile.lastName}
           onChange={handleInputChange}
           placeholder="Enter your last name"
+          disabled={!isEditing}
         />
       </div>
 
@@ -77,6 +97,7 @@ const ProfileForm = ({ userProfileInfo }) => {
           value={profile.biography}
           onChange={handleInputChange}
           placeholder="Enter your biography"
+          disabled={!isEditing}
         />
       </div>
 
@@ -92,6 +113,7 @@ const ProfileForm = ({ userProfileInfo }) => {
           value={profile.laboratoryId}
           onChange={handleInputChange}
           placeholder="Enter your laboratory ID"
+          disabled={!isEditing}
         />
       </div>
 
@@ -105,12 +127,24 @@ const ProfileForm = ({ userProfileInfo }) => {
           name="private"
           value={profile.private}
           onChange={handleInputChange}
+          disabled={!isEditing}
         >
           <option value="">Select visibility</option>
           <option value="true">Private</option>
           <option value="false">Public</option>
         </select>
       </div>
+
+      {isEditing ? (
+          <FormattedMessage id="saveChangesUserProfForm">{(value) => (<input className={styles.input} type="submit" value={"Save Changes"} />)}</FormattedMessage>
+        ) : (
+          isOwnProfile && (
+            <button type="button" onClick={() => setIsEditing(true)} className={styles.editButton} >
+            <FormattedMessage id="editBtnProfForm">Edit</FormattedMessage>
+          </button>
+          )
+        )}
+
     </form>
   );
 };

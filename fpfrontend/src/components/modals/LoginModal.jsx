@@ -42,7 +42,7 @@ const LoginModal = () => {
             localStorage.setItem('role', data.role);
             setIsLoginModalOpen(false); 
             login();
-            navigate(0);
+            navigate('/authenticatedhomepage');
         }
     }
     const handleSignUpNavigation = (event) => {

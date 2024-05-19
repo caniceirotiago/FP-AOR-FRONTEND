@@ -27,7 +27,7 @@ const UserProfilePage = () => {
     };
 
     checkIfOwnProfile();
-  }, []);
+  }, [userProfileInfo]);
 
   useEffect(() => {
     const fetchUserData = async () => {
