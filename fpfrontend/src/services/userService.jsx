@@ -120,13 +120,16 @@ const userService = {
             const response = await fetch(`${API_BASE_URL}/profile`, {
                 method: "PUT",
                 headers: {
-                    'Accept': 'application/json',
+                    Accept: '*/*',
                     'Content-Type': 'application/json',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'Connection': 'keep-alive',
+
                 },
                 credentials: 'include',
                 body: JSON.stringify(updatedUser)
             });
-            console.log(response);
+            console.log(response + "resposta");
             return response; 
         } catch (error) {
             console.error("Error updating user info:", error.message);
