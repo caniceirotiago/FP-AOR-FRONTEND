@@ -109,7 +109,7 @@ const HomepageHeader = () => {
 //     await notificationService.markMessageNotificationsAsRead(userId);
 //     fetchNotifications();
 //   };
-  const nickname = localStorage.getItem("nickname");
+  const username = localStorage.getItem("username");
   const photo = localStorage.getItem("photo") ; 
 //   const handleNotificationClick = (type, userId) => {
 //     if (type === 'message') {
@@ -146,11 +146,11 @@ const HomepageHeader = () => {
       <div className={styles.rightAligned}>
         {isAuthenticated ? (
           <>
-          <div className={styles.usernameDisplay} onClick={() => navigate(`/userProfile/${nickname}`)}>
-            {nickname}
+          <div className={styles.usernameDisplay} onClick={() => navigate(`/userProfile/${username}`)}>
+            {username}
           </div>
           <div className={styles.userPhoto} >
-            <img src={photo} alt="User" className={styles.userImage} onClick={() => navigate(`/userProfile/${nickname}`)}/>
+            <img src={photo} alt="User" className={styles.userImage} onClick={() => navigate(`/userProfile/${username}`)}/>
           </div>
           </>) : 
         null}

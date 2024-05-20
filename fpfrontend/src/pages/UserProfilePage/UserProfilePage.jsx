@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import userService from '../../services/userService';
 
 const UserProfilePage = () => {
-  const { nickname: profileNickname } = useParams();
+  const { username: usernameProfile } = useParams();
   const [isOwnProfile, setIsOwnProfile] = useState();
   const [isAPrivateProfile, setIsAPrivateProfile] = useState();
   const [isTheProfileNotExistant, setIsTheProfileNotExistant] = useState();
@@ -22,8 +22,8 @@ const UserProfilePage = () => {
 
   useEffect(() => {
     const checkIfOwnProfile = () => {
-      const loggedInNickname = localStorage.getItem('nickname');
-      setIsOwnProfile(loggedInNickname === profileNickname);
+      const loggedInUsername = localStorage.getItem('username');
+      setIsOwnProfile(loggedInUsername === usernameProfile);
     };
 
     checkIfOwnProfile();
@@ -32,7 +32,7 @@ const UserProfilePage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
         try {
-          const response = await userService.fetchUserInfo(profileNickname);
+          const response = await userService.fetchUserInfo(usernameProfile);
           const data = await response.json();
           if(response.status === 401){
             setIsAPrivateProfile(true);
@@ -48,7 +48,7 @@ const UserProfilePage = () => {
     };
 
     fetchUserData();
-  }, [profileNickname]);
+  }, [usernameProfile]);
 
   if(isAPrivateProfile){
     return (
