@@ -27,7 +27,7 @@ const UserProfilePage = () => {
     };
 
     checkIfOwnProfile();
-  }, [userProfileInfo]);
+  }, [userProfileInfo, usernameProfile]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -50,26 +50,27 @@ const UserProfilePage = () => {
     fetchUserData();
   }, [usernameProfile]);
 
-  if(isAPrivateProfile){
-    return (
+
+
+  return (
+    <>
+    {isAPrivateProfile ? (
       <div className={styles.userProfilePage} >
         <h1>Private Profile</h1>
       </div>
-    );
-  }
-  if(isTheProfileNotExistant){
-    return (
+    ) : isTheProfileNotExistant ? (
       <div className={styles.userProfilePage} >
         <h1>Profile Not Found</h1>
       </div>
-    );
-  }
-
-  return (
-    <div className={styles.userProfilePage} >
-      <UserProfileBasicElements isOwnProfile={isOwnProfile} userProfileInfo={userProfileInfo}/>
-    </div>
+    ) : (
+      <div className={styles.userProfilePage} >
+        <UserProfileBasicElements isOwnProfile={isOwnProfile} userProfileInfo={userProfileInfo}/>
+      </div>
+      
+    )}
+      </>
   );
+
 };
 
 export default UserProfilePage;
