@@ -16,7 +16,7 @@ const UserProfileBasicElements = ({isOwnProfile, userProfileInfo}) => {
         <div className={styles.profileContainer}>
         <section className={styles.userHeader}>
           <img src={userProfileInfo.photo} alt="User" className={styles.userPhoto} />
-          <h2 className={styles.username}>{userProfileInfo.nickname}</h2>
+          <h2 className={styles.username}>{userProfileInfo.username}</h2>
         </section>
         <div className={styles.formsContainer}>
           {isOwnProfile ? (

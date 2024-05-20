@@ -43,7 +43,7 @@ function App() {
               <Route path="/report" element={<ProtectedRoute><MainLayout><ReportPage /></MainLayout></ProtectedRoute>} />
               <Route path="/inventory" element={<ProtectedRoute><MainLayout><InventoryPage /></MainLayout></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><MainLayout><SettingsPage /></MainLayout></ProtectedRoute>} />
-              <Route path="/userprofile/:nickname" element={<ProtectedRoute><MainLayout><UserProfilePage /></MainLayout></ProtectedRoute>} />
+              <Route path="/userprofile/:username" element={<ProtectedRoute><MainLayout><UserProfilePage /></MainLayout></ProtectedRoute>} />
           </Routes>
         </Router>
       </IntlProvider>

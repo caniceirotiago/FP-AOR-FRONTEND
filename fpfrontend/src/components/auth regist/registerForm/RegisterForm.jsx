@@ -23,7 +23,7 @@ const RegisterForm = ( ) => {
       email: '',
       password: '',
       confirmPassword: '',
-      nickname: '',
+      username: '',
       firstName: '',
       lastName: '',
       photo: '',
@@ -96,7 +96,7 @@ const RegisterForm = ( ) => {
          Password: !user.password ? ' is required' : '',
          Confirmation: user.password !== user.confirmPassword ? ' passwords do not match' : '',
          Passwords: passwordError !=='' ? passwordError : '',
-         Nickname: !user.nickname ? ' is required' : '',
+         Username: !user.username ? ' is required' : '',
          Name: !user.firstName || !user.lastName ? 'First name and last name are required' : '',
          Laboratory: !user.laboratoryId ? ' is required' : '',
          Photo: !imagePreview ? ' is required' : '',
@@ -198,14 +198,14 @@ const RegisterForm = ( ) => {
                      maxLength="25"
                      placeholder={value}
                   />)}</FormattedMessage>
-                  <label className={styles.label} id="nickname-label" htmlFor="nickname-field">Nickname</label>
-                  <FormattedMessage id="nicknamePlaceholder">{(value) => (<input
+                  <label className={styles.label} id="username-label" htmlFor="username-field">Username</label>
+                  <FormattedMessage id="usernamePlaceholder">{(value) => (<input
                      className={styles.input}
                      type="text"
-                     name="nickname"
-                     value={user.nickname}
+                     name="username"
+                     value={user.username}
                      onChange={handleChange}
-                     id="nickname-field"
+                     id="username-field"
                      maxLength="25"
                      placeholder={value}
                   />)}</FormattedMessage>

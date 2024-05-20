@@ -38,7 +38,7 @@ const LoginModal = () => {
         const data = await response.json();
         if(data){
             localStorage.setItem('photo', data.photo);
-            localStorage.setItem('nickname', data.nickname);
+            localStorage.setItem('username', data.username);
             localStorage.setItem('role', data.role);
             setIsLoginModalOpen(false); 
             login();
