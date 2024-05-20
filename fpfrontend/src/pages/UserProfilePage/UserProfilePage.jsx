@@ -40,6 +40,7 @@ const UserProfilePage = () => {
             setIsTheProfileNotExistant(true);
           }else{
             setIsAPrivateProfile(false);
+            setIsTheProfileNotExistant(false);
             setUserProfileInfo(data);
           }
         } catch (error) {
