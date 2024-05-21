@@ -10,9 +10,9 @@ const LandingPageFooter = () => {
       <div className={styles.footerContent}>
         <div className={styles.footerSection}>
           <h4>Contact Us</h4>
-          <p><FaPhone /> +1 234 567 890</p>
+          <p><FaPhone /> +351 999 999 999</p>
           <p><FaEnvelope /> info@criticallab.com</p>
-          <p><FaMapMarkerAlt /> 123 Lab Street, Science Park</p>
+          <p><FaMapMarkerAlt /> Pólo II da Universidade de Coimbra, R. Silvio Lima, 3030-790 Coimbra</p>
         </div>
         <div className={styles.footerSection}>
           <h4>Follow Us</h4>
@@ -30,6 +30,7 @@ const LandingPageFooter = () => {
       </div>
       <div className={styles.copyRight}>
         <p>© 2024 Critical Lab. All rights reserved.</p>
+        <p>Tiago Caniceiro & Vasco Castro</p>
       </div>
     </footer>
   );

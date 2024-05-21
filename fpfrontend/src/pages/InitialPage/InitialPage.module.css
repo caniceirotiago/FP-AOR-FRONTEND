@@ -181,16 +181,16 @@
 
 @media (max-width: 768px) {
   .card2 {
-    flex-direction: column; /* Empilha verticalmente em dispositivos móveis */
+    flex-direction: column; 
   }
 
   .card2ImageSection, .card2TextSection {
-    flex: none; /* Remove a divisão de espaço proporcional */
-    width: 100%; /* Ocupa toda a largura disponível */
+    flex: none; 
+    width: 100%; 
   }
 
   .card2TextSection {
-    order: -1; /* Coloca o texto acima da imagem */
+    order: -1; 
   }
 
 }
