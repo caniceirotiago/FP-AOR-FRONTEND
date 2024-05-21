@@ -20,6 +20,7 @@ import ReportPage from './pages/ReportPage/ReportPage.jsx';
 import InventoryPage from './pages/InventoryPage/InventoryPage.jsx';
 import SettingsPage from './pages/SettingsPage/SettingsPage.jsx';
 import ProtectedRoute from './components/auth regist/ProtecterRoute.jsx';
+import LandingPageLayout from './pages/layout/LandingPageLayout.jsx';
 
 function App() {
   const { locale } = useTranslationsStore();
@@ -31,7 +32,7 @@ function App() {
         <Router>
           <LoginModal />
           <Routes>
-              <Route path="/" element={<AuthLayout><InitialPage /></AuthLayout>} />
+              <Route path="/" element={<LandingPageLayout><InitialPage /></LandingPageLayout>} />
               <Route path="/register" element={<AuthLayout><RegisterPage /></AuthLayout>} />
               <Route path="/confirm" element={<EmailConfirmationPage />} />
               <Route path='/forgot-password' element={<AuthLayout><ForgotPasswordPage/></AuthLayout>}/>

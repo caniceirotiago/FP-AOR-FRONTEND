@@ -28,24 +28,40 @@
     cursor: pointer;
   }
   
-  .topRightFlags li {
-    display: inline;
-    margin-right: 10px;
-  }
-  
-  .topRightFlags a {
-    color: #fff;
-    text-decoration: none;
-  }
-  
-  .topRightFlags a:hover {
-    color: #bcc6db;
+  .languageSelection {
+    position: relative;
     cursor: pointer;
-    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto 10px;
   }
   
-  .topRightFlags a.active {
-    text-decoration: underline;
-    font-weight: bold;
+  .dropdownContent {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 100;
   }
   
+  .dropdownItem {
+    padding: 8px 20px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  
+  .dropdownItem:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .flagIcon {
+    margin: 0 3px; 
+    padding: 5px;
+  }
+  
+  .flagIcon:hover {
+    background-color: #f0f0f0; 
+    border-radius: 5px;
+  }

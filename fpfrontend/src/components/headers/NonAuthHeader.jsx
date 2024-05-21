@@ -4,6 +4,7 @@ import styles from './NonAuthHeader.module.css';
 import useTranslationStore from '../../stores/useTranslationsStore';
 import "/node_modules/flag-icons/css/flag-icons.min.css";
 import logo from '../../assets/CriticalLogo.png';
+import { FaGlobeEurope } from 'react-icons/fa';
 
 
 const NonAuthHeader = () => {
@@ -14,20 +15,25 @@ const NonAuthHeader = () => {
     updateLocale(newLocale);
   };
   const updateLocale = useTranslationStore((state) => state.updateLocale);
-
-
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const toggleLanguageDropdown = () => {
+    setIsLanguageDropdownOpen(!isLanguageDropdownOpen);
+  };
   return (
     <header className={styles.header}>
       <img className={styles.logo} src={logo} alt="Logo" />
       <div className={styles.rightAligned}>
-            <div className={styles.languageSelection}>
-              <select className={styles.languageSelector} onChange={handleSelectLanguage} defaultValue={locale}>
-                {["en", "pt"].map(language => (<option
-                key={language}>{language}</option>))}
-              </select>
-              {locale === "pt" && <span className={styles.flag} class="fi fi-pt"></span> }
-              {locale === "en" && <span className={styles.flag} class="fi fi-gb"></span> }
+      <div className={styles.rightAligned}>
+        <div className={styles.languageSelection} onClick={toggleLanguageDropdown}>
+          <FaGlobeEurope size={24} title="Change Language" />
+          {isLanguageDropdownOpen && (
+            <div className={styles.dropdownContent}>
+              <div className={styles.dropdownItem} onClick={() => updateLocale('en')}>English</div>
+              <div className={styles.dropdownItem} onClick={() => updateLocale('pt')}>Português</div>
             </div>
+          )}
+        </div>
+      </div>
       </div>
     </header>
   );
