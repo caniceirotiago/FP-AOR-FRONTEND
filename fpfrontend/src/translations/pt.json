@@ -56,6 +56,12 @@
     "inventory": "Inventário",
     "selectProject": "Selecionar Projeto",
     "projectPlanning": "Planeamento de Projeto",
-    "messages": "Mensagens"
+    "messages": "Mensagens",
+    "editBtnProfForm": "Editar",
+    "oldPassword": "Palavra-passe Antiga:",
+    "confirmNewPassword": "Confirmar Nova Palavra-passe:",
+    "updatePasswordbtn": "Atualizar Palavra-passe",
+    "editProfileInformation": "Editar Informações de Perfil",
+    "saveChangesUserProfForm": "Salvar Alterações"
   }
   

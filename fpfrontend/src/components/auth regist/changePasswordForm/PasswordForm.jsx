@@ -63,7 +63,7 @@ const PasswordForm = ({ onUpdateUserPassword }) => {
         />
       </div>
       <div className={styles.inputGroup}>
-        <label className={styles.label} htmlFor="newPassword"><FormattedMessage id="newPassord">New Password</FormattedMessage></label>
+        <label className={styles.label} htmlFor="newPassword"><FormattedMessage id="newPassword">New Password</FormattedMessage></label>
         <input
           className={styles.input}
           type="password"

@@ -1,20 +1,19 @@
-.main {
-  height: 100vh;
+.main{
   width: 100%;
-  background-image: url('../../assets/background.jpg'); 
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 100%;
 }
 
 .board {
+  height: calc(100% - 40px);
   display: flex;
-  flex-direction: row;
-  margin: 40px;
-  gap: 20px;
-  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  align-self: center;
+  display: flex;
+  flex-direction: row; 
+  padding: 0; 
+
+
 }
 
 @media (max-width: 768px) {

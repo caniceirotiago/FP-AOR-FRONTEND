@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl';
 
 
 
+
 const InitialPage = () => {
   return (
     <div className={styles.initialPage} >

@@ -10,6 +10,7 @@ import "/node_modules/flag-icons/css/flag-icons.min.css";
 import useLoginModalStore from '../../stores/useLoginModalStore.jsx'
 import useAuthStore from '../../stores/useAuthStore.jsx'
 import { Link } from 'react-router-dom';
+import logo from '../../assets/CriticalLogo.png';
 
 
 const HomepageHeader = () => {
@@ -136,12 +137,17 @@ const HomepageHeader = () => {
     logout(); 
     navigate('/homepage');
   }
+  const handleHomepageNavigate = () => {
+    if(!isAuthenticated)navigate('/homepage');
+    else navigate(`/authenticatedHomepage`);
+
+  }
 
   return (
     <header className={styles.header}>
-      {/* <div className={styles.logoContainer} onClick={() => navigate('/home')}>
+      <div className={styles.logoContainer} onClick={handleHomepageNavigate}>
         <img src={logo} alt="Logo" className={styles.logo} />
-      </div> */}
+      </div>
       
       <div className={styles.rightAligned}>
         {isAuthenticated ? (

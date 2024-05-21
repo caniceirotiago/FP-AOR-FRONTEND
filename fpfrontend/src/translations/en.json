@@ -56,6 +56,12 @@
     "inventory": "Inventory",
     "selectProject": "Select Project",
     "projectPlanning": "Project Planning",
-    "messages": "Messages"
+    "messages": "Messages",
+    "editBtnProfForm": "Edit",
+    "oldPassword": "Old Password:",
+    "confirmNewPassword": "Confirm New Password:",
+    "updatePasswordbtn": "Update Password",
+    "editProfileInformation": "Edit Profile Information",
+    "saveChangesUserProfForm": "Save Changes"
   }
   

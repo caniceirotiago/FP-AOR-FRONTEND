@@ -31,7 +31,7 @@ function App() {
         <Router>
           <LoginModal />
           <Routes>
-              <Route path="/" element={<InitialPage />} />
+              <Route path="/" element={<AuthLayout><InitialPage /></AuthLayout>} />
               <Route path="/register" element={<AuthLayout><RegisterPage /></AuthLayout>} />
               <Route path="/confirm" element={<EmailConfirmationPage />} />
               <Route path='/forgot-password' element={<AuthLayout><ForgotPasswordPage/></AuthLayout>}/>
