@@ -1,14 +1,16 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import styles from './InitialPage.module.css';
 import card1IMG from '../../assets/card1.jpg';
 import card2IMG from '../../assets/card2.jpg';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import RippleButton from '../../components/buttons/landingPageBtn/Button';
+import Button from '../../components/buttons/landingPageBtn/Button';
 import { useInView } from 'react-intersection-observer';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import useLabStore from '../../stores/useLabStore';
+
 
 
 
@@ -20,13 +22,12 @@ const InitialPage = () => {
 
   const videoID = 'eYfTU8E0bgA'; // Your YouTube video ID
   const videoSrc = `https://www.youtube.com/embed/${videoID}?autoplay=1&mute=1&loop=1&playlist=${videoID}&controls=0&showinfo=0&rel=0&modestbranding=1`;
-
+  const {laboratories, fetchLaboratories, loading, error} = useLabStore();
   const labs = [
     { id: 1, name: "Lab", city: "Lisboa", imageUrl: "https://cdn.jornaldenegocios.pt/images/2021-05/img_1200x1200$2021_05_17_12_30_27_403373.jpg" },
     { id: 2, name: "Lab", city: "Coimbra", imageUrl: "https://www.campeaoprovincias.pt/wp-content/uploads/2024/01/Critical-768x614-1.jpg" },
     { id: 3, name: "Lab", city: "Porto", imageUrl: "https://www.porto.pt/_next/image?url=https%3A%2F%2Fmedia.porto.pt%2Foriginal_images%2Fmno_critical_techworks.jpg&w=730&q=85" }
   ];
-  
   const settings = {
     dots: true,
     infinite: true,
@@ -35,8 +36,15 @@ const InitialPage = () => {
     slidesToScroll: 1,
     autoplay: false,
     autoplaySpeed: 3000,
-    cssEase: "linear"
+    cssEase: "linear",
+    arrows: true
   };
+
+  useEffect(() => {
+    fetchLaboratories();
+  }, [fetchLaboratories]);
+
+  console.log(laboratories);
   
   return (
     <div className={styles.initialPage} >
@@ -45,8 +53,8 @@ const InitialPage = () => {
           <h1 className={styles.title}><FormattedMessage id="welcomeToCriticalLab">Welcome to Critical Lab!</FormattedMessage></h1>
           <p className={styles.subtitle}><FormattedMessage id="exploreInnovateMoveForward">Explore. Inove. Avance.</FormattedMessage></p>
           <div className={styles.buttons}>
-            <RippleButton path="/register" tradId="signUp" defaultText="Sign Up"/>
-            <RippleButton path="/homepage" tradId="enterTheApplication" defaultText="Enter The Application"/>
+            <Button path="/register" tradId="signUp" defaultText="Sign Up"/>
+            <Button path="/homepage" tradId="enterTheApplication" defaultText="Enter The Application"/>
           </div>
         </div>
       </div>
@@ -76,13 +84,13 @@ const InitialPage = () => {
               </div>
             </div>
             <div className={styles.card3}>
-            {labs.length > 0 ? (
+            {laboratories.length > 0 ? (
       <Slider {...settings} className={styles.carouselContainer}>
-        {labs.map(lab => (
+        {laboratories.map(lab => (
           <div key={lab.id} className={styles.labCard}>
             <img className={styles.labImage} src={lab.imageUrl} alt={lab.name} />
-            <h3>{lab.name} - {lab.city}</h3>
-            <RippleButton path="/homepage" tradId="seeLabProjects" defaultText="See Lab Projects"/>
+            <h3>{lab.location}</h3>
+            <Button path="/homepage" tradId="seeLabProjects" defaultText="See Lab Projects" btnColor={"var(--btn-color2)"}/>
           </div>
         ))}
       </Slider>

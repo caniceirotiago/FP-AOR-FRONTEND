@@ -2,10 +2,17 @@ import React, { useState , useEffect } from 'react';
 import styles from './ProfileForm.module.css';
 import { FormattedMessage} from 'react-intl';
 import userService from '../../../services/userService';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../firebase";
+import useLabStore from '../../../stores/useLabStore';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
-const ProfileForm = ({ userProfileInfo, isOwnProfile }) => {
+
+const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData }) => {
   const [isEditing, setIsEditing] = useState(false); 
-
+  const [profileImage, setProfileImage] = useState(null);
+  const {laboratories, fetchLaboratories} = useLabStore();
 
   const [profile, setProfile] = useState({
     email: '',
@@ -14,6 +21,7 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile }) => {
     biography: '',
     laboratoryId: '',
     private: '',
+    photo: '',
     });
 
   useEffect(() => {
@@ -21,19 +29,47 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile }) => {
     console.log('userProfileInfo:', userProfileInfo);
   }, [userProfileInfo]); 
 
+     const handleImageChange = (e) => {
+      if (e.target.files[0]) {
+        const file = e.target.files[0];
+        setProfileImage(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          //setImagePreview(reader.result); 
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+  useEffect(() => {
+    fetchLaboratories();
+  }, [fetchLaboratories]);
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setProfile(prev => ({ ...prev, [name]: value }));
   };
+  const handleBiographyChange = (value) => {
+    setProfile(prev => ({ ...prev, biography: value }));
+  };
 
+  const onUpdateSuccess = () => {
+    setIsEditing(false);
+    fetchUserData();
+  };
   const handleUpdateUserProfile = async () => {
     console.log('profile:', profile);
     try {
+      if (profileImage) {
+        const storageRef = ref(storage, `profile_images/${profileImage.name}`);
+        const snapshot = await uploadBytes(storageRef, profileImage);
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        profile.photo = downloadURL;
+      }
       const { email, ...profileData } = profile;
       const result = await userService.updateUser(profileData);
       if(result.status === 204){
         //notify('Profile updated successfully');
-        //onUpdateSuccess(); to fetch again the user profile
+        onUpdateSuccess(); 
       }
       else console.log("Failed to update profile")//notify('Failed to update profile. Please try again.');
     } catch (error) {
@@ -42,7 +78,6 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile }) => {
     }
   };  
 
-  
   return (
     <form className={styles.formProfile}>
       <div className={styles.inputGroup}>
@@ -87,37 +122,56 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile }) => {
         />
       </div>
 
-      <div className={styles.inputGroup}>
+      <div className={styles.inputGroupBigBox}>
         <label className={styles.label} htmlFor="biography">
           <FormattedMessage id="biography">Biography</FormattedMessage>
         </label>
-        <textarea
-          className={styles.input}
-          id="biography"
-          name="biography"
-          value={profile.biography}
-          onChange={handleInputChange}
-          placeholder="Enter your biography"
-          disabled={!isEditing}
-        />
+        {isEditing ? (
+          <ReactQuill
+            theme="snow"
+            value={profile.biography}
+            onChange={handleBiographyChange}
+            className={styles.quillEditor} 
+            modules={{
+              toolbar: [
+                [{ 'font': [] }],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ size: [] }],
+                ['bold', 'italic', 'underline', 'strike'],
+              ]
+            }}
+          />
+        ) : (
+          <div className={styles.biographyText}>
+            <div dangerouslySetInnerHTML={{ __html: profile.biography }} />
+          </div>
+        )}
+
       </div>
 
       <div className={styles.inputGroup}>
         <label className={styles.label} htmlFor="laboratoryId">
           <FormattedMessage id="laboratoryId">Laboratory ID</FormattedMessage>
         </label>
-        <input
-          className={styles.input}
-          type="text"
-          id="laboratoryId"
-          name="laboratoryId"
-          value={profile.laboratoryId}
-          onChange={handleInputChange}
-          placeholder="Enter your laboratory ID"
-          disabled={!isEditing}
-        />
+        <FormattedMessage id="laboratoryPlaceholder" defaultMessage="Select your laboratory">
+            {(placeholder) => (
+            <select
+                className={styles.select}
+                name="laboratoryId"
+                onChange={handleInputChange}
+                id="laboratoryId-field"
+                disabled={!isEditing}
+                value={profile.laboratoryId}
+            >
+                {laboratories.map((lab) => (
+                <option key={lab.id} value={lab.id}>
+                  {lab.location}
+                </option>
+                ))}
+            </select>
+            )}
+         </FormattedMessage>
       </div>
-
       <div className={styles.inputGroup}>
         <label className={styles.label} htmlFor="private">
           <FormattedMessage id="private">Private</FormattedMessage>
@@ -130,10 +184,22 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile }) => {
           onChange={handleInputChange}
           disabled={!isEditing}
         >
-          <option value="">Select visibility</option>
           <option value="true">Private</option>
           <option value="false">Public</option>
         </select>
+      </div>
+      <div className={styles.imageContainer} hidden={!isEditing}>
+          <label htmlFor="profileImage" className={styles.labelButton}>
+          <FormattedMessage id="uploadImage" defaultMessage="Upload Image" />
+          </label>
+          <input
+            type="file"
+            id="profileImage"
+            className={styles.fileInput}
+            onChange={handleImageChange}
+            disabled={!isEditing}
+            hidden={!isEditing}
+          />
       </div>
 
       {isEditing ? (

@@ -6,6 +6,7 @@ import {FormattedMessage} from "react-intl";
 import { FaKey } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import useDialogModalStore from '../../../stores/useDialogModalStore';
+import Button from '../../buttons/landingPageBtn/Button.jsx';
 
 
 
@@ -37,7 +38,6 @@ const ForgotPasswordForm = () => {
             setIsDialogOpen(true);
             setAlertType(true);
             setOnConfirm(async () => {
-                navigate('/');
             });
         } catch (error) {
             console.error('Error :', error);
@@ -46,15 +46,17 @@ const ForgotPasswordForm = () => {
 
     return (
         <div className={styles.mainContent}>
-            <form onSubmit={handleSubmit} className={styles.form}>
+            <form className={styles.form}>
                 <div className={styles.banner}>
                     <FaKey className={styles.loginIcon}/>
                     <p className={styles.memberLoginBanner}><FormattedMessage id="recoverPassword">Recover Password</FormattedMessage></p>
                 </div>
                 <label htmlFor="email">Email</label>
                 <input className={styles.input} type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                <button className={styles.button} type="submit"><FormattedMessage id="askForNewPassword">Ask for new password</FormattedMessage></button>
-                <button className={styles.button} onClick={() => navigate('/')}><FormattedMessage id="backToLogin">Back to login</FormattedMessage></button>
+                <div className={styles.btnDiv}>
+                    <Button onClick={handleSubmit} tradId="askForNewPassword" defaultText="Ask for new password" btnColor={"var(--btn-bolor2)"}/>
+                   <Button path="/" tradId="backToLogin" defaultText="Back to login" btnColor={"var(--btn-bolor2)"}/>
+                </div>
             </form>
         </div>
     );

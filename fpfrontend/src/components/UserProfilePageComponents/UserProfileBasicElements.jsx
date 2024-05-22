@@ -8,7 +8,7 @@ import styles from "./UserProfileBasicElements.module.css";
 import PasswordForm from "../auth regist/changePasswordForm/PasswordForm.jsx";
 import { FormattedMessage } from "react-intl";
 
-const UserProfileBasicElements = ({isOwnProfile, userProfileInfo}) => {
+const UserProfileBasicElements = ({isOwnProfile, userProfileInfo, fetchUserData}) => {
 
   const [showPasswordForm, setShowPasswordForm] = useState(false);
 
@@ -22,7 +22,7 @@ const UserProfileBasicElements = ({isOwnProfile, userProfileInfo}) => {
           {isOwnProfile ? (
           <>
             {!showPasswordForm ? (
-              <ProfileForm userProfileInfo={userProfileInfo} isOwnProfile={isOwnProfile} />
+              <ProfileForm userProfileInfo={userProfileInfo} isOwnProfile={isOwnProfile} fetchUserData={fetchUserData} />
             ) : (
               <PasswordForm />
             )}

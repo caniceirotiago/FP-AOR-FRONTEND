@@ -2,24 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './RegisterForm.module.css';
 import {FormattedMessage} from 'react-intl';
-import labService from '../../../services/labService';
 import userService from '../../../services/userService';
 import  DialogModalStore  from '../../../stores/useDialogModalStore';
 import  DialogMultipleMessagesModalStore  from '../../../stores/useDialogMultipleMessagesModalStore';
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from '../../../firebase';
-import placeHolderProfileImage from '../../../assets/profilePhotoPlaceholder.png'
 import { validatePassword } from '../../../utils/validators/userValidators';
 import Button from '../../buttons/landingPageBtn/Button';
+import  useLabStore  from '../../../stores/useLabStore.jsx';
+
 
 const RegisterForm = ( ) => {
    const { setDialogMultipleMessages, setDialogMultipleMessagesTitle, setIsDialogMultipleMessagesOpen } = DialogMultipleMessagesModalStore();
    const {setIsDialogOpen, setDialogMessage, setAlertType, setOnConfirm} = DialogModalStore();
-   const [profileImage, setProfileImage] = useState(null);
-   const [imagePreview, setImagePreview] = useState(null);
    const [loading, setLoading] = useState(false);
    const navigate = useNavigate();
-   const [laboratories, setLaboratories] = useState([]);
    const [user, setUser] = useState({
       email: '',
       password: '',
@@ -31,33 +26,22 @@ const RegisterForm = ( ) => {
    });
    const [passwordStrength, setPasswordStrength] = useState(0);
    const [passwordError, setPasswordError] = useState('');
+   const [passwordStrongEnough, setpasswordStrongEnough] = useState(true);
+   const { laboratories, fetchLaboratories } = useLabStore();
+
 
    useEffect(() => {
-    const fetchLaboratories = async () => {
-      try {
-        const response = await labService.fetchAllLabs(); 
-        const data = await response.json();
-        console.log(data);
-        setLaboratories(data);
-      } catch (error) {
-        console.error('Error fetching labs:', error);
-        setLaboratories([]);
-      }
-    };
-    fetchLaboratories();
-  }, []);
+      fetchLaboratories();
+    }, [fetchLaboratories]);
 
-   const checkPasswordStrength = (password) => {
-      if (!password) {
-      setPasswordStrength(0);
-      } else if (validatePassword(password)) {
-      setPasswordStrength(3);
-      } else {
-      setPasswordStrength(2);
-      }
-   };
+    const checkPasswordStrength = (password) => {
+      const { isValid, errors, score } = validatePassword(password);
+      setPasswordStrength(score);
+      setPasswordError(errors.join(' '));
+      setpasswordStrongEnough(isValid);
 
-   
+  };
+
    const handleChange = (e) => {
       const { name, value } = e.target;
       if (name === 'password') {
@@ -98,6 +82,8 @@ const RegisterForm = ( ) => {
          Username: !user.username ? ' is required' : '',
          Name: !user.firstName || !user.lastName ? 'First name and last name are required' : '',
          Laboratory: !user.laboratoryId ? ' is required' : '',
+         Weak: passwordStrongEnough ? '' : 'Password is not strong enough'
+
     };
     const isValid = Object.keys(newErrors).every((key) => !newErrors[key]);
     if (isValid) {
@@ -133,6 +119,11 @@ const RegisterForm = ( ) => {
         } catch (error) {
           console.error('Error:', error.message);
           setLoading(false);
+          setDialogMessage('Error: Please try again later., or contact support.');
+            setIsDialogOpen(true);
+            setAlertType(true);
+            setOnConfirm(async () => {
+            });
         }
     } else {
        const errorMessages = Object.entries(newErrors)
@@ -174,16 +165,14 @@ const RegisterForm = ( ) => {
                      maxLength="25"
                      placeholder={value}
                   />)}</FormattedMessage>
-                  {passwordStrength === 2 && (
-                     <div className={styles.passwordStrength} style={{ color: 'yellow' }}>
-                        <FormattedMessage id="weakPassword" />
-                     </div>
-                     )}
-                     {passwordStrength === 3 && (
-                     <div className={styles.passwordStrength} style={{ color: 'green' }}>
-                        <FormattedMessage id="strongPassword" />
-                     </div>
-                     )}
+                  <div className={styles.passwordStrength}>
+                            <div style={{ width: `${passwordStrength * 25}%`, backgroundColor: passwordStrength >= 3 ? 'green' : 'yellow', height: '5px', marginTop: '5px' }}></div>
+                        </div>
+                        {passwordError && (
+                            <div className={styles.passwordError}>
+                                {passwordError}
+                            </div>
+                        )}
                   <label className={styles.label} id="password-label2" htmlFor="password2-field">Repeat Password</label>
                   <FormattedMessage id="passwordPlaceholder">{(value) => (<input
                      className={styles.input}
@@ -228,7 +217,7 @@ const RegisterForm = ( ) => {
                      maxLength="35"
                      placeholder={value}
                   />)}</FormattedMessage>
-                                    <div>
+                  <div>
                      <label className={styles.label} htmlFor="laboratoryId-field">
                            <FormattedMessage id="laboratoryId" defaultMessage="Laboratory" />
                      </label>

@@ -1,5 +1,5 @@
 .main{
-  height: calc(100% - 90px); 
+  height: calc(100% - 40px); 
 }
 
 .board {
@@ -7,7 +7,7 @@
   flex-direction: column;
   width: 100%;
   align-self: center;
-  margin: 5px 0px;
+  margin: 0px 0px;
   display: flex;
   flex-direction: row; 
   padding: 0; 

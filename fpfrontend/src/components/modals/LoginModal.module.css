@@ -33,6 +33,8 @@
     }
 }
 
+
+
 .form {
     display: flex;
     flex-direction: column;
@@ -41,10 +43,24 @@
 .banner {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content:space-between;
     margin-bottom: 20px;
 }
-
+.closeButton {
+    top: 10px;
+    right: 10px;
+    font-size: 1.5em;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s;
+    border: none;
+    background-color: transparent;
+}
+.closeButtonGhost {
+    border: none;
+    color: transparent;
+    background-color: transparent;
+}
 .loginIcon {
     width: 50px;
     height: 50px;
@@ -101,7 +117,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 30px;
+    gap: 10px;
+}
+.signup {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+.forgotPassword {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .resendConfirmation {

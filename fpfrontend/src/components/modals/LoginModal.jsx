@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import userService from '../../services/userService'
 import useAuthStore from '../../stores/useAuthStore.jsx'
 import useDialogModalStore from  '../../stores/useDialogModalStore.jsx'
+import Button from '../buttons/landingPageBtn/Button.jsx'
 
 
 const LoginModal = () => {
@@ -61,22 +62,28 @@ const LoginModal = () => {
     return(<>
         <div className={styles.mainContentModal} >
             <div className={styles.modal}>
-                <form id="loginForm" onSubmit={handleLogin} className={styles.form}>
+                <form id="loginForm" className={styles.form}>
                     <div className={styles.banner}>
+                        <div className={styles.closeButtonGhost}>X</div>
                         <p className={styles.memberLoginBanner}><FormattedMessage id="memberLogin">Member Login</FormattedMessage></p>
-                        <button  type="button" onClick={handleOnClose} className={styles.closeButton}>X</button>
+                        <div  onClick={handleOnClose} className={styles.closeButton}>X</div>
                     </div>
                     <div className={styles.content}>
                         <label htmlFor="email" className={styles.label}><FormattedMessage id="email">Email</FormattedMessage></label>
                         <input className={styles.input} type="email" name="email" id="email" maxLength="100" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         <label htmlFor="password" className={styles.label}><FormattedMessage id="password">Password</FormattedMessage></label>
                         <input className={styles.input} type="password" name="password" id="password" maxLength="25" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                        <input className={styles.submit} type="submit" id="login" value="Login" />
+                        <Button onClick={handleLogin} tradId="login" defaultText="Login" btnColor={"var(--btn-color2)"} />
                     </div>
                 </form>
                 <div className={styles.otherOptions}>
-                    <div className={styles.signup}><FormattedMessage id="dontHaveAnAccount">Don't have an account?</FormattedMessage><button onClick={handleSignUpNavigation}><FormattedMessage id="signUp">Sign up</FormattedMessage></button></div>
-                    <div className={styles.forgotPassword}><button onClick={handleForgotPasswordNavigation}><FormattedMessage id="forgotThePassword">Forgot the password?</FormattedMessage></button></div>
+                    <div className={styles.signup}>
+                        <FormattedMessage id="dontHaveAnAccount">Don't have an account?</FormattedMessage>
+                        <Button onClick={handleSignUpNavigation} tradId="signUp" defaultText="Sign Up" btnColor={"var(--btn-color2)"}/>
+                    </div>
+                    <div className={styles.forgotPassword}>
+                         <Button onClick={handleForgotPasswordNavigation} tradId="forgotThePassword" defaultText="Forgot the password?" btnColor={"var(--btn-color2)"}/> 
+                        </div>
                     <div className={styles.resendConfirmation}>
                         <FormattedMessage id="didntReceiveConfirmationEmail">
                             <span>Didn't receive the confirmation email? </span>

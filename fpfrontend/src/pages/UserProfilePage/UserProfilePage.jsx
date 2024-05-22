@@ -29,8 +29,7 @@ const UserProfilePage = () => {
     checkIfOwnProfile();
   }, [userProfileInfo, usernameProfile]);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
+  const fetchUserData = async () => {
         try {
           const response = await userService.fetchUserInfo(usernameProfile);
           const data = await response.json();
@@ -47,7 +46,7 @@ const UserProfilePage = () => {
           console.error("Failed to fetch user data:", error);
         }
     };
-
+  useEffect(() => {
     fetchUserData();
   }, [usernameProfile]);
 
@@ -65,7 +64,7 @@ const UserProfilePage = () => {
       </div>
     ) : (
       <div className={styles.userProfilePage} >
-        <UserProfileBasicElements isOwnProfile={isOwnProfile} userProfileInfo={userProfileInfo}/>
+        <UserProfileBasicElements fetchUserData={fetchUserData} isOwnProfile={isOwnProfile} userProfileInfo={userProfileInfo}/>
       </div>
       
     )}
