@@ -35,8 +35,15 @@
   padding: 30px;
   border-top-right-radius: 50px;
   border-top-left-radius: 50px;
-  gap: 20px;
+  justify-content: center;
 
+}
+.cardContainer{
+  display: grid;
+  max-width: 1000px;
+  justify-content: center;
+  margin: 0 auto; 
+  grid-gap: 35px;
 }
 .card1 {
   position: relative; 
@@ -46,6 +53,7 @@
   overflow: hidden; 
   padding-top: 56.25%;
   width: 100%; 
+  justify-self: center;
 }
 
 .card1Video {
@@ -102,19 +110,11 @@
   border-radius: 40px;
 }
 
-@media (max-width: 768px) {
-  .card2 {
-    flex-direction: column; 
-  }
-
-  .card2ImageSection, .card2TextSection {
-    flex: none; 
-    width: 100%; 
-  }
-
-  .card2TextSection {
-    order: -1; 
-  }
+.card3{
+  background-color: white;
+  overflow: hidden;
+  align-items: center; 
+  justify-content: center;
 }
 
 
@@ -135,6 +135,28 @@
   display: flex;
   gap: 20px;
 }
+.carouselContainer {
+  width: 80%;
+  margin: 20px auto;
+  overflow: hidden; 
+}
+
+
+.labCard {
+  text-align: center;
+  padding: 20px;
+}
+
+.labImage {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  max-width: 300px;
+  max-height: 300px;
+}
+
+
 
 
 @keyframes fadeInDown {
@@ -177,8 +199,6 @@
 }
 
 
-
-
 @media (max-width: 768px) {
   .card2 {
     flex-direction: column; 
@@ -192,5 +212,9 @@
   .card2TextSection {
     order: -1; 
   }
-
+}
+@media (min-width: 1000px) {
+  .appPresentation {
+    padding: 30px 80px; 
+  }
 }

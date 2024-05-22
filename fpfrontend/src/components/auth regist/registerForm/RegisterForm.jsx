@@ -10,6 +10,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../firebase';
 import placeHolderProfileImage from '../../../assets/profilePhotoPlaceholder.png'
 import { validatePassword } from '../../../utils/validators/userValidators';
+import Button from '../../buttons/landingPageBtn/Button';
 
 const RegisterForm = ( ) => {
    const { setDialogMultipleMessages, setDialogMultipleMessagesTitle, setIsDialogMultipleMessagesOpen } = DialogMultipleMessagesModalStore();
@@ -26,8 +27,6 @@ const RegisterForm = ( ) => {
       username: '',
       firstName: '',
       lastName: '',
-      photo: '',
-      biography: '',
       laboratoryId: '',
    });
    const [passwordStrength, setPasswordStrength] = useState(0);
@@ -75,17 +74,17 @@ const RegisterForm = ( ) => {
       }));
     };
 
-   const handleImageChange = (e) => {
-      if (e.target.files[0]) {
-        const file = e.target.files[0];
-        setProfileImage(file);
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreview(reader.result); 
-        };
-        reader.readAsDataURL(file);
-      }
-    };
+   // const handleImageChange = (e) => {
+   //    if (e.target.files[0]) {
+   //      const file = e.target.files[0];
+   //      setProfileImage(file);
+   //      const reader = new FileReader();
+   //      reader.onloadend = () => {
+   //        setImagePreview(reader.result); 
+   //      };
+   //      reader.readAsDataURL(file);
+   //    }
+   //  };
 
    const handleSubmit = async (e) => {
     e.preventDefault();
@@ -99,19 +98,17 @@ const RegisterForm = ( ) => {
          Username: !user.username ? ' is required' : '',
          Name: !user.firstName || !user.lastName ? 'First name and last name are required' : '',
          Laboratory: !user.laboratoryId ? ' is required' : '',
-         Photo: !imagePreview ? ' is required' : '',
     };
     const isValid = Object.keys(newErrors).every((key) => !newErrors[key]);
-    console.log(isValid);
     if (isValid) {
        try {
           setLoading(true);
-          if (profileImage) {
-            const storageRef = ref(storage, `profile_images/${profileImage.name}`);
-            const snapshot = await uploadBytes(storageRef, profileImage);
-            const downloadURL = await getDownloadURL(snapshot.ref);
-            userData.photo = downloadURL;
-          }
+         //  if (profileImage) {
+         //    const storageRef = ref(storage, `profile_images/${profileImage.name}`);
+         //    const snapshot = await uploadBytes(storageRef, profileImage);
+         //    const downloadURL = await getDownloadURL(snapshot.ref);
+         //    userData.photo = downloadURL;
+         //  }
           console.log(userData);
           const response = await userService.registerUser(userData);
          if (response.status !== 204) {
@@ -150,7 +147,7 @@ const RegisterForm = ( ) => {
   return (
       <div className={styles.mainContent}>
          {loading && <div className="spinner"></div>}
-         <form className={styles.registrationForm} onSubmit={handleSubmit}>
+         <form className={styles.registrationForm}>
             <div className={styles.formContent}>
                <div className={styles.formSection1}>
                   <label className={styles.label} id="email-label" htmlFor="email-field"><FormattedMessage id="email">Email</FormattedMessage></label>
@@ -231,10 +228,35 @@ const RegisterForm = ( ) => {
                      maxLength="35"
                      placeholder={value}
                   />)}</FormattedMessage>
-                  
+                                    <div>
+                     <label className={styles.label} htmlFor="laboratoryId-field">
+                           <FormattedMessage id="laboratoryId" defaultMessage="Laboratory" />
+                     </label>
+                     <FormattedMessage id="laboratoryPlaceholder" defaultMessage="Select your laboratory">
+                           {(placeholder) => (
+                           <select
+                              className={styles.select}
+                              name="laboratoryId"
+                              onChange={handleChange}
+                              id="laboratoryId-field"
+                           >
+                              <option value="">{placeholder}</option>
+                              {laboratories.map((lab) => (
+                              <option key={lab.id} value={lab.id}>
+                                 {lab.location}
+                              </option>
+                              ))}
+                           </select>
+                           )}
+                     </FormattedMessage>
+                  </div>
+                  <div className={styles.btnDiv}>
+                     <Button onClick={handleSubmit} tradId="register" defaultText="Register" btnColor={"var(--btn-color2)"} backgroundColor={"var(--btn-background2)"}/>
+                     <Button path="/" tradId="back" defaultText="Back"btnColor={"var(--btn-color2)"} backgroundColor={"var(--btn-background2)"}/>  
+                  </div>
+
                </div>
-               <div className={styles.formSection2}>
-                  <div className={styles.imageContainer}>
+                  {/* <div className={styles.imageContainer}>
                      <img
                      src={imagePreview || placeHolderProfileImage} 
                      alt="Profile Preview"
@@ -260,33 +282,8 @@ const RegisterForm = ( ) => {
                      id="biography-field" 
                      maxLength="1000" 
                      placeholder={value}
-                     />)}</FormattedMessage>
-                  <div>
-                     <label className={styles.label} htmlFor="laboratoryId-field">
-                           <FormattedMessage id="laboratoryId" defaultMessage="Laboratory" />
-                     </label>
-                     <FormattedMessage id="laboratoryPlaceholder" defaultMessage="Select your laboratory">
-                           {(placeholder) => (
-                           <select
-                              className={styles.select}
-                              name="laboratoryId"
-                              onChange={handleChange}
-                              id="laboratoryId-field"
-                           >
-                              <option value="">{placeholder}</option>
-                              {laboratories.map((lab) => (
-                              <option key={lab.id} value={lab.id}>
-                                 {lab.location}
-                              </option>
-                              ))}
-                           </select>
-                           )}
-                     </FormattedMessage>
-                  </div>  
-               <FormattedMessage id="registration">{(value) => (<input type="submit" id="registration" value={value}/>)}</FormattedMessage>
-               <button className={styles.backButton} onClick={() => navigate('/')}><FormattedMessage id="back">Back</FormattedMessage></button>                
-               </div>
-               
+                     />)}</FormattedMessage> */}
+           
             </div>
          </form>
       </div>    
