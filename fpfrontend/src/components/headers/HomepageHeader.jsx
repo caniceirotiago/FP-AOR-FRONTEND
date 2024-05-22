@@ -162,7 +162,7 @@ const HomepageHeader = () => {
         null}
         <div className={styles.notificationSection}>
           <div  ref={notificationToggleButtonRef} className={styles.notificationBell} onClick = {handleToggleNotificationMenu}>
-            <FaBell />
+            {/* <FaBell /> */}
             {/*  */}
           </div>
           {isNotificationListOpen && (

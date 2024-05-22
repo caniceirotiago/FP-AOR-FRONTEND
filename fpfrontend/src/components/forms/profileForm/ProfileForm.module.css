@@ -1,10 +1,22 @@
+.Profile{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  max-width: 600px;
+  width: 100%;
+  margin-bottom: 40px;  
+
+}
 .formProfile {
+  
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 15px;
     padding: 1px;
     max-width: 600px;
     width: 100%;
+    margin-bottom: 40px;
   }
 
 .inputGroup {
@@ -28,7 +40,8 @@
 .input[type="text"],
 .input[type="email"],
 .input[type="tel"],
-.input[type="submit"] {
+.input[type="submit"],
+.select {
   padding: 5px;
   border: 1px solid #ccc;
   font-size: 16px;
@@ -36,8 +49,15 @@
   width: 100%; 
   background-color: transparent; 
   border: none; 
-  border-bottom: 2px solid #e0e0e0; 
+  border-bottom: 2px solid #e0e0e0;
 }
+
+.select:disabled {
+  color: #666; 
+  background-color: transparent;
+  cursor: not-allowed;
+}
+
 
 .input[type="submit"], .editButton[type="button"] {
   border-radius: 5px;
@@ -70,7 +90,7 @@
   border-radius: 5px;
   padding: 10px;
   flex-grow: 1;
-  max-height: 125px;
+  max-height: 200px;
   overflow-y: auto ;
 }
 :global(.quillEditor) {
@@ -100,4 +120,14 @@
 }
 
 
-  
+/* .inputFile{
+  border: solid 1px #ccc;
+  color: transparent;
+  background-color: transparent;
+  opacity: 0;
+}
+.updateFilebtn{
+  flex-grow: 1;
+  display: flex;
+}
+   */

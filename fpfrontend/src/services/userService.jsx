@@ -134,6 +134,23 @@ const userService = {
       throw error;
     }
   },
+  updateUserPassword: async (oldPassword, newPassword) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/password`, {
+            method: "PUT",
+            headers: getAuthHeaders(),
+            body: JSON.stringify({
+                oldPassword: oldPassword, 
+                newPassword: newPassword, 
+            }),
+            credentials: "include",
+        });
+        return response;
+    } catch (error) {
+        console.error("Error updating password:", error.message);
+        throw error;
+    }
+},
 };
 
 export default userService;

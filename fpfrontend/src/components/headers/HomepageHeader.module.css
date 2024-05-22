@@ -27,14 +27,7 @@
     align-content: center;
   }
   
-  .logo {
-    max-width: 88px;
-    height: auto;
-    display: flex;
-    margin-right: 20px;
-    margin-left: 20px;
-    cursor: pointer;
-  }
+
   
   .topRightFlags li {
     display: inline;
@@ -215,7 +208,7 @@
 }
 
 .logo {
-  max-width: 88px;
+  max-width: 100px;
   height: auto;
   display: flex;
   margin-right: 20px;
@@ -261,13 +254,6 @@
   cursor: pointer;
 }
 
-.usernameDisplay {
-  padding: 0px 15px;
-  font-size: 20px;
-  align-content: center;
-  justify-content: center;
-  text-decoration: none;
-}
 
 
 .topnav {
@@ -435,10 +421,9 @@ background-color: var(--secondary-color);
   border-radius: 50%;
 }
 
-.userName {
-  flex-grow: 1;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
 
+@media (max-width:768px){
+  .usernameDisplay {
+    display: none !important;
+  }
+}

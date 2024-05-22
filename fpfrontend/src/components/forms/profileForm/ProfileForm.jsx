@@ -7,9 +7,15 @@ import { storage } from "../../../firebase";
 import useLabStore from '../../../stores/useLabStore';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import useDialogModalStore from '../../../stores/useDialogModalStore';
+import Button from '../../buttons/landingPageBtn/Button.jsx'
+
+
+
 
 
 const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData }) => {
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
   const [isEditing, setIsEditing] = useState(false); 
   const [profileImage, setProfileImage] = useState(null);
   const {laboratories, fetchLaboratories} = useLabStore();
@@ -70,15 +76,35 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData }) => {
       if(result.status === 204){
         //notify('Profile updated successfully');
         onUpdateSuccess(); 
+        setDialogMessage('Profile updated successfully');
+        setIsDialogOpen(true);
+        setAlertType(true);
+        setOnConfirm(async () => {});
       }
-      else console.log("Failed to update profile")//notify('Failed to update profile. Please try again.');
+      else {
+        console.log("Failed to update profile")
+        setDialogMessage('Failed to update profile. Please try again.');
+        setIsDialogOpen(true);
+        setAlertType(true);
+        setOnConfirm(async () => {});
+      }
     } catch (error) {
+      setDialogMessage('Failed to update profile. Please try again.');
+      setIsDialogOpen(true);
+      setAlertType(true);
+      setOnConfirm(async () => {});
       console.error("Failed to update user profile:", error);
       console.log("Failed to update profile") //notify('Failed to update profile. Please try again.');
     }
   };  
+  const handleEditModeTrue = (e) => {
+    console.log("Entering edit mode");
+    setIsEditing(true);
+  }
 
   return (
+    <div className={styles.Profile}>
+
     <form className={styles.formProfile}>
       <div className={styles.inputGroup}>
         <label className={styles.label} htmlFor="email"><FormattedMessage id="email">Email</FormattedMessage></label>
@@ -177,7 +203,7 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData }) => {
           <FormattedMessage id="private">Private</FormattedMessage>
         </label>
         <select
-          className={styles.input}
+          className={styles.select}
           id="private"
           name="private"
           value={profile.private}
@@ -188,33 +214,30 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData }) => {
           <option value="false">Public</option>
         </select>
       </div>
-      <div className={styles.imageContainer} hidden={!isEditing}>
-          <label htmlFor="profileImage" className={styles.labelButton}>
-          <FormattedMessage id="uploadImage" defaultMessage="Upload Image" />
+      <div className={styles.inputGroup} hidden={!isEditing}>
+          <label htmlFor="profileImage" className={styles.label} hidden={!isEditing}>
+          <FormattedMessage id="uploadNewImage" defaultMessage="Upload New Image" />
           </label>
-          <input
+          <div className={styles.updateFilebtn}>
+            <input
             type="file"
             id="profileImage"
-            className={styles.fileInput}
+            className={styles.inputFile}
             onChange={handleImageChange}
             disabled={!isEditing}
             hidden={!isEditing}
           />
+          </div>
       </div>
-
-      {isEditing ? (
-        <button className={styles.input} type="button" value={"Save Changes"} onClick={() => handleUpdateUserProfile()}>
-          <FormattedMessage id="saveChangesUserProfForm"></FormattedMessage>
-        </button>
+    </form>
+    {isEditing ? (
+        <Button className={styles.button} onClick={handleUpdateUserProfile} tradId="saveChangesUserProfForm" defaultText="Save Changes" btnColor={"var(--btn-color2)"}/> 
         ) : (
           isOwnProfile && (
-            <button type="button" onClick={() => setIsEditing(true)} className={styles.editButton} >
-            <FormattedMessage id="editBtnProfForm">Edit</FormattedMessage>
-          </button>
+            <Button className={styles.button} type="button" onClick={(event) => handleEditModeTrue(event)} tradId="editBtnProfForm" defaultText="Edit" btnColor={"var(--btn-color2)"}/> 
           )
         )}
-
-    </form>
+     </div>   
   );
 };
 

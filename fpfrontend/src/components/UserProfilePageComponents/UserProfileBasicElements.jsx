@@ -7,6 +7,8 @@ import ProfileForm from "../forms/profileForm/ProfileForm.jsx";
 import styles from "./UserProfileBasicElements.module.css";
 import PasswordForm from "../auth regist/changePasswordForm/PasswordForm.jsx";
 import { FormattedMessage } from "react-intl";
+import Button from '../buttons/landingPageBtn/Button.jsx'
+
 
 const UserProfileBasicElements = ({isOwnProfile, userProfileInfo, fetchUserData}) => {
 
@@ -26,9 +28,7 @@ const UserProfileBasicElements = ({isOwnProfile, userProfileInfo, fetchUserData}
             ) : (
               <PasswordForm />
             )}
-            <button onClick={() => setShowPasswordForm(!showPasswordForm)} className={styles.toggleFormButton}>
-              {showPasswordForm ? <FormattedMessage id="editProfileInformation">Edit Profile Information</FormattedMessage> : <FormattedMessage id="changePassword">Change Password</FormattedMessage>}
-            </button>
+            <Button className={styles.toggleFormButton} onClick={() => setShowPasswordForm(!showPasswordForm)} tradId={showPasswordForm ? "editProfileInformation" :  "changePassword"} defaultText={showPasswordForm ? "Edit Profile Information" :  "Change Password"} btnColor={"var(--btn-color2)"}/> 
           </>
           ) : (<>
             <ProfileForm userProfileInfo={userProfileInfo} readOnly={true} isOwnProfile={isOwnProfile}/>

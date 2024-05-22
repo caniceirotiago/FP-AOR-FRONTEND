@@ -1,7 +1,6 @@
 .ReportPage {
   height: 100%;
   width: 100%;
-  background-image: url('../../assets/background.jpg'); 
   background-size: cover;
   background-position: center;
   display: flex;
