@@ -1,13 +1,16 @@
 .mainContent {
-  display: flex;
-  height: 100%;
-  width: 100%;
+
+  height: 80%;
+  width: 80%;
   align-self: center;
   justify-self: center;
+  margin: 60px, auto ;
+  max-width: 500px;
 }
 .formContent {
   padding: 25px;
   display: flex;
+
 }
 .registrationForm {
   background-color: rgba(255, 255, 255, 0.3); 
@@ -17,16 +20,10 @@
   transition: transform 0.2s ease;
 }
 .formSection1{
-  width: 50%;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+
 }
-.formSection2{
-  width: 50%;
-  padding: 25px;
-  display: flex;
-  flex-direction: column;
-}
+
 
 .input[type="text"],
 .input[type="password"],
@@ -46,7 +43,12 @@
 .select{
   width: 100%
 }
-.imageContainer {
+.btnDiv{
+  display: flex;
+  padding: 10px;
+  gap: 10px;
+}
+/* .imageContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -64,9 +66,9 @@
 
 .fileInput {
   display: none;
-}
+} */
 
-.labelButton {
+/* .labelButton {
   background-color: #007bff;
   color: white;
   padding: 5px 10px;
@@ -77,17 +79,17 @@
 
 .labelButton:hover {
   background-color: #0056b3;
-}
-.passwordStrength {
+} */
+/* .passwordStrength {
   margin-top: 5px;
-}
+} */
 .spinner {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
-.infoIcon {
+/* .infoIcon {
   margin-left: 5px;
   cursor: pointer;
-}
+} */

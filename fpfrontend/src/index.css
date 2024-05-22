@@ -18,6 +18,14 @@ code {
     monospace;
 }
 
+:root {
+  --btn-color1: white;
+  --btn-color2: black;
+  --btn-background1: #17a2b8;
+  --btn-background2: #117a8b;
+}
+
+
 body.theme-light {
   --primary-color: #e6e1dd;
   --secondary-color: rgb(255, 255, 255, 0.111);
@@ -29,6 +37,8 @@ body.theme-light {
   --text-color: rgb(0, 0, 0, 1);
   --text-color2: rgb(255, 255, 255, 1);
   --text-color3: rgb(0, 0, 0, 1);
+
+
 }
 
 body.theme-dark {
