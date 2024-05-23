@@ -21,6 +21,7 @@ import InventoryPage from './pages/InventoryPage/InventoryPage.jsx';
 import SettingsPage from './pages/SettingsPage/SettingsPage.jsx';
 import ProtectedRoute from './components/auth regist/ProtecterRoute.jsx';
 import LandingPageLayout from './pages/layout/LandingPageLayout.jsx';
+import ResendEmailPage from './pages/ResendEmailPage/ResendEmailPage.jsx';
 
 function App() {
   const { locale } = useTranslationsStore();
@@ -34,7 +35,8 @@ function App() {
           <Routes>
               <Route path="/" element={<LandingPageLayout><InitialPage /></LandingPageLayout>} />
               <Route path="/register" element={<AuthLayout><RegisterPage /></AuthLayout>} />
-              <Route path="/confirm" element={<EmailConfirmationPage />} />
+              <Route path="/confirm" element={<AuthLayout><EmailConfirmationPage /></AuthLayout>} />
+              <Route path='/request/newemail' element={<AuthLayout><ResendEmailPage/></AuthLayout>}/>
               <Route path='/forgot-password' element={<AuthLayout><ForgotPasswordPage/></AuthLayout>}/>
               <Route path="/reset-password" element={<AuthLayout><ResetPasswordPage/></AuthLayout>}/>
               <Route path="/homepage" element={<MainLayout><HomePage /></MainLayout>} />

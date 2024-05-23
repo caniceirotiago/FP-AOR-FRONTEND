@@ -150,7 +150,23 @@ const userService = {
         console.error("Error updating password:", error.message);
         throw error;
     }
-},
+  },
+  requestNewConfirmationEmail: async (email) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/request/confirmation/email`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email }),
+        });
+        
+        return response;
+    } catch (error) {
+        console.error("Erro ao solicitar novo e-mail de confirmação:", error);
+        throw error;
+    }
+}
 };
 
 export default userService;

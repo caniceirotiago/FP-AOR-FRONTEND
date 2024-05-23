@@ -54,6 +54,10 @@ const LoginModal = () => {
         setIsLoginModalOpen(false);
         navigate('/forgot-password');
     }
+    const handleResendEmail = (event) => {
+        setIsLoginModalOpen(false);
+        navigate('/request/newemail');
+    }
     const handleOnClose = (event) => {
         setIsLoginModalOpen(false);
     }
@@ -82,15 +86,10 @@ const LoginModal = () => {
                         <Button onClick={handleSignUpNavigation} tradId="signUp" defaultText="Sign Up" btnColor={"var(--btn-color2)"}/>
                     </div>
                     <div className={styles.forgotPassword}>
-                         <Button onClick={handleForgotPasswordNavigation} tradId="forgotThePassword" defaultText="Forgot the password?" btnColor={"var(--btn-color2)"}/> 
-                        </div>
+                        <Button onClick={handleForgotPasswordNavigation} tradId="forgotThePassword" defaultText="Forgot the password?" btnColor={"var(--btn-color2)"}/> 
+                    </div>
                     <div className={styles.resendConfirmation}>
-                        <FormattedMessage id="didntReceiveConfirmationEmail">
-                            <span>Didn't receive the confirmation email? </span>
-                        </FormattedMessage>
-                        {/* <Link to="/resend-email">
-                            <FormattedMessage id="resendEmail">Resend Email</FormattedMessage>
-                        </Link> */}
+                      <Button onClick={handleResendEmail} tradId="resendEmail" defaultText="Resend Confirmation Email" btnColor={"var(--btn-color2)"}/> 
                     </div>
                 </div>
             </div>
