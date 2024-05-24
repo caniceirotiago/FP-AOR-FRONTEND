@@ -4,7 +4,7 @@ const API_BASE_URL =
 
 const getAuthHeaders = () => {
   return {
-    Accept: "application/json",
+    "Accept": "application/json",
     "Content-Type": "application/json",
   };
 };
@@ -14,9 +14,7 @@ const userService = {
     try {
       const response = await fetch(`${API_BASE_URL}/register`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(userData),
       });
       return response;
@@ -40,9 +38,7 @@ const userService = {
     try {
       const response = await fetch(`${API_BASE_URL}/request/password/reset`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ email }),
       });
       return response;
@@ -56,9 +52,7 @@ const userService = {
     try {
       const response = await fetch(`${API_BASE_URL}/password/reset`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ resetToken, newPassword }),
       });
       return response;
@@ -72,10 +66,7 @@ const userService = {
     try {
       const response = await fetch(`${API_BASE_URL}/login`, {
         method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(userLogin),
         credentials: "include",
       });
@@ -155,9 +146,7 @@ const userService = {
     try {
         const response = await fetch(`${API_BASE_URL}/request/confirmation/email`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: getAuthHeaders(),
             body: JSON.stringify({ email }),
         });
         
