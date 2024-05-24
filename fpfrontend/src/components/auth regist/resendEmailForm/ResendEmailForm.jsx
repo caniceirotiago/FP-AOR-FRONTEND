@@ -5,6 +5,7 @@ import { FaEnvelope } from 'react-icons/fa';
 import userService from '../../../services/userService';
 import styles from './ResendEmailForm.module.css';
 import DialogModalStore from '../../../stores/useDialogModalStore';
+import Button from '../../buttons/landingPageBtn/Button.jsx';
 
 
 
@@ -43,16 +44,17 @@ const ResendEmailForm = () => {
 
     return (
         <div className={styles.mainContent}>
-            <form onSubmit={handleSubmit} className={styles.form}>
+            <form  className={styles.form}>
                 <div className={styles.banner}>
                     <FaEnvelope className={styles.loginIcon}/>
                     <p className={styles.memberLoginBanner}><FormattedMessage id="resendConfirmationEmail">Resend Confirmation Email</FormattedMessage></p>
                 </div>
                 <label htmlFor="email">Email</label>
                 <input className={styles.input} type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                <button className={styles.button} type="submit"><FormattedMessage id="askForNewConfirmation">Ask for Confirmation</FormattedMessage></button>
-                <button className={styles.button} onClick={() => navigate('/')}><FormattedMessage id="backToLogin">Back to login</FormattedMessage></button>
-
+                <div className={styles.btnDiv}>
+                    <Button onClick={handleSubmit} tradId="askForNewConfirmation" defaultText="Ask For New Confirmation" btnColor={"var(--btn-color2)"}/>
+                  <Button onClick={() => navigate('/')} tradId="back" defaultText="Back" btnColor={"var(--btn-color2)"}/>
+                </div>
             </form>
         </div>
     );

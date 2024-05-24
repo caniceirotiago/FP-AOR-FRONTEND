@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import Cookies from 'js-cookie';
 
-const useAuthStore = create((set) => ({
+const useAuthStore = create((set,get) => ({
   isAuthenticated: !!Cookies.get('authToken'), // operator !! converts to boolean 
   login: () => {
     set({ isAuthenticated: true });

@@ -41,6 +41,7 @@ const LoginModal = () => {
             localStorage.setItem('photo', data.photo);
             localStorage.setItem('username', data.username);
             localStorage.setItem('role', data.role);
+            localStorage.setItem('userId', data.id);
             setIsLoginModalOpen(false); 
             login();
             navigate('/authenticatedhomepage');

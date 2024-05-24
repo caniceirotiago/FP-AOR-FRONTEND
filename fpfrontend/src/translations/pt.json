@@ -69,6 +69,10 @@
     "appDetails": "A Ctritical Lab App facilita a criação, gestão e acompanhamento de projetos inovadores num ambiente colaborativo. As funcionalidades incluem perfis de utilizadores, gestão de projetos, alocação de recursos e canais de comunicação seguros.",
     "uploadImage": "Carregar Imagem",
     "laboratoryPlaceholder": "Selecione um laboratório",
-    "seeLabProjects": "Ver Projetos do Laboratório"
+    "seeLabProjects": "Ver Projetos do Laboratório",
+    "resendConfirmationEmail": "Reenviar Email de Confirmação",
+    "askForNewConfirmation": "Solicitar Novo Email de Confirmação",
+    "login": "Iniciar Sessão",
+    "resendEmail": "Reenviar Email de Confirmação"
   }
   

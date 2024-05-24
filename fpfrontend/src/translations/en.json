@@ -69,6 +69,10 @@
     "appDetails": "Our application facilitates the creation, management, and tracking of innovative projects in a collaborative environment. Features include user profiles, project management, resource allocation, and secure communication channels.",
     "uploadImage": "Upload Image",
     "laboratoryPlaceholder": "Select your laboratory",
-    "seeLabProjects": "See Lab Projects"
+    "seeLabProjects": "See Lab Projects",
+    "resendConfirmationEmail": "Resend Confirmation Email",
+    "askForNewConfirmation": "Ask for a new confirmation email",
+    "login": "Login",
+    "resendEmail": "Resend Confirmation Email"
   }
   
