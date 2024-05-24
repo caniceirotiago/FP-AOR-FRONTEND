@@ -1,15 +1,16 @@
 import { create } from 'zustand';
 import Cookies from 'js-cookie';
+import {jwtDecode} from 'jwt-decode';
 
 const isSessionTokenValid = () => {
   const sessionToken = Cookies.get('sessionToken');
   if (!sessionToken) return false;
+  console.log("Checking session token validity");
 
   try {
-    const decodedToken = atob(sessionToken);
-    const [uuid, expirationTime] = decodedToken.split(':');
-    const currentTime = Date.now();
-    return currentTime < parseInt(expirationTime, 10);
+    const decodedToken = jwtDecode(sessionToken);
+    const currentTime = Date.now() / 1000; // em segundos
+    return decodedToken.exp > currentTime;
   } catch (error) {
     console.error("Invalid session token format", error);
     return false;
@@ -17,7 +18,7 @@ const isSessionTokenValid = () => {
 };
 
 const useAuthStore = create((set, get) => ({
-  isAuthenticated: !!Cookies.get('sessionToken'), // operator !! converts to boolean 
+  isAuthenticated: !!Cookies.get('sessionToken'),
   login: () => {
     set({ isAuthenticated: true });
     console.log("User logged in");
@@ -43,7 +44,7 @@ const startSessionCheck = () => {
     if (!isSessionTokenValid()) {
       useAuthStore.getState().logout();
     }
-  }, 360005000); // Check every 5 seconds
+  }, 5000); // Check every 5 seconds
 };
 
 const stopSessionCheck = () => {
