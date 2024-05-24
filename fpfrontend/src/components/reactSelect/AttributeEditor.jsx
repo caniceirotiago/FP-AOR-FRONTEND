@@ -7,62 +7,41 @@ import generalService from '../../services/generalService';
 const AttributeEditor = ({ title }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [allSuggestions, setAllSuggestions] = useState([]);
   const [items, setItems] = useState([]);
   const [userAttributes, setUserAttributes] = useState([]);
 
-  const fetchInputs = async () => {
-    try {
-      const response = await generalService.fetchInputs(title);
-      if (response.status !== 204) {
-        const data = await response.json();
-        setUserAttributes(data);
-      }
-    } catch (error) {
-      console.error("Error fetching suggestions:", error.message);
-    }
-  };
-
   useEffect(() => {
-    // Fetch user inputs
-    fetchInputs();
+    fetchUserAttributes();
   }, []);
 
-  
-    const addItem = async() => {
-    
-    };
+  const fetchUserAttributes = async () => {
     try {
-      const response = await generalService.createInput(name);
-      if (response.status !== 204) {
+      const response = await generalService.fetchInputs(title);
+      if (response.status === 200) {
         const data = await response.json();
-        setUserAttributes(...data);
-        if (input && !items.includes(input)) {
-          setItems([...items, input]);
-          setInput("");
-          setSuggestions([]);
-        }
+        setUserAttributes(data);
+      } else {
+        throw new Error("Failed to fetch user attributes");
       }
     } catch (error) {
-      console.error("Error fetching suggestions:", error.message);
+      console.error("Error fetching user attributes:", error.message);
     }
   };
-
 
 
   const fetchSuggestions = async (firstLetter) => {
     try {
       const response = await generalService.fetchSuggestions(title, firstLetter);
-      if (response.status !== 204) {
+      if (response.status === 200) {
         const data = await response.json();
-        setAllSuggestions(data);
-        setSuggestions(filterSuggestions(data, firstLetter));
+        setSuggestions(data);
+      } else {
+        throw new Error("Failed to fetch suggestions");
       }
     } catch (error) {
       console.error("Error fetching suggestions:", error.message);
     }
   };
-
 
   const filterSuggestions = (suggestions, query) => {
     return suggestions.filter((item) =>
@@ -73,15 +52,19 @@ const AttributeEditor = ({ title }) => {
   const handleInputChange = (newValue) => {
     const value = newValue;
     setInput(value);
-
-    if (value.length === 1) {
-      fetchSuggestions(value);
+  
+    // Extract the first letter from the input value
+    const firstLetter = value.charAt(0);
+  
+    if (firstLetter.length === 1) {
+      fetchSuggestions(firstLetter); // Pass the first letter to fetchSuggestions
     } else if (value.length > 1) {
-      setSuggestions(filterSuggestions(allSuggestions, value));
+      setSuggestions(filterSuggestions(suggestions, value));
     } else {
       setSuggestions([]);
     }
   };
+  
 
   const handleSelectChange = (selectedOption) => {
     if (selectedOption) {
@@ -91,18 +74,48 @@ const AttributeEditor = ({ title }) => {
     }
   };
 
-
+  const addItem = async () => {
+    try {
+      const response = await generalService.createInput(title, input);
+      if (response.status === 200) {
+        const data = await response.json();
+        setUserAttributes([...userAttributes, data]);
+        if (input && !items.includes(input)) {
+          setItems([...items, input]);
+          setInput("");
+          setSuggestions([]);
+        }
+      } else {
+        throw new Error("Failed to create input");
+      }
+    } catch (error) {
+      console.error("Error adding item:", error.message);
+    }
+  };
 
   return (
     <div>
       <h2>{title}</h2>
+     
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+      <h3>Existing {title}</h3>
+      <ul>
+        {userAttributes.map((attribute) => (
+          <li key={attribute.id}>{attribute.name}</li>
+        ))}
+      </ul>
+      <h3>Add more {title}</h3>
       <Select
         value={{ label: input, value: input }}
         onInputChange={handleInputChange}
         onChange={handleSelectChange}
         options={suggestions.map((suggestion) => ({
-          label: suggestion,
-          value: suggestion,
+          label: suggestion.name,
+          value: suggestion.name,
         }))}
         inputValue={input}
         noOptionsMessage={() => "No suggestions found"}
@@ -110,11 +123,6 @@ const AttributeEditor = ({ title }) => {
         isClearable
       />
       <button onClick={addItem}>Add</button>
-      <ul>
-        {items.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
     </div>
   );
 };
