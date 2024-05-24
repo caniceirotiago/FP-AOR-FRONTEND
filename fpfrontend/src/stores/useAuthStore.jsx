@@ -43,7 +43,7 @@ const startSessionCheck = () => {
     if (!isSessionTokenValid()) {
       useAuthStore.getState().logout();
     }
-  }, 5000); // Check every 5 seconds
+  }, 360005000); // Check every 5 seconds
 };
 
 const stopSessionCheck = () => {
