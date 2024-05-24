@@ -156,7 +156,20 @@ const userService = {
         console.error("Erro ao solicitar novo e-mail de confirmação:", error);
         throw error;
     }
-}
+  },
+  logout: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/logout`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        credentials: 'include',
+      });
+  
+      return response; 
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default userService;
