@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import Cookies from 'js-cookie';
 import {jwtDecode} from 'jwt-decode';
+import userService from '../services/userService';
 
 const isSessionTokenValid = () => {
   const sessionToken = Cookies.get('sessionToken');
@@ -25,12 +26,12 @@ const useAuthStore = create((set, get) => ({
     startSessionCheck(); // Start session check on login
   },
   logout: () => {
-    Cookies.remove('authToken', { path: '/' }); 
-    Cookies.remove('sessionToken', { path: '/' });
+    userService.logout();
     set({ isAuthenticated: false });
     localStorage.clear();
     console.log("User logged out");
     stopSessionCheck(); // Stop session check on logout
+    Cookies.remove('sessionToken', { path: '/' });
   },
 }));
 
