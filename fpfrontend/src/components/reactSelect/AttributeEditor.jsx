@@ -16,7 +16,7 @@ const AttributeEditor = ({ title }) => {
 
   const fetchUserAttributes = async () => {
     try {
-      const response = await generalService.fetchInputs(title);
+      const response = await generalService.fetchUserAttributes(title);
       if (response.status === 200) {
         const data = await response.json();
         setUserAttributes(data);
@@ -76,7 +76,7 @@ const AttributeEditor = ({ title }) => {
 
   const addItem = async () => {
     try {
-      const response = await generalService.createInput(title, input);
+      const response = await generalService.addItem(title, input);
       if (response.status === 200) {
         const data = await response.json();
         setUserAttributes([...userAttributes, data]);

@@ -9,7 +9,7 @@ const getAuthHeaders = () => {
 };
 
 const generalService = {
-  fetchInputs: async (apiUrl) => {
+  fetchUserAttributes: async (apiUrl) => {
     try {
       const response = await fetch(
         `${API_BASE_URL}${apiUrl}`,
@@ -31,26 +31,6 @@ const generalService = {
     }
   },
 
-  createInput: async (apiUrl, name) => {
-    try {
-        const requestBody = {"name" : name};
-      const response = await fetch(
-        `${API_BASE_URL}${apiUrl}`,
-        {
-          method: "POST",
-          headers: getAuthHeaders(),
-          credentials: "include",
-          body: JSON.stringify(requestBody),
-        }
-      );
-      console.log(response);
-      return response;
-    } catch (error) {
-      console.error("Error fetching suggestions:", error.message);
-      throw error;
-    }
-  },
-
   fetchSuggestions: async (apiUrl, firstLetter) => {
     try {
       const response = await fetch(
@@ -66,6 +46,26 @@ const generalService = {
       if (response.status !== 200) {
         throw new Error("Failed to fetch suggestions");
       }
+      return response;
+    } catch (error) {
+      console.error("Error fetching suggestions:", error.message);
+      throw error;
+    }
+  },
+
+  addItem: async (apiUrl, name) => {
+    try {
+        const requestBody = {"name" : name};
+      const response = await fetch(
+        `${API_BASE_URL}${apiUrl}`,
+        {
+          method: "POST",
+          headers: getAuthHeaders(),
+          credentials: "include",
+          body: JSON.stringify(requestBody),
+        }
+      );
+      console.log(response);
       return response;
     } catch (error) {
       console.error("Error fetching suggestions:", error.message);
