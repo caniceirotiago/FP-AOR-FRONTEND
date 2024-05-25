@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import generalService from '../../services/generalService';
-
-
+import styles from "./AttributeEditor.module.css";
+import generalService from "../../services/generalService";
 
 const AttributeEditor = ({ title }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
   const [items, setItems] = useState([]);
   const [userAttributes, setUserAttributes] = useState([]);
 
@@ -28,13 +28,13 @@ const AttributeEditor = ({ title }) => {
     }
   };
 
-
   const fetchSuggestions = async (firstLetter) => {
     try {
       const response = await generalService.fetchSuggestions(title, firstLetter);
       if (response.status === 200) {
         const data = await response.json();
-        setSuggestions(data);
+        setFetchedSuggestions(data);  // Store fetched suggestions
+        setSuggestions(data);         // Initially, set suggestions to fetched data
       } else {
         throw new Error("Failed to fetch suggestions");
       }
@@ -43,28 +43,26 @@ const AttributeEditor = ({ title }) => {
     }
   };
 
-  const filterSuggestions = (suggestions, query) => {
-    return suggestions.filter((item) =>
-      item.toLowerCase().startsWith(query.toLowerCase())
+  const filterSuggestions = (query) => {
+    const filtered = fetchedSuggestions.filter((item) =>
+      item.name.toLowerCase().startsWith(query.toLowerCase())
     );
+    setSuggestions(filtered);
   };
 
-  const handleInputChange = (newValue) => {
-    const value = newValue;
-    setInput(value);
-  
-    // Extract the first letter from the input value
-    const firstLetter = value.charAt(0);
-  
-    if (firstLetter.length === 1) {
-      fetchSuggestions(firstLetter); // Pass the first letter to fetchSuggestions
-    } else if (value.length > 1) {
-      setSuggestions(filterSuggestions(suggestions, value));
-    } else {
-      setSuggestions([]);
+  const handleInputChange = (newValue, { action }) => {
+    if (action === "input-change") {
+      setInput(newValue);
+      
+      if (newValue.length === 1) {
+        fetchSuggestions(newValue); // Fetch from database on first letter input
+      } else if (newValue.length > 1) {
+        filterSuggestions(newValue); // Filter from fetched suggestions
+      } else {
+        setSuggestions([]);
+      }
     }
   };
-  
 
   const handleSelectChange = (selectedOption) => {
     if (selectedOption) {
@@ -75,16 +73,18 @@ const AttributeEditor = ({ title }) => {
   };
 
   const addItem = async () => {
+    console.log("Add button clicked. Input value:", input); // Debug log
+    if (!input) return;  // Prevent adding empty items
     try {
       const response = await generalService.addItem(title, input);
       if (response.status === 200) {
         const data = await response.json();
         setUserAttributes([...userAttributes, data]);
-        if (input && !items.includes(input)) {
+        if (!items.includes(input)) {
           setItems([...items, input]);
-          setInput("");
-          setSuggestions([]);
         }
+        setInput("");
+        setSuggestions([]);
       } else {
         throw new Error("Failed to create input");
       }
@@ -95,34 +95,42 @@ const AttributeEditor = ({ title }) => {
 
   return (
     <div>
-      <h2>{title}</h2>
-     
-      <ul>
-        {items.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
-      <h3>Existing {title}</h3>
-      <ul>
-        {userAttributes.map((attribute) => (
-          <li key={attribute.id}>{attribute.name}</li>
-        ))}
-      </ul>
-      <h3>Add more {title}</h3>
-      <Select
-        value={{ label: input, value: input }}
-        onInputChange={handleInputChange}
-        onChange={handleSelectChange}
-        options={suggestions.map((suggestion) => ({
-          label: suggestion.name,
-          value: suggestion.name,
-        }))}
-        inputValue={input}
-        noOptionsMessage={() => "No suggestions found"}
-        placeholder={`Add a new ${title.toLowerCase()}`}
-        isClearable
-      />
-      <button onClick={addItem}>Add</button>
+      <div className="title">
+        <h2>{title}</h2>
+      </div>
+      <div className="content">
+        <div className="unordered_list">
+          <ul>
+            {items.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+          <h3>Existing {title}</h3>
+          <ul>
+            {userAttributes.map((attribute) => (
+              <li key={attribute.id}>{attribute.name}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="add_attribute_title">
+          <h3>Add more {title}</h3>
+        </div>
+        <div className={styles.suggestions}>
+          <Select
+            value={{ label: input, value: input }}
+            onInputChange={handleInputChange}
+            onChange={handleSelectChange}
+            options={suggestions.map((suggestion) => ({
+              label: suggestion.name,
+              value: suggestion.name,
+            }))}
+            inputValue={input}
+            noOptionsMessage={() => "No suggestions found"}
+            placeholder={`Add a new ${title}`}
+            isClearable/>
+          <button onClick={addItem}>Add</button>
+        </div>
+      </div>
     </div>
   );
 };

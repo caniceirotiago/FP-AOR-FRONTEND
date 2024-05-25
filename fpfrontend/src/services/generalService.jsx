@@ -12,7 +12,7 @@ const generalService = {
   fetchUserAttributes: async (apiUrl) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}${apiUrl}`,
+        `${API_BASE_URL}${apiUrl}/user`,
         {
           method: "GET",
           headers: getAuthHeaders(),
@@ -56,8 +56,11 @@ const generalService = {
   addItem: async (apiUrl, name) => {
     try {
         const requestBody = {"name" : name};
+        console.log("name: ", name);
+        const url = `${API_BASE_URL}${apiUrl}`;
+        console.log(url);
       const response = await fetch(
-        `${API_BASE_URL}${apiUrl}`,
+        `${API_BASE_URL}${apiUrl}/create`,
         {
           method: "POST",
           headers: getAuthHeaders(),

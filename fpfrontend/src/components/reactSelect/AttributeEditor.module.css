@@ -1,0 +1,14 @@
+.suggestions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .suggestions .Select {
+    flex-grow: 1;
+  }
+  
+  .suggestions button {
+    flex-shrink: 0;
+  }
+  
