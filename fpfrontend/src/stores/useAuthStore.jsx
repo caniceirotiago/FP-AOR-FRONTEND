@@ -18,6 +18,7 @@ const isSessionTokenValid = () => {
   }
 };
 
+
 const useAuthStore = create((set, get) => ({
   isAuthenticated: !!Cookies.get('sessionToken'),
   login: () => {
@@ -26,12 +27,12 @@ const useAuthStore = create((set, get) => ({
     startSessionCheck(); // Start session check on login
   },
   logout: () => {
-    userService.logout();
+    Cookies.remove('authToken', { path: '/' }); 
+    Cookies.remove('sessionToken', { path: '/' });
     set({ isAuthenticated: false });
     localStorage.clear();
     console.log("User logged out");
     stopSessionCheck(); // Stop session check on logout
-    Cookies.remove('sessionToken', { path: '/' });
   },
 }));
 
@@ -43,7 +44,7 @@ const startSessionCheck = () => {
 
   sessionCheckInterval = setInterval(() => {
     if (!isSessionTokenValid()) {
-      useAuthStore.getState().logout();
+      //useAuthStore.getState().logout();
     }
   }, 5000); // Check every 5 seconds
 };
