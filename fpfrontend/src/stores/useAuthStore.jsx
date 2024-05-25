@@ -44,9 +44,10 @@ const startSessionCheck = () => {
 
   sessionCheckInterval = setInterval(() => {
     if (!isSessionTokenValid()) {
-      //useAuthStore.getState().logout();
+
+
     }
-  }, 5000); // Check every 5 seconds
+  }, 60000); // Check every minute
 };
 
 const stopSessionCheck = () => {

@@ -9,7 +9,11 @@ export const useGlobalWebSocket = (url, shouldConnect) => {
     const ws = useRef(null);
     const { logout } = useAuthStore();
     const forcedLogout = async() => {
-        await userService.logout();
+        const response = await userService.logout();
+        if(!response.status === 204){
+            const message = {type: 'forcedLogoutFailed', content: 'Failed to logout user. Please try again.'};
+            sendMessage(message);
+        }
         logout();
     }
 
