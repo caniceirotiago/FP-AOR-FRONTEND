@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
-import HomepageHeader from '../../components/headers/HomepageHeader';
-import styles from './MainLayout.module.css';
-import HomepageAside from '../../components/asides/HomepageAside';
+import HomepageHeader from '../../components/headers/HomepageHeader.jsx';
+import styles from './PublicMainLayout.module.css';
+import HomepageAside from '../../components/asides/HomepageAside.jsx';
 import ProtectedComponent from '../../components/auth regist/ProtectedComponents.jsx';
-import useDeviceStore from '../../stores/useDeviceStore';
+import useDeviceStore from '../../stores/useDeviceStore.jsx';
 import HomepageMobileFooter from '../../components/footers/homePageFooters/homePageMobileFooter/HomepageMobileFooter.jsx';
-import  {useGlobalWebSocket}  from '../../websockets/useGlobalWebSocket.jsx';
-import useDomainStore from '../../stores/useDomainStore.jsx';
 
-const MainLayout = ({ children }) => {
+
+const PublicMainLayout = ({ children }) => {
     const { dimensions, setDimensions, setDeviceType } = useDeviceStore(); 
     //const { isAsideExpanded } = useLayoutStore();
     // const onNotification = useCallback((notification) => {
@@ -17,8 +16,7 @@ const MainLayout = ({ children }) => {
     //   }, []);
     //  const wsUrl = `ws://localhost:8080/projeto5backend/globalws/${sessionStorage.getItem('token')}`; 
     // useGlobalWebSocket(wsUrl, true, onNotification);
-    const {domain} = useDomainStore();
-    useGlobalWebSocket(`ws://${domain}/ws`, true);
+
     useEffect(() => {
     const handleResize = () => {
         setDimensions(window.innerWidth, window.innerHeight);
@@ -45,4 +43,4 @@ const MainLayout = ({ children }) => {
     );
 };
 
-export default MainLayout;
+export default PublicMainLayout;

@@ -11,6 +11,7 @@ import useLoginModalStore from '../../stores/useLoginModalStore.jsx'
 import useAuthStore from '../../stores/useAuthStore.jsx'
 import { Link } from 'react-router-dom';
 import logo from '../../assets/CriticalLogo.png';
+import userService from '../../services/userService.jsx';
 
 
 const HomepageHeader = () => {
@@ -133,9 +134,14 @@ const HomepageHeader = () => {
   const handleOpenLoginModal = (event) => {
     setIsLoginModalOpen(true);
   }
-  const handleLogout = (event) => {
-    logout(); 
-    navigate('/homepage');
+  const handleLogout = async (event) => {
+    const response = await userService.logout();
+    console.log(response);
+    if(response.status === 204){
+      logout(); 
+      navigate('/homepage');
+    }
+    
   }
   const handleHomepageNavigate = () => {
     if(!isAuthenticated)navigate('/homepage');

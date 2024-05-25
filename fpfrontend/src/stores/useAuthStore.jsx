@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import Cookies from 'js-cookie';
 import {jwtDecode} from 'jwt-decode';
+import userService from '../services/userService';
 
 const isSessionTokenValid = () => {
   const sessionToken = Cookies.get('sessionToken');
@@ -16,6 +17,7 @@ const isSessionTokenValid = () => {
     return false;
   }
 };
+
 
 const useAuthStore = create((set, get) => ({
   isAuthenticated: !!Cookies.get('sessionToken'),
@@ -42,9 +44,10 @@ const startSessionCheck = () => {
 
   sessionCheckInterval = setInterval(() => {
     if (!isSessionTokenValid()) {
-      useAuthStore.getState().logout();
+
+
     }
-  }, 5000); // Check every 5 seconds
+  }, 60000); // Check every minute
 };
 
 const stopSessionCheck = () => {
