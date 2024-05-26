@@ -73,6 +73,8 @@
     "resendConfirmationEmail": "Reenviar Email de Confirmação",
     "askForNewConfirmation": "Solicitar Novo Email de Confirmação",
     "login": "Iniciar Sessão",
-    "resendEmail": "Reenviar Email de Confirmação"
+    "resendEmail": "Reenviar Email de Confirmação",
+    "existing-attributes": "Atributos do utilizador",
+    "add-attribute": "Adicionar novo atributo"
   }
   
