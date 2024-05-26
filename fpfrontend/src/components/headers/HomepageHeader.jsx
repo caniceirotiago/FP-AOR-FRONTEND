@@ -137,11 +137,8 @@ const HomepageHeader = () => {
   const handleLogout = async (event) => {
     const response = await userService.logout();
     console.log(response);
-    if(response.status === 204){
-      logout(); 
-      navigate('/homepage');
-    }
-    
+    logout(); 
+    navigate('/homepage');
   }
   const handleHomepageNavigate = () => {
     if(!isAuthenticated)navigate('/homepage');
