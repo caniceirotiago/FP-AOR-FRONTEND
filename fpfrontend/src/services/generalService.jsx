@@ -12,7 +12,7 @@ const generalService = {
   fetchUserAttributes: async (apiUrl) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}${apiUrl}`,
+        `${API_BASE_URL}${apiUrl}/user`,
         {
           method: "GET",
           headers: getAuthHeaders(),
@@ -57,9 +57,29 @@ const generalService = {
     try {
         const requestBody = {"name" : name};
       const response = await fetch(
-        `${API_BASE_URL}${apiUrl}`,
+        `${API_BASE_URL}${apiUrl}/create`,
         {
           method: "POST",
+          headers: getAuthHeaders(),
+          credentials: "include",
+          body: JSON.stringify(requestBody),
+        }
+      );
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.error("Error fetching suggestions:", error.message);
+      throw error;
+    }
+  },
+
+  removeItem: async (apiUrl, id) => {
+    try {
+        const requestBody = {"id" : id};
+      const response = await fetch(
+        `${API_BASE_URL}${apiUrl}/remove`,
+        {
+          method: "PUT",
           headers: getAuthHeaders(),
           credentials: "include",
           body: JSON.stringify(requestBody),
