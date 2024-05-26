@@ -176,6 +176,20 @@ const userService = {
       throw error;
     }
   },
+  checkSession: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/session/check`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",  
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Failed to check session", error);
+      return false;
+    }
+  }
 };
 
 export default userService;
