@@ -4,7 +4,7 @@ import styles from "./AttributeEditor.module.css";
 import generalService from "../../services/generalService";
 import { FormattedMessage } from "react-intl";
 
-const AttributeEditor = ({ title, hasAccess }) => {
+const AttributeEditor = ({ title, editMode }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
@@ -140,17 +140,12 @@ const AttributeEditor = ({ title, hasAccess }) => {
       <h2>{elementTitle}</h2>
       <div className={styles.innerContainer}>
         <div className={styles.existingAttributes}>
-          <div>
-            <h3>
-              <FormattedMessage id="existing-attributes" />
-            </h3>
-          </div>
           <div className={styles.userAttributeContainer}>
             <ul className={styles.attributeList}>
               {userAttributes.map((attribute) => (
                 <li className={styles.attribute} key={attribute.id}>
                   <span className={styles.attributeName}>{attribute.name}</span>
-                  {hasAccess && (<button
+                  {editMode && (<button
                     className={styles.removeButton}
                     onClick={() => removeItem(attribute.id)}
                   >
@@ -160,14 +155,8 @@ const AttributeEditor = ({ title, hasAccess }) => {
               ))}
             </ul>
           </div>
-        </div>
-        {hasAccess && (
+          {editMode && (
         <div className={styles.addAttribute}>
-          <div>
-            <h3>
-              <FormattedMessage id="add-attribute" />
-            </h3>
-          </div>
           <div className={styles.selectAddContainer}>
             <Select
               className="react-select-container"
@@ -197,6 +186,8 @@ const AttributeEditor = ({ title, hasAccess }) => {
             <button onClick={addItem}>Add</button>
           </div>
         </div>)}
+        </div>
+        
       </div>
     </div>
   );

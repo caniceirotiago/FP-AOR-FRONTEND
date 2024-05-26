@@ -3,9 +3,16 @@
   width: 100%;
   background-size: cover;
   background-position: center;
-  display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.otherAtributes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
 }
 
 
