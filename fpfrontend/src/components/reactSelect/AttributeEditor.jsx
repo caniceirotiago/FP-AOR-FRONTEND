@@ -93,38 +93,7 @@ const AttributeEditor = ({ title }) => {
 
   return (
     <div>
-      <div className="title">
-        <h2>{title}</h2>
-      </div>
-      <div className="content">
-        <div className="unordered_list">
-          <h3>Existing {title}</h3>
-          <ul>
             {userAttributes.map((attribute) => (
-              <li key={attribute.id}>{attribute.name}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="add_attribute_title">
-          <h3>Add more {title}</h3>
-        </div>
-        <div className={styles.suggestions}>
-          <Select
-            value={{ label: input, value: input }}
-            onInputChange={handleInputChange}
-            onChange={handleSelectChange}
-            options={suggestions.map((suggestion) => ({
-              label: suggestion.name,
-              value: suggestion.name,
-            }))}
-            inputValue={input}
-            noOptionsMessage={() => "No suggestions found"}
-            placeholder={`Add a new ${title}`}
-            isClearable
-          />
-          <button onClick={addItem}>Add</button>
-        </div>
-      </div>
     </div>
   );
 };
