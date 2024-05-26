@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import styles from "./AttributeEditor.module.css";
 import generalService from "../../services/generalService";
+import { FormattedMessage } from 'react-intl';
 
 const AttributeEditor = ({ title }) => {
   const [input, setInput] = useState("");
@@ -133,12 +134,16 @@ const AttributeEditor = ({ title }) => {
     }
   };
 
+  const elementTitle = title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
+
   return (
     <div className={styles["attribute-editor-outter-container"]}>
+    
+      <h3>{elementTitle}</h3>
       <div className={styles["attribute-editor-inner-container"]}>
       <div className={styles["existing-attributes"]}>
         <div>
-          <h3>Existing {title}</h3>
+          <h3><FormattedMessage id="existing-attributes" /></h3>
         </div>
         <div className={styles["user-attribute-container"]}>
           <ul className={styles["attribute-list"]}>
@@ -160,7 +165,7 @@ const AttributeEditor = ({ title }) => {
       </div>
       <div className={styles["add-attribute"]}>
         <div>
-          <h3>Add new {title}</h3>
+          <h3><FormattedMessage id="add-attribute" /></h3>
         </div>
         <div className={styles["select-add-container"]}>
           <Select
