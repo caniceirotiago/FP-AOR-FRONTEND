@@ -4,6 +4,7 @@ import UserProfileBasicElements from '../../components/UserProfilePageComponents
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import userService from '../../services/userService';
+import AttributeEditor from '../../components/reactSelect/AttributeEditor.jsx';
 
 const UserProfilePage = () => {
   const { username: usernameProfile } = useParams();
@@ -65,6 +66,10 @@ const UserProfilePage = () => {
     ) : (
       <div className={styles.userProfilePage} >
         <UserProfileBasicElements fetchUserData={fetchUserData} isOwnProfile={isOwnProfile} userProfileInfo={userProfileInfo}/>
+        <div className={styles.otherAtributes}>
+          <AttributeEditor title="skills" editMode={true}/>
+          <AttributeEditor title="interests" editMode={isOwnProfile}/>
+        </div>
       </div>
       
     )}
