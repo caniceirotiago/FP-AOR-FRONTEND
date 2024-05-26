@@ -1,14 +1,54 @@
-.suggestions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .suggestions .Select {
-    flex-grow: 1;
-  }
-  
-  .suggestions button {
-    flex-shrink: 0;
-  }
-  
+.attribute-editor-outter-container {
+  margin: 20px; /* Add margin to the outer container */
+}
+
+.attribute-editor-inner-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.existing-attributes,
+.add-attribute {
+  margin-bottom: 20px; /* Add margin between sections */
+}
+
+.user-attribute-container {
+  margin-top: 10px; /* Add margin to separate from the title */
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.attribute-list {
+  list-style: none; /* Remove bullet points from the list */
+  padding: 0; /* Remove default padding */
+}
+
+.attribute {
+  display: flex;
+  align-items: center;
+}
+
+.attribute-name {
+  flex-grow: 1;
+}
+
+.remove-button {
+  margin-left: 20px; /* Add spacing between attribute name and remove button */
+}
+
+.add-attribute h3 {
+  margin-bottom: 10px; /* Add margin below the title */
+}
+
+.select-add-container {
+  display: flex;
+  align-items: center;
+}
+
+.add-attribute .react-select-container {
+  flex-grow: 1;
+}
+
+.add-attribute button {
+  margin-left: 10px; /* Add spacing between select and button */
+}

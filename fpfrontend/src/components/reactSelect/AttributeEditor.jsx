@@ -8,6 +8,7 @@ const AttributeEditor = ({ title }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
   const [userAttributes, setUserAttributes] = useState([]);
+  const [selectedValue, setSelectedValue] = useState(null);
 
   useEffect(() => {
     fetchUserAttributes();
@@ -68,26 +69,52 @@ const AttributeEditor = ({ title }) => {
 
   const handleSelectChange = (selectedOption) => {
     if (selectedOption) {
-      setInput(selectedOption.value);
+      setInput(selectedOption.value); // Set input value to selected option value
+      setSelectedValue(selectedOption); // Update selected value
     } else {
-      setInput("");
+      setInput(""); // Clear input value if no option selected
+      setSelectedValue(null); // Reset selected value
     }
   };
 
   const addItem = async () => {
     console.log("Add button clicked. Input value:", input); // Debug log
-    if (!input) return; // Prevent adding empty attributes
+    // Prevent adding empty attributes
+    if (!input) return;
+    // Prevent adding too long attribute name
+    if (input.length > 25) {
+      console.warn("Input exceeds maximum character limit. Not adding.");
+      setInput("");
+      return;
+    }
+    // Check for duplicates
+    if (
+      userAttributes.some(
+        (attribute) => attribute.name.toLowerCase() === input.toLowerCase()
+      )
+    ) {
+      console.warn("Duplicate attribute. Not adding.");
+      setInput("");
+      return; // Prevent adding duplicate attributes
+    }
+    // Optimistically update the UI
+    const newItem = { id: Date.now(), name: input }; // Create a temporary item with a unique id
+    setUserAttributes((prevUserAttributes) => [...prevUserAttributes, newItem]);
     try {
       const response = await generalService.addItem(title, input);
-      if (response.status === 204) {
-        fetchUserAttributes();
-        setInput("");
-        setSuggestions([]);
-      } else {
+      if (response.status !== 204) {
         throw new Error("Failed to create input");
       }
+      // No need to do anything on success as UI is already updated optimistically
     } catch (error) {
       console.error("Error adding item:", error.message);
+      // Revert the optimistic update
+      setUserAttributes((prevUserAttributes) =>
+        prevUserAttributes.filter((attribute) => attribute.id !== newItem.id)
+      );
+    } finally {
+      setInput("");
+      setSuggestions([]);
     }
   };
 
@@ -95,7 +122,9 @@ const AttributeEditor = ({ title }) => {
     try {
       const response = await generalService.removeItem(title, id);
       if (response.status === 204) {
-        setUserAttributes(userAttributes.filter(attribute => attribute.id !== id));
+        setUserAttributes(
+          userAttributes.filter((attribute) => attribute.id !== id)
+        );
       } else {
         throw new Error("Failed to remove item");
       }
@@ -105,25 +134,38 @@ const AttributeEditor = ({ title }) => {
   };
 
   return (
-    <div>
-      <div className="title">
-        <h2>{title}</h2>
-      </div>
-      <div className="content">
-        <div className="unordered_list">
+    <div className={styles["attribute-editor-outter-container"]}>
+      <div className={styles["attribute-editor-inner-container"]}>
+      <div className={styles["existing-attributes"]}>
+        <div>
           <h3>Existing {title}</h3>
-          <ul>
+        </div>
+        <div className={styles["user-attribute-container"]}>
+          <ul className={styles["attribute-list"]}>
             {userAttributes.map((attribute) => (
-              <li key={attribute.id}>{attribute.name}<button onClick={() => removeItem(attribute.id)}>Remove</button></li>
+              <li className={styles.attribute} key={attribute.id}>
+                <span className={styles["attribute-name"]}>
+                  {attribute.name}
+                </span>
+                <button
+                  className={styles["remove-button"]}
+                  onClick={() => removeItem(attribute.id)}
+                >
+                  Remove
+                </button>
+              </li>
             ))}
           </ul>
         </div>
-        <div className="add_attribute_title">
-          <h3>Add more {title}</h3>
+      </div>
+      <div className={styles["add-attribute"]}>
+        <div>
+          <h3>Add new {title}</h3>
         </div>
-        <div className={styles.suggestions}>
+        <div className={styles["select-add-container"]}>
           <Select
-            value={{ label: input, value: input }}
+            className="react-select-container"
+            value={selectedValue}
             onInputChange={handleInputChange}
             onChange={handleSelectChange}
             options={suggestions.map((suggestion) => ({
@@ -132,11 +174,12 @@ const AttributeEditor = ({ title }) => {
             }))}
             inputValue={input}
             noOptionsMessage={() => "No suggestions found"}
-            placeholder={`Add a new ${title}`}
+            placeholder={`Add new ${title}`}
             isClearable
           />
           <button onClick={addItem}>Add</button>
         </div>
+      </div>
       </div>
     </div>
   );
