@@ -11,14 +11,11 @@ const getAuthHeaders = () => {
 const generalService = {
   fetchUserAttributes: async (apiUrl) => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}${apiUrl}/user`,
-        {
-          method: "GET",
-          headers: getAuthHeaders(),
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}${apiUrl}/user`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
 
       console.log(response);
       if (response.status !== 200) {
@@ -55,16 +52,13 @@ const generalService = {
 
   addItem: async (apiUrl, name) => {
     try {
-        const requestBody = {"name" : name};
-      const response = await fetch(
-        `${API_BASE_URL}${apiUrl}/create`,
-        {
-          method: "POST",
-          headers: getAuthHeaders(),
-          credentials: "include",
-          body: JSON.stringify(requestBody),
-        }
-      );
+      const requestBody = { name: name };
+      const response = await fetch(`${API_BASE_URL}${apiUrl}/create`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        credentials: "include",
+        body: JSON.stringify(requestBody),
+      });
       console.log(response);
       return response;
     } catch (error) {
@@ -75,16 +69,13 @@ const generalService = {
 
   removeItem: async (apiUrl, id) => {
     try {
-        const requestBody = {"id" : id};
-      const response = await fetch(
-        `${API_BASE_URL}${apiUrl}/remove`,
-        {
-          method: "PUT",
-          headers: getAuthHeaders(),
-          credentials: "include",
-          body: JSON.stringify(requestBody),
-        }
-      );
+      const requestBody = { id: id };
+      const response = await fetch(`${API_BASE_URL}${apiUrl}/remove`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        credentials: "include",
+        body: JSON.stringify(requestBody),
+      });
       console.log(response);
       return response;
     } catch (error) {
@@ -92,9 +83,6 @@ const generalService = {
       throw error;
     }
   },
-
 };
 
 export default generalService;
-
-

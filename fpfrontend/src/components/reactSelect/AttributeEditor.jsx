@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import styles from "./AttributeEditor.module.css";
 import generalService from "../../services/generalService";
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage } from "react-intl";
 
-const AttributeEditor = ({ title }) => {
+const AttributeEditor = ({ title, hasAccess }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
   const [userAttributes, setUserAttributes] = useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
+
 
   useEffect(() => {
     fetchUserAttributes();
@@ -68,6 +69,7 @@ const AttributeEditor = ({ title }) => {
     }
   };
 
+  
   const handleSelectChange = (selectedOption) => {
     if (selectedOption) {
       setInput(selectedOption.value); // Set input value to selected option value
@@ -78,45 +80,40 @@ const AttributeEditor = ({ title }) => {
     }
   };
 
+
   const addItem = async () => {
-    console.log("Add button clicked. Input value:", input); // Debug log
-    // Prevent adding empty attributes
-    if (!input) return;
-    // Prevent adding too long attribute name
-    if (input.length > 25) {
-      console.warn("Input exceeds maximum character limit. Not adding.");
-      setInput("");
-      return;
-    }
-    // Check for duplicates
-    if (
-      userAttributes.some(
-        (attribute) => attribute.name.toLowerCase() === input.toLowerCase()
-      )
-    ) {
-      console.warn("Duplicate attribute. Not adding.");
-      setInput("");
-      return; // Prevent adding duplicate attributes
-    }
-    // Optimistically update the UI
-    const newItem = { id: Date.now(), name: input }; // Create a temporary item with a unique id
-    setUserAttributes((prevUserAttributes) => [...prevUserAttributes, newItem]);
     try {
-      const response = await generalService.addItem(title, input);
-      if (response.status !== 204) {
-        throw new Error("Failed to create input");
+      // Prevent adding empty attributes or too long attribute name
+      if (!input) return;
+      if (input.length > 25) {
+        console.warn("Input exceeds maximum character limit. Not adding.");
+        return;
       }
-      // No need to do anything on success as UI is already updated optimistically
+      // Prevent adding duplicate attributes
+      if (
+        userAttributes.some(
+          (attribute) => attribute.name.toLowerCase() === input.toLowerCase()
+        )
+      ) {
+        console.warn("Duplicate attribute. Not adding.");
+        return; 
+      }
+      const response = await generalService.addItem(title, input);
+      if (response.status === 204) {
+        fetchUserAttributes();
+      } else {
+        throw new Error("Failed to add item");
+      }
     } catch (error) {
       console.error("Error adding item:", error.message);
-      // Revert the optimistic update
-      setUserAttributes((prevUserAttributes) =>
-        prevUserAttributes.filter((attribute) => attribute.id !== newItem.id)
-      );
     } finally {
-      setInput("");
-      setSuggestions([]);
+      clearInput();
     }
+  };
+
+  const clearInput = () => {
+    setInput("");
+    setSuggestions([]);
   };
 
   const removeItem = async (id) => {
@@ -134,57 +131,71 @@ const AttributeEditor = ({ title }) => {
     }
   };
 
-  const elementTitle = title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
+  const elementTitle =
+    title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
 
   return (
-    <div className={styles["attribute-editor-outter-container"]}>
-    
-      <h3>{elementTitle}</h3>
-      <div className={styles["attribute-editor-inner-container"]}>
-      <div className={styles["existing-attributes"]}>
-        <div>
-          <h3><FormattedMessage id="existing-attributes" /></h3>
+    <div className={styles.container}>
+      <h2>{elementTitle}</h2>
+      <div className={styles.innerContainer}>
+        <div className={styles.existingAttributes}>
+          <div>
+            <h3>
+              <FormattedMessage id="existing-attributes" />
+            </h3>
+          </div>
+          <div className={styles.userAttributeContainer}>
+            <ul className={styles.attributeList}>
+              {userAttributes.map((attribute) => (
+                <li className={styles.attribute} key={attribute.id}>
+                  <span className={styles.attributeName}>{attribute.name}</span>
+                  {hasAccess && (<button
+                    className={styles.removeButton}
+                    onClick={() => removeItem(attribute.id)}
+                  >
+                    Remove
+                  </button>)}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        <div className={styles["user-attribute-container"]}>
-          <ul className={styles["attribute-list"]}>
-            {userAttributes.map((attribute) => (
-              <li className={styles.attribute} key={attribute.id}>
-                <span className={styles["attribute-name"]}>
-                  {attribute.name}
-                </span>
-                <button
-                  className={styles["remove-button"]}
-                  onClick={() => removeItem(attribute.id)}
-                >
-                  Remove
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div className={styles["add-attribute"]}>
-        <div>
-          <h3><FormattedMessage id="add-attribute" /></h3>
-        </div>
-        <div className={styles["select-add-container"]}>
-          <Select
-            className="react-select-container"
-            value={selectedValue}
-            onInputChange={handleInputChange}
-            onChange={handleSelectChange}
-            options={suggestions.map((suggestion) => ({
-              label: suggestion.name,
-              value: suggestion.name,
-            }))}
-            inputValue={input}
-            noOptionsMessage={() => "No suggestions found"}
-            placeholder={`Add new ${title}`}
-            isClearable
-          />
-          <button onClick={addItem}>Add</button>
-        </div>
-      </div>
+        {hasAccess && (
+        <div className={styles.addAttribute}>
+          <div>
+            <h3>
+              <FormattedMessage id="add-attribute" />
+            </h3>
+          </div>
+          <div className={styles.selectAddContainer}>
+            <Select
+              className="react-select-container"
+              classNamePrefix="react-select"
+              value={selectedValue}
+              onInputChange={handleInputChange}
+              onChange={handleSelectChange}
+              options={suggestions.map((suggestion) => ({
+                label: suggestion.name,
+                value: suggestion.name,
+              }))}
+              inputValue={input}
+              noOptionsMessage={() => "No suggestions found"}
+              placeholder={`Add new ${title}`}
+              isClearable
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  width: "300px", // Set fixed width for control
+                }),
+                input: (base) => ({
+                  ...base,
+                  width: "100%", // Ensure the input takes up the full width
+                }),
+              }}
+            />
+            <button onClick={addItem}>Add</button>
+          </div>
+        </div>)}
       </div>
     </div>
   );
