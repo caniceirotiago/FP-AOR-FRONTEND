@@ -4,7 +4,7 @@ import styles from "./AttributeEditor.module.css";
 import generalService from "../../services/generalService";
 import { FormattedMessage } from "react-intl";
 
-const AttributeEditor = ({ title }) => {
+const AttributeEditor = ({ title, hasAccess }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
@@ -70,7 +70,6 @@ const AttributeEditor = ({ title }) => {
   };
 
   
-
   const handleSelectChange = (selectedOption) => {
     if (selectedOption) {
       setInput(selectedOption.value); // Set input value to selected option value
@@ -82,14 +81,12 @@ const AttributeEditor = ({ title }) => {
   };
 
 
-
   const addItem = async () => {
     try {
       // Prevent adding empty attributes or too long attribute name
       if (!input) return;
       if (input.length > 25) {
         console.warn("Input exceeds maximum character limit. Not adding.");
-        clearInput();
         return;
       }
       // Prevent adding duplicate attributes
@@ -99,8 +96,7 @@ const AttributeEditor = ({ title }) => {
         )
       ) {
         console.warn("Duplicate attribute. Not adding.");
-        clearInput();
-        return;
+        return; 
       }
       const response = await generalService.addItem(title, input);
       if (response.status === 204) {
@@ -121,7 +117,6 @@ const AttributeEditor = ({ title }) => {
   };
 
   const removeItem = async (id) => {
-    console.log("attribute id: ", id);
     try {
       const response = await generalService.removeItem(title, id);
       if (response.status === 204) {
@@ -154,17 +149,18 @@ const AttributeEditor = ({ title }) => {
               {userAttributes.map((attribute) => (
                 <li className={styles.attribute} key={attribute.id}>
                   <span className={styles.attributeName}>{attribute.name}</span>
-                  <button
+                  {hasAccess && (<button
                     className={styles.removeButton}
                     onClick={() => removeItem(attribute.id)}
                   >
                     Remove
-                  </button>
+                  </button>)}
                 </li>
               ))}
             </ul>
           </div>
         </div>
+        {hasAccess && (
         <div className={styles.addAttribute}>
           <div>
             <h3>
@@ -199,7 +195,7 @@ const AttributeEditor = ({ title }) => {
             />
             <button onClick={addItem}>Add</button>
           </div>
-        </div>
+        </div>)}
       </div>
     </div>
   );
