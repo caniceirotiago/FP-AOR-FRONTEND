@@ -56,11 +56,30 @@ const generalService = {
   addItem: async (apiUrl, name) => {
     try {
         const requestBody = {"name" : name};
-        console.log("name: ", name);
       const response = await fetch(
         `${API_BASE_URL}${apiUrl}/create`,
         {
           method: "POST",
+          headers: getAuthHeaders(),
+          credentials: "include",
+          body: JSON.stringify(requestBody),
+        }
+      );
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.error("Error fetching suggestions:", error.message);
+      throw error;
+    }
+  },
+
+  removeItem: async (apiUrl, id) => {
+    try {
+        const requestBody = {"id" : id};
+      const response = await fetch(
+        `${API_BASE_URL}${apiUrl}/remove`,
+        {
+          method: "PUT",
           headers: getAuthHeaders(),
           credentials: "include",
           body: JSON.stringify(requestBody),

@@ -91,9 +91,53 @@ const AttributeEditor = ({ title }) => {
     }
   };
 
+  const removeItem = async (id) => {
+    try {
+      const response = await generalService.removeItem(title, id);
+      if (response.status === 204) {
+        setUserAttributes(userAttributes.filter(attribute => attribute.id !== id));
+      } else {
+        throw new Error("Failed to remove item");
+      }
+    } catch (error) {
+      console.error("Error removing item:", error.message);
+    }
+  };
+
   return (
     <div>
+      <div className="title">
+        <h2>{title}</h2>
+      </div>
+      <div className="content">
+        <div className="unordered_list">
+          <h3>Existing {title}</h3>
+          <ul>
             {userAttributes.map((attribute) => (
+              <li key={attribute.id}>{attribute.name}<button onClick={() => removeItem(attribute.id)}>Remove</button></li>
+            ))}
+          </ul>
+        </div>
+        <div className="add_attribute_title">
+          <h3>Add more {title}</h3>
+        </div>
+        <div className={styles.suggestions}>
+          <Select
+            value={{ label: input, value: input }}
+            onInputChange={handleInputChange}
+            onChange={handleSelectChange}
+            options={suggestions.map((suggestion) => ({
+              label: suggestion.name,
+              value: suggestion.name,
+            }))}
+            inputValue={input}
+            noOptionsMessage={() => "No suggestions found"}
+            placeholder={`Add a new ${title}`}
+            isClearable
+          />
+          <button onClick={addItem}>Add</button>
+        </div>
+      </div>
     </div>
   );
 };
