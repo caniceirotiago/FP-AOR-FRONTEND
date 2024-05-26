@@ -96,7 +96,7 @@ const AttributeEditor = ({ title, hasAccess }) => {
         )
       ) {
         console.warn("Duplicate attribute. Not adding.");
-        return; 
+        return;
       }
       const response = await generalService.addItem(title, input);
       if (response.status === 204) {
@@ -113,6 +113,7 @@ const AttributeEditor = ({ title, hasAccess }) => {
 
   const clearInput = () => {
     setInput("");
+    setSelectedValue(null);
     setSuggestions([]);
   };
 

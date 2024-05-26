@@ -54,3 +54,7 @@ body.theme-dark {
   --text-color2: rgb(255, 255, 255, 1);
   --text-color3: rgb(0, 0, 0, 1);
 }
+
+#react-select-2-input {
+  opacity: 1 !important;
+}
