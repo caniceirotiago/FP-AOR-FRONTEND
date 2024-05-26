@@ -7,7 +7,6 @@ const AttributeEditor = ({ title }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
-  const [items, setItems] = useState([]);
   const [userAttributes, setUserAttributes] = useState([]);
 
   useEffect(() => {
@@ -30,11 +29,14 @@ const AttributeEditor = ({ title }) => {
 
   const fetchSuggestions = async (firstLetter) => {
     try {
-      const response = await generalService.fetchSuggestions(title, firstLetter);
+      const response = await generalService.fetchSuggestions(
+        title,
+        firstLetter
+      );
       if (response.status === 200) {
         const data = await response.json();
-        setFetchedSuggestions(data);  // Store fetched suggestions
-        setSuggestions(data);         // Initially, set suggestions to fetched data
+        setFetchedSuggestions(data); // Store fetched suggestions
+        setSuggestions(data); // Initially, set suggestions to fetched data
       } else {
         throw new Error("Failed to fetch suggestions");
       }
@@ -53,7 +55,7 @@ const AttributeEditor = ({ title }) => {
   const handleInputChange = (newValue, { action }) => {
     if (action === "input-change") {
       setInput(newValue);
-      
+
       if (newValue.length === 1) {
         fetchSuggestions(newValue); // Fetch from database on first letter input
       } else if (newValue.length > 1) {
@@ -74,15 +76,11 @@ const AttributeEditor = ({ title }) => {
 
   const addItem = async () => {
     console.log("Add button clicked. Input value:", input); // Debug log
-    if (!input) return;  // Prevent adding empty items
+    if (!input) return; // Prevent adding empty attributes
     try {
       const response = await generalService.addItem(title, input);
-      if (response.status === 200) {
-        const data = await response.json();
-        setUserAttributes([...userAttributes, data]);
-        if (!items.includes(input)) {
-          setItems([...items, input]);
-        }
+      if (response.status === 204) {
+        fetchUserAttributes();
         setInput("");
         setSuggestions([]);
       } else {
@@ -100,11 +98,6 @@ const AttributeEditor = ({ title }) => {
       </div>
       <div className="content">
         <div className="unordered_list">
-          <ul>
-            {items.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
           <h3>Existing {title}</h3>
           <ul>
             {userAttributes.map((attribute) => (
@@ -127,7 +120,8 @@ const AttributeEditor = ({ title }) => {
             inputValue={input}
             noOptionsMessage={() => "No suggestions found"}
             placeholder={`Add a new ${title}`}
-            isClearable/>
+            isClearable
+          />
           <button onClick={addItem}>Add</button>
         </div>
       </div>
