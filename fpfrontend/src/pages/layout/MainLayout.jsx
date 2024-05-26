@@ -17,8 +17,12 @@ const MainLayout = ({ children }) => {
     //   }, []);
     //  const wsUrl = `ws://localhost:8080/projeto5backend/globalws/${sessionStorage.getItem('token')}`; 
     // useGlobalWebSocket(wsUrl, true, onNotification);
+    
+
     const {domain} = useDomainStore();
     useGlobalWebSocket(`ws://${domain}/ws`, true);
+
+
     useEffect(() => {
     const handleResize = () => {
         setDimensions(window.innerWidth, window.innerHeight);
