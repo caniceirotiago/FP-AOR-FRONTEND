@@ -1,3 +1,4 @@
+import useAuthStore from "../stores/useAuthStore";
 import useDomainStore from "../stores/useDomainStore";
 const API_BASE_URL =
   "http://" + useDomainStore.getState().domain + "/rest/users";
@@ -7,6 +8,12 @@ const getAuthHeaders = () => {
     "Accept": "application/json",
     "Content-Type": "application/json",
   };
+};
+
+const checkStatus = (response) => {
+  if (response.status === 401) {
+    useAuthStore.getState().logout();
+  }
 };
 
 const userService = {
@@ -83,9 +90,7 @@ const userService = {
         headers: getAuthHeaders(),
         credentials: "include",
       });
-      if (!response.ok) {
-        throw new Error("Failed to fetch user basic info");
-      }
+      checkStatus(response);
       return response;
     } catch (error) {
       console.error("Error fetching user basic info:", error.message);
@@ -99,6 +104,7 @@ const userService = {
         headers: getAuthHeaders(),
         credentials: "include",
       });
+      checkStatus(response);
       return response;
     } catch (error) {
       console.error("Error fetching user info:", error.message);
@@ -119,7 +125,7 @@ const userService = {
         credentials: "include",
         body: JSON.stringify(updatedUser),
       });
-      console.log(response + "resposta");
+      checkStatus(response);
       return response;
     } catch (error) {
       console.error("Error updating user info:", error.message);
@@ -137,6 +143,7 @@ const userService = {
             }),
             credentials: "include",
         });
+        checkStatus(response);
         return response;
     } catch (error) {
         console.error("Error updating password:", error.message);
@@ -150,7 +157,6 @@ const userService = {
             headers: getAuthHeaders(),
             body: JSON.stringify({ email }),
         });
-        
         return response;
     } catch (error) {
         console.error("Erro ao solicitar novo e-mail de confirmação:", error);
@@ -164,7 +170,7 @@ const userService = {
         headers: getAuthHeaders(),
         credentials: 'include',
       });
-  
+      checkStatus(response);
       return response; 
     } catch (error) {
       throw error;
