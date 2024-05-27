@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './CreateProjectModal.module.css';
+import  useLabStore  from '../../stores/useLabStore.jsx';
+import { FormattedMessage } from 'react-intl';
+import AttributeEditor from '../reactSelect/AttributeEditor.jsx';
 
 const CreateProjectModal = ({ isOpen, onClose }) => {
-    
+    const { laboratories, fetchLaboratories } = useLabStore();
 
     const [projectData, setProjectData] = useState({
         projectName: '',
@@ -12,6 +15,10 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
         users: '',
         assets: ''
     });
+
+    useEffect(() => {
+        fetchLaboratories();
+      }, [fetchLaboratories]);
 
     const handleChange = (e) => {
         setProjectData({ ...projectData, [e.target.name]: e.target.value });
@@ -38,22 +45,25 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
                     />
 
                     <label className={styles.label}>Laboratory</label>
-                    <input
-                        className={styles.input}
-                        type="text"
-                        name="laboratory"
-                        value={projectData.laboratory}
-                        onChange={handleChange}
-                    />
+                    <FormattedMessage id="laboratoryPlaceholder" defaultMessage="Select your laboratory">
+                           {(placeholder) => (
+                           <select
+                              className={styles.select}
+                              name="laboratoryId"
+                              onChange={handleChange}
+                              id="laboratoryId-field"
+                           >
+                              <option value="">{placeholder}</option>
+                              {laboratories.map((lab) => (
+                              <option key={lab.id} value={lab.id}>
+                                 {lab.location}
+                              </option>
+                              ))}
+                           </select>
+                           )}
+                     </FormattedMessage>
 
-                    <label className={styles.label}>Skills</label>
-                    <input
-                        className={styles.input}
-                        type="text"
-                        name="skills"
-                        value={projectData.skills}
-                        onChange={handleChange}
-                    />
+                    <AttributeEditor title="skills" editMode={true}/>
 
                     <label className={styles.label}>Keywords</label>
                     <input
