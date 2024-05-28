@@ -215,6 +215,14 @@
   margin-left: 20px;
   cursor: pointer;
 }
+.accessBtn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+  gap: 5px;
+}
 
 .topRightFlags li {
   display: inline;

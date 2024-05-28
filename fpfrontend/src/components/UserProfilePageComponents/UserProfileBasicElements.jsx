@@ -10,25 +10,37 @@ import { FormattedMessage } from "react-intl";
 import Button from '../buttons/landingPageBtn/Button.jsx'
 
 
-const UserProfileBasicElements = ({isOwnProfile, userProfileInfo, fetchUserData}) => {
+const UserProfileBasicElements = ({isOwnProfile, userProfileInfo, fetchUserData, isEditing, setIsEditing}) => {
 
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const handleEditModeTrue = (e) => {
+    console.log("Entering edit mode");
+    setIsEditing(true);
+  }
+  const handleEditModeFalse = (e) => {
+    console.log("Exiting edit mode");
+    setShowPasswordForm(false);
+    setIsEditing(false);
+  }
 
     return(
         <div className={styles.profileContainer}>
         <section className={styles.userHeader}>
           <img src={userProfileInfo.photo} alt="User" className={styles.userPhoto} />
           <h2 className={styles.username}>{userProfileInfo.username}</h2>
+          {(!isEditing && isOwnProfile) && <Button className={styles.button} type="button" onClick={(event) => handleEditModeTrue(event)} tradId="editBtnProfForm" defaultText="Edit" btnColor={"var(--btn-color2)"}/> }
+          {(isEditing && isOwnProfile) && <Button className={styles.button} type="button" onClick={(event) => handleEditModeFalse(event)} tradId="editBtnProfFormFalse" defaultText="Exit Edit Mode" btnColor={"var(--btn-color2)"}/> }
+          {(isEditing && isOwnProfile) && <Button className={styles.toggleFormButton} onClick={() => setShowPasswordForm(!showPasswordForm)} tradId={showPasswordForm ? "editProfileInformation" :  "changePassword"} defaultText={showPasswordForm ? "Edit Profile Information" :  "Change Password"} btnColor={"var(--btn-color2)"}/>} 
+
         </section>
         <div className={styles.formsContainer}>
           {isOwnProfile ? (
           <>
             {!showPasswordForm ? (
-              <ProfileForm userProfileInfo={userProfileInfo} isOwnProfile={isOwnProfile} fetchUserData={fetchUserData} />
+              <ProfileForm userProfileInfo={userProfileInfo} isOwnProfile={isOwnProfile} fetchUserData={fetchUserData} isEditing={isEditing} setIsEditing={setIsEditing} />
             ) : (
               <PasswordForm />
             )}
-            <Button className={styles.toggleFormButton} onClick={() => setShowPasswordForm(!showPasswordForm)} tradId={showPasswordForm ? "editProfileInformation" :  "changePassword"} defaultText={showPasswordForm ? "Edit Profile Information" :  "Change Password"} btnColor={"var(--btn-color2)"}/> 
           </>
           ) : (<>
             <ProfileForm userProfileInfo={userProfileInfo} readOnly={true} isOwnProfile={isOwnProfile}/>
