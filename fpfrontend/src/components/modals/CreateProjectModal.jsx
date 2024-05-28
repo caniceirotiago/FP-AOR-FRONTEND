@@ -6,19 +6,32 @@ import AttributeEditor from '../reactSelect/AttributeEditor.jsx';
 
 const CreateProjectModal = ({ isOpen, onClose }) => {
     const { laboratories, fetchLaboratories } = useLabStore();
-
     const [projectData, setProjectData] = useState({
         projectName: '',
         laboratory: '',
-        skills: '',
+        skills: [],
         keywords: '',
         users: '',
         assets: ''
     });
 
+
     useEffect(() => {
         fetchLaboratories();
-      }, [fetchLaboratories]);
+    }, [fetchLaboratories]);
+
+    const handleSkillChange = (newSkills) => {
+        setProjectData((prevData) => ({ ...prevData, skills: newSkills }));
+    };
+    const handleKeywordChange = (newKeywords) => {
+        setProjectData((prevData) => ({ ...prevData, keywords: newKeywords }));
+    };
+    const handleUserChange = (newUsers) => {
+        setProjectData((prevData) => ({ ...prevData, users: newUsers }));
+    };
+    const handleAssetChange = (newAssets) => {
+        setProjectData((prevData) => ({ ...prevData, assets: newAssets }));
+    };
 
     const handleChange = (e) => {
         setProjectData({ ...projectData, [e.target.name]: e.target.value });
@@ -63,34 +76,10 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
                            )}
                      </FormattedMessage>
 
-                    <AttributeEditor title="skills" editMode={true}/>
-
-                    <label className={styles.label}>Keywords</label>
-                    <input
-                        className={styles.input}
-                        type="text"
-                        name="keywords"
-                        value={projectData.keywords}
-                        onChange={handleChange}
-                    />
-
-                    <label className={styles.label}>Users</label>
-                    <input
-                        className={styles.input}
-                        type="text"
-                        name="users"
-                        value={projectData.users}
-                        onChange={handleChange}
-                    />
-
-                    <label className={styles.label}>Assets</label>
-                    <input
-                        className={styles.input}
-                        type="text"
-                        name="assets"
-                        value={projectData.assets}
-                        onChange={handleChange}
-                    />
+                    <AttributeEditor title="skills" editMode={true} mainEntity={"project"} creationMode={true} onAttributesChange={handleSkillChange}/>
+                    <AttributeEditor title="keywords" editMode={true} mainEntity={"project"} creationMode={true} onAttributesChange={handleKeywordChange}/>                
+                    <AttributeEditor title="users" editMode={true} mainEntity={"project"} creationMode={true} onAttributesChange={handleUserChange}/>                
+                    <AttributeEditor title="assets" editMode={true} mainEntity={"project"} creationMode={true} onAttributesChange={handleAssetChange}/>                
 
                     <button type="submit" className={styles.button}>Submit</button>
                 </form>
