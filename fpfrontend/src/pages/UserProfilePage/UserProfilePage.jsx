@@ -34,7 +34,7 @@ const UserProfilePage = () => {
         try {
           const response = await userService.fetchUserInfo(usernameProfile);
           const data = await response.json();
-          if(response.status === 401){
+          if(response.status === 403){
             setIsAPrivateProfile(true);
           }else if(response.status === 404){
             setIsTheProfileNotExistant(true);
@@ -67,8 +67,8 @@ const UserProfilePage = () => {
       <div className={styles.userProfilePage} >
         <UserProfileBasicElements fetchUserData={fetchUserData} isOwnProfile={isOwnProfile} userProfileInfo={userProfileInfo}/>
         <div className={styles.otherAtributes}>
-          <AttributeEditor title="skills" mainEntity= "user" editMode={true} creationMode={false}/>
-          <AttributeEditor title="interests" mainEntity= "user" editMode={true} creationMode={false}/>
+          <AttributeEditor title="skills" mainEntity= "user" editMode={isOwnProfile} creationMode={false} username={usernameProfile}/>
+          <AttributeEditor title="interests" mainEntity= "user" editMode={isOwnProfile} creationMode={false} username={usernameProfile}/>
         </div>
       </div>
       
