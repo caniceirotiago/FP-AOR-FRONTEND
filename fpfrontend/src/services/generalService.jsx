@@ -27,6 +27,24 @@ const generalService = {
       throw error;
     }
   },
+  fetchProjectAttributes: async (apiUrl) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${apiUrl}/project`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+
+      console.log(response);
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch inputs");
+      }
+      return response;
+    } catch (error) {
+      console.error("Error fetching inputs:", error.message);
+      throw error;
+    }
+  },
 
   fetchSuggestions: async (apiUrl, firstLetter) => {
     try {

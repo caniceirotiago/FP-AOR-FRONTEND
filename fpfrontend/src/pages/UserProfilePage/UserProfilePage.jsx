@@ -67,8 +67,8 @@ const UserProfilePage = () => {
       <div className={styles.userProfilePage} >
         <UserProfileBasicElements fetchUserData={fetchUserData} isOwnProfile={isOwnProfile} userProfileInfo={userProfileInfo}/>
         <div className={styles.otherAtributes}>
-          <AttributeEditor title="skills" editMode={true}/>
-          <AttributeEditor title="interests" editMode={isOwnProfile}/>
+          <AttributeEditor title="skills" mainEntity= "user" editMode={true} creationMode={false}/>
+          <AttributeEditor title="interests" mainEntity= "user" editMode={true} creationMode={false}/>
         </div>
       </div>
       

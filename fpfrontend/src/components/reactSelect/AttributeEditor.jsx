@@ -4,42 +4,59 @@ import styles from "./AttributeEditor.module.css";
 import generalService from "../../services/generalService";
 import { FormattedMessage } from "react-intl";
 
-const AttributeEditor = ({ title, editMode }) => {
+const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
-  const [userAttributes, setUserAttributes] = useState([]);
+  const [attributes, setAttributes] = useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
 
 
   useEffect(() => {
-    fetchUserAttributes();
+    if(!creationMode){
+      fetchAttributes();
+    }
   }, []);
 
-  const fetchUserAttributes = async () => {
-    try {
-      const response = await generalService.fetchUserAttributes(title);
-      if (response.status === 200) {
-        const data = await response.json();
-        setUserAttributes(data);
-      } else {
-        throw new Error("Failed to fetch user attributes");
-      }
-    } catch (error) {
-      console.error("Error fetching user attributes:", error.message);
+  useEffect(() => {
+    if (onAttributesChange) {
+      onAttributesChange(attributes);
+    }
+  }, [attributes]);
+
+  const getFetchFunction = (title) => {
+    switch (mainEntity) {
+      case 'user':
+        return generalService.fetchUserAttributes(title);
+      case 'project':
+        return generalService.fetchProjectAttributes(title);
     }
   };
 
+  const fetchAttributes = async () => {
+    try {
+      const response = await getFetchFunction(title);
+      if (response.status === 200) {
+        const data = await response.json();
+        setAttributes(data);
+      } else {
+        throw new Error("Failed to fetch attributes");
+      }
+    } catch (error) {
+      console.error("Error fetching attributes:", error.message);
+    }
+  };
+
+
+
   const fetchSuggestions = async (firstLetter) => {
     try {
-      const response = await generalService.fetchSuggestions(
-        title,
-        firstLetter
-      );
+      const response = await generalService.fetchSuggestions(title, firstLetter);
       if (response.status === 200) {
         const data = await response.json();
         setFetchedSuggestions(data); // Store fetched suggestions
         setSuggestions(data); // Initially, set suggestions to fetched data
+        console.log(data);
       } else {
         throw new Error("Failed to fetch suggestions");
       }
@@ -48,12 +65,22 @@ const AttributeEditor = ({ title, editMode }) => {
     }
   };
 
+  const getItemProperty = (item) => {
+    switch (title) {
+      case 'users':
+        return item.username;
+      default:
+        return item.name;
+    }
+  };
+
   const filterSuggestions = (query) => {
     const filtered = fetchedSuggestions.filter((item) =>
-      item.name.toLowerCase().startsWith(query.toLowerCase())
+      getItemProperty(item).toLowerCase().startsWith(query.toLowerCase())
     );
     setSuggestions(filtered);
   };
+
 
   const handleInputChange = (newValue, { action }) => {
     if (action === "input-change") {
@@ -82,6 +109,10 @@ const AttributeEditor = ({ title, editMode }) => {
 
 
   const addItem = async () => {
+    if (title === 'users' && !fetchedSuggestions.some((suggestion) => suggestion.username.toLowerCase() === input.toLowerCase())) {
+      console.warn("User not in suggestions. Not adding.");
+      return;
+    }
     try {
       // Prevent adding empty attributes or too long attribute name
       if (!input) return;
@@ -91,18 +122,23 @@ const AttributeEditor = ({ title, editMode }) => {
       }
       // Prevent adding duplicate attributes
       if (
-        userAttributes.some(
+        attributes.some(
           (attribute) => attribute.name.toLowerCase() === input.toLowerCase()
         )
       ) {
         console.warn("Duplicate attribute. Not adding.");
         return;
       }
-      const response = await generalService.addItem(title, input);
-      if (response.status === 204) {
-        fetchUserAttributes();
+      if(!creationMode){
+        const response = await generalService.addItem(title, input, mainEntity);
+        if (response.status === 204) {
+          fetchAttributes();
+        } else {
+          throw new Error("Failed to add item");
+        }
       } else {
-        throw new Error("Failed to add item");
+        
+        setAttributes([...attributes, { id: attributes.length + 1, name: input }]);
       }
     } catch (error) {
       console.error("Error adding item:", error.message);
@@ -119,16 +155,28 @@ const AttributeEditor = ({ title, editMode }) => {
 
   const removeItem = async (id) => {
     try {
-      const response = await generalService.removeItem(title, id);
-      if (response.status === 204) {
-        setUserAttributes(
-          userAttributes.filter((attribute) => attribute.id !== id)
-        );
-      } else {
-        throw new Error("Failed to remove item");
+      setAttributes(
+        attributes.filter((attribute) => attribute.id !== id)
+      );
+      if(!creationMode){
+        const response = await generalService.removeItem(title, id);
+        if (response.status !== 204) {
+          fetchAttributes();
+        } else {
+          throw new Error("Failed to remove item");
+        }
       }
     } catch (error) {
       console.error("Error removing item:", error.message);
+    }
+  };
+
+  const getLabelValue = (suggestion) => {
+    switch (title) {
+      case 'users':
+        return { label: suggestion.username, value: suggestion.username };
+      default:
+        return { label: suggestion.name, value: suggestion.name };
     }
   };
 
@@ -142,7 +190,7 @@ const AttributeEditor = ({ title, editMode }) => {
         <div className={styles.existingAttributes}>
           <div className={styles.userAttributeContainer}>
             <ul className={styles.attributeList}>
-              {userAttributes.map((attribute) => (
+              {attributes.map((attribute) => (
                 <li className={styles.attribute} key={attribute.id}>
                   <span className={styles.attributeName}>{attribute.name}</span>
                   {editMode && (<button
@@ -164,10 +212,7 @@ const AttributeEditor = ({ title, editMode }) => {
               value={selectedValue}
               onInputChange={handleInputChange}
               onChange={handleSelectChange}
-              options={suggestions.map((suggestion) => ({
-                label: suggestion.name,
-                value: suggestion.name,
-              }))}
+              options={suggestions.map(getLabelValue)}
               inputValue={input}
               noOptionsMessage={() => "No suggestions found"}
               placeholder={`Add new ${title}`}
@@ -175,15 +220,15 @@ const AttributeEditor = ({ title, editMode }) => {
               styles={{
                 control: (base) => ({
                   ...base,
-                  width: "300px", // Set fixed width for control
+                  width: "300px", 
                 }),
                 input: (base) => ({
                   ...base,
-                  width: "100%", // Ensure the input takes up the full width
+                  width: "100%", 
                 }),
               }}
             />
-            <button onClick={addItem}>Add</button>
+            <div onClick={addItem}>Add</div>
           </div>
         </div>)}
         </div>
