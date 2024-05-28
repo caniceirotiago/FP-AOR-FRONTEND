@@ -7,6 +7,7 @@ import userService from '../../services/userService';
 import AttributeEditor from '../../components/reactSelect/AttributeEditor.jsx';
 
 const UserProfilePage = () => {
+  const [isEditing, setIsEditing] = useState(false); 
   const { username: usernameProfile } = useParams();
   const [isOwnProfile, setIsOwnProfile] = useState();
   const [isAPrivateProfile, setIsAPrivateProfile] = useState();
@@ -34,7 +35,7 @@ const UserProfilePage = () => {
         try {
           const response = await userService.fetchUserInfo(usernameProfile);
           const data = await response.json();
-          if(response.status === 401){
+          if(response.status === 403){
             setIsAPrivateProfile(true);
           }else if(response.status === 404){
             setIsTheProfileNotExistant(true);
@@ -65,10 +66,10 @@ const UserProfilePage = () => {
       </div>
     ) : (
       <div className={styles.userProfilePage} >
-        <UserProfileBasicElements fetchUserData={fetchUserData} isOwnProfile={isOwnProfile} userProfileInfo={userProfileInfo}/>
+        <UserProfileBasicElements fetchUserData={fetchUserData} isOwnProfile={isOwnProfile} userProfileInfo={userProfileInfo} isEditing={isEditing} setIsEditing={setIsEditing}/>
         <div className={styles.otherAtributes}>
-          <AttributeEditor title="skills" mainEntity= "user" editMode={true} creationMode={false}/>
-          <AttributeEditor title="interests" mainEntity= "user" editMode={true} creationMode={false}/>
+          <AttributeEditor title="skills" mainEntity= "user" editMode={isOwnProfile && isEditing} creationMode={false} username={usernameProfile}/>
+          <AttributeEditor title="interests" mainEntity= "user" editMode={isOwnProfile && isEditing} creationMode={false} username={usernameProfile}/>
         </div>
       </div>
       

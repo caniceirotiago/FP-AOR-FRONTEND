@@ -4,7 +4,7 @@ import styles from "./AttributeEditor.module.css";
 import generalService from "../../services/generalService";
 import { FormattedMessage } from "react-intl";
 
-const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange }) => {
+const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
@@ -27,7 +27,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   const getFetchFunction = (title) => {
     switch (mainEntity) {
       case 'user':
-        return generalService.fetchUserAttributes(title);
+        return generalService.fetchUserAttributes(title, username);
       case 'project':
         return generalService.fetchProjectAttributes(title);
     }

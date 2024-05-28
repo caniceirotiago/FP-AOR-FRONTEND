@@ -9,9 +9,9 @@ const getAuthHeaders = () => {
 };
 
 const generalService = {
-  fetchUserAttributes: async (apiUrl) => {
+  fetchUserAttributes: async (apiUrl, user) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${apiUrl}/user`, {
+      const response = await fetch(`${API_BASE_URL}${apiUrl}/user/${user}`, {
         method: "GET",
         headers: getAuthHeaders(),
         credentials: "include",

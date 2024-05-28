@@ -174,6 +174,11 @@ const HomepageHeader = () => {
             </div>
           )}
         </div>
+        {!isAuthenticated && 
+        <div onClick={handleOpenLoginModal} className={styles.accessBtn}>
+              <FaSignInAlt /> <FormattedMessage id="access">Access</FormattedMessage>
+        </div>
+        }
         <div  ref={navToggleButtonRef} className={styles.menuBurger} onClick={handleToggleNavMenu}>
           <FaBars />
         </div>
@@ -196,9 +201,7 @@ const HomepageHeader = () => {
               <FaSignOutAlt /> <FormattedMessage id="logout">Logout</FormattedMessage>
             </div>)
             :
-            (<div onClick={handleOpenLoginModal}>
-              <FaSignInAlt /> <FormattedMessage id="access">Access</FormattedMessage>
-            </div>)
+            null
             }         
           </div>
         )}

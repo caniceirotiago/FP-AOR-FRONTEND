@@ -11,9 +11,8 @@ import useDialogModalStore from '../../../stores/useDialogModalStore';
 import Button from '../../buttons/landingPageBtn/Button.jsx'
 
 
-const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData }) => {
+const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData, isEditing, setIsEditing }) => {
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
-  const [isEditing, setIsEditing] = useState(false); 
   const [profileImage, setProfileImage] = useState(null);
   const {laboratories, fetchLaboratories} = useLabStore();
 
@@ -56,7 +55,6 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData }) => {
   };
 
   const onUpdateSuccess = () => {
-    setIsEditing(false);
     fetchUserData();
   };
   const handleUpdateUserProfile = async () => {
@@ -94,15 +92,13 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData }) => {
       console.log("Failed to update profile") //notify('Failed to update profile. Please try again.');
     }
   };  
-  const handleEditModeTrue = (e) => {
-    console.log("Entering edit mode");
-    setIsEditing(true);
-  }
+
 
   return (
     <div className={styles.Profile}>
 
     <form className={styles.formProfile}>
+      
       <div className={styles.inputGroup}>
         <label className={styles.label} htmlFor="email"><FormattedMessage id="email">Email</FormattedMessage></label>
         <input
@@ -228,10 +224,10 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData }) => {
       </div>
     </form>
     {isEditing ? (
-        <Button className={styles.button} onClick={handleUpdateUserProfile} tradId="saveChangesUserProfForm" defaultText="Save Changes" btnColor={"var(--btn-color2)"}/> 
+        <Button className={styles.button} onClick={handleUpdateUserProfile} tradId="updateUserBasicInformations" defaultText="Update User Basic Information" btnColor={"var(--btn-color2)"}/> 
         ) : (
           isOwnProfile && (
-            <Button className={styles.button} type="button" onClick={(event) => handleEditModeTrue(event)} tradId="editBtnProfForm" defaultText="Edit" btnColor={"var(--btn-color2)"}/> 
+            null
           )
         )}
      </div>   

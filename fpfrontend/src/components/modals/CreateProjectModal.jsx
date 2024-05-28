@@ -38,8 +38,8 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
     };
 
     const handleSubmit = (e) => {
-        // e.preventDefault();
-        // console.log('Project Data:', projectData);
+         e.preventDefault();
+         console.log('Project Data:', projectData);
         // onClose(); 
     };
     if (!isOpen) return null;
@@ -79,7 +79,7 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
                     <AttributeEditor title="skills" editMode={true} mainEntity={"project"} creationMode={true} onAttributesChange={handleSkillChange}/>
                     <AttributeEditor title="keywords" editMode={true} mainEntity={"project"} creationMode={true} onAttributesChange={handleKeywordChange}/>                
                     <AttributeEditor title="users" editMode={true} mainEntity={"project"} creationMode={true} onAttributesChange={handleUserChange}/>                
-                    <AttributeEditor title="assets" editMode={true} mainEntity={"project"} creationMode={true} onAttributesChange={handleAssetChange}/>                
+                    {/* <AttributeEditor title="assets" editMode={true} mainEntity={"project"} creationMode={true} onAttributesChange={handleAssetChange}/>                 */}
 
                     <button type="submit" className={styles.button}>Submit</button>
                 </form>
