@@ -27,7 +27,6 @@ const EmailConfirmationPage = () => {
       const performConfirmation = async () => {
           try {
               const response = await userService.confirmAccount(token); 
-              console.log('Response:', response.status);
               if(response.status === 204) {
                   setDialogMessage('Acount Confirmed!');
                   setIsDialogOpen(true);

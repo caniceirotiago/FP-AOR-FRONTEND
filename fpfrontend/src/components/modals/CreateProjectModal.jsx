@@ -39,7 +39,6 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
 
     const handleSubmit = (e) => {
          e.preventDefault();
-         console.log('Project Data:', projectData);
         // onClose(); 
     };
     if (!isOpen) return null;

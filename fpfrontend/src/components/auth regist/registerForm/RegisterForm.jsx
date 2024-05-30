@@ -95,7 +95,6 @@ const RegisterForm = ( ) => {
          //    const downloadURL = await getDownloadURL(snapshot.ref);
          //    userData.photo = downloadURL;
          //  }
-          console.log(userData);
           const response = await userService.registerUser(userData);
          if (response.status !== 204) {
                setLoading(false);
@@ -111,7 +110,6 @@ const RegisterForm = ( ) => {
              setIsDialogOpen(true);
              setAlertType(true);
              setOnConfirm(async () => {
-                console.log(loading);
                 setLoading(false);
                 navigate('/');
              });

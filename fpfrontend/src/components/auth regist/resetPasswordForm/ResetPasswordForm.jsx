@@ -46,7 +46,6 @@ const ResetPasswordForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('passwords :', passwords);
         const newErrors = {
             Password: !passwords.password ? ' is required' : '',
             Confirmation: passwords.password !== passwords.confirmPassword ? ' passwords do not match' : '',
@@ -56,7 +55,6 @@ const ResetPasswordForm = () => {
        const isValid = Object.keys(newErrors).every((key) => !newErrors[key]);
        if (isValid) {
         try {
-            console.log(newErrors);
             const response = await userService.resetPassword(token, passwords.password);
             if (response.status === 204) {
                 setDialogMessage('Password Changed Successfully');
@@ -68,7 +66,6 @@ const ResetPasswordForm = () => {
                 return;
             }
             const responseBody = await response.json();
-            console.log('responseBody :', responseBody);
             
             setDialogMessage('Not able to change password, contact support.');
             setIsDialogOpen(true);

@@ -55,7 +55,6 @@ const userService = {
     }
   },
   resetPassword: async (resetToken, newPassword) => {
-    console.log(JSON.stringify({ resetToken, newPassword }));
     try {
       const response = await fetch(`${API_BASE_URL}/password/reset`, {
         method: "PUT",
@@ -77,7 +76,6 @@ const userService = {
         body: JSON.stringify(userLogin),
         credentials: "include",
       });
-      console.log(response);
       return response;
     } catch (error) {
       throw error;
@@ -112,7 +110,6 @@ const userService = {
     }
   },
   updateUser: async (updatedUser) => {
-    console.log(updatedUser);
     try {
       const response = await fetch(`${API_BASE_URL}/profile`, {
         method: "PUT",

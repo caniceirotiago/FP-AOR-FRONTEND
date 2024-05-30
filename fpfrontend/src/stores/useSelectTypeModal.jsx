@@ -1,5 +1,5 @@
 // src/stores/useSelectTypeModal.js
-import create from 'zustand';
+import {create} from 'zustand';
 
 const useSelectTypeModal = create((set) => ({
   showModal: false,

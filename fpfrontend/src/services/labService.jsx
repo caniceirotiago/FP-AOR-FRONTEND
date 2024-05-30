@@ -16,7 +16,6 @@ const labService = {
                 method: "GET",
                 headers: getAuthHeaders(),
             });
-            console.log(response);
             if (response.status !== 200) {
                 throw new Error('Failed to fetch labs info');
             }

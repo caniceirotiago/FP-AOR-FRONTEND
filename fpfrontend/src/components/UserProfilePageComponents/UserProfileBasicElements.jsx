@@ -14,11 +14,9 @@ const UserProfileBasicElements = ({isOwnProfile, userProfileInfo, fetchUserData,
 
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const handleEditModeTrue = (e) => {
-    console.log("Entering edit mode");
     setIsEditing(true);
   }
   const handleEditModeFalse = (e) => {
-    console.log("Exiting edit mode");
     setShowPasswordForm(false);
     setIsEditing(false);
   }

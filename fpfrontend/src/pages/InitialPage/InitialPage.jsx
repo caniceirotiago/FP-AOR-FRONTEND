@@ -44,7 +44,6 @@ const InitialPage = () => {
     fetchLaboratories();
   }, [fetchLaboratories]);
 
-  console.log(laboratories);
   
   return (
     <div className={styles.initialPage} >
@@ -68,7 +67,7 @@ const InitialPage = () => {
                   className={styles.card1Video}
                   src={videoSrc}
                   title="YouTube video player" 
-                  frameborder="0"
+                  frameBorder="0"
                   onError={() => setVideoError(true)} 
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                 ></iframe>

@@ -61,7 +61,6 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
         const data = await response.json();
         setFetchedSuggestions(data); // Store fetched suggestions
         setSuggestions(data); // Initially, set suggestions to fetched data
-        console.log(data);
       } else {
         throw new Error("Failed to fetch suggestions");
       }
@@ -142,13 +141,10 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
         const options = title === 'skills' ? ["KNOWLEDGE", "SOFTWARE", "HARDWARE", "TOOLS"] : ["TOPICS", "CAUSES", "KNOWLEDGE_AREAS"];
         selectTypeModal.setOptions(options);
         selectTypeModal.setShowModal(true);
-        console.log("waiting for selection");
         selectedOption = await selectTypeModal.waitForSelection();
-        console.log("selected option: " + selectedOption);
       }
 
       const data = { name: input, type: selectedOption };
-      console.log("data: ", data);
 
       if (!creationMode) {
         const response = await generalService.addItem(title, data, mainEntity);
@@ -158,7 +154,8 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
           throw new Error("Failed to add item");
         }
       } else {
-        setAttributes([...attributes, { id: attributes.length + 1, name: input, type: selectedOption }]);
+        const suggestion = fetchedSuggestions.find((suggestion) => suggestion.name.toLowerCase() === input.toLowerCase());
+        setAttributes([...attributes, { id: suggestion?.id, name: input, type: suggestion?.type ?? selectedOption }]);
       }
     } catch (error) {
       console.error("Error adding item:", error.message);
@@ -173,13 +170,13 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     setSuggestions([]);
   };
 
-  const removeItem = async (id) => {
+  const removeItem = async (attributeToRemove) => {
     try {
       setAttributes(
-        attributes.filter((attribute) => attribute.id !== id)
+        attributes.filter((attribute) => attribute.name !== attributeToRemove.name)
       );
       if(!creationMode){
-        const response = await generalService.removeItem(title, id);
+        const response = await generalService.removeItem(title, attributeToRemove.id);
         if (response.status !== 204) {
           fetchAttributes();
         } else {
@@ -203,7 +200,6 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   const elementTitle =
     title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
 
-    console.log(attributes);
 
 
   return (
@@ -218,7 +214,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
                   <ListItem title={title} attribute={attribute}/>
                   {editMode && (<button
                     className={styles.removeButton}
-                    onClick={() => removeItem(attribute.id)}
+                    onClick={() => removeItem(attribute)}
                   >
                     Remove
                   </button>)}

@@ -17,7 +17,6 @@ const generalService = {
         credentials: "include",
       });
 
-      console.log(response);
       if (response.status !== 200) {
         throw new Error("Failed to fetch inputs");
       }
@@ -35,7 +34,6 @@ const generalService = {
         credentials: "include",
       });
 
-      console.log(response);
       if (response.status !== 200) {
         throw new Error("Failed to fetch inputs");
       }
@@ -57,7 +55,6 @@ const generalService = {
         }
       );
 
-      console.log(response);
       if (response.status !== 200) {
         throw new Error("Failed to fetch suggestions");
       }
@@ -76,7 +73,6 @@ const generalService = {
         credentials: "include",
         body: JSON.stringify(data),
       });
-      console.log(response);
       return response;
     } catch (error) {
       console.error("Error fetching suggestions:", error.message);
@@ -93,7 +89,6 @@ const generalService = {
         credentials: "include",
         body: JSON.stringify(requestBody),
       });
-      console.log(response);
       return response;
     } catch (error) {
       console.error("Error fetching suggestions:", error.message);

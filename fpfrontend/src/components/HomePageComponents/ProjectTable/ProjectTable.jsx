@@ -52,8 +52,7 @@ function ProjectTable() {
             {
                 Header: 'Final Date',
                 accessor: 'finalDate',
-            }
-            ,
+            },
             {
                 Header: 'Laboratory',
                 accessor: 'laboratory',
@@ -73,26 +72,36 @@ function ProjectTable() {
     return (
         <table {...getTableProps()} className={styles.table}>
             <thead>
-                {headerGroups.map(headerGroup => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map(column => (
-                            <th {...column.getHeaderProps()} className={styles.header}>
-                                {column.render('Header')}
-                            </th>
-                        ))}
-                    </tr>
-                ))}
+                {headerGroups.map(headerGroup => {
+                    const { key, ...headerGroupProps } = headerGroup.getHeaderGroupProps();
+                    return (
+                        <tr key={key} {...headerGroupProps}>
+                            {headerGroup.headers.map(column => {
+                                const { key, ...columnProps } = column.getHeaderProps();
+                                return (
+                                    <th key={key} {...columnProps} className={styles.header}>
+                                        {column.render('Header')}
+                                    </th>
+                                );
+                            })}
+                        </tr>
+                    );
+                })}
             </thead>
             <tbody {...getTableBodyProps()}>
                 {rows.map(row => {
                     prepareRow(row);
+                    const { key, ...rowProps } = row.getRowProps();
                     return (
-                        <tr {...row.getRowProps()} className={styles.row}>
-                            {row.cells.map(cell => (
-                                <td {...cell.getCellProps()} className={styles.cell}>
-                                    {cell.render('Cell')}
-                                </td>
-                            ))}
+                        <tr key={key} {...rowProps} className={styles.row}>
+                            {row.cells.map(cell => {
+                                const { key, ...cellProps } = cell.getCellProps();
+                                return (
+                                    <td key={key} {...cellProps} className={styles.cell}>
+                                        {cell.render('Cell')}
+                                    </td>
+                                );
+                            })}
                         </tr>
                     );
                 })}

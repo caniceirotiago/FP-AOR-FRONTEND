@@ -28,7 +28,6 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData, isEditing, 
 
   useEffect(() => {
     setProfile({ ...userProfileInfo });
-    console.log('userProfileInfo:', userProfileInfo);
   }, [userProfileInfo]); 
 
      const handleImageChange = (e) => {
@@ -58,7 +57,6 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData, isEditing, 
     fetchUserData();
   };
   const handleUpdateUserProfile = async () => {
-    console.log('profile:', profile);
     try {
       if (profileImage) {
         const storageRef = ref(storage, `profile_images/${profileImage.name}`);
@@ -77,7 +75,6 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData, isEditing, 
         setOnConfirm(async () => {});
       }
       else {
-        console.log("Failed to update profile")
         setDialogMessage('Failed to update profile. Please try again.');
         setIsDialogOpen(true);
         setAlertType(true);
@@ -89,7 +86,6 @@ const ProfileForm = ({ userProfileInfo, isOwnProfile, fetchUserData, isEditing, 
       setAlertType(true);
       setOnConfirm(async () => {});
       console.error("Failed to update user profile:", error);
-      console.log("Failed to update profile") //notify('Failed to update profile. Please try again.');
     }
   };  
 

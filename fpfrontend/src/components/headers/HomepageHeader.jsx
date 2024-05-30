@@ -136,7 +136,6 @@ const HomepageHeader = () => {
   }
   const handleLogout = async (event) => {
     const response = await userService.logout();
-    console.log(response);
     logout(); 
     navigate('/homepage');
   }
@@ -193,8 +192,8 @@ const HomepageHeader = () => {
                 {["en", "pt"].map(language => (<option
                 key={language}>{language}</option>))}
               </select>
-              {locale === "pt" && <span className={styles.flag} class="fi fi-pt"></span> }
-              {locale === "en" && <span className={styles.flag} class="fi fi-gb"></span> }
+              {locale === "pt" && <span className={`${styles.flag} fi fi-pt`}></span>}
+              {locale === "en" && <span className={`${styles.flag} fi fi-gb`}></span>}
             </div>
             {isAuthenticated ? (
             <div onClick={handleLogout}>

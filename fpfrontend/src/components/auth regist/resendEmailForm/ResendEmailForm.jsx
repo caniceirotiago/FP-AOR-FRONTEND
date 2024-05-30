@@ -27,7 +27,6 @@ const ResendEmailForm = () => {
                 return;
             }
             const responseBody = await response.json();
-            console.log('responseBody :', responseBody);
             if(responseBody.errorMessage === "You can't request a new confirmation email now, please wait 1 minute"){
                 DialogModalStore.getState().setDialogMessage('You can not request a new confirmation email now, please wait 1 minute');
             }

@@ -67,7 +67,6 @@ const checkPasswordStrength = (password) => {
     if (isValid) {
       try {
         const response = await userService.updateUserPassword( oldPassword, newPassword );
-        console.log(response);
         if(response.status === 204){
           setDialogMessage('Password Changed Successfully');
           setIsDialogOpen(true);
@@ -90,7 +89,6 @@ const checkPasswordStrength = (password) => {
           confirmNewPassword: '',
         });
       } catch (error) {
-        console.log('Failed to update password. Please try again.');
       }
     }else{
       const errorMessages = Object.entries(newErrors)

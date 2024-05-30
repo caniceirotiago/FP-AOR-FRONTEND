@@ -23,7 +23,6 @@ const useAuthStore = create((set, get) => ({
   isAuthenticated: !!Cookies.get('sessionToken'),
   login: () => {
     set({ isAuthenticated: true });
-    console.log("User logged in");
     startSessionCheck(); // Start session check on login
   },
   logout: () => {
@@ -31,7 +30,6 @@ const useAuthStore = create((set, get) => ({
     Cookies.remove('sessionToken', { path: '/' });
     set({ isAuthenticated: false });
     localStorage.clear();
-    console.log("User logged out");
     stopSessionCheck(); // Stop session check on logout
   },
 }));

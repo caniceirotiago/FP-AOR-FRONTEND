@@ -9,7 +9,6 @@ import  useTranslationsStore  from '../../stores/useTranslationsStore';
 import { FaChartGantt } from "react-icons/fa6";
 
 const HomepageAside = () => {
-    console.log('HomepageAside');
     const { isAsideExpanded, toggleAside } = useLayoutStore();
     const [showText, setShowText] = useState(false);
     const locale = useTranslationsStore((state) => state.locale);
