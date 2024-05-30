@@ -68,14 +68,13 @@ const generalService = {
     }
   },
 
-  addItem: async (apiUrl, name) => {
+  addItem: async (apiUrl, data) => {
     try {
-      const requestBody = { name: name };
       const response = await fetch(`${API_BASE_URL}${apiUrl}/add/user`, {
         method: "POST",
         headers: getAuthHeaders(),
         credentials: "include",
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify(data),
       });
       console.log(response);
       return response;

@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import styles from "./AttributeEditor.module.css";
 import generalService from "../../services/generalService";
-import { FormattedMessage } from "react-intl";
+import ListItem from "./listItems/ListItem";
+import { useSelect } from "downshift";
+import useSelectTypeModal from "../../stores/useSelectTypeModal";
+import SelectTypeModal from "../modals/SelectTypeModal.jsx";
+
 
 const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username }) => {
   const [input, setInput] = useState("");
@@ -10,6 +14,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
   const [attributes, setAttributes] = useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
+  const selectTypeModal = useSelectTypeModal();
 
 
   useEffect(() => {
@@ -109,36 +114,51 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
 
 
   const addItem = async () => {
-    if (title === 'users' && !fetchedSuggestions.some((suggestion) => suggestion.username.toLowerCase() === input.toLowerCase())) {
+    const existingAttribute = fetchedSuggestions.some((suggestion) =>
+      suggestion?.name?.toLowerCase() === input.toLowerCase()
+    );
+    const existingUser = fetchedSuggestions.some((suggestion) =>
+      suggestion?.username?.toLowerCase() === input.toLowerCase()
+    );
+    if (title === 'users' && !existingUser) {
       console.warn("User not in suggestions. Not adding.");
       return;
     }
+
     try {
-      // Prevent adding empty attributes or too long attribute name
       if (!input) return;
       if (input.length > 25) {
         console.warn("Input exceeds maximum character limit. Not adding.");
         return;
       }
-      // Prevent adding duplicate attributes
-      if (
-        attributes.some(
-          (attribute) => attribute.name.toLowerCase() === input.toLowerCase()
-        )
-      ) {
+      if (attributes.some((attribute) => attribute.name.toLowerCase() === input.toLowerCase())) {
         console.warn("Duplicate attribute. Not adding.");
         return;
       }
-      if(!creationMode){
-        const response = await generalService.addItem(title, input, mainEntity);
+
+      let selectedOption = null;
+
+      if (!existingAttribute && (title === 'skills' || title === 'interests')) {
+        const options = title === 'skills' ? ["KNOWLEDGE", "SOFTWARE", "HARDWARE", "TOOLS"] : ["TOPICS", "CAUSES", "KNOWLEDGE_AREAS"];
+        selectTypeModal.setOptions(options);
+        selectTypeModal.setShowModal(true);
+        console.log("waiting for selection");
+        selectedOption = await selectTypeModal.waitForSelection();
+        console.log("selected option: " + selectedOption);
+      }
+
+      const data = { name: input, type: selectedOption };
+      console.log("data: ", data);
+
+      if (!creationMode) {
+        const response = await generalService.addItem(title, data, mainEntity);
         if (response.status === 204) {
           fetchAttributes();
         } else {
           throw new Error("Failed to add item");
         }
       } else {
-        
-        setAttributes([...attributes, { id: attributes.length + 1, name: input }]);
+        setAttributes([...attributes, { id: attributes.length + 1, name: input, type: selectedOption }]);
       }
     } catch (error) {
       console.error("Error adding item:", error.message);
@@ -176,12 +196,15 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       case 'users':
         return { label: suggestion.username, value: suggestion.username };
       default:
-        return { label: suggestion.name, value: suggestion.name };
+        return { label: suggestion.name + ' - ' + suggestion.type, value: suggestion.name };
     }
   };
 
   const elementTitle =
     title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
+
+    console.log(attributes);
+
 
   return (
     <div className={styles.container}>
@@ -192,7 +215,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
             <ul className={styles.attributeList}>
               {attributes.map((attribute) => (
                 <li className={styles.attribute} key={attribute.id}>
-                  <span className={styles.attributeName}>{attribute.name}</span>
+                  <ListItem title={title} attribute={attribute}/>
                   {editMode && (<button
                     className={styles.removeButton}
                     onClick={() => removeItem(attribute.id)}
@@ -232,7 +255,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
           </div>
         </div>)}
         </div>
-        
+        <SelectTypeModal />
       </div>
     </div>
   );
