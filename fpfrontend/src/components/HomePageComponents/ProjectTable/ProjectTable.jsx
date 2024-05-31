@@ -1,33 +1,19 @@
-import React from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useTable } from 'react-table';
 import styles from './ProjectTable.module.css'; 
+import projectService from '../../../services/projectService';
+import { useNavigate } from 'react-router';
 
-function ProjectTable() {
-    const data = React.useMemo(
-        () => [
-            { 
-                id: 1, 
-                name: 'Project Alpha', 
-                description: 'Exploration of Alpha technologies.', 
-                state: 'ACTIVE', 
-                creationDate: '2022-01-01T00:00:00Z', 
-                finalDate: '2022-12-31T00:00:00Z',
-                laboratory: 'Lab 1'
-            },
-            { 
-                id: 2, 
-                name: 'Project Beta', 
-                description: 'Development of Beta tools.', 
-                state: 'PLANNED', 
-                creationDate: '2022-02-01T00:00:00Z', 
-                finalDate: '2023-01-31T00:00:00Z',
-                laboratory: 'Lab 2'
-            }
-        ],
-        []
-    );
+function ProjectTable({projects}) {
+    const navigate = useNavigate();
+    const handleClickToOpenProjectPage = (projectId) => () => {
+        navigate(`/projectpage/${projectId}`);
+    }
+    
 
-    const columns = React.useMemo(
+    const data = useMemo(() => projects, [projects]);
+
+    const columns = useMemo(
         () => [
             {
                 Header: 'ID',
@@ -51,11 +37,30 @@ function ProjectTable() {
             },
             {
                 Header: 'Final Date',
-                accessor: 'finalDate',
+                accessor: 'conclusionDate',
             },
             {
                 Header: 'Laboratory',
-                accessor: 'laboratory',
+                accessor: 'laboratory.location',
+            },
+            {
+                Header: 'Number of Members',
+                accessor: 'members.length',
+            },
+            {
+                Header: 'Created By',
+                accessor: 'createdBy.username',
+            },
+            {
+                Header: 'Actions',
+                id: 'actions',
+                accessor: 'id',
+                Cell: ({value}) => (
+                    <div>
+                        <button onClick={handleClickToOpenProjectPage(value)}>Project Page</button>
+                        <button onClick={() => console.log(value)}>Project Plane</button>
+                    </div>
+                )
             }
         ],
         []
@@ -72,36 +77,26 @@ function ProjectTable() {
     return (
         <table {...getTableProps()} className={styles.table}>
             <thead>
-                {headerGroups.map(headerGroup => {
-                    const { key, ...headerGroupProps } = headerGroup.getHeaderGroupProps();
-                    return (
-                        <tr key={key} {...headerGroupProps}>
-                            {headerGroup.headers.map(column => {
-                                const { key, ...columnProps } = column.getHeaderProps();
-                                return (
-                                    <th key={key} {...columnProps} className={styles.header}>
-                                        {column.render('Header')}
-                                    </th>
-                                );
-                            })}
-                        </tr>
-                    );
-                })}
+                {headerGroups.map(headerGroup => (
+                    <tr {...headerGroup.getHeaderGroupProps()}>
+                        {headerGroup.headers.map(column => (
+                            <th {...column.getHeaderProps()} className={styles.header}>
+                                {column.render('Header')}
+                            </th>
+                        ))}
+                    </tr>
+                ))}
             </thead>
             <tbody {...getTableBodyProps()}>
                 {rows.map(row => {
                     prepareRow(row);
-                    const { key, ...rowProps } = row.getRowProps();
                     return (
-                        <tr key={key} {...rowProps} className={styles.row}>
-                            {row.cells.map(cell => {
-                                const { key, ...cellProps } = cell.getCellProps();
-                                return (
-                                    <td key={key} {...cellProps} className={styles.cell}>
-                                        {cell.render('Cell')}
-                                    </td>
-                                );
-                            })}
+                        <tr {...row.getRowProps()} className={styles.row}>
+                            {row.cells.map(cell => (
+                                <td {...cell.getCellProps()} className={styles.cell}>
+                                    {cell.render('Cell')}
+                                </td>
+                            ))}
                         </tr>
                     );
                 })}

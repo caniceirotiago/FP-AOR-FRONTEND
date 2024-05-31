@@ -113,12 +113,21 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
 
 
   const addItem = async () => {
-    const existingAttribute = fetchedSuggestions.some((suggestion) =>
-      suggestion?.name?.toLowerCase() === input.toLowerCase()
-    );
-    const existingUser = fetchedSuggestions.some((suggestion) =>
+    let existingAttribute 
+    let existingUser
+
+    if(title !== 'users'){
+      existingAttribute = fetchedSuggestions.some((suggestion) =>
+        suggestion?.name?.toLowerCase() === input.toLowerCase()
+      );
+    }
+    else{
+      existingUser = fetchedSuggestions.some((suggestion) =>
       suggestion?.username?.toLowerCase() === input.toLowerCase()
     );
+    }
+   
+
     if (title === 'users' && !existingUser) {
       console.warn("User not in suggestions. Not adding.");
       return;
@@ -130,10 +139,18 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
         console.warn("Input exceeds maximum character limit. Not adding.");
         return;
       }
-      if (attributes.some((attribute) => attribute.name.toLowerCase() === input.toLowerCase())) {
-        console.warn("Duplicate attribute. Not adding.");
-        return;
+      if(title !== 'users'){
+        if (attributes.some((attribute) => attribute.name?.toLowerCase() === input.toLowerCase())) {
+          console.warn("Duplicate attribute. Not adding.");
+          return;
+        }
+      }else{
+        if (attributes.some((attribute) => attribute.username?.toLowerCase() === input.toLowerCase())) {
+          console.warn("Duplicate user. Not adding.");
+          return;
+        }
       }
+      
 
       let selectedOption = null;
 
@@ -154,8 +171,17 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
           throw new Error("Failed to add item");
         }
       } else {
-        const suggestion = fetchedSuggestions.find((suggestion) => suggestion.name.toLowerCase() === input.toLowerCase());
-        setAttributes([...attributes, { id: suggestion?.id, name: input, type: suggestion?.type ?? selectedOption }]);
+          let suggestion
+          if(title === 'users'){
+            suggestion = fetchedSuggestions.find((suggestion) => suggestion.username.toLowerCase() === input.toLowerCase());
+          console.log(suggestion);
+            setAttributes([...attributes, { id: suggestion?.id, username: input, photo: suggestion?.photo, role: suggestion?.role}]);
+          }
+          else{
+            suggestion = fetchedSuggestions.find((suggestion) => suggestion.name.toLowerCase() === input.toLowerCase());
+          setAttributes([...attributes, { id: suggestion?.id, name: input, type: suggestion?.type ?? selectedOption }]);
+          }
+        
       }
     } catch (error) {
       console.error("Error adding item:", error.message);
