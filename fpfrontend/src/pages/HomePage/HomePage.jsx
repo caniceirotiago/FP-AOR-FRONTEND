@@ -9,19 +9,27 @@ const HomePage = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const [projects, setProjects] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(5); 
+  const [pageCount, setPageCount] = useState(0);
+  const [filters, setFilters] = useState({});
 
   useEffect(() => {
       const fetchProjects = async () => {
-          const response = await projectService.getAllProjects();
+          const response = await projectService.getFilteredProjects(pageNumber, pageSize, filters);
           console.log(response);
           if (response.status === 200) {
               const data = await response.json();
               console.log(data);
-              setProjects(data);
+              setProjects(data.
+                projectsForAPage
+                );
+              setPageCount(Math.ceil(data.totalProjects / pageSize));
           }
       }
       fetchProjects();
-  }, [isModalOpen]);
+  }, [isModalOpen, pageNumber, pageSize, filters]);
+
   const handleClick = () => {
     setIsModalOpen(true);
   }
@@ -31,7 +39,14 @@ const HomePage = () => {
         <CreateProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         <button onClick={handleClick}>Click me</button>
       </ProtectedComponents>
-      <ProjectTable projects={projects}/>
+      <ProjectTable 
+      projects={projects} 
+      pageCount={pageCount} 
+      filters={filters} 
+      setFilters={setFilters} 
+      pageSize={pageSize} 
+      setPageSize={setPageSize}
+      setPageNumber={setPageNumber}/>
     </div>
   );
 };

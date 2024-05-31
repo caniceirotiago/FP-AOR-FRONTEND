@@ -45,6 +45,25 @@ const projectService = {
       throw error;
     }
   },
+  getFilteredProjects: async (page, pageSize, filters = {}) => {
+    const filterParams = new URLSearchParams({
+      ...filters,
+      page,
+      pageSize
+    }).toString();
+    try {
+      const response = await fetch(`${API_BASE_URL}/all/filter?${filterParams}`,
+        {
+          method: "GET",
+          headers: getAuthHeaders(),
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error("Error fetching projects:", error.message);
+      throw error;
+    }
+  },
 };
 
 export default projectService;
