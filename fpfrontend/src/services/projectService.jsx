@@ -64,6 +64,20 @@ const projectService = {
       throw error;
     }
   },
+  getProjectById: async (projectId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/info/${projectId}`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error fetching project data:", error.message);
+      throw error;
+    }
+  },
 };
 
 export default projectService;

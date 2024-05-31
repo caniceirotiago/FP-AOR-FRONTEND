@@ -8,7 +8,7 @@ import useSelectTypeModal from "../../stores/useSelectTypeModal";
 import SelectTypeModal from "../modals/SelectTypeModal.jsx";
 
 
-const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username }) => {
+const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username, projectId }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
@@ -34,7 +34,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       case 'user':
         return generalService.fetchUserAttributes(title, username);
       case 'project':
-        return generalService.fetchProjectAttributes(title);
+        return generalService.fetchProjectAttributes(title, projectId);
     }
   };
 

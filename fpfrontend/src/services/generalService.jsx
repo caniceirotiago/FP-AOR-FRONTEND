@@ -26,9 +26,9 @@ const generalService = {
       throw error;
     }
   },
-  fetchProjectAttributes: async (apiUrl) => {
+  fetchProjectAttributes: async (apiUrl, projectId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${apiUrl}/project`, {
+      const response = await fetch(`${API_BASE_URL}${apiUrl}/project/${projectId}`, {
         method: "GET",
         headers: getAuthHeaders(),
         credentials: "include",
