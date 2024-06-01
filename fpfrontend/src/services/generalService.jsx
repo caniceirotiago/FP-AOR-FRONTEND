@@ -65,9 +65,12 @@ const generalService = {
     }
   },
 
-  addItem: async (apiUrl, data) => {
+  addItem: async (apiUrl, data, mainEntity, mainEntityId) => {
+    if (mainEntity === "project") {
+      data = { ...data, projectId: mainEntityId };
+    }
     try {
-      const response = await fetch(`${API_BASE_URL}${apiUrl}/add/user`, {
+      const response = await fetch(`${API_BASE_URL}${apiUrl}/add/${mainEntity}`, {
         method: "POST",
         headers: getAuthHeaders(),
         credentials: "include",
@@ -80,10 +83,13 @@ const generalService = {
     }
   },
 
-  removeItem: async (apiUrl, id) => {
+  removeItem: async (apiUrl, id, mainEntity, mainEntityId) => {
     try {
-      const requestBody = { id: id };
-      const response = await fetch(`${API_BASE_URL}${apiUrl}/remove/user`, {
+      let requestBody = { id: id };
+      if (mainEntity === "project") {
+        requestBody = { id: id, projectId: mainEntityId};
+      }
+      const response = await fetch(`${API_BASE_URL}${apiUrl}/remove/${mainEntity}`, {
         method: "PUT",
         headers: getAuthHeaders(),
         credentials: "include",

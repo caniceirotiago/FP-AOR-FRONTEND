@@ -186,7 +186,51 @@ const userService = {
       console.error("Failed to check session", error);
       return false;
     }
-  }
+  },
+  addUserToProject: async (projectId, username) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/add/${username}/${projectId}`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error adding user to project:", error.message);
+      throw error;
+    }
+  },
+  removeUserFromProject: async (projectId, username) => {
+    console.log("projectId: " + projectId + " username: " + username);
+    try {
+      const response = await fetch(`${API_BASE_URL}/remove/${username}/${projectId}`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      console.log(response);
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error removing user from project:", error.message);
+      throw error;
+    }
+  },
+  confirmProjectAssociation: async (token) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/confirm/project?token=${token}`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error confirming project association:", error.message);
+      throw error;
+    }
+  },
 };
 
 export default userService;

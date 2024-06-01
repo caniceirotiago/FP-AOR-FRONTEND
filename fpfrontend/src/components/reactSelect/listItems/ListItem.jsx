@@ -3,8 +3,6 @@ import styles from './ListItem.module.css';
 
 const ListItem = ({ title, attribute }) => {
 
-
-
     return (
         <>
         {(title === "keywords") &&
@@ -24,9 +22,10 @@ const ListItem = ({ title, attribute }) => {
         (
             <>
             <div className={styles.attributePhoto}>
-                <img src={attribute.Photo} alt="user" className={styles.photo}/>
+                <img src={attribute.user.photo} alt="user" className={styles.photo}/>
             </div>
-            <div className={styles.attributeName}>{attribute.username}</div>
+            <div className={styles.attributeName}>{attribute.user.username}</div>
+            {!attribute.accepted && <div className={styles.attributeName}>not accepted</div>}
             </>
         )}
             

@@ -6,6 +6,7 @@ import ListItem from "./listItems/ListItem";
 import { useSelect } from "downshift";
 import useSelectTypeModal from "../../stores/useSelectTypeModal";
 import SelectTypeModal from "../modals/SelectTypeModal.jsx";
+import userService from "../../services/userService";
 
 
 const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username, projectId }) => {
@@ -43,6 +44,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       const response = await getFetchFunction(title);
       if (response.status === 200) {
         const data = await response.json();
+        console.log(data);
         setAttributes(data);
       } else {
         throw new Error("Failed to fetch attributes");
@@ -162,9 +164,17 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       }
 
       const data = { name: input, type: selectedOption };
+      if(title === 'keywords'){
+        delete data.type;
+      }
 
       if (!creationMode) {
-        const response = await generalService.addItem(title, data, mainEntity);
+        let response
+        if(title === 'users' && mainEntity === 'project'){
+          response = await userService.addUserToProject(projectId, input);
+        }else{
+          response = await generalService.addItem(title, data, mainEntity, projectId);
+        }
         if (response.status === 204) {
           fetchAttributes();
         } else {
@@ -175,7 +185,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
           if(title === 'users'){
             suggestion = fetchedSuggestions.find((suggestion) => suggestion.username.toLowerCase() === input.toLowerCase());
           console.log(suggestion);
-            setAttributes([...attributes, { id: suggestion?.id, username: input, photo: suggestion?.photo, role: suggestion?.role}]);
+            setAttributes([...attributes, {user:{id: suggestion?.id, username: input, photo: suggestion?.photo, role: suggestion?.role, accepted: suggestion?.isAccepted} }]);
           }
           else{
             suggestion = fetchedSuggestions.find((suggestion) => suggestion.name.toLowerCase() === input.toLowerCase());
@@ -197,18 +207,33 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   };
 
   const removeItem = async (attributeToRemove) => {
+    console.log("attribut to remove" + attributeToRemove.user.username);
     try {
-      setAttributes(
-        attributes.filter((attribute) => attribute.name !== attributeToRemove.name)
-      );
       if(!creationMode){
-        const response = await generalService.removeItem(title, attributeToRemove.id);
-        if (response.status !== 204) {
+        let response
+        if(title === 'users' && mainEntity === 'project'){
+          response = await userService.removeUserFromProject(projectId, attributeToRemove.user.username);
+        }else{
+         response = await generalService.removeItem(title, attributeToRemove.id, mainEntity, projectId);
+        }
+        if (response.status === 204) {
           fetchAttributes();
         } else {
           throw new Error("Failed to remove item");
         }
       }
+
+      if (title === 'users' && mainEntity === 'project') {
+        setAttributes(
+          attributes.filter((attribute) => attribute.user.username !== attributeToRemove.user.username)
+        );
+      }else{
+        setAttributes(
+        attributes.filter((attribute) => attribute.name !== attributeToRemove.name)
+      );
+      }
+      
+      
     } catch (error) {
       console.error("Error removing item:", error.message);
     }
@@ -225,7 +250,6 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
 
   const elementTitle =
     title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
-
 
 
   return (
