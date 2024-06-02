@@ -202,14 +202,12 @@ const userService = {
     }
   },
   removeUserFromProject: async (projectId, username) => {
-    console.log("projectId: " + projectId + " username: " + username);
     try {
       const response = await fetch(`${API_BASE_URL}/remove/${username}/${projectId}`, {
         method: "PUT",
         headers: getAuthHeaders(),
         credentials: "include",
       });
-      console.log(response);
       checkStatus(response);
       return response;
     } catch (error) {

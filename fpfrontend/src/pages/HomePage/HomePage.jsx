@@ -17,10 +17,8 @@ const HomePage = () => {
   useEffect(() => {
       const fetchProjects = async () => {
           const response = await projectService.getFilteredProjects(pageNumber, pageSize, filters);
-          console.log(response);
           if (response.status === 200) {
               const data = await response.json();
-              console.log(data);
               setProjects(data.
                 projectsForAPage
                 );

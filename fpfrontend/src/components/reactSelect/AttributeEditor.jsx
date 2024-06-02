@@ -7,6 +7,7 @@ import { useSelect } from "downshift";
 import useSelectTypeModal from "../../stores/useSelectTypeModal";
 import SelectTypeModal from "../modals/SelectTypeModal.jsx";
 import userService from "../../services/userService";
+import projectService from "../../services/projectService.jsx";
 
 
 const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username, projectId }) => {
@@ -17,7 +18,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   const [selectedValue, setSelectedValue] = useState(null);
   const selectTypeModal = useSelectTypeModal();
 
-
+  
   useEffect(() => {
     if(!creationMode){
       fetchAttributes();
@@ -44,7 +45,6 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       const response = await getFetchFunction(title);
       if (response.status === 200) {
         const data = await response.json();
-        console.log(data);
         setAttributes(data);
       } else {
         throw new Error("Failed to fetch attributes");
@@ -110,6 +110,19 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     } else {
       setInput(""); // Clear input value if no option selected
       setSelectedValue(null); // Reset selected value
+    }
+  };
+
+  const handleChangeUserProjectRole = async (userId, role) => {
+    try {
+      const response = await projectService.updateProjecUserRole(projectId, userId, role);
+      if (response.status === 204) {
+        fetchAttributes();
+      } else {
+        throw new Error("Failed to update user role");
+      }
+    } catch (error) {
+      console.error("Error updating user role:", error.message);
     }
   };
 
@@ -184,7 +197,6 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
           let suggestion
           if(title === 'users'){
             suggestion = fetchedSuggestions.find((suggestion) => suggestion.username.toLowerCase() === input.toLowerCase());
-          console.log(suggestion);
             setAttributes([...attributes, {user:{id: suggestion?.id, username: input, photo: suggestion?.photo, role: suggestion?.role, accepted: suggestion?.isAccepted} }]);
           }
           else{
@@ -207,7 +219,6 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   };
 
   const removeItem = async (attributeToRemove) => {
-    console.log("attribut to remove" + attributeToRemove.user.username);
     try {
       if(!creationMode){
         let response
@@ -261,7 +272,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
             <ul className={styles.attributeList}>
               {attributes.map((attribute) => (
                 <li className={styles.attribute} key={attribute.id}>
-                  <ListItem title={title} attribute={attribute}/>
+                  <ListItem title={title} attribute={attribute} creationMode={creationMode} handleChangeUserProjectRole={handleChangeUserProjectRole}/>
                   {editMode && (<button
                     className={styles.removeButton}
                     onClick={() => removeItem(attribute)}

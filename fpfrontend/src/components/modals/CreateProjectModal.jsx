@@ -60,7 +60,6 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
     };
 
     const handleSubmit = async (e) => {
-        console.log(projectData);
          e.preventDefault();
         const dataToSend= {
             name: projectData.name,
@@ -72,7 +71,6 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
             keywords: projectData.keywords.map(keyword => ({ name: keyword.name })),
             users: projectData.users.map(user => ({ username: user.user.username }))
         };
-        console.log(dataToSend);
         const response = await projectService.createProject(dataToSend);
         if (response.status === 204) {
             setDialogMessage("Project created successfully!");
