@@ -4,11 +4,9 @@ import useProjectRolesStore from '../../../stores/useProjectRolesStore';
 
 const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole }) => {
     const { roles } = useProjectRolesStore();
-    console.log(roles);
 
     const onChangeRole = (event) => {
         const role = event.target.value;
-        console.log(role);
         const userId = attribute.user.id;
         handleChangeUserProjectRole(userId, role);
       };

@@ -48,17 +48,17 @@ const ProjectPage = () => {
     fetchProjectRoles();
     fetchProjectStates();
   }, []);
-
-
+          
+  console.log("projectInfo", projectInfo);
 
   return (
     <>
 
       <div  >
         <ProjectBasicInfo projectInfo={projectInfo} states={states} laboratories={laboratories} setProjectInfo={setProjectInfo}/>
+        <AttributeEditor title="users" editMode={true} mainEntity={"project"} creationMode={false} projectId={id}/>
         <AttributeEditor title="skills" editMode={true} mainEntity={"project"} creationMode={false} projectId={id}/>
         <AttributeEditor title="keywords" editMode={true} mainEntity={"project"} creationMode={false} projectId={id}/>                
-        <AttributeEditor title="users" editMode={true} mainEntity={"project"} creationMode={false} projectId={id}/>
       </div>
       
     </>

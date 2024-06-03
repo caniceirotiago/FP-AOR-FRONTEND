@@ -7,6 +7,7 @@ import useDeviceStore from '../../stores/useDeviceStore';
 import HomepageMobileFooter from '../../components/footers/homePageFooters/homePageMobileFooter/HomepageMobileFooter.jsx';
 import  {useGlobalWebSocket}  from '../../websockets/useGlobalWebSocket.jsx';
 import useDomainStore from '../../stores/useDomainStore.jsx';
+import useConfigurationStore from '../../stores/useConfigurationStore.jsx';
 
 const MainLayout = ({ children }) => {
     const { dimensions, setDimensions, setDeviceType } = useDeviceStore(); 
@@ -18,10 +19,13 @@ const MainLayout = ({ children }) => {
     //  const wsUrl = `ws://localhost:8080/projeto5backend/globalws/${sessionStorage.getItem('token')}`; 
     // useGlobalWebSocket(wsUrl, true, onNotification);
     
-
+    const{configurations, fetchConfiguraions} = useConfigurationStore();
     const {domain} = useDomainStore();
     useGlobalWebSocket(`ws://${domain}/ws`, true);
 
+    useEffect(() => {
+        fetchConfiguraions();
+    }, [fetchConfiguraions]);
 
     useEffect(() => {
     const handleResize = () => {
@@ -34,7 +38,6 @@ const MainLayout = ({ children }) => {
 
     return () => window.removeEventListener('resize', handleResize);
     }, [setDimensions, setDeviceType]);
-
     return (
         <div className={styles.main}>
          <HomepageHeader />

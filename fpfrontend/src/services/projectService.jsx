@@ -122,6 +122,29 @@ const projectService = {
       console.error("Error updating user role:", error.message);
       throw error;
     }
+  },
+  askToJoinProject: async (projectId) => {
+    const body = {
+      projectId,
+      userId: localStorage.getItem("userId"),
+    };
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/ask/join`,
+        {
+          method: "PUT",
+          headers: getAuthHeaders(),
+          credentials: "include",
+          body: JSON.stringify(body),
+        }
+      );
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error asking to join project:", error.message);
+      throw error;
+    }
   }
   
 };

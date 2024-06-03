@@ -8,6 +8,7 @@ import useSelectTypeModal from "../../stores/useSelectTypeModal";
 import SelectTypeModal from "../modals/SelectTypeModal.jsx";
 import userService from "../../services/userService";
 import projectService from "../../services/projectService.jsx";
+import useConfigurationStore from "../../stores/useConfigurationStore";
 
 
 const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username, projectId }) => {
@@ -17,6 +18,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   const [attributes, setAttributes] = useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
   const selectTypeModal = useSelectTypeModal();
+  const {configurations} = useConfigurationStore();
 
   
   useEffect(() => {
@@ -211,6 +213,20 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       clearInput();
     }
   };
+  const askToJoinProject = async () => {
+    try {
+      const response = await projectService.askToJoinProject(projectId);
+      if (response.status === 204) {
+        console.log("Asked to join project");
+        setAttributes([...attributes, {user:{id: localStorage.getItem("userId"), username: localStorage.getItem("username"), photo: localStorage.getItem("photo"), role: "NORMAL_USER", accepted: false} }]);
+      } else {
+        throw new Error("Failed to ask to join project");
+      }
+    } catch (error) {
+      console.error("Error asking to join project:", error.message);
+    }
+  };
+
 
   const clearInput = () => {
     setInput("");
@@ -261,11 +277,16 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
 
   const elementTitle =
     title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
+  
+    const maxProjectMembersConfig = configurations.get('maxProjectMembers');
+    const isPossibleToJoin = (maxProjectMembersConfig ? attributes.length < maxProjectMembersConfig : true) && !attributes.some((attribute) => attribute.user?.username === localStorage.getItem('username'));
 
+  
 
   return (
     <div className={styles.container}>
       <h2>{elementTitle}</h2>
+      {title === 'users' && !creationMode &&  <>{isPossibleToJoin ? <button onClick={askToJoinProject}>Ask To Join</button> : null}</>}
       <div className={styles.innerContainer}>
         <div className={styles.existingAttributes}>
           <div className={styles.userAttributeContainer}>

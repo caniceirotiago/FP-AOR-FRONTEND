@@ -14,7 +14,6 @@ import { useRef } from "react";
 const ProjectBasicInfo = ({projectInfo, states, laboratories, setProjectInfo}) => {
   const quillDescriptionRef = useRef(null);
   const quillMotivationRef = useRef(null);
-    console.log(projectInfo)
     const toolbarOptions = useMemo(() => [
       [{ 'font': [] }],
       [{ 'color': [] }, { 'background': [] }],
