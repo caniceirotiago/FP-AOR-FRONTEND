@@ -11,7 +11,7 @@ import { useRef } from "react";
 
 
 
-const ProjectBasicInfo = ({projectInfo, states, laboratories, setProjectInfo}) => {
+const ProjectBasicInfo = ({projectInfo, states, laboratories, setProjectInfo, isEditing, updateProjectInfo}) => {
   const quillDescriptionRef = useRef(null);
   const quillMotivationRef = useRef(null);
     const toolbarOptions = useMemo(() => [
@@ -34,6 +34,10 @@ const ProjectBasicInfo = ({projectInfo, states, laboratories, setProjectInfo}) =
         [name]: value,
       }));
     };
+
+    const handleUpdateProject = () => {
+      updateProjectInfo();
+    }
   
     if (!projectInfo) {
       return null; // or a loading indicator
@@ -45,7 +49,6 @@ const ProjectBasicInfo = ({projectInfo, states, laboratories, setProjectInfo}) =
         <div className={styles.projectContainer}>
         <section className={styles.projectHeader}>
           <h1>{projectInfo.name}</h1>
-          <p>{projectInfo.description}</p>
         </section>
         <div className={styles.formContainer}>
         <form className={styles.form} >
@@ -56,25 +59,38 @@ const ProjectBasicInfo = ({projectInfo, states, laboratories, setProjectInfo}) =
                         name="name"
                         value={projectInfo.name}
                         onChange={handleInputChange}
+                        disabled={!isEditing}
                     />
                     <label className={styles.label}>Description</label>
-                    <ReactQuill
+                    {isEditing ? (
+                       <ReactQuill
                         ref={quillDescriptionRef}
                         theme="snow"
                         value={projectInfo.description}
                         className={styles.quillEditor} 
                         modules={{ toolbar: toolbarOptions }}
                         onChange={(value) => handleQuillChange("description", value)}
-                    />
+                    />) 
+                      : 
+                    (<div className={styles.descriptionText}>
+                      <div dangerouslySetInnerHTML={{ __html: projectInfo.description }} />
+                    </div>)}
+                   
                     <label className={styles.label}>Motivation</label>
-                    <ReactQuill
+                    {isEditing ? (  
+                      <ReactQuill
                         ref={quillMotivationRef}
                         theme="snow"
                         value={projectInfo.motivation}
                         className={styles.quillEditor} 
                         modules={{ toolbar: toolbarOptions }}
-                        onChange={(value) => handleQuillChange("description", value)}
-                    />
+                        onChange={(value) => handleQuillChange("motivation", value)}
+                    />)
+                      :
+                      (<div className={styles.motivationText}>
+                        <div dangerouslySetInnerHTML={{ __html: projectInfo.motivation }} />
+                      </div>)}
+                    
                     <label className={styles.label}>State</label>
                     <FormattedMessage id="projectcStatusPlaceholder" defaultMessage="Select project state">
                            {(placeholder) => (
@@ -84,6 +100,7 @@ const ProjectBasicInfo = ({projectInfo, states, laboratories, setProjectInfo}) =
                               id="state-field"
                               value={projectInfo.state}
                               onChange={handleInputChange}
+                              disabled={!isEditing}
                            >
                               <option value="">{placeholder}</option>
                               {states.map((state) => (
@@ -103,6 +120,7 @@ const ProjectBasicInfo = ({projectInfo, states, laboratories, setProjectInfo}) =
                               id="laboratoryId-field"
                               value={projectInfo?.laboratory.id || ''}
                               onChange={handleInputChange}
+                              disabled={!isEditing}
                            >
                               <option value="">{placeholder}</option>
                               {laboratories.map((lab) => (
@@ -119,7 +137,10 @@ const ProjectBasicInfo = ({projectInfo, states, laboratories, setProjectInfo}) =
                         className={styles.datePicker}
                         value={projectInfo.conclusionDate ? new Date(projectInfo.conclusionDate).toISOString().substring(0, 16) : ''}
                         onChange={handleInputChange}
+                        disabled={!isEditing}
                     /> 
+                    {isEditing && <Button className={styles.button} onClick={handleUpdateProject} tradId="updateProject" defaultText="Update Project Basic Information" btnColor={"var(--btn-color2)"}/> 
+}
                 </form>
             
               

@@ -145,7 +145,22 @@ const projectService = {
       console.error("Error asking to join project:", error.message);
       throw error;
     }
-  }
+  },
+  updateProject: async (projectData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(projectData),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error updating project:", error.message);
+      throw error;
+    }
+  },
   
 };
 

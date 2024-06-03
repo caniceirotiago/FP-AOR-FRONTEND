@@ -1,9 +1,89 @@
+.projectContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 800px;
+  width: 100%;
+}
 
+.projectHeader {
+  text-align: center;
+}
 
-  
-  @media (max-width: 768px) {
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 
-  
-  
-  }
-  
+  max-width: 800px;
+  width: 100%;
+}
+
+.label {
+  color: var(--text-color);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.input,
+.select,
+.datePicker {
+
+  border: 1px solid #ccc;
+  font-size: 16px;
+  color: var(--text-color);
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.select:disabled,
+.datePicker:disabled,
+.input:disabled {
+  color: #666;
+  background-color: transparent;
+  cursor: not-allowed;
+}
+
+/* .quillEditor {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  flex-grow: 1;
+} */
+
+.descriptionText,
+.motivationText {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+
+  flex-grow: 1;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.button {
+  margin-top: 20px;
+  border-radius: 5px;
+
+  font-size: 16px;
+  background-color: var(--btn-color2);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.button:hover,
+.button:focus {
+  background-color: var(--btn-hover-color);
+  transform: scale(1.05);
+  outline: none;
+}
+
+.button:active {
+  background-color: var(--btn-active-color);
+  transform: scale(0.98);
+}

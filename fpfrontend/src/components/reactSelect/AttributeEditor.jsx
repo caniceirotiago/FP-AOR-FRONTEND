@@ -11,7 +11,7 @@ import projectService from "../../services/projectService.jsx";
 import useConfigurationStore from "../../stores/useConfigurationStore";
 
 
-const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username, projectId }) => {
+const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username, projectId, createdBy }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
@@ -281,7 +281,6 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     const maxProjectMembersConfig = configurations.get('maxProjectMembers');
     const isPossibleToJoin = (maxProjectMembersConfig ? attributes.length < maxProjectMembersConfig : true) && !attributes.some((attribute) => attribute.user?.username === localStorage.getItem('username'));
 
-  
 
   return (
     <div className={styles.container}>
@@ -293,13 +292,8 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
             <ul className={styles.attributeList}>
               {attributes.map((attribute) => (
                 <li className={styles.attribute} key={attribute.id}>
-                  <ListItem title={title} attribute={attribute} creationMode={creationMode} handleChangeUserProjectRole={handleChangeUserProjectRole}/>
-                  {editMode && (<button
-                    className={styles.removeButton}
-                    onClick={() => removeItem(attribute)}
-                  >
-                    Remove
-                  </button>)}
+                  <ListItem removeItem={removeItem} title={title} attribute={attribute} creationMode={creationMode} handleChangeUserProjectRole={handleChangeUserProjectRole} editMode={editMode} createdBy={createdBy}/>
+                 
                 </li>
               ))}
             </ul>

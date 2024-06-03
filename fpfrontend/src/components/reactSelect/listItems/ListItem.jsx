@@ -2,7 +2,7 @@ import react from 'react';
 import styles from './ListItem.module.css';
 import useProjectRolesStore from '../../../stores/useProjectRolesStore';
 
-const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole }) => {
+const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole, editMode, createdBy, removeItem }) => {
     const { roles } = useProjectRolesStore();
 
     const onChangeRole = (event) => {
@@ -10,6 +10,10 @@ const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole 
         const userId = attribute.user.id;
         handleChangeUserProjectRole(userId, role);
       };
+    console.log("createdBy", createdBy);
+    console.log("attribute", attribute);
+    let isTheCreator
+    if(title === "users" && createdBy) isTheCreator = createdBy.username === attribute.user.username;
 
     return (
         <>
@@ -36,7 +40,8 @@ const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole 
             {!creationMode && <div className={styles.attributeRole}>
                 <select
                  value={attribute.role} 
-                 onChange={onChangeRole}>
+                 onChange={onChangeRole}
+                 disabled={!editMode || isTheCreator}>
                     {roles.map((role) => (
                         <option key={role} value={role}>{role}</option>
                     ))}
@@ -45,6 +50,12 @@ const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole 
             {!attribute.accepted && <div className={styles.attributeName}>not accepted</div>}
             </>
         )}
+         {(editMode && !isTheCreator) && (<button
+                    className={styles.removeButton}
+                    onClick={() => removeItem(attribute)}
+                  >
+                    Remove
+                  </button>)}
             
         </>
     );
