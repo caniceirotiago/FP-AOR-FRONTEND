@@ -1,14 +1,24 @@
 .ProjectPlanningPage {
-  height: 100%;
-  width: 100%;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 20px;
 }
 
+.button {
+  margin-bottom: 20px;
+}
 
-@media (max-width: 768px) {
+.select {
+  margin-bottom: 20px;
+  margin-right: 10px;
+}
 
+.taskContent {
+  display: flex;
+  align-items: center;
+}
+
+.executantImage {
+  margin-right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }
