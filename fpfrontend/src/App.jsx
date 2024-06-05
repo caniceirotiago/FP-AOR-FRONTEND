@@ -23,6 +23,8 @@ import ProtectedRoute from './components/auth regist/ProtecterRoute.jsx';
 import LandingPageLayout from './pages/layout/LandingPageLayout.jsx';
 import ResendEmailPage from './pages/ResendEmailPage/ResendEmailPage.jsx';
 import PublicMainLayout from './pages/layout/PublicMainLayout.jsx';
+import ProjectPagePage from './pages/ProjectPage/ProjectPage.jsx';
+import ProjectConfirmationPage from './pages/ProjectConfirmationPage/ProjectConfirmationPage.jsx';
 
 function App() {
   const { locale } = useTranslationsStore();
@@ -37,6 +39,7 @@ function App() {
               <Route path="/" element={<LandingPageLayout><InitialPage /></LandingPageLayout>} />
               <Route path="/register" element={<AuthLayout><RegisterPage /></AuthLayout>} />
               <Route path="/confirm" element={<AuthLayout><EmailConfirmationPage /></AuthLayout>} />
+              <Route path="/accept-project" element={<AuthLayout><ProjectConfirmationPage /></AuthLayout>} />
               <Route path='/request/newemail' element={<AuthLayout><ResendEmailPage/></AuthLayout>}/>
               <Route path='/forgot-password' element={<AuthLayout><ForgotPasswordPage/></AuthLayout>}/>
               <Route path="/reset-password" element={<AuthLayout><ResetPasswordPage/></AuthLayout>}/>
@@ -48,6 +51,8 @@ function App() {
               <Route path="/inventory" element={<ProtectedRoute><MainLayout><InventoryPage /></MainLayout></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><MainLayout><SettingsPage /></MainLayout></ProtectedRoute>} />
               <Route path="/userprofile/:username" element={<ProtectedRoute><MainLayout><UserProfilePage /></MainLayout></ProtectedRoute>} />
+              <Route path="/projectpage/:id" element={<ProtectedRoute><MainLayout><ProjectPagePage /></MainLayout></ProtectedRoute>} />
+
           </Routes>
         </Router>
       </IntlProvider>

@@ -1,0 +1,55 @@
+.projectPage {
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    gap: 20px;
+  }
+
+.basicInfo {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    width: 100%;
+}
+.btnContainer  {
+    max-height: 30px !important;
+    align-self: center;
+    width: 10%;
+}
+.formContainer{
+    width: 40%;
+
+}
+.usersContainer {
+    width: 40%;
+    align-self: center;
+    justify-self: center;
+}
+
+.attributesContainer {
+display: flex;
+flex-direction: column;
+justify-self: center;
+gap: 20px;
+width: 100%;
+max-width: 800px;
+}
+
+@media (max-width: 768px) {
+.projectPage {
+    padding: 10px;
+}
+.basicInfo {
+    flex-direction: column;
+}
+
+.attributesContainer {
+    width: 100%;
+}
+}

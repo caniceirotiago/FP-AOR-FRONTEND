@@ -6,7 +6,6 @@ import userService from '../services/userService';
 const isSessionTokenValid = () => {
   const sessionToken = Cookies.get('sessionToken');
   if (!sessionToken) return false;
-  console.log("Checking session token validity");
 
   try {
     const decodedToken = jwtDecode(sessionToken);
