@@ -1,24 +1,17 @@
-.ProjectPlanningPage {
+.container {
   padding: 20px;
+  max-width: 1000px;
+  overflow: hidden;
 }
 
-.button {
-  margin-bottom: 20px;
+.ganttContainer {
+  width: 100%;
+  height: 500px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  overflow-x: auto; /* Adicionar barra de rolagem horizontal */
 }
 
-.select {
-  margin-bottom: 20px;
-  margin-right: 10px;
-}
-
-.taskContent {
-  display: flex;
-  align-items: center;
-}
-
-.executantImage {
-  margin-right: 10px;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+:global(.gantt_add) {
+  display: none !important;
 }
