@@ -161,6 +161,20 @@ const projectService = {
       throw error;
     }
   },
+  getTasksByProjectId: async (projId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/FPBackend/rest/tasks/project/1`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error updating project:", error.message);
+      throw error;
+    }
+  },
   
 };
 
