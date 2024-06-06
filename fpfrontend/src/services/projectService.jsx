@@ -83,7 +83,7 @@ const projectService = {
   },
   fetchAllStates: async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/info/project-states`, {
+      const response = await fetch(`${API_BASE_URL}/enum/states`, {
         method: "GET",
         headers: getAuthHeaders(),
       });
@@ -95,7 +95,7 @@ const projectService = {
   },
   fetchProjectRoles: async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/info/project-roles`, {
+      const response = await fetch(`${API_BASE_URL}/enum/roles`, {
         method: "GET",
         headers: getAuthHeaders(),
       });
@@ -113,7 +113,7 @@ const projectService = {
     };
     try {
       const response = await fetch(
-        `${API_BASE_URL}/project-role`,
+        `${API_BASE_URL}/project/role`,
         {
           method: "PUT",
           headers: getAuthHeaders(),
