@@ -3,9 +3,18 @@ import { useTable, usePagination } from 'react-table';
 import styles from './ProjectTable.module.css'; 
 import projectService from '../../../services/projectService';
 import { useNavigate } from 'react-router';
+import useProjectStatesStore from '../../../stores/useProjectStatesStore';
+
 
 function ProjectTable({projects, pageCount, filters, setFilters, pageSize, setPageSize, setPageNumber }) {
     const navigate = useNavigate();
+    const { states, fetchProjectStates } = useProjectStatesStore();
+    const [filterType, setFilterType] = useState('name');
+
+    useEffect(() => {
+        fetchProjectStates();
+      }, [fetchProjectStates]);
+
     const handleClickToOpenProjectPage = (projectId) => () => {
         navigate(`/projectpage/${projectId}`);
     }
@@ -20,6 +29,13 @@ function ProjectTable({projects, pageCount, filters, setFilters, pageSize, setPa
         setFilters({
           ...filters,
           sortBy: e.target.value
+        });
+      };
+      const handleFilterTypeChange = (e) => {
+        setFilterType(e.target.value);
+        setFilters({
+          ...filters,
+          [filterType]: ''
         });
       };
     
