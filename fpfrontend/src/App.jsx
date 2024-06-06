@@ -25,9 +25,18 @@ import ResendEmailPage from './pages/ResendEmailPage/ResendEmailPage.jsx';
 import PublicMainLayout from './pages/layout/PublicMainLayout.jsx';
 import ProjectPagePage from './pages/ProjectPage/ProjectPage.jsx';
 import ProjectConfirmationPage from './pages/ProjectConfirmationPage/ProjectConfirmationPage.jsx';
+import useThemeStore from './stores/useThemeStore.jsx';
+import {useEffect} from 'react';
+ 
 
 function App() {
   const { locale } = useTranslationsStore();
+  const { theme } = useThemeStore();
+  useEffect(() => {
+    document.body.className = '';
+    document.body.classList.add(`theme-${theme}`);
+  }, [theme]);
+
   return (
     <>
       <IntlProvider locale={locale} messages={languages[locale]}>

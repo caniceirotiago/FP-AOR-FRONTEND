@@ -18,46 +18,38 @@ code {
     monospace;
 }
 
-:root {
+body.theme-light {
   --btn-color1: white;
   --btn-color2: black;
   --btn-background1: #17a2b8;
   --btn-background2: #117a8b;
   --background-color1: rgba(240, 248, 255, 0.8);
+  --card-background: rgba(255, 255, 255, 0.9); /* Fundo dos cartões com transparência fosca */
+  --card-border: rgba(0, 0, 0, 0.1); /* Borda dos cartões */
   --color-planning: #ffeb3b;
   --color-ready: #4caf50;
   --color-in-progress: #2196f3;
   --color-finished: #9c27b0;
   --color-cancelled: #f44336;
-}
-
-
-body.theme-light {
-  --primary-color: #e6e1dd;
-  --secondary-color: rgb(255, 255, 255, 0.111);
-  --tertiary-color: rgb(255, 255, 255, 0.111);
-  --quaternary-color: #5a7d9a;
-  --quinary-color: rgb(255, 255, 255, 1);
-  --header-color: rgba(5, 16, 46, 0.9);
-  --background-color: #dcc6bc;
-  --text-color: rgb(0, 0, 0, 1);
-  --text-color2: rgb(255, 255, 255, 1);
-  --text-color3: rgb(0, 0, 0, 1);
+  --text-color: black;
 
 
 }
 
 body.theme-dark {
-  --primary-color: #e6e1dd;
-  --secondary-color: rgb(255, 255, 255, 0.111);
-  --tertiary-color: rgb(255, 255, 255, 0.111);
-  --quaternary-color: #5a7d9a;
-  --quinary-color: rgb(255, 255, 255, 1);
-  --header-color: rgba(5, 16, 46, 0.9);
-  --background-color: #dcc6bc;
-  --text-color: rgb(0, 0, 0, 1);
-  --text-color2: rgb(255, 255, 255, 1);
-  --text-color3: rgb(0, 0, 0, 1);
+  --btn-color1: #e0e0e0;
+  --btn-color2: #121212; 
+  --btn-background1: #007bff; 
+  --btn-background2: #0056b3; 
+  --background-color1: rgba(18, 18, 18, 0.8); 
+  --card-background: rgba(18, 18, 18, 0.9); /* Fundo dos cartões com transparência fosca */
+  --card-border: rgba(255, 255, 255, 0.1); /* Borda dos cartões */
+  --color-planning: #ffc107; 
+  --color-ready: #28a745; 
+  --color-in-progress: #17a2b8; 
+  --color-finished: #6f42c1; 
+  --color-cancelled: #dc3545; 
+  --text-color: #e0e0e0;
 }
 
 .react-select__input {

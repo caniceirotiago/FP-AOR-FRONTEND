@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './ProjectCards.module.css';
 import { useNavigate } from 'react-router';
 import useProjectStatesStore from '../../../stores/useProjectStatesStore';
+import useConfigurationStore from '../../../stores/useConfigurationStore';
 
 const stateColors = {
   PLANNING: 'var(--color-planning)',
@@ -15,10 +16,19 @@ function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setP
   const navigate = useNavigate();
   const { states, fetchProjectStates } = useProjectStatesStore();
   const [filterType, setFilterType] = useState('name');
+  const { configurations, fetchConfigurations } = useConfigurationStore();
+  const [maxProjectMembers, setMaxProjectMembers] = useState(null);
 
   useEffect(() => {
     fetchProjectStates();
-  }, [fetchProjectStates]);
+    fetchConfigurations();
+  }, [fetchProjectStates, fetchConfigurations]);
+
+  useEffect(() => {
+    if (configurations.has('maxProjectMembers')) {
+      setMaxProjectMembers(parseInt(configurations.get('maxProjectMembers'), 10));
+    }
+  }, [configurations]);
 
   const handleFilterChange = (e) => {
     setFilters({
@@ -36,14 +46,25 @@ function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setP
 
   const handleFilterTypeChange = (e) => {
     setFilterType(e.target.value);
-    setFilters({
-      ...filters,
-      [filterType]: ''
-    });
+    
   };
 
   const handleClickToOpenProjectPage = (projectId) => () => {
     navigate(`/projectpage/${projectId}`);
+  };
+
+  const renderMemberThumbnails = (members) => {
+    const memberThumbnails = members.slice(0, 3).map(member => (
+      <img key={member.id} src={member.user.photo || 'default-thumbnail.png'} alt={member.user.username} className={styles.thumbnail} />
+    ));
+
+    if (members.length > 3) {
+      memberThumbnails.push(
+        <span key="more" className={styles.moreMembers}>+{members.length - 3}</span>
+      );
+    }
+
+    return memberThumbnails;
   };
 
   return (
@@ -76,8 +97,16 @@ function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setP
         {projects.map(project => (
           <div key={project.id} className={styles.card} onClick={handleClickToOpenProjectPage(project.id)}>
             <div className={styles.statusIndicator} style={{ backgroundColor: stateColors[project.state] }}></div>
+            {maxProjectMembers && project.members.length < maxProjectMembers && (
+              <div className={styles.vacancyIndicator}>
+                {maxProjectMembers - project.members.length} open slots
+              </div>
+            )}
             <div className={styles.topSection}>
               <div className={styles.border}></div>
+              <div className={styles.thumbnails}>
+                {renderMemberThumbnails(project.members)}
+              </div>
             </div>
             <div className={styles.bottomSection}>
               <span className={styles.title}>{project.name}</span>

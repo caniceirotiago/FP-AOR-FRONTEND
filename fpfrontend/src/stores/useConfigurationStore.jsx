@@ -5,7 +5,7 @@ const useConfigurationStore = create((set) => ({
     configurations: new Map(),
   loading: false,
   error: null,
-  fetchConfiguraions: async () => {
+  fetchConfigurations: async () => {
     set({ loading: true, error: null });
     try {
       const response = await configurationService.getAllConfigurations();

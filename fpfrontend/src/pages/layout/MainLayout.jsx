@@ -19,13 +19,13 @@ const MainLayout = ({ children }) => {
     //  const wsUrl = `ws://localhost:8080/projeto5backend/globalws/${sessionStorage.getItem('token')}`; 
     // useGlobalWebSocket(wsUrl, true, onNotification);
     
-    const{configurations, fetchConfiguraions} = useConfigurationStore();
+    const{configurations, fetchConfigurations} = useConfigurationStore();
     const {domain} = useDomainStore();
     useGlobalWebSocket(`ws://${domain}/ws`, true);
 
     useEffect(() => {
-        fetchConfiguraions();
-    }, [fetchConfiguraions]);
+        fetchConfigurations();
+    }, [fetchConfigurations]);
 
     useEffect(() => {
     const handleResize = () => {
