@@ -16,6 +16,13 @@ function ProjectTable({projects, pageCount, filters, setFilters, pageSize, setPa
             [e.target.name]: e.target.value
         });
     }
+    const handleSortChange = (e) => {
+        setFilters({
+          ...filters,
+          sortBy: e.target.value
+        });
+      };
+    
     const data = useMemo(() => projects, [projects]);
 
     const columns = useMemo(
@@ -103,7 +110,14 @@ function ProjectTable({projects, pageCount, filters, setFilters, pageSize, setPa
             <div className={styles.filters}>
                 <input name="name" placeholder="Name" onChange={handleFilterChange} />
                 <input name="state" placeholder="State" onChange={handleFilterChange} />
-                {/* Add more filters as needed */}
+                <input name="keywords" placeholder="Keywords" onChange={handleFilterChange} />
+                <input name="skills" placeholder="Skills" onChange={handleFilterChange} />
+                <select name="sortBy" onChange={handleSortChange}>
+                <option value="">Sort By</option>
+                <option value="creationDate">Creation Date</option>
+                <option value="openPositions">Open Positions</option>
+                <option value="state">State</option>
+                </select>
             </div>
             <table {...getTableProps()} className={styles.table}>
                 <thead>

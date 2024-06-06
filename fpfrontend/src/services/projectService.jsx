@@ -45,11 +45,15 @@ const projectService = {
     }
   },
   getFilteredProjects: async (page, pageSize, filters = {}) => {
-    const filterParams = new URLSearchParams({
-      ...filters,
-      page,
-      pageSize
-    }).toString();
+    const filterParams = new URLSearchParams();
+
+    Object.keys(filters).forEach(key => {
+      if (filters[key]) {
+        filterParams.append(key, filters[key]);
+      }
+    });
+    filterParams.append('page', page);
+  filterParams.append('pageSize', pageSize);
     try {
       const response = await fetch(`${API_BASE_URL}/all/filter?${filterParams}`,
         {

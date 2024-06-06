@@ -4,6 +4,7 @@ import ProjectTable from '../../components/HomePageComponents/ProjectTable/Proje
 import ProtectedComponents from '../../components/auth regist/ProtectedComponents';
 import CreateProjectModal from '../../components/modals/CreateProjectModal.jsx';
 import projectService from '../../services/projectService';
+import ProjectCards from '../../components/HomePageComponents/ProjectCards/ProjectCards.jsx';
 
 const HomePage = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -12,7 +13,14 @@ const HomePage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(5); 
   const [pageCount, setPageCount] = useState(0);
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState({
+    name: '',
+    state: '',
+    projectKeywords: '',
+    projectSkills: '',
+    sortBy: ''
+  });
+  const [view, setView] = useState('table');
 
   useEffect(() => {
       const fetchProjects = async () => {
@@ -31,20 +39,40 @@ const HomePage = () => {
   const handleClick = () => {
     setIsModalOpen(true);
   }
+  console.log(projects)
   return (
     <div className={styles.homePage} >
       <ProtectedComponents>
         <CreateProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-        <button onClick={handleClick}>Click me</button>
+        <button onClick={handleClick}>Create Project</button>
       </ProtectedComponents>
-      <ProjectTable 
-      projects={projects} 
-      pageCount={pageCount} 
-      filters={filters} 
-      setFilters={setFilters} 
-      pageSize={pageSize} 
-      setPageSize={setPageSize}
-      setPageNumber={setPageNumber}/>
+      <div className={styles.viewToggle}>
+        <button onClick={() => setView('table')}>Table View</button>
+        <button onClick={() => setView('cards')}>Card View</button>
+      </div>
+      {view === 'table' ? (
+        <ProjectTable
+          projects={projects}
+          pageCount={pageCount}
+          filters={filters}
+          setFilters={setFilters}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          setPageNumber={setPageNumber}
+          pageNumber={pageNumber}
+        />
+      ) : (
+        <ProjectCards
+          pageNumber={pageNumber}
+          projects={projects}
+          pageCount={pageCount}
+          filters={filters}
+          setFilters={setFilters}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          setPageNumber={setPageNumber}
+        />
+      )}
     </div>
   );
 };
