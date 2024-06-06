@@ -24,6 +24,11 @@ code {
   --btn-background1: #17a2b8;
   --btn-background2: #117a8b;
   --background-color1: rgba(240, 248, 255, 0.8);
+  --color-planning: #ffeb3b;
+  --color-ready: #4caf50;
+  --color-in-progress: #2196f3;
+  --color-finished: #9c27b0;
+  --color-cancelled: #f44336;
 }
 
 

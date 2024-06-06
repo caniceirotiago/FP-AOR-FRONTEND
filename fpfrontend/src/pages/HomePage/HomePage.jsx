@@ -5,10 +5,11 @@ import ProtectedComponents from '../../components/auth regist/ProtectedComponent
 import CreateProjectModal from '../../components/modals/CreateProjectModal.jsx';
 import projectService from '../../services/projectService';
 import ProjectCards from '../../components/HomePageComponents/ProjectCards/ProjectCards.jsx';
+import useTableCardView from '../../stores/useTableCardView.jsx';
 
-const HomePage = () => {
+const HomePage = ({isAuthenticated}) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-
+  const { view, setView } = useTableCardView();
   const [projects, setProjects] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(5); 
@@ -20,7 +21,6 @@ const HomePage = () => {
     projectSkills: '',
     sortBy: ''
   });
-  const [view, setView] = useState('table');
 
   useEffect(() => {
       const fetchProjects = async () => {
@@ -33,6 +33,7 @@ const HomePage = () => {
               setPageCount(Math.ceil(data.totalProjects / pageSize));
           }
       }
+      if(!isAuthenticated) setView("cards");
       fetchProjects();
   }, [isModalOpen, pageNumber, pageSize, filters]);
 
@@ -46,10 +47,12 @@ const HomePage = () => {
         <CreateProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         <button onClick={handleClick}>Create Project</button>
       </ProtectedComponents>
-      <div className={styles.viewToggle}>
-        <button onClick={() => setView('table')}>Table View</button>
-        <button onClick={() => setView('cards')}>Card View</button>
-      </div>
+      {isAuthenticated &&
+        <div className={styles.viewToggle}>
+          <button onClick={() => setView('table')}>Table View</button>
+          <button onClick={() => setView('cards')}>Card View</button>
+        </div>
+      }
       {view === 'table' ? (
         <ProjectTable
           projects={projects}

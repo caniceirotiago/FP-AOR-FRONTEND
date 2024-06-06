@@ -43,8 +43,8 @@ function App() {
               <Route path='/request/newemail' element={<AuthLayout><ResendEmailPage/></AuthLayout>}/>
               <Route path='/forgot-password' element={<AuthLayout><ForgotPasswordPage/></AuthLayout>}/>
               <Route path="/reset-password" element={<AuthLayout><ResetPasswordPage/></AuthLayout>}/>
-              <Route path="/homepage" element={<PublicMainLayout><HomePage /></PublicMainLayout>} />
-              <Route path="/authenticatedhomepage" element={<ProtectedRoute><MainLayout><HomePage /></MainLayout></ProtectedRoute>} />
+              <Route path="/homepage" element={<PublicMainLayout><HomePage isAuthenticated={false}/></PublicMainLayout>} />
+              <Route path="/authenticatedhomepage" element={<ProtectedRoute><MainLayout><HomePage isAuthenticated={true}/></MainLayout></ProtectedRoute>} />
               <Route path="/projectplanning" element={<ProtectedRoute><MainLayout><ProjectPlanningPage /></MainLayout></ProtectedRoute>} />
               <Route path="/messages" element={<ProtectedRoute><MainLayout><MessagesPage /></MainLayout></ProtectedRoute>} />
               <Route path="/report" element={<ProtectedRoute><MainLayout><ReportPage /></MainLayout></ProtectedRoute>} />
