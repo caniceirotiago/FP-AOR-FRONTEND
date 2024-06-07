@@ -110,17 +110,17 @@ const projectService = {
   },
   updateProjecUserRole: async (projectId, userId, newRole) => {
     const body = {
-      projectId,
       userId,
       newRole,
     };
     try {
       const response = await fetch(
-        `${API_BASE_URL}/role${projectId}`,
+        `${API_BASE_URL}/role/${projectId}`,
         {
           method: "PUT",
           headers: getAuthHeaders(),
           body: JSON.stringify(body),
+          credentials: "include"
         }
       );
       checkStatus(response);

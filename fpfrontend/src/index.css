@@ -25,7 +25,7 @@ body.theme-light {
   --btn-color2: black;
   --btn-background1: #17a2b8;
   --btn-background2: #117a8b;
-  --background-color1: rgba(240, 248, 255, 0.8);
+  --background-color1: rgba(240, 248, 255);
   --card-background: rgba(255, 255, 255, 1); 
   --card-border: rgba(0, 0, 0, 0.1); 
   --color-planning: #ffeb3b;
