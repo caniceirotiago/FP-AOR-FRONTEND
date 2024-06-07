@@ -105,15 +105,15 @@ const projectService = {
       throw error;
     }
   },
-  updateProjecUserRole: async (projectId, userId, role) => {
+  updateProjecUserRole: async (projectId, userId, newRole) => {
     const body = {
       projectId,
       userId,
-      role,
+      newRole,
     };
     try {
       const response = await fetch(
-        `${API_BASE_URL}/project/role`,
+        `${API_BASE_URL}/role${projectId}`,
         {
           method: "PUT",
           headers: getAuthHeaders(),
