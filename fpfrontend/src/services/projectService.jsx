@@ -3,6 +3,9 @@ import useDomainStore from "../stores/useDomainStore";
 const API_BASE_URL =
   "http://" + useDomainStore.getState().domain + "/rest/projects";
 
+  const MEMBER_BASE_URL =
+  "http://" + useDomainStore.getState().domain + "/rest/memberships";
+
 const getAuthHeaders = () => {
   return {
     "Accept": "application/json",
@@ -105,15 +108,15 @@ const projectService = {
       throw error;
     }
   },
-  updateProjecUserRole: async (projectId, userId, role) => {
+  updateProjecUserRole: async (projectId, userId, newRole) => {
     const body = {
       projectId,
       userId,
-      role,
+      newRole,
     };
     try {
       const response = await fetch(
-        `${API_BASE_URL}/project/role`,
+        `${API_BASE_URL}/role${projectId}`,
         {
           method: "PUT",
           headers: getAuthHeaders(),
@@ -135,7 +138,7 @@ const projectService = {
 
     try {
       const response = await fetch(
-        `${API_BASE_URL}/ask/join`,
+        `${MEMBER_BASE_URL}/ask/join`,
         {
           method: "PUT",
           headers: getAuthHeaders(),
@@ -150,9 +153,9 @@ const projectService = {
       throw error;
     }
   },
-  updateProject: async (projectData) => {
+  updateProject: async (projectId, projectData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}`, {
+      const response = await fetch(`${API_BASE_URL}/${projectId}`, {
         method: "PUT",
         headers: getAuthHeaders(),
         body: JSON.stringify(projectData),
