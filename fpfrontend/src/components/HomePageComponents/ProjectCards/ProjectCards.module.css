@@ -4,30 +4,10 @@
   height: 100%;
   position: relative;
   overflow-y: auto;
+  padding: 20px;
 }
 
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-  justify-content: center;
-  width: 100%;
-}
 
-.filters select, .filters input {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  font-size: 14px;
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-.filters select:focus, .filters input:focus {
-  border-color: var(--btn-background1);
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
 
 .cardContainer {
   display: flex;
@@ -35,6 +15,8 @@
   gap: 20px;
   justify-content: center;
   flex-grow: 1;
+  padding-right: 15px;
+  padding-left: 15px;
 }
 
 .card {
@@ -134,7 +116,6 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: var(--card-background);
   padding: 2px 5px;
   border-radius: 5px;
   font-size: 10px;
@@ -151,9 +132,12 @@
   display: block;
   font-size: 17px;
   font-weight: bolder;
-  color: var(--text-color);
+  color: var(--text-color4);
   text-align: center;
   letter-spacing: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .row {
@@ -166,7 +150,7 @@
   flex: 30%;
   text-align: center;
   padding: 5px;
-  color: var(--text-color);
+  color: var(--text-color4);
 }
 
 .bigText {
@@ -183,32 +167,3 @@
   border-right: 1px solid rgba(255, 255, 255, 0.126);
 }
 
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  padding: 50px 0px;
-  position: relative;
-  width: 100%;
-  margin-bottom: 30px;
-}
-
-.pagination button {
-  padding: 5px 10px;
-  border: none;
-  background-color: var(--btn-background1);
-  color: var(--btn-color1);
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.pagination button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.pagination button:hover:not(:disabled) {
-  background-color: var(--btn-background2);
-}

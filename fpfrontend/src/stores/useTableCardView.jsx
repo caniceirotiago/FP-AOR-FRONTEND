@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 
 const useTableCardView = create((set) => ({
-  view: 'table',
+  view: '',
   setView: (view) => set({ view }),
 }));
 

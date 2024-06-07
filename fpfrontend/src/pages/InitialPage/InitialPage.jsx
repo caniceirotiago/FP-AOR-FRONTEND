@@ -10,11 +10,13 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import useLabStore from '../../stores/useLabStore';
+import { useNavigate } from 'react-router';
 
 
 
 
 const InitialPage = () => {
+  const navigate = useNavigate();
   const { ref, inView } = useInView({
     triggerOnce: true,
   });
@@ -43,6 +45,10 @@ const InitialPage = () => {
   useEffect(() => {
     fetchLaboratories();
   }, [fetchLaboratories]);
+
+  const navigateWithFilter = (lab) => {
+    navigate(`/homepage?laboratory=${lab.id}`);
+  };
 
   
   return (
@@ -89,7 +95,7 @@ const InitialPage = () => {
           <div key={lab.id} className={styles.labCard}>
             <img className={styles.labImage} src={lab.imageUrl} alt={lab.name} />
             <h3>{lab.location}</h3>
-            <Button path="/homepage" tradId="seeLabProjects" defaultText="See Lab Projects" btnColor={"var(--btn-color2)"}/>
+            <Button onClick={() => navigateWithFilter(lab)} tradId="seeLabProjects" defaultText="See Lab Projects" btnColor={"var(--btn-color2)"}/>
           </div>
         ))}
       </Slider>

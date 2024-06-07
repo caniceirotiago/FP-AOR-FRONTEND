@@ -17,8 +17,10 @@
   flex-grow: 1;
 }
 .rightContainer {
+  width: 100%;
   display: flex;
-  flex-grow: 1;
+  height: 100%;
   background-color: var(--background-color1); 
+  overflow-y: auto;
 
 }

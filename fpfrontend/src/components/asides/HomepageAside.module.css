@@ -1,24 +1,17 @@
 
-.aside {
-  background-color: var(--quaternary-color);
-  border-radius: 8px;
-  padding: 10px 0;
-  margin-bottom: 0;
-  text-align: center;
-  width: 15%;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3);
-  height: 100%;
-  transition: width 0.5s ease-in-out;
-}
 
 .asideExpanded {
   width: 15%;
+  background-color: var(--background-color1);
+  border-right: solid 2px var(--card-border);
+  transition: width 0.5s ease-in-out;
 }
 
 .asideCollapsed {
   width: 4%;
+  background-color: var(--background-color1);
+  border-right: solid 2px var(--card-border);
+  transition: width 0.5s ease-in-out;
 }
 
 .toggleButton {
@@ -26,7 +19,7 @@
   padding: 10px;
   border: none;
   background: transparent;
-  color: var(--text-color);
+  color: var(--text-color4);
   align-self: center;
   font-size: 20px;
 }
@@ -37,7 +30,7 @@
   display: flex;
   align-items: center;
   position: relative; 
-  color: var(--text-color);
+  color: var(--text-color4);
   text-decoration: none;
   height: 20px;
 }
@@ -70,13 +63,13 @@
 }
 
 .menuItem:hover, .menuItem a:hover {
-  background-color: var(--menu-hover);
+  background-color: var(--background-color1);
 }
 .asideExpanded, .asideCollapsed {
   transition: width 0.5s ease-in-out, padding 0.5s ease-in-out;
 }
 .menuTextHidden {
-  opacity: 0;
+  opacity: 1;
   transform: translateX(-100%);
   transition: none;
   display: none;

@@ -4,41 +4,20 @@ import styles from './ProjectTable.module.css';
 import projectService from '../../../services/projectService';
 import { useNavigate } from 'react-router';
 import useProjectStatesStore from '../../../stores/useProjectStatesStore';
+import { FaEye, FaProjectDiagram } from 'react-icons/fa';
 
-
-function ProjectTable({projects, pageCount, filters, setFilters, pageSize, setPageSize, setPageNumber }) {
+function ProjectTable({ projects, pageCount, setPageNumber }) {
     const navigate = useNavigate();
-    const { states, fetchProjectStates } = useProjectStatesStore();
-    const [filterType, setFilterType] = useState('name');
+    const { fetchProjectStates } = useProjectStatesStore();
 
     useEffect(() => {
         fetchProjectStates();
-      }, [fetchProjectStates]);
+    }, [fetchProjectStates]);
 
     const handleClickToOpenProjectPage = (projectId) => () => {
         navigate(`/projectpage/${projectId}`);
     }
-    
-    const handleFilterChange = (e) => {
-        setFilters({
-            ...filters,
-            [e.target.name]: e.target.value
-        });
-    }
-    const handleSortChange = (e) => {
-        setFilters({
-          ...filters,
-          sortBy: e.target.value
-        });
-      };
-      const handleFilterTypeChange = (e) => {
-        setFilterType(e.target.value);
-        setFilters({
-          ...filters,
-          [filterType]: ''
-        });
-      };
-    
+
     const data = useMemo(() => projects, [projects]);
 
     const columns = useMemo(
@@ -83,10 +62,14 @@ function ProjectTable({projects, pageCount, filters, setFilters, pageSize, setPa
                 Header: 'Actions',
                 id: 'actions',
                 accessor: 'id',
-                Cell: ({value}) => (
-                    <div>
-                        <button onClick={handleClickToOpenProjectPage(value)}>Project Page</button>
-                        <button onClick={() => console.log(value)}>Project Plane</button>
+                Cell: ({ value }) => (
+                    <div className={styles.actions}>
+                        <button onClick={handleClickToOpenProjectPage(value)} className={styles.actionButton}>
+                            <FaEye /> View
+                        </button>
+                        <button onClick={() => console.log(value)} className={styles.actionButton}>
+                            <FaProjectDiagram /> Plan
+                        </button>
                     </div>
                 )
             }
@@ -99,13 +82,7 @@ function ProjectTable({projects, pageCount, filters, setFilters, pageSize, setPa
         getTableBodyProps,
         headerGroups,
         prepareRow,
-        page, 
-        canPreviousPage,
-        canNextPage,
-        pageOptions,
-        gotoPage,
-        nextPage,
-        previousPage,
+        page,
         state: { pageIndex }
     } = useTable(
         {
@@ -117,72 +94,47 @@ function ProjectTable({projects, pageCount, filters, setFilters, pageSize, setPa
         },
         usePagination
     );
+
     useEffect(() => {
         setPageNumber(pageIndex + 1); 
-      }, [pageIndex, setPageNumber]);
+    }, [pageIndex, setPageNumber]);
 
     return (
-        <>
-            <div className={styles.filters}>
-                <input name="name" placeholder="Name" onChange={handleFilterChange} />
-                <input name="state" placeholder="State" onChange={handleFilterChange} />
-                <input name="keywords" placeholder="Keywords" onChange={handleFilterChange} />
-                <input name="skills" placeholder="Skills" onChange={handleFilterChange} />
-                <select name="sortBy" onChange={handleSortChange}>
-                <option value="">Sort By</option>
-                <option value="creationDate">Creation Date</option>
-                <option value="openPositions">Open Positions</option>
-                <option value="state">State</option>
-                </select>
-            </div>
-            <table {...getTableProps()} className={styles.table}>
-                <thead>
-                    {headerGroups.map(headerGroup => (
-                        <tr {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map(column => (
-                                <th {...column.getHeaderProps()} className={styles.header}>
-                                    {column.render('Header')}
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                    {page.map(row => {
-                        prepareRow(row);
-                        return (
-                            <tr {...row.getRowProps()} className={styles.row}>
-                                {row.cells.map(cell => (
-                                    <td {...cell.getCellProps()} className={styles.cell}>
-                                        {cell.render('Cell')}
-                                    </td>
+        <div className={styles.tableContainer}>
+            <div className={styles.tblHeader}>
+                <table {...getTableProps()} className={styles.table}>
+                    <thead>
+                        {headerGroups.map(headerGroup => (
+                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map(column => (
+                                    <th {...column.getHeaderProps()} className={styles.header}>
+                                        {column.render('Header')}
+                                    </th>
                                 ))}
                             </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-            <div className={styles.pagination}>
-                <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                    {'<<'}
-                </button>
-                <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-                    {'<'}
-                </button>
-                <button onClick={() => nextPage()} disabled={!canNextPage}>
-                    {'>'}
-                </button>
-                <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-                    {'>>'}
-                </button>
-                <span>
-                    Page{' '}
-                    <strong>
-                        {pageIndex + 1} of {pageOptions.length}
-                    </strong>{' '}
-                </span>
+                        ))}
+                    </thead>
+                </table>
             </div>
-        </>
+            <div className={styles.tblContent}>
+                <table {...getTableProps()} className={styles.table}>
+                    <tbody {...getTableBodyProps()}>
+                        {page.map(row => {
+                            prepareRow(row);
+                            return (
+                                <tr {...row.getRowProps()} className={styles.row}>
+                                    {row.cells.map(cell => (
+                                        <td {...cell.getCellProps()} className={styles.cell}>
+                                            {cell.render('Cell')}
+                                        </td>
+                                    ))}
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     );
 }
 

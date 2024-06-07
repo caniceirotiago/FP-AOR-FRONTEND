@@ -3,6 +3,7 @@ import styles from './ProjectCards.module.css';
 import { useNavigate } from 'react-router';
 import useProjectStatesStore from '../../../stores/useProjectStatesStore';
 import useConfigurationStore from '../../../stores/useConfigurationStore';
+import useLoginModalStore from '../../../stores/useLoginModalStore';
 
 const stateColors = {
   PLANNING: 'var(--color-planning)',
@@ -12,17 +13,17 @@ const stateColors = {
   CANCELLED: 'var(--color-cancelled)'
 };
 
-function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setPageSize, pageNumber, setPageNumber }) {
+function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setPageSize, pageNumber, setPageNumber, isAuthenticated, labs }) {
   const navigate = useNavigate();
-  const { states, fetchProjectStates } = useProjectStatesStore();
-  const [filterType, setFilterType] = useState('name');
+
   const { configurations, fetchConfigurations } = useConfigurationStore();
   const [maxProjectMembers, setMaxProjectMembers] = useState(null);
+  const {setIsLoginModalOpen} = useLoginModalStore();
 
   useEffect(() => {
-    fetchProjectStates();
+
     fetchConfigurations();
-  }, [fetchProjectStates, fetchConfigurations]);
+  }, [fetchConfigurations]);
 
   useEffect(() => {
     if (configurations.has('maxProjectMembers')) {
@@ -30,27 +31,11 @@ function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setP
     }
   }, [configurations]);
 
-  const handleFilterChange = (e) => {
-    setFilters({
-      ...filters,
-      [e.target.name]: e.target.value
-    });
-  };
 
-  const handleSortChange = (e) => {
-    setFilters({
-      ...filters,
-      sortBy: e.target.value
-    });
-  };
-
-  const handleFilterTypeChange = (e) => {
-    setFilterType(e.target.value);
-    
-  };
 
   const handleClickToOpenProjectPage = (projectId) => () => {
-    navigate(`/projectpage/${projectId}`);
+    if(isAuthenticated)navigate(`/projectpage/${projectId}`);
+    else setIsLoginModalOpen(true);
   };
 
   const renderMemberThumbnails = (members) => {
@@ -69,30 +54,7 @@ function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setP
 
   return (
     <div className={styles.mainContainer}>
-      <div className={styles.filters}>
-        <select value={filterType} onChange={handleFilterTypeChange}>
-          <option value="name">Name</option>
-          <option value="keywords">Keywords</option>
-          <option value="skills">Skills</option>
-        </select>
-        <input
-          name={filterType}
-          placeholder={filterType.charAt(0).toUpperCase() + filterType.slice(1)}
-          onChange={handleFilterChange}
-        />
-        <select name="state" onChange={handleFilterChange}>
-          <option value="">Select State</option>
-          {states.map((state) => (
-            <option key={state} value={state}>{state}</option>
-          ))}
-        </select>
-        <select name="sortBy" onChange={handleSortChange}>
-          <option value="">Sort By</option>
-          <option value="creationDate">Creation Date</option>
-          <option value="openPositions">Open Positions</option>
-          <option value="state">State</option>
-        </select>
-      </div>
+     
       <div className={styles.cardContainer}>
         {projects.map(project => (
           <div key={project.id} className={styles.card} onClick={handleClickToOpenProjectPage(project.id)}>
@@ -127,26 +89,6 @@ function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setP
             </div>
           </div>
         ))}
-      </div>
-      <div className={styles.pagination}>
-        <button onClick={() => setPageNumber(1)} disabled={pageNumber === 1}>
-          {'<<'}
-        </button>
-        <button onClick={() => setPageNumber(pageNumber - 1)} disabled={pageNumber === 1}>
-          {'<'}
-        </button>
-        <button onClick={() => setPageNumber(pageNumber + 1)} disabled={pageNumber === pageCount}>
-          {'>'}
-        </button>
-        <button onClick={() => setPageNumber(pageCount)} disabled={pageNumber === pageCount}>
-          {'>>'}
-        </button>
-        <span>
-          Page{' '}
-          <strong>
-            {pageNumber} of {pageCount}
-          </strong>
-        </span>
       </div>
     </div>
   );

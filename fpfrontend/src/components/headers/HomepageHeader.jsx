@@ -11,6 +11,7 @@ import useLoginModalStore from '../../stores/useLoginModalStore.jsx'
 import useAuthStore from '../../stores/useAuthStore.jsx'
 import { Link } from 'react-router-dom';
 import logo from '../../assets/CriticalLogo.png';
+import logo2 from '../../assets/CriticalLogo2.png';
 import userService from '../../services/userService.jsx';
 
 
@@ -148,7 +149,7 @@ const HomepageHeader = () => {
   return (
     <header className={styles.header}>
       <div className={styles.logoContainer} onClick={handleHomepageNavigate}>
-        <img src={logo} alt="Logo" className={styles.logo} />
+        {theme === "light" ? <img src={logo} alt="Logo" className={styles.logo} /> : <img src={logo2} alt="Logo" className={styles.logo} />}
       </div>
       
       <div className={styles.rightAligned}>
