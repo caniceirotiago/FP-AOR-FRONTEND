@@ -3,9 +3,12 @@ import useDomainStore from "../stores/useDomainStore";
 const API_BASE_URL =
   "http://" + useDomainStore.getState().domain + "/rest/users";
 
+const MEMBER_BASE_URL =
+  "http://" + useDomainStore.getState().domain + "/rest/memberships";
+
 const getAuthHeaders = () => {
   return {
-    "Accept": "application/json",
+    Accept: "application/json",
     "Content-Type": "application/json",
   };
 };
@@ -131,44 +134,47 @@ const userService = {
   },
   updateUserPassword: async (oldPassword, newPassword) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/password`, {
-            method: "PUT",
-            headers: getAuthHeaders(),
-            body: JSON.stringify({
-                oldPassword: oldPassword, 
-                newPassword: newPassword, 
-            }),
-            credentials: "include",
-        });
-        checkStatus(response);
-        return response;
+      const response = await fetch(`${API_BASE_URL}/password`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        }),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
     } catch (error) {
-        console.error("Error updating password:", error.message);
-        throw error;
+      console.error("Error updating password:", error.message);
+      throw error;
     }
   },
   requestNewConfirmationEmail: async (email) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/request/confirmation/email`, {
-            method: "POST",
-            headers: getAuthHeaders(),
-            body: JSON.stringify({ email }),
-        });
-        return response;
+      const response = await fetch(
+        `${API_BASE_URL}/request/confirmation/email`,
+        {
+          method: "POST",
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ email }),
+        }
+      );
+      return response;
     } catch (error) {
-        console.error("Erro ao solicitar novo e-mail de confirmação:", error);
-        throw error;
+      console.error("Erro ao solicitar novo e-mail de confirmação:", error);
+      throw error;
     }
   },
   logout: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/logout`, {
-        method: 'POST',
+        method: "POST",
         headers: getAuthHeaders(),
-        credentials: 'include',
+        credentials: "include",
       });
       checkStatus(response);
-      return response; 
+      return response;
     } catch (error) {
       throw error;
     }
@@ -178,7 +184,7 @@ const userService = {
       const response = await fetch(`${API_BASE_URL}/session/check`, {
         method: "GET",
         headers: getAuthHeaders(),
-        credentials: "include",  
+        credentials: "include",
       });
       checkStatus(response);
       return response;
@@ -189,11 +195,14 @@ const userService = {
   },
   addUserToProject: async (projectId, username) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/add/${username}/${projectId}`, {
-        method: "POST",
-        headers: getAuthHeaders(),
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/add/${username}/${projectId}`,
+        {
+          method: "POST",
+          headers: getAuthHeaders(),
+          credentials: "include",
+        }
+      );
       checkStatus(response);
       return response;
     } catch (error) {
@@ -203,11 +212,14 @@ const userService = {
   },
   removeUserFromProject: async (projectId, username) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/remove/${username}/${projectId}`, {
-        method: "PUT",
-        headers: getAuthHeaders(),
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/remove/${username}/${projectId}`,
+        {
+          method: "PUT",
+          headers: getAuthHeaders(),
+          credentials: "include",
+        }
+      );
       checkStatus(response);
       return response;
     } catch (error) {
@@ -217,11 +229,14 @@ const userService = {
   },
   confirmProjectAssociation: async (token) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/confirm/project?token=${token}`, {
-        method: "PUT",
-        headers: getAuthHeaders(),
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${MEMBER_BASE_URL}/confirm/project?token=${token}`,
+        {
+          method: "PUT",
+          headers: getAuthHeaders(),
+          credentials: "include",
+        }
+      );
       checkStatus(response);
       return response;
     } catch (error) {

@@ -61,7 +61,6 @@ const ProjectPage = () => {
   }
   const handleUpdateProjectInfo = async () => {
     const projectUpdateData = {
-      id: projectInfo.id,
       name: projectInfo.name,
       description: projectInfo.description,
       motivation: projectInfo.motivation,
@@ -70,7 +69,7 @@ const ProjectPage = () => {
       conclusionDate: projectInfo.conclusionDate ? new Date(projectInfo.conclusionDate).toISOString() : null
   };
     try {
-      await projectService.updateProject(projectUpdateData);
+      await projectService.updateProject(projectInfo.id, projectUpdateData);
       setIsEditing(false);
     } catch (error) {
       console.error("Failed to update project info:", error);
