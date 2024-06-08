@@ -37,6 +37,8 @@ body.theme-light {
   --text-color2: white;
   --text-color3: white;
   --text-color4: black;
+  --positive-color: #50C878;
+  --negative-color: #FF6347;
 
 
 }
@@ -59,6 +61,8 @@ body.theme-dark {
   --text-color2: white;
   --text-color3: black;
   --text-color4: white;
+  --positive-color: #50C878;
+  --negative-color: #FF6347;
 
 }
 

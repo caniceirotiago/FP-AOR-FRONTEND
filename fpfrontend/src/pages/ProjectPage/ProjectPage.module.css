@@ -1,29 +1,90 @@
 .projectPage {
-    height: 100%;
-    width: 100%;
-    background-size: cover;
-    background-position: center;
-    display: grid;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  }
+
+  .approvalDiv {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    overflow-y: auto;
+    justify-content:center;
+    background-color: rgb(255, 255, 255, 0,2);
+    border: 2px solid var(--card-border);
+    border-radius: 6px;
+    padding: 0px 20px;
+    margin-bottom: 0px;
     gap: 20px;
   }
+  
+  .approvalText {
+    font-size: 16px;
+    color: var(--text-color4);
+
+  }
+  
+  .approvalBtn, .rejectBtn {
+    padding: 5px 8px;
+    font-size: 13px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .approvalBtn {
+    background-color: var(--positive-color);
+    color: var(--text-color2);
+  }
+  
+  .approvalBtn:hover {
+    background-color:var(--btn-background2);
+ 
+  }
+  .rejectBtn {
+    background-color: var(--negative-color);
+    color: var(--text-color2);
+  }
+  .rejectBtn:hover{
+    background-color:var(--btn-background2);
+  }
+  
+
 
 .basicInfo {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
+    flex-direction: column;
+    flex-grow: 1;
     width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center; 
 }
 .btnContainer  {
     max-height: 30px !important;
     align-self: center;
     width: 10%;
 }
+.projectHeader {
+    text-align: center;
+    color: var(--text-color4);
+    padding: 40px 0px;
+}
+.firstSeccion{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+
+    width: 100%;
+    max-width: 1200px;
+
+}
 .formContainer{
     width: 40%;
+    align-self: center;
+    height: 100%;
 
 }
 .usersContainer {
@@ -31,14 +92,104 @@
     align-self: center;
     justify-self: center;
 }
+.secondSeccion{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    align-self:center;
+    gap: 20px;
+    width: 100%;
+    margin-top: 40px;
+
+}
 
 .attributesContainer {
-display: flex;
-flex-direction: column;
-justify-self: center;
-gap: 20px;
-width: 100%;
-max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    align-items: center; 
+    text-align: center; 
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;   
+}
+.controlPanel {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content:space-between;
+    align-items: center;
+  }
+
+.btns {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 300px;
+    padding-top: 10px;
+  }
+  
+  .iconButton {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--btn-background2);
+    border: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+    cursor: pointer;
+    transition: width 0.3s, border-radius 0.3s, background-color 0.3s;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .iconButton:hover {
+    width: 80px;
+    border-radius: 50px;
+    background-color: var(--btn-background1);
+  }
+  
+  .iconButton .svgIcon {
+    width: 20px;
+    transition: width 0.3s, transform 0.3s;
+    fill: white;
+  }
+  
+  .iconButton:hover .svgIcon {
+    width: 30px;
+    transform: translateY(+400%);
+  }
+  
+  .iconButton::after {
+    content: attr(data-text);
+    color: white;
+    font-size: 16px;
+    position: absolute;
+    bottom: +90px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease, bottom 0.3s ease;
+  }
+  
+  .iconButton:hover::after {
+    bottom: 15px;
+    opacity: 1;
+  }
+
+.otherControls{
+    justify-self: right;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+    padding-top: 7px;
+
 }
 
 @media (max-width: 768px) {

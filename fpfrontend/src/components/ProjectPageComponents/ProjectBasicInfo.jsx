@@ -1,152 +1,200 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-import ReactQuill from "react-quill";
-import { FormattedMessage, useIntl } from "react-intl";
+import React, { useEffect, useState } from "react";
+import { FormattedMessage } from "react-intl";
 import styles from "./ProjectBasicInfo.module.css";
 import Button from '../buttons/landingPageBtn/Button.jsx'
-import useLabStore from "../../stores/useLabStore.jsx";
-import useProjectStatesStore from "../../stores/useProjectStatesStore.jsx";
-import { useMemo } from "react";
-import { useRef } from "react";
 
+const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing, updateProjectInfo, onApprove, onReject, onCancel }) => {
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setProjectInfo((prevInfo) => ({
+      ...prevInfo,
+      [name]: value,
+    }));
+  };
 
+  const handleUpdateProject = async () => {
+    await updateProjectInfo();
+  };
 
-const ProjectBasicInfo = ({projectInfo, states, laboratories, setProjectInfo, isEditing, updateProjectInfo}) => {
-  const quillDescriptionRef = useRef(null);
-  const quillMotivationRef = useRef(null);
-    const toolbarOptions = useMemo(() => [
-      [{ 'font': [] }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ size: [] }],
-      ['bold', 'italic', 'underline', 'strike'],
-    ], []);
-    const handleInputChange = (event) => {
-      const { name, value } = event.target;
-      setProjectInfo((prevInfo) => ({
-        ...prevInfo,
-        [name]: value,
-      }));
-    };
-  
-    const handleQuillChange = (name, value) => {
-      setProjectInfo((prevInfo) => ({
-        ...prevInfo,
-        [name]: value,
-      }));
-    };
+  const handleStateChange = async (newState) => {
+    setProjectInfo((prevInfo) => ({
+      ...prevInfo,
+      state: newState,
+    }));
+  };
 
-    const handleUpdateProject = () => {
+  useEffect(() => {
+    if (projectInfo.state) {
       updateProjectInfo();
     }
-  
-    if (!projectInfo) {
-      return null; // or a loading indicator
+  }, [projectInfo.state]);
+
+  const renderStateActions = () => {
+    switch (projectInfo.state) {
+      case "PLANNING":
+        return (
+          <>
+            <button
+              className={styles.smallButton}
+              onClick={() => handleStateChange("READY")}
+            >
+              Mark as Ready
+            </button>
+            <button
+              className={`${styles.smallButton} ${styles.cancelBtn}`}
+              onClick={() => handleStateChange("CANCELLED")}
+            >
+              Cancel Project
+            </button>
+          </>
+        );
+      case "READY":
+        return (
+          <>
+            <button
+              className={styles.smallButton}
+              onClick={() => handleStateChange("PLANNING")}
+            >
+              Mark as Planning
+            </button>
+            <button
+              className={`${styles.smallButton} ${styles.cancelBtn}`}
+              onClick={() => handleStateChange("CANCELLED")}
+            >
+              Cancel Project
+            </button>
+          </>
+        );
+      case "IN_PROGRESS":
+        return (
+          <>
+            <button
+              className={styles.smallButton}
+              onClick={() => handleStateChange("FINISHED")}
+            >
+              Mark as Finished
+            </button>
+            <button
+              className={`${styles.smallButton} ${styles.cancelBtn}`}
+              onClick={() => handleStateChange("CANCELLED")}
+            >
+              Cancel Project
+            </button>
+          </>
+        );
+      default:
+        return null;
     }
+  };
 
+  if (!projectInfo) {
+    return null; 
+  }
 
-
-    return(
-        <div className={styles.projectContainer}>
-        <section className={styles.projectHeader}>
-          <h1>{projectInfo.name}</h1>
-        </section>
-        <div className={styles.formContainer}>
-        <form className={styles.form} >
-                    <label className={styles.label}>Project Name</label>
-                    <input
-                        className={styles.input}
-                        type="text"
-                        name="name"
-                        value={projectInfo.name}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                    />
-                    <label className={styles.label}>Description</label>
-                    {isEditing ? (
-                       <ReactQuill
-                        ref={quillDescriptionRef}
-                        theme="snow"
-                        value={projectInfo.description}
-                        className={styles.quillEditor} 
-                        modules={{ toolbar: toolbarOptions }}
-                        onChange={(value) => handleQuillChange("description", value)}
-                    />) 
-                      : 
-                    (<div className={styles.descriptionText}>
-                      <div dangerouslySetInnerHTML={{ __html: projectInfo.description }} />
-                    </div>)}
-                   
-                    <label className={styles.label}>Motivation</label>
-                    {isEditing ? (  
-                      <ReactQuill
-                        ref={quillMotivationRef}
-                        theme="snow"
-                        value={projectInfo.motivation}
-                        className={styles.quillEditor} 
-                        modules={{ toolbar: toolbarOptions }}
-                        onChange={(value) => handleQuillChange("motivation", value)}
-                    />)
-                      :
-                      (<div className={styles.motivationText}>
-                        <div dangerouslySetInnerHTML={{ __html: projectInfo.motivation }} />
-                      </div>)}
-                    
-                    <label className={styles.label}>State</label>
-                    <FormattedMessage id="projectcStatusPlaceholder" defaultMessage="Select project state">
-                           {(placeholder) => (
-                           <select
-                              className={styles.select}
-                              name="state"
-                              id="state-field"
-                              value={projectInfo.state}
-                              onChange={handleInputChange}
-                              disabled={!isEditing}
-                           >
-                              <option value="">{placeholder}</option>
-                              {states.map((state) => (
-                              <option key={state} value={state}>
-                                 {state}
-                              </option>
-                              ))}
-                           </select>
-                           )}
-                     </FormattedMessage>
-                    <label className={styles.label}>Laboratory</label>
-                    <FormattedMessage id="laboratoryPlaceholder" defaultMessage="Select your laboratory">
-                           {(placeholder) => (
-                           <select
-                              className={styles.select}
-                              name="laboratoryId"
-                              id="laboratoryId-field"
-                              value={projectInfo?.laboratory.id || ''}
-                              onChange={handleInputChange}
-                              disabled={!isEditing}
-                           >
-                              <option value="">{placeholder}</option>
-                              {laboratories.map((lab) => (
-                              <option key={lab.id} value={lab.id}>
-                                 {lab.location}
-                              </option>
-                              ))}
-                           </select>
-                           )}
-                     </FormattedMessage>
-                     <label className={styles.label}>Conclusion Date</label>
-                    <input
-                        type="datetime-local"
-                        className={styles.datePicker}
-                        value={projectInfo.conclusionDate ? new Date(projectInfo.conclusionDate).toISOString().substring(0, 16) : ''}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                    /> 
-                    {isEditing && <Button className={styles.button} onClick={handleUpdateProject} tradId="updateProject" defaultText="Update Project Basic Information" btnColor={"var(--btn-color2)"}/> 
-}
-                </form>
-            
-              
+  return (
+    <div className={styles.projectContainer}>
+      <div className={styles.statusContainer}>
+        <label className={styles.label}>Project Status</label>
+        <div className={styles.statusDisplay}>
+          <span
+            className={styles.statusIndicator}
+            style={{ backgroundColor: getStatusColor(projectInfo.state) }}
+          ></span>
+          <span>{projectInfo.state}</span>
+          <div className={styles.stateActions}>
+            {isEditing && renderStateActions()}
+          </div>
         </div>
       </div>
-    )
-    };
+      <div className={styles.formContainer}>
+        <form className={styles.form}>
+          <label className={styles.label}>Project Name</label>
+          <input
+            className={styles.input}
+            type="text"
+            name="name"
+            value={projectInfo.name}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+          />
+          <label className={styles.label}>Description</label>
+          <textarea
+              className={styles.textarea}
+              name="description"
+              value={projectInfo.description}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+            />
+          <label className={styles.label}>Motivation</label>
+          <textarea
+              className={styles.textarea}
+              name="motivation"
+              value={projectInfo.motivation}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+            />
+
+          <label className={styles.label}>Laboratory</label>
+          <FormattedMessage id="laboratoryPlaceholder" defaultMessage="Select your laboratory">
+            {(placeholder) => (
+              <select
+                className={styles.select}
+                name="laboratoryId"
+                id="laboratoryId-field"
+                value={projectInfo?.laboratory.id || ''}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              >
+                <option value="">{placeholder}</option>
+                {laboratories.map((lab) => (
+                  <option key={lab.id} value={lab.id}>
+                    {lab.location}
+                  </option>
+                ))}
+              </select>
+            )}
+          </FormattedMessage>
+          <label className={styles.label}>Conclusion Date</label>
+          <input
+            type="date"
+            className={styles.datePicker}
+            name="conclusionDate"
+            value={projectInfo.conclusionDate ? new Date(projectInfo.conclusionDate).toISOString().substring(0, 10) : ''}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+          />
+          {isEditing && (
+            <div className={styles.buttonContainer}>
+            <Button
+              className={styles.button}
+              onClick={handleUpdateProject}
+              tradId="saveFields"
+              defaultText="Save Fields"
+              btnColor={"var(--btn-color2)"}
+            />
+            </div>
+          )}
+        </form>
+      </div>
+    </div>
+  );
+};
 
 export default ProjectBasicInfo;
+
+const getStatusColor = (status) => {
+  switch (status) {
+    case "PLANNING":
+      return "var(--color-planning)";
+    case "READY":
+      return "var(--color-ready)";
+    case "IN_PROGRESS":
+      return "var(--color-in-progress)";
+    case "FINISHED":
+      return "var(--color-finished)";
+    case "CANCELLED":
+      return "var(--color-cancelled)";
+    default:
+      return "var(--color-default)";
+  }
+};

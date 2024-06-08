@@ -27,11 +27,26 @@ import ProjectPagePage from './pages/ProjectPage/ProjectPage.jsx';
 import ProjectConfirmationPage from './pages/ProjectConfirmationPage/ProjectConfirmationPage.jsx';
 import useThemeStore from './stores/useThemeStore.jsx';
 import {useEffect} from 'react';
+import useDeviceStore from './stores/useDeviceStore.jsx';
  
 
 function App() {
   const { locale } = useTranslationsStore();
   const { theme } = useThemeStore();
+  const { setDimensions, setDeviceType } = useDeviceStore();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDimensions(window.innerWidth, window.innerHeight);
+      setDeviceType(window.innerWidth < 768 ? 'mobile' : 'desktop');
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Call handleResize initially to set dimensions on mount
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [setDimensions, setDeviceType]);
+
   useEffect(() => {
     document.body.className = '';
     document.body.classList.add(`theme-${theme}`);

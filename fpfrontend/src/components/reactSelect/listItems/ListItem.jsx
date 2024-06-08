@@ -10,7 +10,6 @@ const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole,
         const userId = attribute.user.id;
         handleChangeUserProjectRole(userId, role);
       };
-    console.log("createdBy", createdBy);
   
     let isTheCreator
     if(title === "users" && createdBy) isTheCreator = createdBy.username === attribute.user.username;

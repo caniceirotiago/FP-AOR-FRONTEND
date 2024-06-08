@@ -4,23 +4,80 @@
   gap: 20px;
   max-width: 800px;
   width: 100%;
+  color: var(--text-color4);
 }
 
 .projectHeader {
   text-align: center;
+  color: var(--text-color4);
 }
+
+.statusContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-color4);
+}
+
+.statusDisplay {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-color4);
+}
+
+.statusIndicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.stateActions {
+  display: flex;
+  gap: 10px;
+}
+
+.smallButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: none;
+  background-color: var(--btn-background1);
+  color: var(--btn-color1);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.smallButton:hover,
+.smallButton:focus {
+  background-color: var(--btn-background2);
+}
+.cancelBtn{
+  background-color: var(--negative-color);
+
+}
+
 
 .formContainer {
   display: flex;
   flex-direction: column;
   gap: 15px;
-
   max-width: 800px;
   width: 100%;
 }
+.form{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 800px;
+  width: 100%;
+
+}
 
 .label {
-  color: var(--text-color);
+  color: var(--text-color4);
   font-weight: 600;
   margin-bottom: 8px;
 }
@@ -28,7 +85,6 @@
 .input,
 .select,
 .datePicker {
-
   border: 1px solid #ccc;
   font-size: 16px;
   color: var(--text-color);
@@ -46,34 +102,33 @@
   cursor: not-allowed;
 }
 
-/* .quillEditor {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.textarea {
+  width: 100%;
+  height: 50px; 
   padding: 10px;
-  flex-grow: 1;
-} */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+  resize: none;
+  background-color: transparent;
+  color: var(--text-color);
+}
+
+.textarea:focus {
+  border-color: var(--btn-background1);
+}
 
 .descriptionText,
 .motivationText {
   border: 1px solid #ccc;
   border-radius: 5px;
-
   flex-grow: 1;
   max-height: 200px;
   overflow-y: auto;
 }
 
-.button {
-  margin-top: 20px;
-  border-radius: 5px;
-
-  font-size: 16px;
-  background-color: var(--btn-color2);
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+.buttonContainer {
+  width: 30%;
 }
 
 .button:hover,
