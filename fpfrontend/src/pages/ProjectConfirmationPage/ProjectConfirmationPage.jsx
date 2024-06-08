@@ -14,6 +14,7 @@ const ProjectConfirmationPage = () => {
     const searchParams = new URLSearchParams(location.search);
     const token = searchParams.get("token");
     const approve = searchParams.get("approve");
+    const approver = searchParams.get("approver");
 
     if (!token) {
       console.error("Token not received");
@@ -30,7 +31,8 @@ const ProjectConfirmationPage = () => {
       try {
         const response = await userService.confirmProjectAssociation(
           token,
-          approve
+          approve,
+          approver
         );
         if (response.status === 204) {
           setDialogMessage("Request processed!");
