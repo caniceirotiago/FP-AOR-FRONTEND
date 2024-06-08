@@ -11,8 +11,10 @@ import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import useProjectStatesStore from '../../stores/useProjectStatesStore.jsx';
 import { FaTable, FaTh, FaPlus, FaFilter } from 'react-icons/fa';
+import useAuthStore from '../../stores/useAuthStore.jsx';
 
-const HomePage = ({ isAuthenticated }) => {
+const HomePage = () => {
+  const {isAuthenticated} = useAuthStore();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedView, setSelectedView] = useState('table');
@@ -42,6 +44,7 @@ const HomePage = ({ isAuthenticated }) => {
   };
   const { states, fetchProjectStates } = useProjectStatesStore();
   const [filterType, setFilterType] = useState('name');
+  
 
   function getInitialPageSize() {
     const width = window.innerWidth;

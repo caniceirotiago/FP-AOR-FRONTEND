@@ -10,6 +10,7 @@ import { useCallback } from 'react';
 import useProjectRolesStore from '../../stores/useProjectRolesStore.jsx';
 import Button from '../../components/buttons/landingPageBtn/Button.jsx'
 import styles from './ProjectPage.module.css';
+import { FaEdit, FaCheck } from 'react-icons/fa';
 
 
 
@@ -88,7 +89,24 @@ const ProjectPage = () => {
       ) : (
         <div className={styles.projectPage}>
           <div className={styles.basicInfo}>
-            {canEdit &&
+          <div className={styles.controlPanel}>
+              <div className={styles.btns}>
+                {canEdit &&
+                  <>{!isEditing &&  (
+                    <button  onClick={handleEditModeTrue} className={`${styles.iconButton} ${styles.createButton}`} data-text="Edit">
+                      <FaEdit className={styles.svgIcon} />
+                    </button>
+                  )}
+                  {isEditing &&  (
+                    <button onClick={handleEditModeFalse} className={`${styles.iconButton} ${styles.createButton}`} data-text="Back">
+                      <FaCheck className={styles.svgIcon} />
+                    </button>
+                  )}
+                  </>
+                }
+            </div>
+          </div>
+            {/* {canEdit &&
             <div className={styles.btnContainer}>
               {!isEditing && (
                 <Button className={styles.button} type="button" onClick={handleEditModeTrue} tradId="editBtnProfForm" defaultText="Edit" btnColor={"var(--btn-color2)"} />
@@ -97,25 +115,28 @@ const ProjectPage = () => {
                 <Button className={styles.button} type="button" onClick={handleEditModeFalse} tradId="editBtnProfFormFalse" defaultText="Exit Edit Mode" btnColor={"var(--btn-color2)"} />
               )}
             </div>
-            }
-            
-            <div className={styles.formContainer}>
-              <ProjectBasicInfo
-                projectInfo={projectInfo}
-                states={states}
-                laboratories={laboratories}
-                setProjectInfo={setProjectInfo}
-                isEditing={isEditing}
-                updateProjectInfo={handleUpdateProjectInfo}
-              />
-            </div>
-            <div className={styles.usersContainer}>
-              <AttributeEditor title="users" editMode={isEditing} mainEntity={"project"} creationMode={false} projectId={id} createdBy={projectInfo.createdBy}/>
+            } */}
+            <div className={styles.firstSeccion}>
+              <div className={styles.formContainer}>
+                <ProjectBasicInfo
+                  projectInfo={projectInfo}
+                  states={states}
+                  laboratories={laboratories}
+                  setProjectInfo={setProjectInfo}
+                  isEditing={isEditing}
+                  updateProjectInfo={handleUpdateProjectInfo}
+                />
+              </div>
+              <div className={styles.usersContainer}>
+                <AttributeEditor title="users" editMode={isEditing} mainEntity={"project"} creationMode={false} projectId={id} createdBy={projectInfo.createdBy}/>
+              </div>
             </div>
           </div>
-          <div className={styles.attributesContainer}>
-            <AttributeEditor title="skills" editMode={isEditing} mainEntity={"project"} creationMode={false} projectId={id} />
-            <AttributeEditor title="keywords" editMode={isEditing} mainEntity={"project"} creationMode={false} projectId={id} />
+          <div className={styles.secondSeccion}>
+            <div className={styles.attributesContainer}>
+              <AttributeEditor title="skills" editMode={isEditing} mainEntity={"project"} creationMode={false} projectId={id} />
+              <AttributeEditor title="keywords" editMode={isEditing} mainEntity={"project"} creationMode={false} projectId={id} />
+            </div>
           </div>
         </div>
       )}
