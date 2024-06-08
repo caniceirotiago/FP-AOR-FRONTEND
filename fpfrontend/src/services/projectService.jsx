@@ -20,6 +20,7 @@ const checkStatus = (response) => {
 };
 
 const projectService = {
+
   createProject: async (projectData) => {
     try {
       const response = await fetch(`${API_BASE_URL}/create`, {
@@ -35,6 +36,7 @@ const projectService = {
       throw error;
     }
   },
+
   getAllProjects: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/all`, {
@@ -47,6 +49,7 @@ const projectService = {
       throw error;
     }
   },
+
   getFilteredProjects: async (page, pageSize, filters = {}) => {
     const filterParams = new URLSearchParams();
 
@@ -70,6 +73,7 @@ const projectService = {
       throw error;
     }
   },
+
   getProjectById: async (projectId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/info/${projectId}`, {
@@ -84,6 +88,7 @@ const projectService = {
       throw error;
     }
   },
+
   fetchAllStates: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/enum/states`, {
@@ -96,6 +101,7 @@ const projectService = {
       throw error;
     }
   },
+
   fetchProjectRoles: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/enum/roles`, {
@@ -108,6 +114,7 @@ const projectService = {
       throw error;
     }
   },
+
   updateProjecUserRole: async (projectId, userId, newRole) => {
     const body = {
       userId,
@@ -130,20 +137,15 @@ const projectService = {
       throw error;
     }
   },
-  askToJoinProject: async (projectId) => {
-    const body = {
-      projectId,
-      userId: localStorage.getItem("userId"),
-    };
 
+  askToJoinProject: async (projectId) => {
     try {
       const response = await fetch(
-        `${MEMBER_BASE_URL}/ask/join`,
+        `${MEMBER_BASE_URL}/ask/join/${projectId}`,
         {
           method: "PUT",
           headers: getAuthHeaders(),
           credentials: "include",
-          body: JSON.stringify(body),
         }
       );
       checkStatus(response);
@@ -153,6 +155,7 @@ const projectService = {
       throw error;
     }
   },
+
   updateProject: async (projectId, projectData) => {
     try {
       const response = await fetch(`${API_BASE_URL}/${projectId}`, {
@@ -168,9 +171,10 @@ const projectService = {
       throw error;
     }
   },
-  getTasksByProjectId: async (projId) => {
+
+  getTasksByProjectId: async (projectId) => {
     try {
-      const response = await fetch(`http://localhost:8080/FPBackend/rest/tasks/project/1`, {
+      const response = await fetch(`http://localhost:8080/FPBackend/rest/tasks/project/${projectId}`, {
         method: "GET",
         headers: getAuthHeaders(),
         credentials: "include",

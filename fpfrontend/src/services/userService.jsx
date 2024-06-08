@@ -227,10 +227,10 @@ const userService = {
       throw error;
     }
   },
-  confirmProjectAssociation: async (token) => {
+  confirmProjectAssociation: async (token, approve) => {
     try {
       const response = await fetch(
-        `${MEMBER_BASE_URL}/confirm/project?token=${token}`,
+        `${MEMBER_BASE_URL}/confirm/project?token=${token}&approve=${approve}`,
         {
           method: "PUT",
           headers: getAuthHeaders(),
