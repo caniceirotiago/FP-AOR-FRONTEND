@@ -11,8 +11,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import useLabStore from '../../stores/useLabStore';
 import { useNavigate } from 'react-router';
-
-
+import bigLogo from '../../assets/verticalLogo2.png';
 
 
 const InitialPage = () => {
@@ -55,8 +54,7 @@ const InitialPage = () => {
     <div className={styles.initialPage} >
       <div className={styles.content}>
         <div className={styles.welcomeBoard}>
-          <h1 className={styles.title}><FormattedMessage id="welcomeToCriticalLab">Welcome to Critical Lab!</FormattedMessage></h1>
-          <p className={styles.subtitle}><FormattedMessage id="exploreInnovateMoveForward">Explore. Inove. Avance.</FormattedMessage></p>
+          <img className={styles.bigLogo} src={bigLogo} alt="logo" />
           <div className={styles.buttons}>
             <Button path="/register" tradId="signUp" defaultText="Sign Up"/>
             <Button path="/homepage" tradId="enterTheApplication" defaultText="Enter The Application"/>

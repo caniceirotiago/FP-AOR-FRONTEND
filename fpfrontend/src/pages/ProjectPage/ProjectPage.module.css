@@ -1,10 +1,57 @@
 .projectPage {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
   }
+
+  .approvalDiv {
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    background-color: rgb(255, 255, 255, 0,2);
+    border: 2px solid var(--card-border);
+    border-radius: 6px;
+    padding: 0px 20px;
+    margin-bottom: 0px;
+    gap: 20px;
+  }
+  
+  .approvalText {
+    font-size: 16px;
+    color: var(--text-color4);
+
+  }
+  
+  .approvalBtn, .rejectBtn {
+    padding: 5px 8px;
+    font-size: 13px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .approvalBtn {
+    background-color: var(--positive-color);
+    color: var(--text-color2);
+  }
+  
+  .approvalBtn:hover {
+    background-color:var(--btn-background2);
+ 
+  }
+  .rejectBtn {
+    background-color: var(--negative-color);
+    color: var(--text-color2);
+  }
+  .rejectBtn:hover{
+    background-color:var(--btn-background2);
+  }
+  
+
 
 .basicInfo {
     display: flex;
@@ -20,13 +67,18 @@
     align-self: center;
     width: 10%;
 }
+.projectHeader {
+    text-align: center;
+    color: var(--text-color4);
+    padding: 40px 0px;
+}
 .firstSeccion{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    gap: 20px;
+    justify-content:space-around;
+
     width: 100%;
-    max-width: 800px;
+    max-width: 1200px;
 
 }
 .formContainer{
@@ -48,6 +100,7 @@
     align-self:center;
     gap: 20px;
     width: 100%;
+    margin-top: 40px;
 
 }
 
@@ -55,8 +108,8 @@
     display: flex;
     flex-direction: column;
     justify-self: center;
-    align-items: center; /* Alinha os itens ao centro horizontalmente */
-    text-align: center; /* Centraliza o texto dentro dos itens */
+    align-items: center; 
+    text-align: center; 
     gap: 20px;
     width: 100%;
     max-width: 800px;   

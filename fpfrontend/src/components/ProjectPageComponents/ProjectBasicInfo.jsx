@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useMemo, useRef } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+import React, { useEffect, useState } from "react";
+import { FormattedMessage } from "react-intl";
 import styles from "./ProjectBasicInfo.module.css";
 import Button from '../buttons/landingPageBtn/Button.jsx'
-import useLabStore from "../../stores/useLabStore.jsx";
-import useProjectStatesStore from "../../stores/useProjectStatesStore.jsx";
 
 const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing, updateProjectInfo, onApprove, onReject, onCancel }) => {
   const handleInputChange = (event) => {
@@ -32,56 +30,56 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
   }, [projectInfo.state]);
 
   const renderStateActions = () => {
-    console.log(projectInfo.state);
     switch (projectInfo.state) {
       case "PLANNING":
         return (
           <>
-          <Button
-            className={styles.button}
-            onClick={() => handleStateChange("READY")}
-            defaultText="Mark as Ready"
-            btnColor={"var(--btn-color2)"}
-            tradId="markAsReady"
-          />
-          <Button
-              className={styles.button}
+            <button
+              className={styles.smallButton}
+              onClick={() => handleStateChange("READY")}
+            >
+              Mark as Ready
+            </button>
+            <button
+              className={`${styles.smallButton} ${styles.cancelBtn}`}
               onClick={() => handleStateChange("CANCELLED")}
-              tradId="cancelProject"
-              defaultText="Cancel Project"
-              btnColor={"var(--btn-color2)"}
-            />
+            >
+              Cancel Project
+            </button>
           </>
         );
       case "READY":
         return (
           <>
-          <Button
-            className={styles.button}
-            onClick={() => handleStateChange("PLANNING")}
-            defaultText="Mark as PLANNING"
-            btnColor={"var(--btn-color2)"}
-            tradId="markAsPlanning"
-          />
-          <Button
-              className={styles.button}
+            <button
+              className={styles.smallButton}
+              onClick={() => handleStateChange("PLANNING")}
+            >
+              Mark as Planning
+            </button>
+            <button
+              className={`${styles.smallButton} ${styles.cancelBtn}`}
               onClick={() => handleStateChange("CANCELLED")}
-              tradId="cancelProject"
-              defaultText="Cancel Project"
-              btnColor={"var(--btn-color2)"}
-            />
+            >
+              Cancel Project
+            </button>
           </>
         );
       case "IN_PROGRESS":
         return (
           <>
-          <Button
-            className={styles.button}
-            onClick={() => handleStateChange("FINISHED")}
-            defaultText="Mark as Finished"
-            btnColor={"var(--btn-color2)"}
-            tradId={"markAsFinished"}
-          />
+            <button
+              className={styles.smallButton}
+              onClick={() => handleStateChange("FINISHED")}
+            >
+              Mark as Finished
+            </button>
+            <button
+              className={`${styles.smallButton} ${styles.cancelBtn}`}
+              onClick={() => handleStateChange("CANCELLED")}
+            >
+              Cancel Project
+            </button>
           </>
         );
       default:
@@ -95,25 +93,21 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
 
   return (
     <div className={styles.projectContainer}>
-      <section className={styles.projectHeader}>
-        <h1>{projectInfo.name}</h1>
-      </section>
+      <div className={styles.statusContainer}>
+        <label className={styles.label}>Project Status</label>
+        <div className={styles.statusDisplay}>
+          <span
+            className={styles.statusIndicator}
+            style={{ backgroundColor: getStatusColor(projectInfo.state) }}
+          ></span>
+          <span>{projectInfo.state}</span>
+          <div className={styles.stateActions}>
+            {isEditing && renderStateActions()}
+          </div>
+        </div>
+      </div>
       <div className={styles.formContainer}>
         <form className={styles.form}>
-        {isEditing && (<>
-            <div className={styles.stateActions}>
-              {renderStateActions()}
-            </div>
-          </>
-          )}
-          <label className={styles.label}>Project Status</label>
-          <input
-            className={styles.input}
-            type="text"
-            name="state"
-            value={projectInfo.state}
-            disabled
-          />
           <label className={styles.label}>Project Name</label>
           <input
             className={styles.input}
@@ -124,32 +118,21 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
             disabled={!isEditing}
           />
           <label className={styles.label}>Description</label>
-          {isEditing ? (
-            <textarea
+          <textarea
               className={styles.textarea}
               name="description"
               value={projectInfo.description}
               onChange={handleInputChange}
+              disabled={!isEditing}
             />
-          ) : (
-            <div className={styles.descriptionText}>
-              <div dangerouslySetInnerHTML={{ __html: projectInfo.description }} />
-            </div>
-          )}
-
           <label className={styles.label}>Motivation</label>
-          {isEditing ? (
-            <textarea
+          <textarea
               className={styles.textarea}
               name="motivation"
               value={projectInfo.motivation}
               onChange={handleInputChange}
+              disabled={!isEditing}
             />
-          ) : (
-            <div className={styles.motivationText}>
-              <div dangerouslySetInnerHTML={{ __html: projectInfo.motivation }} />
-            </div>
-          )}
 
           <label className={styles.label}>Laboratory</label>
           <FormattedMessage id="laboratoryPlaceholder" defaultMessage="Select your laboratory">
@@ -171,7 +154,6 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
               </select>
             )}
           </FormattedMessage>
-
           <label className={styles.label}>Conclusion Date</label>
           <input
             type="date"
@@ -181,20 +163,17 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
             onChange={handleInputChange}
             disabled={!isEditing}
           />
-
-          {isEditing && (<>
-
+          {isEditing && (
+            <div className={styles.buttonContainer}>
             <Button
               className={styles.button}
               onClick={handleUpdateProject}
-              tradId="updateProject"
-              defaultText="Update Project Basic Information"
+              tradId="saveFields"
+              defaultText="Save Fields"
               btnColor={"var(--btn-color2)"}
             />
-            
-          </>
+            </div>
           )}
-          
         </form>
       </div>
     </div>
@@ -202,3 +181,20 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
 };
 
 export default ProjectBasicInfo;
+
+const getStatusColor = (status) => {
+  switch (status) {
+    case "PLANNING":
+      return "var(--color-planning)";
+    case "READY":
+      return "var(--color-ready)";
+    case "IN_PROGRESS":
+      return "var(--color-in-progress)";
+    case "FINISHED":
+      return "var(--color-finished)";
+    case "CANCELLED":
+      return "var(--color-cancelled)";
+    default:
+      return "var(--color-default)";
+  }
+};

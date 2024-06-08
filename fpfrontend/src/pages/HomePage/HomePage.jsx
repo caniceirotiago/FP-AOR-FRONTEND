@@ -12,8 +12,10 @@ import { useNavigate } from 'react-router';
 import useProjectStatesStore from '../../stores/useProjectStatesStore.jsx';
 import { FaTable, FaTh, FaPlus, FaFilter } from 'react-icons/fa';
 import useAuthStore from '../../stores/useAuthStore.jsx';
+import useDeviceStore from '../../stores/useDeviceStore.jsx';
 
 const HomePage = () => {
+  const {  dimensions, deviceType } = useDeviceStore(); 
   const {isAuthenticated} = useAuthStore();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,7 +49,7 @@ const HomePage = () => {
   
 
   function getInitialPageSize() {
-    const width = window.innerWidth;
+    const width = dimensions.width;
     if (width < 600) {
       return 5;
     } else if (width < 1200 && width >= 600) {
@@ -59,7 +61,7 @@ const HomePage = () => {
   }
 
   const updatePageSize = () => {
-    const width = window.innerWidth;
+    const width = dimensions.width;
     let newPageSize;
 
     if (width < 600) {
@@ -69,15 +71,11 @@ const HomePage = () => {
     } else if (width >= 1200) {
       newPageSize = 15;
     }
-
     setPageSize(newPageSize);
   };
 
   const handleResize = () => {
-    const width = window.innerWidth;
-    console.log("Handle resize:", width, selectedView, view);
-
-    if (width < 768) {
+    if (deviceType === "mobile") {
       if (view !== 'cards') {
         setView('cards');
       }
@@ -170,7 +168,6 @@ const HomePage = () => {
     setFiltersVisible(!filtersVisible);
   };
 
-  const isMobile = window.innerWidth < 768;
 
   return (
     <div className={styles.homePage}>
@@ -182,7 +179,7 @@ const HomePage = () => {
               <FaPlus className={styles.svgIcon} />
             </button>
           </ProtectedComponents>
-          {isAuthenticated && !isMobile && (
+          {isAuthenticated && deviceType === "desktop" && (
             <div className={styles.viewToggle}>
               <button onClick={toggleView} className={styles.iconButton} data-text={view === 'table' ? 'Cards' : 'Table'}>
                 {view === 'table' ? <FaTh className={styles.svgIcon} /> : <FaTable className={styles.svgIcon} />}
@@ -228,7 +225,7 @@ const HomePage = () => {
         )}
       </div>
       <div className={styles.projectsPanel}>
-        {view === 'table' && !isMobile ? (
+        {view === 'table' && deviceType === "desktop" ? (
           <ProjectTable
             projects={projects}
             pageCount={pageCount}

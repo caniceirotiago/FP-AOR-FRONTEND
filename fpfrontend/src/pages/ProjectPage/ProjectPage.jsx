@@ -18,6 +18,7 @@ import { set } from 'date-fns';
 
 const ProjectPage = () => {
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
+  const [projectLogs, setProjectLogs] = useState([]);  
   const [approveOrReject, setApproveOrReject] = useState("");
   const [isEditing, setIsEditing] = useState(false); 
   const { id } = useParams();
@@ -50,11 +51,22 @@ const ProjectPage = () => {
       console.error("Error fetching project data:", error.message);
     }
   }, [id]);
+  const fetchProjectLogs = useCallback(async () => {
+    try {
+      const response = await projectService.getProjectLogsByProjectId(id);
+      const logs = await response.json();
+      setProjectLogs(logs);
+    } catch (error) {
+      console.error("Error fetching project logs:", error.message);
+    }
+  }
+  , [id]);
 
   useEffect(() => {
     fetchProjectData();
     fetchLaboratories();
     fetchProjectRoles();
+    fetchProjectLogs();
     fetchProjectStates();
   }, [isApprovalModalOpen]);
           
@@ -90,7 +102,7 @@ const ProjectPage = () => {
  
 
 
-
+  console.log(projectLogs);
   const canEdit = projectInfo.members && projectInfo.members.some(user => user.userId ===  parseInt(localStorage.getItem('userId')) && user.role === 'PROJECT_MANAGER' && user.accepted);
   const isInApprovalMode = localStorage.getItem('role') === "1" && projectInfo.state === "READY";
   return (
@@ -102,10 +114,9 @@ const ProjectPage = () => {
       ) : (
         <div className={styles.projectPage}>
           <ApprovalModal isOpen={isApprovalModalOpen} onClose={() => setIsApprovalModalOpen(false)} title={approveOrReject} projectId={projectInfo.id}/>
-          <div className={styles.basicInfo}>
           <div className={styles.controlPanel}>
               <div className={styles.btns}>
-                {canEdit &&
+                {(canEdit && projectInfo.state !== "FINISHED" && projectInfo.state !== "CANCELLED") &&
                   <>{!isEditing &&  (
                     <button  onClick={handleEditModeTrue} className={`${styles.iconButton} ${styles.createButton}`} data-text="Edit">
                       <FaEdit className={styles.svgIcon} />
@@ -122,21 +133,20 @@ const ProjectPage = () => {
             <div className={styles.otherControls}>
                 {isInApprovalMode && 
                 <>
-                <button onClick={() => handleApproveProject(true)}>Approve Project</button>
-                <button onClick={() => handleApproveProject(false)}>Reject Project</button>
+                <div className={styles.approvalDiv}>
+                  <p className={styles.approvalText}>This project is waiting for approval!</p>
+                  <button className={styles.approvalBtn} onClick={() => handleApproveProject(true)}>Approve Project</button>
+                  <button className={styles.rejectBtn} onClick={() => handleApproveProject(false)}>Reject Project</button>
+                </div>
                 </>}
             </div>
+            <div className={styles.btns}></div> {/*  //This div is empty just to make a ghost effect */}
           </div>
-            {/* {canEdit &&
-            <div className={styles.btnContainer}>
-              {!isEditing && (
-                <Button className={styles.button} type="button" onClick={handleEditModeTrue} tradId="editBtnProfForm" defaultText="Edit" btnColor={"var(--btn-color2)"} />
-              )}
-              {isEditing && (
-                <Button className={styles.button} type="button" onClick={handleEditModeFalse} tradId="editBtnProfFormFalse" defaultText="Exit Edit Mode" btnColor={"var(--btn-color2)"} />
-              )}
-            </div>
-            } */}
+          <div className={styles.basicInfo}>
+
+            <section className={styles.projectHeader}>
+              <h1>{projectInfo.name}</h1>
+            </section>
             <div className={styles.firstSeccion}>
               <div className={styles.formContainer}>
                 <ProjectBasicInfo
@@ -157,6 +167,21 @@ const ProjectPage = () => {
             <div className={styles.attributesContainer}>
               <AttributeEditor title="skills" editMode={isEditing} mainEntity={"project"} creationMode={false} projectId={id} />
               <AttributeEditor title="keywords" editMode={isEditing} mainEntity={"project"} creationMode={false} projectId={id} />
+            </div>
+            <div className={styles.projectLogs}>
+              <h2>Project Logs</h2>
+              <ul>
+                {projectLogs.map((log) => (
+                  <li key={log.id}>
+
+                    <p>{log.type}</p>
+                    <p>{log.username}</p>
+                    <p>{log.creationDate}</p>
+                    <p>{log.content}</p>
+
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
