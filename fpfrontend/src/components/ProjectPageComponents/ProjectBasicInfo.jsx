@@ -14,25 +14,39 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
     }));
   };
 
-  const handleUpdateProject = () => {
-    updateProjectInfo();
-  }
+  const handleUpdateProject = async () => {
+    await updateProjectInfo();
+  };
+
+  const handleStateChange = async (newState) => {
+    setProjectInfo((prevInfo) => ({
+      ...prevInfo,
+      state: newState,
+    }));
+  };
+
+  useEffect(() => {
+    if (projectInfo.state) {
+      updateProjectInfo();
+    }
+  }, [projectInfo.state]);
 
   const renderStateActions = () => {
+    console.log(projectInfo.state);
     switch (projectInfo.state) {
       case "PLANNING":
         return (
           <>
           <Button
             className={styles.button}
-            onClick={() => setProjectInfo((prevInfo) => ({ ...prevInfo, state: "READY" }))}
+            onClick={() => handleStateChange("READY")}
             defaultText="Mark as Ready"
             btnColor={"var(--btn-color2)"}
             tradId="markAsReady"
           />
           <Button
               className={styles.button}
-              onClick={() => setProjectInfo((prevInfo) => ({ ...prevInfo, state: "CANCELLED" }))}
+              onClick={() => handleStateChange("CANCELLED")}
               tradId="cancelProject"
               defaultText="Cancel Project"
               btnColor={"var(--btn-color2)"}
@@ -44,14 +58,14 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
           <>
           <Button
             className={styles.button}
-            onClick={() => setProjectInfo((prevInfo) => ({ ...prevInfo, state: "PLANNING" }))}
+            onClick={() => handleStateChange("PLANNING")}
             defaultText="Mark as PLANNING"
             btnColor={"var(--btn-color2)"}
             tradId="markAsPlanning"
           />
           <Button
               className={styles.button}
-              onClick={() => setProjectInfo((prevInfo) => ({ ...prevInfo, state: "CANCELLED" }))}
+              onClick={() => handleStateChange("CANCELLED")}
               tradId="cancelProject"
               defaultText="Cancel Project"
               btnColor={"var(--btn-color2)"}
@@ -63,7 +77,7 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
           <>
           <Button
             className={styles.button}
-            onClick={() => setProjectInfo((prevInfo) => ({ ...prevInfo, state: "FINISHED" }))}
+            onClick={() => handleStateChange("FINISHED")}
             defaultText="Mark as Finished"
             btnColor={"var(--btn-color2)"}
             tradId={"markAsFinished"}

@@ -11,10 +11,14 @@ import useProjectRolesStore from '../../stores/useProjectRolesStore.jsx';
 import Button from '../../components/buttons/landingPageBtn/Button.jsx'
 import styles from './ProjectPage.module.css';
 import { FaEdit, FaCheck } from 'react-icons/fa';
+import ApprovalModal from '../../components/modals/ApprovalModal.jsx';
+import { set } from 'date-fns';
 
 
 
 const ProjectPage = () => {
+  const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
+  const [approveOrReject, setApproveOrReject] = useState("");
   const [isEditing, setIsEditing] = useState(false); 
   const { id } = useParams();
   const [isTheProjectNotExistant, setIsTheProjectNotExistant] = useState();
@@ -52,7 +56,7 @@ const ProjectPage = () => {
     fetchLaboratories();
     fetchProjectRoles();
     fetchProjectStates();
-  }, []);
+  }, [isApprovalModalOpen]);
           
   const handleEditModeTrue = (e) => {
     setIsEditing(true);
@@ -69,6 +73,8 @@ const ProjectPage = () => {
       laboratoryId: projectInfo.laboratory.id,
       conclusionDate: projectInfo.conclusionDate ? new Date(projectInfo.conclusionDate).toISOString() : null
   };
+  console.log(projectUpdateData + "update data");
+  console.log(projectUpdateData)
     try {
       await projectService.updateProject(projectInfo.id, projectUpdateData);
       setIsEditing(false);
@@ -76,10 +82,17 @@ const ProjectPage = () => {
       console.error("Failed to update project info:", error);
     }
   }
+  const handleApproveProject = async (wantToApprove) => {
+    setApproveOrReject(wantToApprove ? "Approve Project" : "Reject Project");
+    setIsApprovalModalOpen(true);
+    
+  }
+ 
+
+
 
   const canEdit = projectInfo.members && projectInfo.members.some(user => user.userId ===  parseInt(localStorage.getItem('userId')) && user.role === 'PROJECT_MANAGER' && user.accepted);
-  console.log(projectInfo);
-
+  const isInApprovalMode = localStorage.getItem('role') === "1" && projectInfo.state === "READY";
   return (
     <>
       {isTheProjectNotExistant ? (
@@ -88,6 +101,7 @@ const ProjectPage = () => {
         </div>
       ) : (
         <div className={styles.projectPage}>
+          <ApprovalModal isOpen={isApprovalModalOpen} onClose={() => setIsApprovalModalOpen(false)} title={approveOrReject} projectId={projectInfo.id}/>
           <div className={styles.basicInfo}>
           <div className={styles.controlPanel}>
               <div className={styles.btns}>
@@ -104,6 +118,13 @@ const ProjectPage = () => {
                   )}
                   </>
                 }
+            </div>
+            <div className={styles.otherControls}>
+                {isInApprovalMode && 
+                <>
+                <button onClick={() => handleApproveProject(true)}>Approve Project</button>
+                <button onClick={() => handleApproveProject(false)}>Reject Project</button>
+                </>}
             </div>
           </div>
             {/* {canEdit &&

@@ -182,6 +182,26 @@ const projectService = {
       throw error;
     }
   },
+  approveOrRejectProject: async (projectId, comment, confirm) => {
+    const body = {
+      projectId,
+      comment,
+      confirm,
+    };
+    try {
+      const response = await fetch(`${API_BASE_URL}/approve`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(body),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error approving or rejecting project:", error.message);
+      throw error;
+    }
+  }
   
 };
 

@@ -217,7 +217,6 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     try {
       const response = await projectService.askToJoinProject(projectId);
       if (response.status === 204) {
-        console.log("Asked to join project");
         setAttributes([...attributes, {user:{id: localStorage.getItem("userId"), username: localStorage.getItem("username"), photo: localStorage.getItem("photo"), role: "NORMAL_USER", accepted: false} }]);
       } else {
         throw new Error("Failed to ask to join project");

@@ -1,25 +1,36 @@
 import React, { useState } from 'react';
-import Modal from 'react-modal';
 import Button from '../buttons/landingPageBtn/Button.jsx';
 import styles from './ApprovalModal.module.css';
+import projectService from '../../services/projectService.jsx';
 
-const ApprovalModal = ({ isOpen, onRequestClose, onSubmit, title, message }) => {
+const ApprovalModal = ({ isOpen, onClose, title, projectId }) => {
   const [justification, setJustification] = useState('');
 
-  const handleSubmit = () => {
-    onSubmit(justification);
-    onRequestClose();
+
+  const onRequestClose = () => {
+    setJustification('');
+    onClose();
+  }
+  const handleSubmit = async () => {
+    try {
+        let isToApprove = title === "Approve Project";
+      await projectService.approveOrRejectProject(projectId, justification, isToApprove);
+      console.log("Project approved or rejected successfully");
+      onClose();
+    } catch (error) {
+      console.error("Failed to approve or reject project:", error);
+    }
   }
 
+  if(!isOpen) return null;
+
   return (
-    <Modal
+    <div
       isOpen={isOpen}
-      onRequestClose={onRequestClose}
       className={styles.modal}
       overlayClassName={styles.overlay}
     >
       <h2>{title}</h2>
-      <p>{message}</p>
       <textarea
         className={styles.textarea}
         value={justification}
@@ -30,7 +41,7 @@ const ApprovalModal = ({ isOpen, onRequestClose, onSubmit, title, message }) => 
         <Button  tradId="submit" className={styles.button} onClick={handleSubmit} defaultText="Submit" btnColor={"var(--btn-color2)"} />
         <Button tradId="cancel" className={styles.button} onClick={onRequestClose} defaultText="Cancel" btnColor={"var(--btn-color2)"} />
       </div>
-    </Modal>
+    </div>
   );
 };
 
