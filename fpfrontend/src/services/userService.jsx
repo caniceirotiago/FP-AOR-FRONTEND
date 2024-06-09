@@ -228,15 +228,23 @@ const userService = {
     }
   },
   confirmProjectAssociation: async (token, approve, approver) => {
+    alert("token: " + token);
+    alert("approve: " + approve);
+    alert("approver: " + approver);
     try {
-      const response = await fetch(
-        `${MEMBER_BASE_URL}/confirm/project?token=${token}&approve=${approve}&approver=${approver}`,
-        {
-          method: "PUT",
-          headers: getAuthHeaders(),
-          credentials: "include",
-        }
-      );
+      let url;
+      if (approver) {
+        url = `${MEMBER_BASE_URL}/confirm/project?token=${token}&approve=${approve}&approver=${approver}`;
+      } else {
+        url = `${MEMBER_BASE_URL}/accept/project?token=${token}&approve=${approve}`;
+      }
+      alert(url);
+
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
       checkStatus(response);
       return response;
     } catch (error) {
