@@ -14,7 +14,7 @@ const LogsList = ({ logs }) => {
                  <div className={styles.existingAttributes}>
                     <div className={styles.userAttributeContainer}>
                         <ul className={styles.attributeList}>
-                            {logs.map((log, index) => (
+                            {logs.slice().reverse().map((log, index) => (
                                 <div className={styles.logElement} key={index}>
                                     <div>{log.username}</div>
                                     <div>{formatDate(log.creationDate)}</div>
