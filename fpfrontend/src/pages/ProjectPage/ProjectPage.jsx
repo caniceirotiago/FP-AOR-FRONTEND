@@ -169,7 +169,7 @@ const ProjectPage = () => {
               <AttributeEditor title="skills" editMode={isEditing} mainEntity={"project"} creationMode={false} projectId={id} />
               <AttributeEditor title="keywords" editMode={isEditing} mainEntity={"project"} creationMode={false} projectId={id} />
             </div>
-            <div className={styles.projectLogs}>
+            <div className={styles.attributesContainer}>
                   <LogsList logs={projectLogs} />
             </div>
           </div>
