@@ -1,0 +1,15 @@
+.container {
+    width: 100%;
+    align-self: center;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .innerContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  .attribute{
+    border-bottom: solid 1px #ddd;
+  }

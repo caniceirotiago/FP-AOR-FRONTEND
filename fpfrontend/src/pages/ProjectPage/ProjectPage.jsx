@@ -13,6 +13,7 @@ import styles from './ProjectPage.module.css';
 import { FaEdit, FaCheck } from 'react-icons/fa';
 import ApprovalModal from '../../components/modals/ApprovalModal.jsx';
 import { set } from 'date-fns';
+import LogsList from '../../components/ProjectPageComponents/LogsList/LogsList.jsx';
 
 
 
@@ -169,19 +170,7 @@ const ProjectPage = () => {
               <AttributeEditor title="keywords" editMode={isEditing} mainEntity={"project"} creationMode={false} projectId={id} />
             </div>
             <div className={styles.projectLogs}>
-              <h2>Project Logs</h2>
-              <ul>
-                {projectLogs.map((log) => (
-                  <li key={log.id}>
-
-                    <p>{log.type}</p>
-                    <p>{log.username}</p>
-                    <p>{log.creationDate}</p>
-                    <p>{log.content}</p>
-
-                  </li>
-                ))}
-              </ul>
+                  <LogsList logs={projectLogs} />
             </div>
           </div>
         </div>
