@@ -291,8 +291,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
             <ul className={styles.attributeList}>
               {attributes.map((attribute) => (
                 <li className={styles.attribute} key={attribute.id}>
-                  <ListItem removeItem={removeItem} title={title} attribute={attribute} creationMode={creationMode} handleChangeUserProjectRole={handleChangeUserProjectRole} editMode={editMode} createdBy={createdBy}/>
-                 
+                  <ListItem removeItem={removeItem} title={title} attribute={attribute} creationMode={creationMode} handleChangeUserProjectRole={handleChangeUserProjectRole} editMode={editMode} createdBy={createdBy}/>                
                 </li>
               ))}
             </ul>
