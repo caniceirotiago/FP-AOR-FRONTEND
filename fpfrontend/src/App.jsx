@@ -63,6 +63,7 @@ function App() {
               <Route path="/" element={<LandingPageLayout><InitialPage /></LandingPageLayout>} />
               <Route path="/register" element={<AuthLayout><RegisterPage /></AuthLayout>} />
               <Route path="/confirm" element={<AuthLayout><EmailConfirmationPage /></AuthLayout>} />
+              <Route path="/accept-project" element={<AuthLayout><ProjectConfirmationPage /></AuthLayout>} />
               <Route path="/confirm/project" element={<AuthLayout><ProjectConfirmationPage /></AuthLayout>} />
               <Route path='/request/newemail' element={<AuthLayout><ResendEmailPage/></AuthLayout>}/>
               <Route path='/forgot-password' element={<AuthLayout><ForgotPasswordPage/></AuthLayout>}/>
