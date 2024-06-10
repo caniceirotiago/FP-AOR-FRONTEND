@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./InventoryPage.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
-import styles from "./InventoryPage.module.css";
-import AssetTable from "../../components/InventoryComponents/AssetTable/AssetTable.jsx";
+import AssetTable from "../../components/InventoryComponents/AssetsTable/AssetTable.jsx";
 import CreateAssetModal from "../../components/InventoryComponents/AssetsModal/CreateAssetModal.jsx";
 import assetService from "../../services/assetService";
 import { FaTable, FaTh, FaPlus, FaFilter } from "react-icons/fa";

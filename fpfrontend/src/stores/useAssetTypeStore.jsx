@@ -10,9 +10,9 @@ const useAssetTypeStore = create((set) => ({
     try {
       const response = await assetService.fetchAllTypes();
       const data = await response.json();
-      set({ states: data, loading: false });
+      set({ types: data, loading: false });
     } catch (error) {
-      set({ error: 'Error fetching states', loading: false });
+      set({ error: 'Error fetching types', loading: false });
     }
   },
 }));

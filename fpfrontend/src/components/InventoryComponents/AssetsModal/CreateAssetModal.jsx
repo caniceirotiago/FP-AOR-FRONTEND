@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import assetService from '../../../services/assetService';
 import styles from './CreateAssetModal.module.css';
-import useLabStore from '../../stores/useLabStore.jsx';
 import { FormattedMessage } from 'react-intl';
-import AttributeEditor from '../reactSelect/AttributeEditor.jsx';
-import { format } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
-import projectService from '../../services/projectService.jsx';
-import useDialogModalStore from '../../stores/useDialogModalStore.jsx';
+import useDialogModalStore from '../../../stores/useDialogModalStore.jsx';
 
 const CreateAssetModal = ({ isOpen, onClose }) => {
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
   const [assetData, setAssetData] = useState({
     name: '',
     type: '',

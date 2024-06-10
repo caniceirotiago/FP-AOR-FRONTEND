@@ -18,8 +18,8 @@ const checkStatus = (response) => {
 
 const assetService = {
 
-  /*
-  createProject: async (projectData) => {
+  
+  createAsset: async (projectData) => {
     try {
       const response = await fetch(`${API_BASE_URL}/create`, {
         method: "POST",
@@ -34,7 +34,6 @@ const assetService = {
       throw error;
     }
   },
-  */
 
   getAllAssets: async () => {
     try {
