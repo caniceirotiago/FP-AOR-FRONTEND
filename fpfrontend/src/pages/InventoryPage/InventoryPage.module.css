@@ -1,14 +1,140 @@
-.InventoryPage {
+
+.inventoryPage {
   height: 100%;
   width: 100%;
-  background-size: cover;
-  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+.controlPanel {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content:space-between;
+  align-items: center;
+}
+
+.btns {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 300px;
+  padding-top: 10px;
+}
+
+.iconButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--btn-background2);
+  border: none;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+  cursor: pointer;
+  transition: width 0.3s, border-radius 0.3s, background-color 0.3s;
+  overflow: hidden;
+  position: relative;
 }
 
+.iconButton:hover {
+  width: 80px;
+  border-radius: 50px;
+  background-color: var(--btn-background1);
+}
+
+.iconButton .svgIcon {
+  width: 20px;
+  transition: width 0.3s, transform 0.3s;
+  fill: white;
+}
+
+.iconButton:hover .svgIcon {
+  width: 30px;
+  transform: translateY(+400%);
+}
+
+.iconButton::after {
+  content: attr(data-text);
+  color: white;
+  font-size: 16px;
+  position: absolute;
+  bottom: +90px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease, bottom 0.3s ease;
+}
+
+.iconButton:hover::after {
+  bottom: 15px;
+  opacity: 1;
+}
+.filters {
+  justify-self: right;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+  padding-top: 7px;
+}
+
+.filters select, .filters input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.filters select:focus, .filters input:focus {
+  border-color: var(--btn-background1);
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.viewToggle {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 0px 0px;
+  width: 100%;
+  padding-bottom: 30px;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  border: none;
+  background-color: var(--btn-background1);
+  color: var(--btn-color1);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: var(--btn-background2);
+}
 
 @media (max-width: 768px) {
-
+  .filters {
+    flex-direction: column;
+    align-items: center;
+  }
 }
