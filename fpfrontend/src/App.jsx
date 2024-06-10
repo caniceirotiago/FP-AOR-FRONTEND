@@ -42,7 +42,7 @@ function App() {
     };
 
     window.addEventListener('resize', handleResize);
-    handleResize(); // Call handleResize initially to set dimensions on mount
+    handleResize(); 
 
     return () => window.removeEventListener('resize', handleResize);
   }, [setDimensions, setDeviceType]);

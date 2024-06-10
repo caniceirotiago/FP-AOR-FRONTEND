@@ -228,9 +228,6 @@ const userService = {
     }
   },
   confirmProjectAssociation: async (token, approve, approver) => {
-    alert("token: " + token);
-    alert("approve: " + approve);
-    alert("approver: " + approver);
     try {
       let url;
       if (approver) {

@@ -76,6 +76,15 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
                 setIsDialogOpen(false);
             });
         }
+        else {
+            const data = await response.json();
+     
+            setDialogMessage(data.errorMessage);
+            setAlertType(true);
+            setIsDialogOpen(true);
+            setOnConfirm(() => {
+            });
+        }
     };
 
     if (!isOpen) return null;
