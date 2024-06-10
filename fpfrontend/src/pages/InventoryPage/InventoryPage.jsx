@@ -97,7 +97,7 @@ const InventoryPage = () => {
 
   useEffect(() => {
     const fetchAssets = async () => {
-      const response = await assetService.getAssets({ page: pageNumber, filters });
+      const response = await assetService.getAllAssets({ page: pageNumber, filters });
       if (response.ok) {
         const data = await response.json();
         setAssets(data.assets);

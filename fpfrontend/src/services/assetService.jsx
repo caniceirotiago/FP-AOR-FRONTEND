@@ -19,12 +19,12 @@ const checkStatus = (response) => {
 const assetService = {
 
   
-  createAsset: async (projectData) => {
+  createAsset: async (assetData) => {
     try {
       const response = await fetch(`${API_BASE_URL}/create`, {
         method: "POST",
         headers: getAuthHeaders(),
-        body: JSON.stringify(projectData),
+        body: JSON.stringify(assetData),
         credentials: "include",
       });
       checkStatus(response);
