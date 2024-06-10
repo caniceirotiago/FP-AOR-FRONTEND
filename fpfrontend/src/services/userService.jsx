@@ -196,7 +196,7 @@ const userService = {
   addUserToProject: async (projectId, username) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/add/${username}/${projectId}`,
+        `${MEMBER_BASE_URL}/add/${username}/${projectId}`,
         {
           method: "POST",
           headers: getAuthHeaders(),
@@ -213,7 +213,7 @@ const userService = {
   removeUserFromProject: async (projectId, username) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/remove/${username}/${projectId}`,
+        `${MEMBER_BASE_URL}/remove/${username}/${projectId}`,
         {
           method: "PUT",
           headers: getAuthHeaders(),
