@@ -33,6 +33,7 @@
   overflow: hidden;
   position: relative;
 }
+
 .timelineDate:after {
   content: "";
   position: absolute;
@@ -55,6 +56,7 @@
   align-items: center;
   margin: 2px 0;
   transition: all 0.05s ease;
+  z-index: 2;
 }
 
 .taskHandleStart,
@@ -96,12 +98,20 @@
 .taskCircleEnd {
   width: 10px;
   height: 10px;
-  background-color: darkblue;
+  background-color: transparent;
   border-radius: 50%;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
+  z-index: 2;
+}
+
+.taskBar:hover .taskCircleStart,
+.taskBar:hover .taskCircleEnd,
+.taskCircleEnd:hover,
+.taskCircleStart:hover {
+  background-color: blue;
 }
 
 .taskCircleStart {
@@ -110,4 +120,42 @@
 
 .taskCircleEnd {
   right: -15px; /* Ajuste a posição conforme necessário */
+}
+
+.temporaryDependencyLine {
+  position: absolute;
+  background-color: transparent;
+  border-top: 1px dashed darkblue;
+  transform-origin: top left;
+  z-index: 1;
+}
+
+.dependenciesContainer {
+  position: relative;
+  z-index: 1;
+}
+
+.fixedDependencyLine {
+  pointer-events: none;
+}
+
+.fixedLine {
+  pointer-events: all;
+  stroke-width: 2px; /* Ajuste para um stroke-width menor */
+  transition: stroke-width 0.3s ease, stroke 0.3s ease;
+}
+.fixedLine > * {
+  pointer-events: all;
+
+}
+
+.fixedLine:hover {
+  stroke-width: 4px;
+  stroke: blue;
+  cursor: pointer;
+}
+
+.dependencyLineWrapper {
+  position: relative;
+  z-index: 1;
 }
