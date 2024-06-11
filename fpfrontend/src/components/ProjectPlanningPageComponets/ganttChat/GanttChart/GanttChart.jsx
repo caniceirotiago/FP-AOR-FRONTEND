@@ -88,57 +88,71 @@ const GanttChart = ({ tasks, setTasks }) => {
 
   return (
     <div className={styles.mainGanttContainer}>
-    <div className={styles.ganttContainer} ref={ganttRef} onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
-      <div className={styles.timeline}>
-        {timeline.map((date, index) => (
-          <div key={index} className={styles.timelineDate}>
-            {date.toISOString().split('T')[0].slice(5)} {/* Remove o ano */}
-          </div>
-        ))}
-      </div>
-      <div className={styles.taskBars}>
-        {tasks.map((task, index) => {
-          const taskStartDate = new Date(task.start);
-          const taskEndDate = new Date(task.end);
-          const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 40px de largura
-          const taskDuration = ((taskEndDate - taskStartDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 40px de largura
-
-          return (
-            <div
-              key={task.id}
-              className={styles.taskBar}
-              style={{
-                left: `${taskStartOffset}px`,
-                width: `${taskDuration}px`,
-                top: `${index * 40}px` // Ajuste a altura da barra
-              }}
-            >
-              <div
-                className={styles.taskHandleStart}
-                draggable
-                onDragStart={(e) => handleDragStart(e, task.id, 'start')}
-                onDrag={(e) => handleDrag(e, task.id, 'start')}
-                onDragEnd={handleDrop}
-              ></div>
-              <div className={styles.taskContent}
-                draggable
-                onDragStart={(e) => handleDragStart(e, task.id, 'bar')}
-                onDrag={(e) => handleDrag(e, task.id, 'bar')}
-                onDragEnd={handleDrop}>
-                {task.name}
-              </div>
-              <div
-                className={styles.taskHandleEnd}
-                draggable
-                onDragStart={(e) => handleDragStart(e, task.id, 'end')}
-                onDrag={(e) => handleDrag(e, task.id, 'end')}
-                onDragEnd={handleDrop}
-              ></div>
+      <div className={styles.ganttContainer} ref={ganttRef} onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
+        <div className={styles.timeline}>
+          {timeline.map((date, index) => (
+            <div key={index} className={styles.timelineDate}>
+              {date.toISOString().split('T')[0].slice(5)} {/* Remove o ano */}
             </div>
-          );
-        })}
+          ))}
+        </div>
+        <div className={styles.taskBars}>
+          {tasks.map((task, index) => {
+            const taskStartDate = new Date(task.start);
+            const taskEndDate = new Date(task.end);
+            const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 40px de largura
+            const taskDuration = ((taskEndDate - taskStartDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 40px de largura
+
+            return (
+              <div
+                key={task.id}
+                className={styles.taskBar}
+                style={{
+                  left: `${taskStartOffset}px`,
+                  width: `${taskDuration}px`,
+                  top: `${index * 40}px` // Ajuste a altura da barra
+                }}
+              >
+                <div
+                  className={styles.taskHandleStart}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, task.id, 'start')}
+                  onDrag={(e) => handleDrag(e, task.id, 'start')}
+                  onDragEnd={handleDrop}
+                ></div>
+                <div className={styles.taskContent}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, task.id, 'bar')}
+                  onDrag={(e) => handleDrag(e, task.id, 'bar')}
+                  onDragEnd={handleDrop}>
+                  {task.name}
+                </div>
+                <div
+                  className={styles.taskHandleEnd}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, task.id, 'end')}
+                  onDrag={(e) => handleDrag(e, task.id, 'end')}
+                  onDragEnd={handleDrop}
+                ></div>
+                <div
+                  className={styles.taskCircleStart}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, task.id, 'start')}
+                  onDrag={(e) => handleDrag(e, task.id, 'start')}
+                  onDragEnd={handleDrop}
+                ></div>
+                <div
+                  className={styles.taskCircleEnd}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, task.id, 'end')}
+                  onDrag={(e) => handleDrag(e, task.id, 'end')}
+                  onDragEnd={handleDrop}
+                ></div>
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
     </div>
   );
 };

@@ -55,36 +55,6 @@
   align-items: center;
   margin: 2px 0;
   transition: all 0.05s ease;
-
-}
-
-
-.taskBar:hover::before,
-.taskBar:hover::after {
-  opacity: 1;
- 
-}
-
-.taskBar::before,
-.taskBar::after {
-  content: '';
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: darkblue;
-  border-radius: 50%;
-  top: 50%;
-  transform: translateY(-50%);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.taskBar::before {
-  left: -15px; /* Ajuste a posição conforme necessário */
-}
-
-.taskBar::after {
-  right: -15px; /* Ajuste a posição conforme necessário */
 }
 
 .taskHandleStart,
@@ -120,4 +90,24 @@
   border-bottom-right-radius: 5px;
   border-top-right-radius: 5px;
   overflow: hidden;
+}
+
+.taskCircleStart,
+.taskCircleEnd {
+  width: 10px;
+  height: 10px;
+  background-color: darkblue;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.taskCircleStart {
+  left: -15px; /* Ajuste a posição conforme necessário */
+}
+
+.taskCircleEnd {
+  right: -15px; /* Ajuste a posição conforme necessário */
 }
