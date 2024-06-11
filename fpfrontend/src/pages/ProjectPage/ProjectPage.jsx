@@ -8,11 +8,9 @@ import useProjectStatesStore from '../../stores/useProjectStatesStore.jsx';
 import useLabStore from '../../stores/useLabStore.jsx';
 import { useCallback } from 'react';
 import useProjectRolesStore from '../../stores/useProjectRolesStore.jsx';
-import Button from '../../components/buttons/landingPageBtn/Button.jsx'
 import styles from './ProjectPage.module.css';
 import { FaEdit, FaCheck } from 'react-icons/fa';
 import ApprovalModal from '../../components/modals/ApprovalModal.jsx';
-import { set } from 'date-fns';
 import LogsList from '../../components/ProjectPageComponents/LogsList/LogsList.jsx';
 
 

@@ -235,8 +235,6 @@ const userService = {
       } else {
         url = `${MEMBER_BASE_URL}/accept/project?token=${token}&approve=${approve}`;
       }
-      alert(url);
-
       const response = await fetch(url, {
         method: "PUT",
         headers: getAuthHeaders(),
