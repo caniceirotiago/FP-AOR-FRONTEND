@@ -2,8 +2,8 @@
   display: flex;
   height: 100%;
   width: 100%;
-
 }
+
 .ganttContainer {
   position: relative;
   flex: 1;
@@ -50,10 +50,41 @@
 .taskBar {
   position: absolute;
   height: 30px;
-  background-color: steelblue;
+  background-color: transparent;
   display: flex;
   align-items: center;
-  margin: 2px 0px 2px 0px;
+  margin: 2px 0;
+  transition: all 0.05s ease;
+
+}
+
+
+.taskBar:hover::before,
+.taskBar:hover::after {
+  opacity: 1;
+ 
+}
+
+.taskBar::before,
+.taskBar::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: darkblue;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.taskBar::before {
+  left: -15px; /* Ajuste a posição conforme necessário */
+}
+
+.taskBar::after {
+  right: -15px; /* Ajuste a posição conforme necessário */
 }
 
 .taskHandleStart,
@@ -67,17 +98,26 @@
 .taskHandleStart {
   position: absolute;
   left: 0;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  overflow: hidden;
 }
 
 .taskContent {
-  padding: 0 10px;
+  background-color: lightblue;
+  padding: 5px 10px;
   color: white;
   flex-grow: 1;
   text-align: center; /* Alinhar o texto centralizado */
   cursor: move;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 .taskHandleEnd {
   position: absolute;
   right: 0;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  overflow: hidden;
 }
