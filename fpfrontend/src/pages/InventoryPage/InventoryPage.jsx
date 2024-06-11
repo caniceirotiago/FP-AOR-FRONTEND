@@ -90,10 +90,13 @@ const InventoryPage = () => {
   }, [location.search]);
 
   useEffect(() => {
+    console.log("before useEffect assets", assets);
     fetchAssets();
+    console.log("after useEffect assets", assets);
   }, [isModalOpen, pageNumber, filters]);
 
   useEffect(() => {
+    console.log("component mounts useEffect assets", assets);
     // Update the assetData whenever the asset prop changes and it is not undefined
     if (!assets) {
       fetchAssets();
@@ -133,6 +136,7 @@ const InventoryPage = () => {
   };
 
   console.log("InventoryPage assets:", assets);
+  console.log("InventoryPage assets (before render):", assets);
   return (
     <div className={styles.inventoryPage}>
       <div className={styles.controlPanel}>
@@ -157,7 +161,7 @@ const InventoryPage = () => {
           <div className={styles.filters}>
             <select value={filterType} onChange={handleFilterTypeChange}>
               <option value="name">Name</option>
-              {/* Add other filter options here */}
+              <option value="type">Type</option>
             </select>
             {/* Add filter inputs here */}
           </div>

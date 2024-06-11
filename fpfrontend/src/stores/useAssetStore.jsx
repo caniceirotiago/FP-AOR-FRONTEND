@@ -7,11 +7,14 @@ const useAssetStore = create((set) => ({
   error: null,
   fetchAssets: async () => {
     set({ loading: true, error: null });
+    console.log("Fetching assets...");
     try {
       const response = await assetService.getAllAssets();
       const data = await response.json();
+      console.log("Assets fetched:", data);
       set({ assets: data, loading: false });
     } catch (error) {
+      console.error("Error fetching assets:", error);
       set({ error: 'Error fetching assets', loading: false });
     }
   },
