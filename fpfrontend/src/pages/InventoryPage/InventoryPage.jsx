@@ -20,21 +20,13 @@ const InventoryPage = () => {
   const [filtersVisible, setFiltersVisible] = useState(false);
   const [filters, setFilters] = useState({
     name: "",
-    state: "",
-    projectKeywords: "",
-    projectSkills: "",
-    sortBy: "",
-    laboratory: "",
+    type: "",
   });
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const defaultFilters = {
     name: "",
-    state: "",
-    projectKeywords: "",
-    projectSkills: "",
-    sortBy: "",
-    laboratory: "",
+    type: "",
   };
   const [filterType, setFilterType] = useState("name");
   const { types, fetchAssetTypes } = useAssetTypeStore();
@@ -95,18 +87,19 @@ const InventoryPage = () => {
     fetchAssetTypes();
   }, [location.search]);
 
+  const fetchAssets = async () => {
+    const response = await assetService.getAllAssets();
+    if (response.ok) {
+      const data = await response.json();
+      setAssets(data);
+    } else {
+      console.error("Error fetching assets:", response.status);
+    }
+  };
+
   useEffect(() => {
-    const fetchAssets = async () => {
-      const response = await assetService.getAllAssets();
-      if (response.ok) {
-        const data = await response.json();
-        setAssets(data);
-      } else {
-        console.error("Error fetching assets:", response.status);
-      }
-    };
     fetchAssets();
-  }, [pageNumber, filters]);
+  }, [isModalOpen, pageNumber, filters]);
 
   const handleFilterChange = (e) => {
     setFilters({
@@ -144,10 +137,7 @@ const InventoryPage = () => {
     <div className={styles.inventoryPage}>
       <div className={styles.controlPanel}>
         <div className={styles.btns}>
-          <CreateAssetModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-          />
+          <CreateAssetModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
           <button
             onClick={handleClick}
             className={`${styles.iconButton} ${styles.createButton}`}
@@ -173,10 +163,13 @@ const InventoryPage = () => {
           </div>
         )}
       </div>
-      <AssetTable assets={assets} pageCount={pageCount} setPageNumber={setPageNumber} />
+      <AssetTable
+        assets={assets}
+        pageCount={pageCount}
+        setPageNumber={setPageNumber}
+      />
     </div>
   );
 };
 
 export default InventoryPage;
-
