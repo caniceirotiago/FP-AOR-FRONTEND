@@ -99,12 +99,7 @@ const InventoryPage = () => {
 
   useEffect(() => {
     fetchAssets();
-  }, [pageNumber, filters]);
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    fetchAssets();
-  };
+  }, [isModalOpen, pageNumber, filters]);
 
   const handleFilterChange = (e) => {
     setFilters({
@@ -142,7 +137,7 @@ const InventoryPage = () => {
     <div className={styles.inventoryPage}>
       <div className={styles.controlPanel}>
         <div className={styles.btns}>
-          <CreateAssetModal isOpen={isModalOpen} onClose={handleModalClose} />
+          <CreateAssetModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
           <button
             onClick={handleClick}
             className={`${styles.iconButton} ${styles.createButton}`}

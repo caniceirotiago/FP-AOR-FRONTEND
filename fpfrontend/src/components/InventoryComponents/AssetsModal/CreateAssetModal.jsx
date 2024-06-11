@@ -60,6 +60,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
         setIsDialogOpen(true);
         setOnConfirm(() => {
           onClose();
+          setIsDialogOpen(false);
         });
         setAssetData({
           name: "",
@@ -73,6 +74,12 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
         });
       } else {
         console.error("Error creating asset:", response.statusText);
+        const data = await response.json();
+        setDialogMessage(data.errorMessage);
+        setAlertType(true);
+        setIsDialogOpen(true);
+        setOnConfirm(() => {
+        });
       }
     } catch (error) {
       console.error("Error creating asset:", error);
