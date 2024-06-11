@@ -1,14 +1,24 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTable, usePagination } from 'react-table';
 import styles from './AssetTable.module.css'; 
-import { useNavigate } from 'react-router';
 import { FaEye, FaEdit } from 'react-icons/fa';
+import EditAssetModal from '../AssetsModal/EditAssetModal.jsx';
 
 function AssetTable({ assets, pageCount, setPageNumber }) {
-    const navigate = useNavigate();
+    const [selectedAsset, setSelectedAsset] = useState(null); // Track selected asset for editing
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-    const handleClickToOpenAssetPage = (assetId) => () => {
-        navigate(`/assetpage/${assetId}`);
+    const handleViewAsset = (assetId) => () => {
+        const selected = assets.find(asset => asset.id === assetId);
+        setSelectedAsset(selected);
+        setIsEditModalOpen(true);
+        //setViewOnlyMode;
+    }
+
+    const handleEditAsset = (assetId) => {
+        const selected = assets.find(asset => asset.id === assetId);
+        setSelectedAsset(selected);
+        setIsEditModalOpen(true);
     }
 
     const data = useMemo(() => assets, [assets]);
@@ -53,10 +63,10 @@ function AssetTable({ assets, pageCount, setPageNumber }) {
                 accessor: 'id',
                 Cell: ({ value }) => (
                     <div className={styles.actions}>
-                        <button onClick={handleClickToOpenAssetPage(value)} className={styles.actionButton}>
+                        <button onClick={handleViewAsset(value)} className={styles.actionButton}>
                             <FaEye /> View
                         </button>
-                        <button onClick={() => console.log(value)} className={styles.actionButton}>
+                        <button onClick={() => handleEditAsset(value)} className={styles.actionButton}>
                             <FaEdit /> Edit
                         </button>
                     </div>
@@ -122,9 +132,16 @@ function AssetTable({ assets, pageCount, setPageNumber }) {
                         })}
                     </tbody>
                 </table>
-            </div>
-        </div>
-    );
-}
+                </div>
+        {isEditModalOpen && selectedAsset && (
+            <EditAssetModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                asset={selectedAsset}
+            />
+        )}
+    </div>
+ );
+};
 
 export default AssetTable;

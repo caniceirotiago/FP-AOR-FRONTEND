@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import assetService from "../../../services/assetService";
-import styles from "./CreateAssetModal.module.css";
+import styles from "./EditAssetModal.module.css";
+import { FormattedMessage } from "react-intl";
 import "react-datepicker/dist/react-datepicker.css";
 import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
-import useAssetTypeStore from "../../../stores/useAssetTypeStore.jsx";
-import { FormattedMessage } from "react-intl";
 
-const CreateAssetModal = ({ isOpen, onClose }) => {
+const EditAssetModal = ({ isOpen, onClose }) => {
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
     useDialogModalStore();
   const [assetData, setAssetData] = useState({
@@ -20,11 +19,27 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
     observations: "",
   });
 
-  const { types, fetchAssetTypes } = useAssetTypeStore();
+  const [types, setTypes] = useState([]);
 
   useEffect(() => {
-    fetchAssetTypes();
-  }, [fetchAssetTypes]);
+    const fetchTypes = async () => {
+      try {
+        const response = await assetService.fetchAllTypes();
+        if (response.ok) {
+          const data = await response.json();
+          setTypes(data);
+        } else {
+          console.error("Error fetching asset types:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching asset types:", error.message);
+      }
+    };
+
+    if (isOpen) {
+      fetchTypes();
+    }
+  }, [isOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,7 +78,8 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
         setDialogMessage(data.errorMessage);
         setAlertType(true);
         setIsDialogOpen(true);
-        setOnConfirm(() => {});
+        setOnConfirm(() => {
+        });
       }
     } catch (error) {
       console.error("Error creating asset:", error);
@@ -165,4 +181,4 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default CreateAssetModal;
+export default EditAssetModal;
