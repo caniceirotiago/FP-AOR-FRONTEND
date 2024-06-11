@@ -9,6 +9,7 @@ function AssetTable({ assets, pageCount, setPageNumber }) {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const handleViewAsset = (assetId) => () => {
+        console.log('You clicked on view button');
         const selected = assets.find(asset => asset.id === assetId);
         setSelectedAsset(selected);
         setIsEditModalOpen(true);
@@ -16,12 +17,15 @@ function AssetTable({ assets, pageCount, setPageNumber }) {
     }
 
     const handleEditAsset = (assetId) => {
+        console.log('You clicked on Edit button');
+        console.log('Edit asset:', assetId);
         const selected = assets.find(asset => asset.id === assetId);
         setSelectedAsset(selected);
         setIsEditModalOpen(true);
     }
 
     const data = useMemo(() => assets, [assets]);
+
 
     const columns = useMemo(
         () => [
@@ -43,7 +47,7 @@ function AssetTable({ assets, pageCount, setPageNumber }) {
             },
             {
                 Header: 'Stock Quantity',
-                accessor: 'stockQuantity',
+                accessor: 'quantity',
             },
             {
                 Header: 'Part Number',
@@ -52,10 +56,6 @@ function AssetTable({ assets, pageCount, setPageNumber }) {
             {
                 Header: 'Manufacturer',
                 accessor: 'manufacturer',
-            },
-            {
-                Header: 'Project ID',
-                accessor: 'projectId',
             },
             {
                 Header: 'Actions',
@@ -97,6 +97,9 @@ function AssetTable({ assets, pageCount, setPageNumber }) {
     useEffect(() => {
         setPageNumber(pageIndex + 1); 
     }, [pageIndex, setPageNumber]);
+
+
+    console.log(assets);
 
     return (
         <div className={styles.tableContainer}>

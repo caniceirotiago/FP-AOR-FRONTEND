@@ -76,7 +76,8 @@
   margin-top: 20px;
 }
 
-@media (max-width: 1250px) {
+
+/*@media (max-width: 1250px) {
   .header:nth-child(5), .cell:nth-child(5) {
     display: none;
   }
@@ -98,3 +99,5 @@
     display: none;
   }
 }
+  */
+  

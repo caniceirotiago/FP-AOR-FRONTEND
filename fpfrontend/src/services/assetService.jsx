@@ -18,15 +18,6 @@ const checkStatus = (response) => {
 
 const assetService = {
   createAsset: async (assetData) => {
-    console.log("assetData", assetData);
-    console.log(assetData.name);
-    console.log(assetData.type);
-    console.log(assetData.description);
-    console.log(assetData.stockQuantity);
-    console.log(assetData.partNumber);
-    console.log(assetData.manufacturer);
-    console.log(assetData.manufacturerPhone);
-    console.log(assetData.observations);
     try {
       const response = await fetch(`${API_BASE_URL}/create`, {
         method: "POST",
@@ -56,7 +47,37 @@ const assetService = {
     }
   },
 
-  /*
+  fetchAllTypes: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/enum/types`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      return response;
+    } catch (error) {
+      console.error("Error fetching asset types states:", error.message);
+      throw error;
+    }
+  },
+  
+  updateAsset: async (assetData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${projectId}`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(assetData),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error updating project:", error.message);
+      throw error;
+    }
+  },
+
+   /*
   getFilteredProjects: async (page, pageSize, filters = {}) => {
     const filterParams = new URLSearchParams();
 
@@ -99,39 +120,6 @@ const assetService = {
   },
   */
 
-  fetchAllTypes: async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/enum/types`, {
-        method: "GET",
-        headers: getAuthHeaders(),
-        credentials: "include",
-      });
-      return response;
-    } catch (error) {
-      console.error("Error fetching asset types states:", error.message);
-      throw error;
-    }
-  },
-
-  /*
-  updateProject: async (projectId, projectData) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/${projectId}`, {
-        method: "PUT",
-        headers: getAuthHeaders(),
-        body: JSON.stringify(projectData),
-        credentials: "include",
-      });
-      checkStatus(response);
-      return response;
-    } catch (error) {
-      console.error("Error updating project:", error.message);
-      throw error;
-    }
-  },
-
-  */
-
   /*
   getTasksByProjectId: async (projectId) => {
     try {
@@ -148,6 +136,7 @@ const assetService = {
     }
   },
 */
+
 };
 
 export default assetService;

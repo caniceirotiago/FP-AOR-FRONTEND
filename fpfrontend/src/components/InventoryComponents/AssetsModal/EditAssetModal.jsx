@@ -4,89 +4,55 @@ import styles from "./EditAssetModal.module.css";
 import { FormattedMessage } from "react-intl";
 import "react-datepicker/dist/react-datepicker.css";
 import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
+import useAssetTypeStore from "../../../stores/useAssetTypeStore.jsx";
 
-const EditAssetModal = ({ isOpen, onClose }) => {
-  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
+const EditAssetModal = ({ isOpen, onClose, asset }) => {
+    const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
     useDialogModalStore();
-  const [assetData, setAssetData] = useState({
-    name: "",
-    type: "",
-    description: "",
-    stockQuantity: "",
-    partNumber: "",
-    manufacturer: "",
-    manufacturerPhone: "",
-    observations: "",
-  });
+    const [assetData, setAssetData] = useState(asset);
 
-  const [types, setTypes] = useState([]);
+    useEffect(() => {
+        // Update the assetData whenever the asset prop changes
+        setAssetData(asset);
+    }, [asset]);
+
+  const { types, fetchAssetTypes } = useAssetTypeStore();
 
   useEffect(() => {
-    const fetchTypes = async () => {
-      try {
-        const response = await assetService.fetchAllTypes();
-        if (response.ok) {
-          const data = await response.json();
-          setTypes(data);
-        } else {
-          console.error("Error fetching asset types:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error fetching asset types:", error.message);
-      }
-    };
-
-    if (isOpen) {
-      fetchTypes();
-    }
-  }, [isOpen]);
+    fetchAssetTypes();
+  }, [fetchAssetTypes]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAssetData({
-      ...assetData,
-      [name]: value,
+        ...assetData,
+        [name]: value,
     });
-  };
+};
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await assetService.createAsset(assetData);
-      if (response.ok) {
-        // Handle success
-        setDialogMessage("Asset created successfully!");
-        setAlertType("success");
-        setIsDialogOpen(true);
-        setOnConfirm(() => {
-          onClose();
-          setIsDialogOpen(false);
-        });
-        setAssetData({
-          name: "",
-          type: "",
-          description: "",
-          stockQuantity: "",
-          partNumber: "",
-          manufacturer: "",
-          manufacturerPhone: "",
-          observations: "",
-        });
-      } else {
-        console.error("Error creating asset:", response.statusText);
-        const data = await response.json();
-        setDialogMessage(data.errorMessage);
-        setAlertType(true);
-        setIsDialogOpen(true);
-        setOnConfirm(() => {
-        });
-      }
+        const response = await assetService.updateAsset(assetData);
+        if (response.ok) {
+            setDialogMessage("Asset updated successfully!");
+            setAlertType("success");
+            setIsDialogOpen(true);
+            onClose();
+        } else {
+            console.error("Error updating asset:", response.statusText);
+            const data = await response.json();
+            setDialogMessage(data.errorMessage);
+            setAlertType(true);
+            setIsDialogOpen(true);
+            setOnConfirm(() => {});
+        }
     } catch (error) {
-      console.error("Error creating asset:", error);
+        console.error("Error updating asset:", error);
     }
-  };
+};
 
-  if (!isOpen) return null;
+if (!isOpen) return null;
 
   return (
     <div className={styles.modal}>
@@ -133,7 +99,7 @@ const EditAssetModal = ({ isOpen, onClose }) => {
               className={styles.input}
               type="number"
               name="stockQuantity"
-              value={assetData.stockQuantity}
+              value={assetData.quantity}
               onChange={handleChange}
               required
             />
@@ -172,7 +138,7 @@ const EditAssetModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
             />
             <button type="submit" className={styles.button}>
-              Submit
+              Save
             </button>
           </form>
         </div>
