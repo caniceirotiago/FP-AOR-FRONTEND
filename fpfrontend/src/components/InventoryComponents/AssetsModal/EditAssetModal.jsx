@@ -12,9 +12,12 @@ const EditAssetModal = ({ isOpen, onClose, asset }) => {
     const [assetData, setAssetData] = useState(asset);
 
     useEffect(() => {
-        // Update the assetData whenever the asset prop changes
-        setAssetData(asset);
-    }, [asset]);
+      // Update the assetData whenever the asset prop changes and it is not undefined
+      if (asset) {
+          setAssetData(asset);
+      }
+  }, [asset]);
+  
 
   const { types, fetchAssetTypes } = useAssetTypeStore();
 
@@ -31,31 +34,34 @@ const EditAssetModal = ({ isOpen, onClose, asset }) => {
 };
 
 const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      console.log("Asset data:", assetData);
-      console.log("Asset Id:", assetData.id);
-// Remove the id field from assetData
-const { id, ...updateData } = updateData;
-console.log("Update data:", updateData);
+  e.preventDefault();
+  try {
+    console.log("Asset data:", asset);
+    console.log("Asset Id:", asset.id);
+    // Remove the id field from assetData
+    const { id, ...updateData } = assetData;
+    console.log("Update data:", updateData);
 
-        const response = await assetService.updateAsset(asset.id, updateData);
-        if (response.ok) {
-            setDialogMessage("Asset updated successfully!");
-            setAlertType("success");
-            setIsDialogOpen(true);
-            onClose();
-        } else {
-            console.error("Error updating asset:", response.statusText);
-            const data = await response.json();
-            setDialogMessage(data.errorMessage);
-            setAlertType(true);
-            setIsDialogOpen(true);
-            setOnConfirm(() => {});
-        }
-    } catch (error) {
-        console.error("Error updating asset:", error);
+    const response = await assetService.updateAsset(asset.id, updateData);
+    if (response.ok) {
+      setDialogMessage("Asset updated successfully!");
+      setAlertType("success");
+      setIsDialogOpen(true);
+      setOnConfirm(() => {
+        onClose();
+        setIsDialogOpen(false);
+      });
+    } else {
+      console.error("Error updating asset:", response.statusText);
+      const data = await response.json();
+      setDialogMessage(data.errorMessage);
+      setAlertType(true);
+      setIsDialogOpen(true);
+      setOnConfirm(() => {});
     }
+  } catch (error) {
+    console.error("Error updating asset:", error);
+  }
 };
 
 if (!isOpen) return null;

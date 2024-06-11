@@ -16,7 +16,7 @@ const InventoryPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [assets, fetchAssets] = useAssetStore();
+  const { assets, fetchAssets } = useAssetStore();
   const { types, fetchAssetTypes } = useAssetTypeStore();
   const [pageSize, setPageSize] = useState(getInitialPageSize());
   const [filtersVisible, setFiltersVisible] = useState(false);
@@ -92,6 +92,13 @@ const InventoryPage = () => {
   useEffect(() => {
     fetchAssets();
   }, [isModalOpen, pageNumber, filters]);
+
+  useEffect(() => {
+    // Update the assetData whenever the asset prop changes and it is not undefined
+    if (!assets) {
+      fetchAssets();
+    }
+}, []);
 
   const handleFilterChange = (e) => {
     setFilters({

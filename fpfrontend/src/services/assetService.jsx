@@ -80,66 +80,6 @@ const assetService = {
     }
   },
 
-   /*
-  getFilteredProjects: async (page, pageSize, filters = {}) => {
-    const filterParams = new URLSearchParams();
-
-    Object.keys(filters).forEach(key => {
-      if (filters[key]) {
-        filterParams.append(key, filters[key]);
-      }
-    });
-    filterParams.append('page', page);
-  filterParams.append('pageSize', pageSize);
-    try {
-      const response = await fetch(`${API_BASE_URL}/all/filter?${filterParams}`,
-        {
-          method: "GET",
-          headers: getAuthHeaders(),
-        }
-      );
-      return response;
-    } catch (error) {
-      console.error("Error fetching projects:", error.message);
-      throw error;
-    }
-  },
-  */
-
-  /*
-  getProjectById: async (projectId) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/info/${projectId}`, {
-        method: "GET",
-        headers: getAuthHeaders(),
-        credentials: "include",
-      });
-      checkStatus(response);
-      return response;
-    } catch (error) {
-      console.error("Error fetching project data:", error.message);
-      throw error;
-    }
-  },
-  */
-
-  /*
-  getTasksByProjectId: async (projectId) => {
-    try {
-      const response = await fetch(`http://localhost:8080/FPBackend/rest/tasks/project/${projectId}`, {
-        method: "GET",
-        headers: getAuthHeaders(),
-        credentials: "include",
-      });
-      checkStatus(response);
-      return response;
-    } catch (error) {
-      console.error("Error updating project:", error.message);
-      throw error;
-    }
-  },
-*/
-
 };
 
 export default assetService;
