@@ -50,46 +50,40 @@ const GanttChart = ({ tasks, setTasks }) => {
     const roundedDayOffset = Math.round(dayOffset);
 
     if (Math.abs(dayOffset) >= 1) {
-      if (type === 'bar') {
-        setTasks(tasks.map(task => {
-          if (task.id === taskId) {
-            const taskStartDate = new Date(task.start);
-            const taskEndDate = new Date(task.end);
-            const newStartDate = new Date(taskStartDate.getTime() + roundedDayOffset * (1000 * 60 * 60 * 24));
-            const newEndDate = new Date(taskEndDate.getTime() + roundedDayOffset * (1000 * 60 * 60 * 24));
-            return {
-              ...task,
-              start: newStartDate.toISOString().split('T')[0],
-              end: newEndDate.toISOString().split('T')[0]
-            };
+      const updatedTasks = tasks.map(task => {
+        if (task.id === taskId) {
+          const taskStartDate = new Date(task.start);
+          const taskEndDate = new Date(task.end);
+          const newStartDate = new Date(taskStartDate.getTime() + roundedDayOffset * (1000 * 60 * 60 * 24));
+          const newEndDate = new Date(taskEndDate.getTime() + roundedDayOffset * (1000 * 60 * 60 * 24));
+
+          if (type === 'bar') {
+            return validateTaskUpdate(task, newStartDate, newEndDate);
+          } else if (type === 'start') {
+            return validateTaskUpdate(task, newStartDate, taskEndDate);
+          } else if (type === 'end') {
+            return validateTaskUpdate(task, taskStartDate, newEndDate);
           }
-          return task;
-        }));
-        setDraggingTask({ ...draggingTask, initialX: e.clientX - ganttRect.left });
-      } else if (type === 'start') {
-        setTasks(tasks.map(task => {
-          if (task.id === taskId) {
-            const taskEndDate = new Date(task.end);
-            const newStartDate = new Date(new Date(task.start).getTime() + roundedDayOffset * (1000 * 60 * 60 * 24));
-            if (newStartDate > taskEndDate) return task; // Evita a inversão das datas
-            return { ...task, start: newStartDate.toISOString().split('T')[0] };
-          }
-          return task;
-        }));
-        setDraggingTask({ ...draggingTask, initialX: e.clientX - ganttRect.left });
-      } else if (type === 'end') {
-        setTasks(tasks.map(task => {
-          if (task.id === taskId) {
-            const taskStartDate = new Date(task.start);
-            const newEndDate = new Date(new Date(task.end).getTime() + roundedDayOffset * (1000 * 60 * 60 * 24));
-            if (newEndDate < taskStartDate) return task; // Evita a inversão das datas
-            return { ...task, end: newEndDate.toISOString().split('T')[0] };
-          }
-          return task;
-        }));
-        setDraggingTask({ ...draggingTask, initialX: e.clientX - ganttRect.left });
-      }
+        }
+        return task;
+      });
+
+      setTasks(updatedTasks);
+      setDraggingTask({ ...draggingTask, initialX: e.clientX - ganttRect.left });
     }
+  };
+
+  const validateTaskUpdate = (task, newStartDate, newEndDate) => {
+    const dependencies = task.dependencies.map(depId => tasks.find(t => t.id === depId));
+
+    const isValidStartDate = dependencies.every(dep => newStartDate >= new Date(dep.end));
+    const dependentTasks = tasks.filter(t => t.dependencies.includes(task.id));
+    const isValidEndDate = dependentTasks.every(dep => newEndDate <= new Date(dep.start));
+
+    if (isValidStartDate && isValidEndDate) {
+      return { ...task, start: newStartDate.toISOString().split('T')[0], end: newEndDate.toISOString().split('T')[0] };
+    }
+    return task;
   };
 
   const handleDrop = (e) => {
