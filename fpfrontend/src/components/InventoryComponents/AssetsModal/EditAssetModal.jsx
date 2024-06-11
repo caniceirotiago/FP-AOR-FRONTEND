@@ -33,10 +33,10 @@ const EditAssetModal = ({ isOpen, onClose, asset }) => {
 const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Asset data:", asset);
-      console.log("Asset Id:", asset.id);
+      console.log("Asset data:", assetData);
+      console.log("Asset Id:", assetData.id);
 // Remove the id field from assetData
-const { id, ...updateData } = assetData;
+const { id, ...updateData } = updateData;
 console.log("Update data:", updateData);
 
         const response = await assetService.updateAsset(asset.id, updateData);

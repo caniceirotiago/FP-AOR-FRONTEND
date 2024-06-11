@@ -8,6 +8,7 @@ import { FaTable, FaTh, FaPlus, FaFilter } from "react-icons/fa";
 import useAuthStore from "../../stores/useAuthStore.jsx";
 import useDeviceStore from "../../stores/useDeviceStore.jsx";
 import useAssetTypeStore from "../../stores/useAssetTypeStore.jsx";
+import useAssetStore from '../../stores/useAssetStore.jsx';
 
 const InventoryPage = () => {
   const { dimensions } = useDeviceStore();
@@ -15,7 +16,8 @@ const InventoryPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [assets, setAssets] = useState([]);
+  const [assets, fetchAssets] = useAssetStore();
+  const { types, fetchAssetTypes } = useAssetTypeStore();
   const [pageSize, setPageSize] = useState(getInitialPageSize());
   const [filtersVisible, setFiltersVisible] = useState(false);
   const [filters, setFilters] = useState({
@@ -28,8 +30,8 @@ const InventoryPage = () => {
     name: "",
     type: "",
   };
-  const [filterType, setFilterType] = useState("name");
-  const { types, fetchAssetTypes } = useAssetTypeStore();
+  const [filterType, setFilterType] = useState("name", "type");
+  
 
   function getInitialPageSize() {
     const width = dimensions.width;
@@ -86,16 +88,6 @@ const InventoryPage = () => {
     }));
     fetchAssetTypes();
   }, [location.search]);
-
-  const fetchAssets = async () => {
-    const response = await assetService.getAllAssets();
-    if (response.ok) {
-      const data = await response.json();
-      setAssets(data);
-    } else {
-      console.error("Error fetching assets:", response.status);
-    }
-  };
 
   useEffect(() => {
     fetchAssets();
