@@ -18,6 +18,15 @@ const checkStatus = (response) => {
 
 const assetService = {
   createAsset: async (assetData) => {
+    console.log("assetData", assetData);
+    console.log(assetData.name);
+    console.log(assetData.type);
+    console.log(assetData.description);
+    console.log(assetData.stockQuantity);
+    console.log(assetData.partNumber);
+    console.log(assetData.manufacturer);
+    console.log(assetData.manufacturerPhone);
+    console.log(assetData.observations);
     try {
       const response = await fetch(`${API_BASE_URL}/create`, {
         method: "POST",

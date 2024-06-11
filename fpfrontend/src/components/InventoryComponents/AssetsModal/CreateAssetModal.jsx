@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import assetService from '../../../services/assetService';
-import styles from './CreateAssetModal.module.css';
-import { FormattedMessage } from 'react-intl';
-import 'react-datepicker/dist/react-datepicker.css';
-import useDialogModalStore from '../../../stores/useDialogModalStore.jsx';
+import React, { useState, useEffect } from "react";
+import assetService from "../../../services/assetService";
+import styles from "./CreateAssetModal.module.css";
+import { FormattedMessage } from "react-intl";
+import "react-datepicker/dist/react-datepicker.css";
+import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
 
 const CreateAssetModal = ({ isOpen, onClose }) => {
-  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
+    useDialogModalStore();
   const [assetData, setAssetData] = useState({
-    name: '',
-    type: '',
-    description: '',
-    stockQuantity: '',
-    partNumber: '',
-    manufacturer: '',
-    manufacturerPhone: '',
-    observations: '',
-    projectId: ''
+    name: "",
+    type: "",
+    description: "",
+    stockQuantity: "",
+    partNumber: "",
+    manufacturer: "",
+    manufacturerPhone: "",
+    observations: "",
   });
 
   const [types, setTypes] = useState([]);
@@ -45,7 +45,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
     const { name, value } = e.target;
     setAssetData({
       ...assetData,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -54,8 +54,23 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
     try {
       const response = await assetService.createAsset(assetData);
       if (response.ok) {
-        // Handle success, maybe refresh assets list or show a success message
-        onClose();
+        // Handle success
+        setDialogMessage("Asset created successfully!");
+        setAlertType("success");
+        setIsDialogOpen(true);
+        setOnConfirm(() => {
+          onClose();
+        });
+        setAssetData({
+          name: "",
+          type: "",
+          description: "",
+          stockQuantity: "",
+          partNumber: "",
+          manufacturer: "",
+          manufacturerPhone: "",
+          observations: "",
+        });
       } else {
         console.error("Error creating asset:", response.statusText);
       }
@@ -68,10 +83,12 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
 
   return (
     <div className={styles.modal}>
-    <div className={styles.modalContent}>
-    <div className={styles.closeButton} onClick={onClose}>X</div>
-    <div className={styles.formContainer}>
-    <form className={styles.form} onSubmit={handleSubmit}>
+      <div className={styles.modalContent}>
+        <div className={styles.closeButton} onClick={onClose}>
+          X
+        </div>
+        <div className={styles.formContainer}>
+          <form className={styles.form} onSubmit={handleSubmit}>
             <label className={styles.label}>Asset Name</label>
             <input
               className={styles.input}
@@ -102,6 +119,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               name="description"
               value={assetData.description}
               onChange={handleChange}
+              required
             />
             <label className={styles.label}>Stock Quantity</label>
             <input
@@ -119,6 +137,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               name="partNumber"
               value={assetData.partNumber}
               onChange={handleChange}
+              required
             />
             <label className={styles.label}>Manufacturer</label>
             <input
@@ -127,6 +146,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               name="manufacturer"
               value={assetData.manufacturer}
               onChange={handleChange}
+              required
             />
             <label className={styles.label}>Manufacturer Phone</label>
             <input
@@ -135,6 +155,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               name="manufacturerPhone"
               value={assetData.manufacturerPhone}
               onChange={handleChange}
+              required
             />
             <label className={styles.label}>Observations</label>
             <textarea
@@ -143,7 +164,9 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               value={assetData.observations}
               onChange={handleChange}
             />
-            <button type="submit" className={styles.button}>Submit</button>
+            <button type="submit" className={styles.button}>
+              Submit
+            </button>
           </form>
         </div>
       </div>
@@ -152,4 +175,3 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
 };
 
 export default CreateAssetModal;
-
