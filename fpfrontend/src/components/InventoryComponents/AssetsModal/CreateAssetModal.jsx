@@ -19,6 +19,28 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
     projectId: ''
   });
 
+  const [types, setTypes] = useState([]);
+
+  useEffect(() => {
+    const fetchTypes = async () => {
+      try {
+        const response = await assetService.fetchAllTypes();
+        if (response.ok) {
+          const data = await response.json();
+          setTypes(data);
+        } else {
+          console.error("Error fetching asset types:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching asset types:", error.message);
+      }
+    };
+
+    if (isOpen) {
+      fetchTypes();
+    }
+  }, [isOpen]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAssetData({
@@ -45,14 +67,11 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modal}>
-        <div className={styles.modalHeader}>
-          <h2>Create Asset</h2>
-          <button className={styles.closeButton} onClick={onClose}>X</button>
-        </div>
-        <div className={styles.modalBody}>
-          <form className={styles.form} onSubmit={handleSubmit}>
+    <div className={styles.modal}>
+    <div className={styles.modalContent}>
+    <div className={styles.closeButton} onClick={onClose}>X</div>
+    <div className={styles.formContainer}>
+    <form className={styles.form} onSubmit={handleSubmit}>
             <label className={styles.label}>Asset Name</label>
             <input
               className={styles.input}
@@ -63,14 +82,20 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               required
             />
             <label className={styles.label}>Type</label>
-            <input
-              className={styles.input}
-              type="text"
+            <select
+              className={styles.select}
               name="type"
               value={assetData.type}
               onChange={handleChange}
               required
-            />
+            >
+              <option value="">Select a type</option>
+              {types.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
             <label className={styles.label}>Description</label>
             <textarea
               className={styles.textarea}
@@ -117,15 +142,6 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               name="observations"
               value={assetData.observations}
               onChange={handleChange}
-            />
-            <label className={styles.label}>Project ID</label>
-            <input
-              className={styles.input}
-              type="number"
-              name="projectId"
-              value={assetData.projectId}
-              onChange={handleChange}
-              required
             />
             <button type="submit" className={styles.button}>Submit</button>
           </form>
