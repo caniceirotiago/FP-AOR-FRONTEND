@@ -12,6 +12,7 @@ const TaskManager = () => {
     { id: 6, name: 'Task 6', start: '2023-06-10', end: '2023-06-20', dependencies: [2] },
   ]);
 
+  console.log(tasks);
   return (
     <div className={styles.container}>
       <TaskTable tasks={tasks} />

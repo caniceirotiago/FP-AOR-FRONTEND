@@ -111,3 +111,11 @@
 .taskCircleEnd {
   right: -15px; /* Ajuste a posição conforme necessário */
 }
+
+.dependencyLine {
+  position: absolute;
+  background-color: transparent;
+  border-top: 1px dashed darkblue;
+  border-left: 1px dashed darkblue;
+  transform-origin: top left;
+}

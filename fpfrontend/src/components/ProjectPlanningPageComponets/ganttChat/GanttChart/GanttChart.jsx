@@ -4,24 +4,30 @@ import styles from './GanttChart.module.css';
 const GanttChart = ({ tasks, setTasks }) => {
   const ganttRef = useRef(null);
   const [draggingTask, setDraggingTask] = useState(null);
+  const [activeDependency, setActiveDependency] = useState(null);
   const startDate = new Date(Math.min(...tasks.map(task => new Date(task.start))));
   const endDate = new Date(Math.max(...tasks.map(task => new Date(task.end))));
   const totalDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
 
-  const handleDragStart = (e, taskId, type) => {
-    e.dataTransfer.setData('taskId', taskId);
+  const handleDragStart = (e, taskId, type, handleType) => {
+    e.dataTransfer.setData('sourceTaskId', taskId);
     e.dataTransfer.setData('type', type);
-    setDraggingTask({ taskId, type, initialX: e.clientX });
+    e.dataTransfer.setData('handleType', handleType);
+    setDraggingTask({ taskId, type, handleType, initialX: e.clientX });
+    if (handleType === 'dependency') {
+      setActiveDependency({ taskId, type });
+    }
     e.dataTransfer.setDragImage(new Image(), 0, 0); // Evita o ícone de arrasto padrão
   };
 
   const handleDrag = (e) => {
     if (!draggingTask || e.clientX === 0) return;
 
-    const { taskId, type, initialX } = draggingTask;
-    const ganttRect = ganttRef.current.getBoundingClientRect();
+    const { taskId, type, initialX, handleType } = draggingTask;
+    if (handleType === 'dependency') return; // Impede alterações de data ao arrastar círculos de dependência
+
     const deltaX = e.clientX - initialX;
-    const dayOffset = (deltaX / 40); // Cada dia tem 40px de largura
+    const dayOffset = deltaX / 40; // Cada dia tem 40px de largura
     const roundedDayOffset = Math.round(dayOffset);
 
     if (Math.abs(dayOffset) >= 1) {
@@ -69,7 +75,44 @@ const GanttChart = ({ tasks, setTasks }) => {
 
   const handleDrop = (e) => {
     e.preventDefault();
+    const sourceTaskId = Number(e.dataTransfer.getData('sourceTaskId'));
+    const handleType = e.dataTransfer.getData('handleType');
+    const targetTaskId = Number(e.target.dataset.taskId);
+
+    if (activeDependency && handleType === 'dependency') {
+      if (sourceTaskId !== targetTaskId) {
+        const sourceTask = tasks.find(task => task.id === sourceTaskId);
+        const targetTask = tasks.find(task => task.id === targetTaskId);
+
+        if (sourceTask && targetTask) {
+          const sourceStartDate = new Date(sourceTask.start);
+          const targetStartDate = new Date(targetTask.start);
+
+          if (sourceStartDate < targetStartDate) {
+            // Source task is independent, target task is dependent
+            setTasks(tasks.map(task => {
+              if (task.id === targetTaskId) {
+                const dependencies = [...task.dependencies, sourceTaskId];
+                return { ...task, dependencies };
+              }
+              return task;
+            }));
+          } else {
+            // Target task is independent, source task is dependent
+            setTasks(tasks.map(task => {
+              if (task.id === sourceTaskId) {
+                const dependencies = [...task.dependencies, targetTaskId];
+                return { ...task, dependencies };
+              }
+              return task;
+            }));
+          }
+        }
+      }
+    }
+
     setDraggingTask(null);
+    setActiveDependency(null);
   };
 
   const generateTimeline = () => {
@@ -107,6 +150,7 @@ const GanttChart = ({ tasks, setTasks }) => {
               <div
                 key={task.id}
                 className={styles.taskBar}
+                data-task-id={task.id}
                 style={{
                   left: `${taskStartOffset}px`,
                   width: `${taskDuration}px`,
@@ -116,35 +160,38 @@ const GanttChart = ({ tasks, setTasks }) => {
                 <div
                   className={styles.taskHandleStart}
                   draggable
-                  onDragStart={(e) => handleDragStart(e, task.id, 'start')}
+                  onDragStart={(e) => handleDragStart(e, task.id, 'start', 'handle')}
                   onDrag={(e) => handleDrag(e, task.id, 'start')}
                   onDragEnd={handleDrop}
                 ></div>
                 <div className={styles.taskContent}
                   draggable
-                  onDragStart={(e) => handleDragStart(e, task.id, 'bar')}
+                  onDragStart={(e) => handleDragStart(e, task.id, 'bar', 'handle')}
                   onDrag={(e) => handleDrag(e, task.id, 'bar')}
-                  onDragEnd={handleDrop}>
+                  onDragEnd={handleDrop}
+                >
                   {task.name}
                 </div>
                 <div
                   className={styles.taskHandleEnd}
                   draggable
-                  onDragStart={(e) => handleDragStart(e, task.id, 'end')}
+                  onDragStart={(e) => handleDragStart(e, task.id, 'end', 'handle')}
                   onDrag={(e) => handleDrag(e, task.id, 'end')}
                   onDragEnd={handleDrop}
                 ></div>
                 <div
                   className={styles.taskCircleStart}
                   draggable
-                  onDragStart={(e) => handleDragStart(e, task.id, 'start')}
+                  data-task-id={task.id}
+                  onDragStart={(e) => handleDragStart(e, task.id, 'start', 'dependency')}
                   onDrag={(e) => handleDrag(e, task.id, 'start')}
                   onDragEnd={handleDrop}
                 ></div>
                 <div
                   className={styles.taskCircleEnd}
                   draggable
-                  onDragStart={(e) => handleDragStart(e, task.id, 'end')}
+                  data-task-id={task.id}
+                  onDragStart={(e) => handleDragStart(e, task.id, 'end', 'dependency')}
                   onDrag={(e) => handleDrag(e, task.id, 'end')}
                   onDragEnd={handleDrop}
                 ></div>
