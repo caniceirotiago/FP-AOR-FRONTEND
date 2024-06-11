@@ -38,6 +38,7 @@ const assetService = {
       const response = await fetch(`${API_BASE_URL}`, {
         method: "GET",
         headers: getAuthHeaders(),
+        credentials: "include",
       });
       return response;
     } catch (error) {
