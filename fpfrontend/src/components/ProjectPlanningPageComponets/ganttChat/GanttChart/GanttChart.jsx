@@ -5,15 +5,24 @@ const GanttChart = ({ tasks, setTasks }) => {
   const ganttRef = useRef(null);
   const [draggingTask, setDraggingTask] = useState(null);
   const [activeDependency, setActiveDependency] = useState(null);
+  const [linePosition, setLinePosition] = useState(null);
+
   const startDate = new Date(Math.min(...tasks.map(task => new Date(task.start))));
   const endDate = new Date(Math.max(...tasks.map(task => new Date(task.end))));
   const totalDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
 
   const handleDragStart = (e, taskId, type, handleType) => {
+    const ganttRect = ganttRef.current.getBoundingClientRect();
     e.dataTransfer.setData('sourceTaskId', taskId);
     e.dataTransfer.setData('type', type);
     e.dataTransfer.setData('handleType', handleType);
-    setDraggingTask({ taskId, type, handleType, initialX: e.clientX });
+    setDraggingTask({ 
+      taskId, 
+      type, 
+      handleType, 
+      initialX: e.clientX - ganttRect.left, 
+      initialY: e.clientY - ganttRect.top 
+    });
     if (handleType === 'dependency') {
       setActiveDependency({ taskId, type });
     }
@@ -23,10 +32,20 @@ const GanttChart = ({ tasks, setTasks }) => {
   const handleDrag = (e) => {
     if (!draggingTask || e.clientX === 0) return;
 
-    const { taskId, type, initialX, handleType } = draggingTask;
-    if (handleType === 'dependency') return; // Impede alterações de data ao arrastar círculos de dependência
+    const { taskId, type, initialX, initialY, handleType } = draggingTask;
+    const ganttRect = ganttRef.current.getBoundingClientRect();
 
-    const deltaX = e.clientX - initialX;
+    if (handleType === 'dependency') {
+      setLinePosition({ 
+        startX: initialX, 
+        startY: initialY, 
+        endX: e.clientX - ganttRect.left, 
+        endY: e.clientY - ganttRect.top 
+      });
+      return;
+    }
+
+    const deltaX = e.clientX - (ganttRect.left + initialX);
     const dayOffset = deltaX / 40; // Cada dia tem 40px de largura
     const roundedDayOffset = Math.round(dayOffset);
 
@@ -46,7 +65,7 @@ const GanttChart = ({ tasks, setTasks }) => {
           }
           return task;
         }));
-        setDraggingTask({ ...draggingTask, initialX: e.clientX });
+        setDraggingTask({ ...draggingTask, initialX: e.clientX - ganttRect.left });
       } else if (type === 'start') {
         setTasks(tasks.map(task => {
           if (task.id === taskId) {
@@ -57,7 +76,7 @@ const GanttChart = ({ tasks, setTasks }) => {
           }
           return task;
         }));
-        setDraggingTask({ ...draggingTask, initialX: e.clientX });
+        setDraggingTask({ ...draggingTask, initialX: e.clientX - ganttRect.left });
       } else if (type === 'end') {
         setTasks(tasks.map(task => {
           if (task.id === taskId) {
@@ -68,7 +87,7 @@ const GanttChart = ({ tasks, setTasks }) => {
           }
           return task;
         }));
-        setDraggingTask({ ...draggingTask, initialX: e.clientX });
+        setDraggingTask({ ...draggingTask, initialX: e.clientX - ganttRect.left });
       }
     }
   };
@@ -113,7 +132,19 @@ const GanttChart = ({ tasks, setTasks }) => {
 
     setDraggingTask(null);
     setActiveDependency(null);
+    setLinePosition(null);
   };
+
+  const handleDependencyDoubleClick = (taskId, depId) => {
+    setTasks(tasks.map(task => {
+      if (task.id === taskId) {
+        const updatedDependencies = task.dependencies.filter(dependency => dependency !== depId);
+        return { ...task, dependencies: updatedDependencies };
+      }
+      return task;
+    }));
+  };
+  
 
   const generateTimeline = () => {
     const timeline = [];
@@ -198,6 +229,63 @@ const GanttChart = ({ tasks, setTasks }) => {
               </div>
             );
           })}
+          {linePosition && (
+            <div
+              className={styles.temporaryDependencyLine}
+              style={{
+                left: `${linePosition.startX}px`,
+                top: `${linePosition.startY - 25}px`,
+                width: `${Math.sqrt(Math.pow(linePosition.endX - linePosition.startX, 2) + Math.pow(linePosition.endY - linePosition.startY, 2))}px`,
+                transform: `rotate(${Math.atan2(linePosition.endY - linePosition.startY, linePosition.endX - linePosition.startX)}rad)`
+              }}
+            ></div>
+          )}
+          {/* Renderizar linhas de dependência fixas */}
+          <div className={styles.svgContainer}>
+            {tasks.map((task) =>
+              task.dependencies.map((depId) => {
+                const depTask = tasks.find((t) => t.id === depId);
+                if (!depTask) return null;
+
+                const depEndDate = new Date(depTask.end);
+                const taskStartDate = new Date(task.start);
+
+                const depEndOffset = ((depEndDate - startDate) / (1000 * 60 * 60 * 24)) * 50;
+                const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 50;
+                const depIndex = tasks.findIndex((t) => t.id === depId);
+                const taskIndex = tasks.findIndex((t) => t.id === task.id);
+
+                return (
+                  <svg
+                    key={`${task.id}-${depId}`}
+                    className={styles.fixedDependencyLine}
+                    style={{
+                      position: 'absolute',
+                      left: `${depEndOffset - 20}px`,
+                      top: `${depIndex * 40 + 15}px`,
+                      width: `${taskStartOffset - depEndOffset + 20}px`,
+                      height: `${Math.abs((taskIndex - depIndex) * 40)}px`,
+                    }}
+                  >
+                    <path
+                      className={styles.fixedLine}
+                      d={`
+                        M 0 0 
+                        L 0 ${(taskIndex - depIndex) * 40 - 20}
+                        Q 0 ${(taskIndex - depIndex) * 40} 20 ${(taskIndex - depIndex) * 40}
+                        L ${taskStartOffset - depEndOffset + 20} ${(taskIndex - depIndex) * 40}
+                      `}
+                      fill="none"
+                      stroke="red"
+                      strokeWidth="2"
+                      onDoubleClick={() => handleDependencyDoubleClick(task.id, depId)} // Adiciona o manipulador de duplo clique
+
+                    />
+                  </svg>
+                );
+              })
+            )}
+          </div>
         </div>
       </div>
     </div>
