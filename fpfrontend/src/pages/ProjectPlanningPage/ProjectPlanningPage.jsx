@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './ProjectPlanningPage.module.css'
-import GanttChart from '../../components/ProjectPlanningPageComponets/ganttChat/GanttChart';
+import TaskManager from '../../components/ProjectPlanningPageComponets/ganttChat/TaskManager';
 
 const ProjectPlanningPage = () => {
  
@@ -8,7 +8,7 @@ const ProjectPlanningPage = () => {
   return (
     
     <div className={styles.container}>
-      <GanttChart/>
+      <TaskManager/>
     </div>
   );
 };
