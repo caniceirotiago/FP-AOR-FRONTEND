@@ -5,7 +5,7 @@ const API_BASE_URL =
 
 const getAuthHeaders = () => {
   return {
-    "Accept": "application/json",
+    Accept: "application/json",
     "Content-Type": "application/json",
   };
 };
@@ -17,8 +17,6 @@ const checkStatus = (response) => {
 };
 
 const assetService = {
-
-  
   createAsset: async (assetData) => {
     try {
       const response = await fetch(`${API_BASE_URL}/create`, {
@@ -104,7 +102,7 @@ const assetService = {
     }
   },
 
-/*
+  /*
   updateProject: async (projectId, projectData) => {
     try {
       const response = await fetch(`${API_BASE_URL}/${projectId}`, {
@@ -139,7 +137,6 @@ const assetService = {
     }
   },
 */
-
 };
 
 export default assetService;

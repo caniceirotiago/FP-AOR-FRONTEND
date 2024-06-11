@@ -97,11 +97,10 @@ const InventoryPage = () => {
 
   useEffect(() => {
     const fetchAssets = async () => {
-      const response = await assetService.getAllAssets({ page: pageNumber, filters });
+      const response = await assetService.getAllAssets();
       if (response.ok) {
         const data = await response.json();
-        setAssets(data.assets);
-        setPageCount(data.pageCount);
+        setAssets(data);
       } else {
         console.error("Error fetching assets:", response.status);
       }
