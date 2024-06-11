@@ -60,9 +60,9 @@ const GanttChart = ({ tasks, setTasks }) => {
           if (type === 'bar') {
             return validateTaskUpdate(task, newStartDate, newEndDate);
           } else if (type === 'start') {
-            return validateTaskUpdate(task, newStartDate, taskEndDate);
+            return validateTaskUpdate(task, newStartDate, taskEndDate, true);
           } else if (type === 'end') {
-            return validateTaskUpdate(task, taskStartDate, newEndDate);
+            return validateTaskUpdate(task, taskStartDate, newEndDate, true);
           }
         }
         return task;
@@ -73,14 +73,18 @@ const GanttChart = ({ tasks, setTasks }) => {
     }
   };
 
-  const validateTaskUpdate = (task, newStartDate, newEndDate) => {
+  const validateTaskUpdate = (task, newStartDate, newEndDate, isDraggingHandle = false) => {
     const dependencies = task.dependencies.map(depId => tasks.find(t => t.id === depId));
-
     const isValidStartDate = dependencies.every(dep => newStartDate >= new Date(dep.end));
     const dependentTasks = tasks.filter(t => t.dependencies.includes(task.id));
     const isValidEndDate = dependentTasks.every(dep => newEndDate <= new Date(dep.start));
+    const isValidDuration = newEndDate > newStartDate;
 
-    if (isValidStartDate && isValidEndDate) {
+    if (isDraggingHandle && !isValidDuration) {
+      return task; // Prevents dragging to create a zero or negative duration task
+    }
+
+    if (isValidStartDate && isValidEndDate && isValidDuration) {
       return { ...task, start: newStartDate.toISOString().split('T')[0], end: newEndDate.toISOString().split('T')[0] };
     }
     return task;
@@ -98,11 +102,12 @@ const GanttChart = ({ tasks, setTasks }) => {
         const targetTask = tasks.find(task => task.id === targetTaskId);
 
         if (sourceTask && targetTask) {
+          const sourceEndDate = new Date(sourceTask.end);
           const sourceStartDate = new Date(sourceTask.start);
           const targetStartDate = new Date(targetTask.start);
+          const targetEndDate = new Date(targetTask.end);
 
-          if (sourceStartDate < targetStartDate) {
-            // Source task is independent, target task is dependent
+          if ((sourceStartDate < targetEndDate && sourceEndDate > targetStartDate)) {
             setTasks(tasks.map(task => {
               if (task.id === targetTaskId) {
                 const dependencies = [...task.dependencies, sourceTaskId];
@@ -110,8 +115,7 @@ const GanttChart = ({ tasks, setTasks }) => {
               }
               return task;
             }));
-          } else {
-            // Target task is independent, source task is dependent
+          } else if (sourceEndDate >= targetStartDate) {
             setTasks(tasks.map(task => {
               if (task.id === sourceTaskId) {
                 const dependencies = [...task.dependencies, targetTaskId];
@@ -138,7 +142,6 @@ const GanttChart = ({ tasks, setTasks }) => {
       return task;
     }));
   };
-  
 
   const generateTimeline = () => {
     const timeline = [];
@@ -168,8 +171,8 @@ const GanttChart = ({ tasks, setTasks }) => {
           {tasks.map((task, index) => {
             const taskStartDate = new Date(task.start);
             const taskEndDate = new Date(task.end);
-            const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 40px de largura
-            const taskDuration = ((taskEndDate - taskStartDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 40px de largura
+            const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 50px de largura
+            const taskDuration = ((taskEndDate - taskStartDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 50px de largura
 
             return (
               <div
@@ -234,52 +237,70 @@ const GanttChart = ({ tasks, setTasks }) => {
               }}
             ></div>
           )}
-          {/* Renderizar linhas de dependência fixas */}
-          <div className={styles.svgContainer}>
-            {tasks.map((task) =>
-              task.dependencies.map((depId) => {
-                const depTask = tasks.find((t) => t.id === depId);
-                if (!depTask) return null;
+        </div>
+        {/* Renderizar linhas de dependência fixas */}
+        <div className={styles.svgContainer}>
+          {tasks.map((task) =>
+            task.dependencies.map((depId) => {
+              const depTask = tasks.find((t) => t.id === depId);
+              if (!depTask) return null;
 
-                const depEndDate = new Date(depTask.end);
-                const taskStartDate = new Date(task.start);
+              const depEndDate = new Date(depTask.end);
+              const taskStartDate = new Date(task.start);
 
-                const depEndOffset = ((depEndDate - startDate) / (1000 * 60 * 60 * 24)) * 50;
-                const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 50;
-                const depIndex = tasks.findIndex((t) => t.id === depId);
-                const taskIndex = tasks.findIndex((t) => t.id === task.id);
+              const depEndOffset = ((depEndDate - startDate) / (1000 * 60 * 60 * 24)) * 50;
+              const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 50;
+              const depIndex = tasks.findIndex((t) => t.id === depId);
+              const taskIndex = tasks.findIndex((t) => t.id === task.id);
 
-                return (
+              return (
+                <React.Fragment key={`${task.id}-${depId}`}>
                   <svg
-                    key={`${task.id}-${depId}`}
-                    className={styles.fixedDependencyLine}
+                    className={`${styles.fixedDependencyLine} ${styles.verticalLine}`}
                     style={{
                       position: 'absolute',
                       left: `${depEndOffset - 20}px`,
-                      top: `${depIndex * 40 + 15}px`,
-                      width: `${taskStartOffset - depEndOffset + 20}px`,
+                      top: `${Math.min(depIndex, taskIndex) * 40 + 45}px`,
+                      width: '5px',
                       height: `${Math.abs((taskIndex - depIndex) * 40)}px`,
                     }}
                   >
-                    <path
+                    <line
                       className={styles.fixedLine}
-                      d={`
-                        M 0 0 
-                        L 0 ${(taskIndex - depIndex) * 40 - 20}
-                        Q 0 ${(taskIndex - depIndex) * 40} 20 ${(taskIndex - depIndex) * 40}
-                        L ${taskStartOffset - depEndOffset + 20} ${(taskIndex - depIndex) * 40}
-                      `}
-                      fill="none"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2={`${Math.abs((taskIndex - depIndex) * 40)}`}
                       stroke="red"
                       strokeWidth="2"
-                      onDoubleClick={() => handleDependencyDoubleClick(task.id, depId)} // Adiciona o manipulador de duplo clique
-
+                      onDoubleClick={() => handleDependencyDoubleClick(task.id, depId)}
                     />
                   </svg>
-                );
-              })
-            )}
-          </div>
+                  <svg
+                    className={`${styles.fixedDependencyLine} ${styles.horizontalLine}`}
+                    style={{
+                      position: 'absolute',
+                      left: `${Math.min(depEndOffset, taskStartOffset) - 20}px`,
+                      top: `${taskIndex * 40 + 45}px`,
+                      width: `${Math.abs(taskStartOffset - depEndOffset) + 20}px`,
+                      height: '5px',
+                    }}
+                  >
+                    <line
+                      className={styles.fixedLine}
+                      x1="0"
+                      y1="0"
+                      x2={`${Math.abs(taskStartOffset - depEndOffset) + 20}`}
+                      y2="0"
+                      stroke="red"
+                      strokeWidth="2"
+                      onDoubleClick={() => handleDependencyDoubleClick(task.id, depId)}
+                    />
+                  </svg>
+                </React.Fragment>
+              );
+            })
+          )}
         </div>
       </div>
     </div>
