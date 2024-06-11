@@ -103,11 +103,11 @@ const GanttChart = ({ tasks, setTasks }) => {
 
         if (sourceTask && targetTask) {
           const sourceEndDate = new Date(sourceTask.end);
-          const sourceStartDate = new Date(sourceTask.start);
           const targetStartDate = new Date(targetTask.start);
           const targetEndDate = new Date(targetTask.end);
+          const sourceStartDate = new Date(sourceTask.start);
 
-          if ((sourceStartDate < targetEndDate && sourceEndDate > targetStartDate)) {
+          if (sourceEndDate <= targetStartDate){
             setTasks(tasks.map(task => {
               if (task.id === targetTaskId) {
                 const dependencies = [...task.dependencies, sourceTaskId];
@@ -115,7 +115,7 @@ const GanttChart = ({ tasks, setTasks }) => {
               }
               return task;
             }));
-          } else if (sourceEndDate >= targetStartDate) {
+          } else if (sourceStartDate >= targetEndDate) {
             setTasks(tasks.map(task => {
               if (task.id === sourceTaskId) {
                 const dependencies = [...task.dependencies, targetTaskId];
