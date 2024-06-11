@@ -9,7 +9,7 @@ function AssetTable({ assets, pageCount, setPageNumber }) {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const handleViewAsset = (assetId) => () => {
-        console.log('You clicked on view button');
+        console.log('Clicked on view asset:', assetId);
         const selected = assets.find(asset => asset.id === assetId);
         setSelectedAsset(selected);
         setIsEditModalOpen(true);
@@ -17,10 +17,11 @@ function AssetTable({ assets, pageCount, setPageNumber }) {
     }
 
     const handleEditAsset = (assetId) => {
-        console.log('You clicked on Edit button');
-        console.log('Edit asset:', assetId);
+        console.log('Clicked on Edit asset:', assetId);
+        console.log(' handleEditAsset assets', assets);
         const selected = assets.find(asset => asset.id === assetId);
         setSelectedAsset(selected);
+        console.log('Selected asset:', selected);
         setIsEditModalOpen(true);
     }
 
@@ -47,7 +48,7 @@ function AssetTable({ assets, pageCount, setPageNumber }) {
             },
             {
                 Header: 'Stock Quantity',
-                accessor: 'quantity',
+                accessor: 'stockQuantity',
             },
             {
                 Header: 'Part Number',
@@ -56,6 +57,14 @@ function AssetTable({ assets, pageCount, setPageNumber }) {
             {
                 Header: 'Manufacturer',
                 accessor: 'manufacturer',
+            },
+            {
+                Header: 'Manufacturer Phone',
+                accessor: 'manufacturerPhone',
+            },
+            {
+                Header: 'Observations',
+                accessor: 'observations',
             },
             {
                 Header: 'Actions',
@@ -99,8 +108,8 @@ function AssetTable({ assets, pageCount, setPageNumber }) {
     }, [pageIndex, setPageNumber]);
 
 
-    console.log(assets);
-
+    
+    console.log('AssetTable assets:', assets);
     return (
         <div className={styles.tableContainer}>
             <div className={styles.tblHeader}>

@@ -33,7 +33,13 @@ const EditAssetModal = ({ isOpen, onClose, asset }) => {
 const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await assetService.updateAsset(assetData);
+      console.log("Asset data:", asset);
+      console.log("Asset Id:", asset.id);
+// Remove the id field from assetData
+const { id, ...updateData } = assetData;
+console.log("Update data:", updateData);
+
+        const response = await assetService.updateAsset(asset.id, updateData);
         if (response.ok) {
             setDialogMessage("Asset updated successfully!");
             setAlertType("success");
@@ -54,6 +60,8 @@ const handleSubmit = async (e) => {
 
 if (!isOpen) return null;
 
+
+console.log(asset);
   return (
     <div className={styles.modal}>
       <div className={styles.modalContent}>
@@ -99,7 +107,7 @@ if (!isOpen) return null;
               className={styles.input}
               type="number"
               name="stockQuantity"
-              value={assetData.quantity}
+              value={assetData.stockQuantity}
               onChange={handleChange}
               required
             />
