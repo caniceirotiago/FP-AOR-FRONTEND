@@ -133,6 +133,7 @@ const InventoryPage = () => {
     setFiltersVisible(!filtersVisible);
   };
 
+  console.log("InventoryPage assets:", assets);
   return (
     <div className={styles.inventoryPage}>
       <div className={styles.controlPanel}>
