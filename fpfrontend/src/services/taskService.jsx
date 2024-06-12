@@ -17,6 +17,21 @@ const checkStatus = (response) => {
 };
 
 const projectService = {
+  createTask: async (task, projectId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/add/project/${projectId}`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        credentials: "include",
+        body: JSON.stringify(task),
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error creating task:", error.message);
+      throw error;
+    }
+  },
 
   getTasksByProjectId: async (projectId) => {
     try {

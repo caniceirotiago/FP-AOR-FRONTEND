@@ -9,6 +9,7 @@ import SelectTypeModal from "../modals/SelectTypeModal.jsx";
 import userService from "../../services/userService";
 import projectService from "../../services/projectService.jsx";
 import useConfigurationStore from "../../stores/useConfigurationStore";
+import membershipService from "../../services/membershipService";
 
 
 const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username, projectId, createdBy }) => {
@@ -59,18 +60,35 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
 
 
   const fetchSuggestions = async (firstLetter) => {
-    try {
-      const response = await generalService.fetchSuggestions(title, firstLetter);
-      if (response.status === 200) {
-        const data = await response.json();
-        setFetchedSuggestions(data); // Store fetched suggestions
-        setSuggestions(data); // Initially, set suggestions to fetched data
-      } else {
-        throw new Error("Failed to fetch suggestions");
+    if(creationMode && title === 'users' && mainEntity === 'task'){
+      try {
+        const response = await membershipService.fetchSuggestionsByProjectId(firstLetter, projectId);
+        if (response.status === 200) {
+          const data = await response.json();
+          console.log(data);
+          setFetchedSuggestions(data); // Store fetched suggestions
+          setSuggestions(data); // Initially, set suggestions to fetched data
+        } else {
+          throw new Error("Failed to fetch suggestions");
+        }
+      } catch (error) {
+        console.error("Error fetching suggestions:", error.message);
       }
-    } catch (error) {
-      console.error("Error fetching suggestions:", error.message);
+    } else {
+      try {
+        const response = await generalService.fetchSuggestions(title, firstLetter);
+        if (response.status === 200) {
+          const data = await response.json();
+          setFetchedSuggestions(data); // Store fetched suggestions
+          setSuggestions(data); // Initially, set suggestions to fetched data
+        } else {
+          throw new Error("Failed to fetch suggestions");
+        }
+      } catch (error) {
+        console.error("Error fetching suggestions:", error.message);
+      }
     }
+    
   };
 
   const getItemProperty = (item) => {
@@ -147,6 +165,10 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
 
     if (title === 'users' && !existingUser) {
       console.warn("User not in suggestions. Not adding.");
+      return;
+    }
+    if(title === 'users' && creationMode && mainEntity ==='task' && attributes.length === 1){
+      console.warn("Only one user can be assigned to a task as responsible. Not adding.");
       return;
     }
 
@@ -283,7 +305,8 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
 
   return (
     <div className={styles.container}>
-      <h2>{elementTitle}</h2>
+      {(creationMode && title === 'users' && mainEntity === 'task') ? <h2>Responsible</h2> : <h2>{elementTitle}</h2>}
+      
       {title === 'users' && !creationMode &&  <>{isPossibleToJoin ? <button onClick={askToJoinProject}>Ask To Join</button> : null}</>}
       <div className={styles.innerContainer}>
         <div className={styles.existingAttributes}>
