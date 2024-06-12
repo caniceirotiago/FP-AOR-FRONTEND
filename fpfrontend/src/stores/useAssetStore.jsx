@@ -3,6 +3,9 @@ import assetService from '../services/assetService';
 
 const useAssetStore = create((set) => ({
   assets: [],
+  selectedAsset: null,
+  setSelectedAsset: (asset) => set({ selectedAsset: asset }),
+
   loading: false,
   error: null,
   fetchAssets: async () => {

@@ -7,27 +7,22 @@ import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
 import useAssetTypeStore from "../../../stores/useAssetTypeStore.jsx";
 import useAssetStore from "../../../stores/useAssetStore.jsx";
 
-const EditAssetModal = ({ isOpen, onClose, assetId }) => {
+const EditAssetModal = ({ isOpen, onClose, assets, selectedAssetId }) => {
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
-  const { assets } = useAssetStore();
   const [assetData, setAssetData] = useState(null);
-
-
-
-  console.log("EditAssetModal Asset Id:", assetId);
-
-  useEffect(() => {
-      const asset = assets.find(a => a.id === assetId);
-      if (asset) {
-          setAssetData(asset);
-      }
-  }, [assetId, assets]);
-
   const { types, fetchAssetTypes } = useAssetTypeStore();
 
   useEffect(() => {
       fetchAssetTypes();
-  }, [fetchAssetTypes]);
+  }, []);
+
+  useEffect(() => {
+    const asset = assets.find(a => a.id === selectedAssetId);
+    if (asset) {
+        setAssetData(asset);
+    }
+}, [selectedAssetId]);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
