@@ -6,7 +6,7 @@ import EditAssetModal from '../AssetsModal/EditAssetModal.jsx';
 import useAssetStore from '../../../stores/useAssetStore.jsx';
 
 function AssetTable({ pageCount, setPageNumber }) {
-    const [selectedAssetId, setSelectedAssetId] = useState(null); // Track selected asset for editing
+    const [selectedAssetId, setSelectedAssetId] = useState(null); // Track selected asset id for editing
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const { assets, fetchAssets } = useAssetStore();
 
@@ -105,8 +105,6 @@ function AssetTable({ pageCount, setPageNumber }) {
     }, [pageIndex, setPageNumber]);
 
 
-    
-    console.log('AssetTable assets:', assets);
     return (
         <div className={styles.tableContainer}>
             <div className={styles.tblHeader}>

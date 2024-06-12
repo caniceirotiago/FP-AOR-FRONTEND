@@ -12,6 +12,10 @@ const EditAssetModal = ({ isOpen, onClose, assetId }) => {
   const { assets } = useAssetStore();
   const [assetData, setAssetData] = useState(null);
 
+
+
+  console.log("EditAssetModal Asset Id:", assetId);
+
   useEffect(() => {
       const asset = assets.find(a => a.id === assetId);
       if (asset) {
@@ -37,7 +41,7 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   try {
     console.log("Asset data:", assetData);
-    console.log("Asset Id:", assetData.id);
+    
     
     const response = await assetService.updateAsset(assetData);
     if (response.ok) {
