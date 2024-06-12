@@ -10,6 +10,7 @@ const TaskManager = ({projectId, tasksUpdated }) => {
 
 
   const fetchProjectTasks = async () => {
+    if(!projectId) return;
     try {
       const response = await taskService.getTasksByProjectId(projectId);
       const data = await response.json();

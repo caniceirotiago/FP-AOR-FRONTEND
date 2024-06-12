@@ -8,12 +8,13 @@ import CreateTaskModal from '../../components/modals/CreateTaskModal';
 
 const ProjectPlanningPage = () => {
   const [accessibleProjectsIds, setAccessibleProjectsIds] = useState([]);
-  const [projectId, setProjectId] = useState(2);
+  const [projectId, setProjectId] = useState();
   const [filtersVisible, setFiltersVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tasksUpdated, setTasksUpdated] = useState(false); 
 
   const fetchProjetsIdByloggedUser = async () => {
+ 
     try {
       const response = await membershipService.getProjectIdsByuserId();
       const data = await response.json();
@@ -26,7 +27,7 @@ const ProjectPlanningPage = () => {
   useEffect(() => {
     fetchProjetsIdByloggedUser();
   }
-  , []);
+  , [projectId]);
 
   const toggleFiltersVisibility = () => {
     setFiltersVisible(!filtersVisible);
@@ -36,9 +37,14 @@ const ProjectPlanningPage = () => {
     setIsModalOpen(true);
   }
   const handleTaskCreated = () => {
-    setTasksUpdated(!tasksUpdated); // Atualiza o estado para forçar a atualização das tarefas
+    setTasksUpdated(!tasksUpdated); 
   };
+  const handleSelectProject = (e) => {
+    setProjectId(e.target.value);
+  }
+
  
+  console.log(projectId);
   return (
     
     <div className={styles.container}>
@@ -55,7 +61,8 @@ const ProjectPlanningPage = () => {
           </button>
         </div>
         {filtersVisible && (
-          <select onChange={(e) => setProjectId(e.target.value)}>
+          <select onChange={handleSelectProject}>
+            <option value="">Select a project</option>
             {accessibleProjectsIds.map((projectId) => (
               <option key={projectId} value={projectId}>
                 {projectId}
