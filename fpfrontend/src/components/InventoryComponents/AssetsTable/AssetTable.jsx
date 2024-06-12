@@ -8,16 +8,17 @@ import useAssetsStore from "../../../stores/useAssetsStore.jsx";
 function AssetTable({ pageCount, setPageNumber, assets }) {
   const { isEditModalOpen, setEditModalOpen } = useAssetsStore();
   const [selectedAssetId, setSelectedAssetId] = useState(null);
-
+  const [isViewOnly, setIsViewOnly] = useState(false);
 
   const handleViewAsset = (assetId) => () => {
-    console.log("Clicked on view asset:", assetId);
+    setSelectedAssetId(assetId);
+    setIsViewOnly(true);
     setEditModalOpen(true);
-    //setViewOnlyMode;
   };
 
   const handleEditAsset = (assetId) => {
     setSelectedAssetId(assetId);
+    setIsViewOnly(false);
     setEditModalOpen(true);
   };
 
@@ -149,7 +150,8 @@ function AssetTable({ pageCount, setPageNumber, assets }) {
         <EditAssetModal
           isOpen={isEditModalOpen}
           onClose={() => setEditModalOpen(false)}
-          selectedAssetId = {selectedAssetId}
+          selectedAssetId={selectedAssetId}
+          isViewOnly={isViewOnly}
         />
       )}
     </div>
