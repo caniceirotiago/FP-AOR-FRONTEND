@@ -1,10 +1,12 @@
 import {create} from 'zustand';
 import assetService from '../services/assetService';
 
-const useAssetTypeStore = create((set) => ({
+const useAssetsStore = create((set) => ({
   states: [],
   loading: false,
   error: null,
+  isEditModalOpen: false,
+  setEditModalOpen: (isOpen) => set({ isEditModalOpen: isOpen }),
   fetchAssetTypes: async () => {
     set({ loading: true, error: null });
     try {
@@ -17,4 +19,4 @@ const useAssetTypeStore = create((set) => ({
   },
 }));
 
-export default useAssetTypeStore;
+export default useAssetsStore;

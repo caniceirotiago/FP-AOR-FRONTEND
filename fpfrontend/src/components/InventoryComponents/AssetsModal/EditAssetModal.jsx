@@ -4,25 +4,32 @@ import styles from "./EditAssetModal.module.css";
 import { FormattedMessage } from "react-intl";
 import "react-datepicker/dist/react-datepicker.css";
 import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
-import useAssetTypeStore from "../../../stores/useAssetTypeStore.jsx";
-import useAssetStore from "../../../stores/useAssetStore.jsx";
+import useAssetsStore from "../../../stores/useAssetsStore.jsx";
 
-const EditAssetModal = ({ isOpen, onClose, assets, selectedAssetId }) => {
+const EditAssetModal = ({ isOpen, onClose, selectedAssetId }) => {
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
   const [assetData, setAssetData] = useState(null);
-  const { types, fetchAssetTypes } = useAssetTypeStore();
+  const { types } = useAssetsStore();
+
 
   useEffect(() => {
-      fetchAssetTypes();
-  }, []);
-
-  useEffect(() => {
-    const asset = assets.find(a => a.id === selectedAssetId);
-    if (asset) {
-        setAssetData(asset);
+    if (!selectedAssetId) return;
+    
+    const fetchAssetById = async () => {
+      try {
+      const response = await assetService.getAssetById(selectedAssetId);
+      if (response.status === 200) {
+        const data = await response.json();
+        setAssetData(data);
+      } else {
+        console.error("Error fetching asset:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching asset:", error.message);
     }
+  };
+  fetchAssetById();
 }, [selectedAssetId]);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,7 +67,7 @@ const handleSubmit = async (e) => {
   }
 };
 
-if (!isOpen) return null;
+if (!isOpen || !assetData) return null;
 
 
 console.log(assetData);

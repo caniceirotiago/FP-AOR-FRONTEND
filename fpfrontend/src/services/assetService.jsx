@@ -47,6 +47,20 @@ const assetService = {
     }
   },
 
+  getAssetById: async (assetId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/id/${assetId}`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      return response;
+    } catch (error) {
+      console.error("Error fetching assets:", error.message);
+      throw error;
+    }
+  },
+
   fetchAllTypes: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/enum/types`, {

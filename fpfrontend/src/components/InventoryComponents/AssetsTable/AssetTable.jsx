@@ -3,29 +3,22 @@ import { useTable, usePagination } from "react-table";
 import styles from "./AssetTable.module.css";
 import { FaEye, FaEdit } from "react-icons/fa";
 import EditAssetModal from "../AssetsModal/EditAssetModal.jsx";
-import useAssetStore from "../../../stores/useAssetStore.jsx";
+import useAssetsStore from "../../../stores/useAssetsStore.jsx";
 
-function AssetTable({ pageCount, setPageNumber }) {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { assets, fetchAssets } = useAssetStore();
-  const [ selectedAssetId, setSelectedAssetId ] = useState();
+function AssetTable({ pageCount, setPageNumber, assets }) {
+  const { isEditModalOpen, setEditModalOpen } = useAssetsStore();
+  const [selectedAssetId, setSelectedAssetId] = useState(null);
 
-  useEffect(() => {
-    fetchAssets();
-  }, [isEditModalOpen]);
 
   const handleViewAsset = (assetId) => () => {
     console.log("Clicked on view asset:", assetId);
-    setIsEditModalOpen(true);
+    setEditModalOpen(true);
     //setViewOnlyMode;
   };
 
-  console.log("Selected asset:", assets);
-
   const handleEditAsset = (assetId) => {
     setSelectedAssetId(assetId);
-
-    setIsEditModalOpen(true);
+    setEditModalOpen(true);
   };
 
   const data = useMemo(() => assets, [assets]);
@@ -111,9 +104,11 @@ function AssetTable({ pageCount, setPageNumber }) {
     usePagination
   );
 
+  /*
   useEffect(() => {
     setPageNumber(pageIndex + 1);
   }, [pageIndex, setPageNumber]);
+  */
 
   return (
     <div className={styles.tableContainer}>
@@ -153,9 +148,8 @@ function AssetTable({ pageCount, setPageNumber }) {
       {isEditModalOpen && (
         <EditAssetModal
           isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
-          assets={assets}
-          selectedAssetId={selectedAssetId}
+          onClose={() => setEditModalOpen(false)}
+          selectedAssetId = {selectedAssetId}
         />
       )}
     </div>

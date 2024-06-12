@@ -3,7 +3,7 @@ import assetService from "../../../services/assetService";
 import styles from "./CreateAssetModal.module.css";
 import "react-datepicker/dist/react-datepicker.css";
 import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
-import useAssetTypeStore from "../../../stores/useAssetTypeStore.jsx";
+import useAssetTypeStore from "../../../stores/useAssetsStore.jsx";
 import { FormattedMessage } from "react-intl";
 
 const CreateAssetModal = ({ isOpen, onClose }) => {
