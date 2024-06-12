@@ -30,7 +30,6 @@ const InventoryPage = () => {
     type: "",
   };
   const [filterType, setFilterType] = useState("name", "type");
-  
 
   function getInitialPageSize() {
     const width = dimensions.width;
@@ -61,7 +60,7 @@ const InventoryPage = () => {
   const handleResize = () => {
     // Additional logic for resizing if needed
   };
-  
+
   useEffect(() => {
     updatePageSize();
     handleResize();
@@ -107,7 +106,7 @@ const InventoryPage = () => {
     if (isAuthenticated) navigate("/authenticatedhomepage");
     else navigate("/homepage");
   };
-  
+
   const handleFilterTypeChange = (e) => {
     setFilterType(e.target.value);
   };
@@ -115,6 +114,22 @@ const InventoryPage = () => {
     setFiltersVisible(!filtersVisible);
   };
 
+  /*
+  useEffect(() => {
+    const fetchAssets = async () => {
+      const response = await assetService.getFilteredAssets(pageNumber, pageSize, filters);
+      if (response.status === 200) {
+        const data = await response.json();
+        setAssets(data.assetsForAPage);
+        setPageCount(Math.ceil(data.totalAssets / pageSize));
+      }
+         else{
+        console.error("Error fetching assets:");
+      }
+    };
+    fetchAssets();
+  }, [isModalOpen, pageNumber, pageSize, filters, isEditModalOpen]);
+  */
 
   useEffect(() => {
     const fetchAssets = async () => {
@@ -122,14 +137,12 @@ const InventoryPage = () => {
       if (response.status === 200) {
         const data = await response.json();
         setAssets(data);
-      }
-      else{
+      } else {
         console.error("Error fetching assets:");
       }
     };
     fetchAssets();
   }, [isModalOpen, pageNumber, pageSize, filters, isEditModalOpen]);
-
 
   const handleClick = () => {
     setIsModalOpen(true);
@@ -139,7 +152,10 @@ const InventoryPage = () => {
     <div className={styles.inventoryPage}>
       <div className={styles.controlPanel}>
         <div className={styles.btns}>
-          <CreateAssetModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+          <CreateAssetModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+          />
           <button
             onClick={handleClick}
             className={`${styles.iconButton} ${styles.createButton}`}
@@ -168,7 +184,7 @@ const InventoryPage = () => {
       <AssetTable
         pageCount={pageCount}
         setPageNumber={setPageNumber}
-        assets = {assets}
+        assets={assets}
       />
     </div>
   );
