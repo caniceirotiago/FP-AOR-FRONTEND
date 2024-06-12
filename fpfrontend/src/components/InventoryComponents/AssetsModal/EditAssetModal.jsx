@@ -4,23 +4,32 @@ import styles from "./EditAssetModal.module.css";
 import { FormattedMessage } from "react-intl";
 import "react-datepicker/dist/react-datepicker.css";
 import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
-import useAssetTypeStore from "../../../stores/useAssetTypeStore.jsx";
+import useAssetsStore from "../../../stores/useAssetsStore.jsx";
 
-const EditAssetModal = ({ isOpen, onClose, asset }) => {
-    const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
-    useDialogModalStore();
-    const [assetData, setAssetData] = useState(asset);
+const EditAssetModal = ({ isOpen, onClose, selectedAssetId }) => {
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
+  const [assetData, setAssetData] = useState(null);
+  const { types } = useAssetsStore();
 
-    useEffect(() => {
-        // Update the assetData whenever the asset prop changes
-        setAssetData(asset);
-    }, [asset]);
-
-  const { types, fetchAssetTypes } = useAssetTypeStore();
 
   useEffect(() => {
-    fetchAssetTypes();
-  }, [fetchAssetTypes]);
+    if (!selectedAssetId) return;
+    
+    const fetchAssetById = async () => {
+      try {
+      const response = await assetService.getAssetById(selectedAssetId);
+      if (response.status === 200) {
+        const data = await response.json();
+        setAssetData(data);
+      } else {
+        console.error("Error fetching asset:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching asset:", error.message);
+    }
+  };
+  fetchAssetById();
+}, [selectedAssetId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,37 +40,37 @@ const EditAssetModal = ({ isOpen, onClose, asset }) => {
 };
 
 const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      console.log("Asset data:", asset);
-      console.log("Asset Id:", asset.id);
-// Remove the id field from assetData
-const { id, ...updateData } = assetData;
-console.log("Update data:", updateData);
-
-        const response = await assetService.updateAsset(asset.id, updateData);
-        if (response.ok) {
-            setDialogMessage("Asset updated successfully!");
-            setAlertType("success");
-            setIsDialogOpen(true);
-            onClose();
-        } else {
-            console.error("Error updating asset:", response.statusText);
-            const data = await response.json();
-            setDialogMessage(data.errorMessage);
-            setAlertType(true);
-            setIsDialogOpen(true);
-            setOnConfirm(() => {});
-        }
-    } catch (error) {
-        console.error("Error updating asset:", error);
+  e.preventDefault();
+  try {
+    console.log("Asset data:", assetData);
+    
+    
+    const response = await assetService.updateAsset(assetData);
+    if (response.ok) {
+      setDialogMessage("Asset updated successfully!");
+      setAlertType("success");
+      setIsDialogOpen(true);
+      setOnConfirm(() => {
+        onClose();
+        setIsDialogOpen(false);
+      });
+    } else {
+      console.error("Error updating asset:", response.statusText);
+      const data = await response.json();
+      setDialogMessage(data.errorMessage);
+      setAlertType(true);
+      setIsDialogOpen(true);
+      setOnConfirm(() => {});
     }
+  } catch (error) {
+    console.error("Error updating asset:", error);
+  }
 };
 
-if (!isOpen) return null;
+if (!isOpen || !assetData) return null;
 
 
-console.log(asset);
+console.log(assetData);
   return (
     <div className={styles.modal}>
       <div className={styles.modalContent}>

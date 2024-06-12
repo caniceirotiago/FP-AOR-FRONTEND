@@ -47,6 +47,20 @@ const assetService = {
     }
   },
 
+  getAssetById: async (assetId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/id/${assetId}`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      return response;
+    } catch (error) {
+      console.error("Error fetching assets:", error.message);
+      throw error;
+    }
+  },
+
   fetchAllTypes: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/enum/types`, {
@@ -61,12 +75,12 @@ const assetService = {
     }
   },
   
-  updateAsset: async (assetId, assetData) => {
+  updateAsset: async (assetData) => {
     console.log("Inside service Asset data:", assetData);
-      console.log("Inside service Asset Id:", assetId);
+      console.log("Inside service Asset Id:", assetData.id);
   
     try {
-      const response = await fetch(`${API_BASE_URL}/${assetId}`, {
+      const response = await fetch(`${API_BASE_URL}`, {
         method: "PUT",
         headers: getAuthHeaders(),
         body: JSON.stringify(assetData),
@@ -79,66 +93,6 @@ const assetService = {
       throw error;
     }
   },
-
-   /*
-  getFilteredProjects: async (page, pageSize, filters = {}) => {
-    const filterParams = new URLSearchParams();
-
-    Object.keys(filters).forEach(key => {
-      if (filters[key]) {
-        filterParams.append(key, filters[key]);
-      }
-    });
-    filterParams.append('page', page);
-  filterParams.append('pageSize', pageSize);
-    try {
-      const response = await fetch(`${API_BASE_URL}/all/filter?${filterParams}`,
-        {
-          method: "GET",
-          headers: getAuthHeaders(),
-        }
-      );
-      return response;
-    } catch (error) {
-      console.error("Error fetching projects:", error.message);
-      throw error;
-    }
-  },
-  */
-
-  /*
-  getProjectById: async (projectId) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/info/${projectId}`, {
-        method: "GET",
-        headers: getAuthHeaders(),
-        credentials: "include",
-      });
-      checkStatus(response);
-      return response;
-    } catch (error) {
-      console.error("Error fetching project data:", error.message);
-      throw error;
-    }
-  },
-  */
-
-  /*
-  getTasksByProjectId: async (projectId) => {
-    try {
-      const response = await fetch(`http://localhost:8080/FPBackend/rest/tasks/project/${projectId}`, {
-        method: "GET",
-        headers: getAuthHeaders(),
-        credentials: "include",
-      });
-      checkStatus(response);
-      return response;
-    } catch (error) {
-      console.error("Error updating project:", error.message);
-      throw error;
-    }
-  },
-*/
 
 };
 

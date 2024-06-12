@@ -7,7 +7,7 @@ import assetService from "../../services/assetService";
 import { FaTable, FaTh, FaPlus, FaFilter } from "react-icons/fa";
 import useAuthStore from "../../stores/useAuthStore.jsx";
 import useDeviceStore from "../../stores/useDeviceStore.jsx";
-import useAssetTypeStore from "../../stores/useAssetTypeStore.jsx";
+import useAssetsStore from "../../stores/useAssetsStore.jsx";
 
 const InventoryPage = () => {
   const { dimensions } = useDeviceStore();
@@ -16,6 +16,7 @@ const InventoryPage = () => {
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [assets, setAssets] = useState([]);
+  const { fetchAssetTypes, isEditModalOpen } = useAssetsStore();
   const [pageSize, setPageSize] = useState(getInitialPageSize());
   const [filtersVisible, setFiltersVisible] = useState(false);
   const [filters, setFilters] = useState({
@@ -28,8 +29,8 @@ const InventoryPage = () => {
     name: "",
     type: "",
   };
-  const [filterType, setFilterType] = useState("name");
-  const { types, fetchAssetTypes } = useAssetTypeStore();
+  const [filterType, setFilterType] = useState("name", "type");
+  
 
   function getInitialPageSize() {
     const width = dimensions.width;
@@ -60,7 +61,7 @@ const InventoryPage = () => {
   const handleResize = () => {
     // Additional logic for resizing if needed
   };
-
+  
   useEffect(() => {
     updatePageSize();
     handleResize();
@@ -87,20 +88,6 @@ const InventoryPage = () => {
     fetchAssetTypes();
   }, [location.search]);
 
-  const fetchAssets = async () => {
-    const response = await assetService.getAllAssets();
-    if (response.ok) {
-      const data = await response.json();
-      setAssets(data);
-    } else {
-      console.error("Error fetching assets:", response.status);
-    }
-  };
-
-  useEffect(() => {
-    fetchAssets();
-  }, [isModalOpen, pageNumber, filters]);
-
   const handleFilterChange = (e) => {
     setFilters({
       ...filters,
@@ -115,25 +102,39 @@ const InventoryPage = () => {
     });
   };
 
-  const handleFilterTypeChange = (e) => {
-    setFilterType(e.target.value);
-  };
-
-  const handleClick = () => {
-    setIsModalOpen(true);
-  };
-
   const handleClearFilters = () => {
     setFilters(defaultFilters);
     if (isAuthenticated) navigate("/authenticatedhomepage");
     else navigate("/homepage");
   };
-
+  
+  const handleFilterTypeChange = (e) => {
+    setFilterType(e.target.value);
+  };
   const toggleFiltersVisibility = () => {
     setFiltersVisible(!filtersVisible);
   };
 
-  console.log("InventoryPage assets:", assets);
+
+  useEffect(() => {
+    const fetchAssets = async () => {
+      const response = await assetService.getAllAssets();
+      if (response.status === 200) {
+        const data = await response.json();
+        setAssets(data);
+      }
+      else{
+        console.error("Error fetching assets:");
+      }
+    };
+    fetchAssets();
+  }, [isModalOpen, pageNumber, pageSize, filters, isEditModalOpen]);
+
+
+  const handleClick = () => {
+    setIsModalOpen(true);
+  };
+
   return (
     <div className={styles.inventoryPage}>
       <div className={styles.controlPanel}>
@@ -158,16 +159,16 @@ const InventoryPage = () => {
           <div className={styles.filters}>
             <select value={filterType} onChange={handleFilterTypeChange}>
               <option value="name">Name</option>
-              {/* Add other filter options here */}
+              <option value="type">Type</option>
             </select>
             {/* Add filter inputs here */}
           </div>
         )}
       </div>
       <AssetTable
-        assets={assets}
         pageCount={pageCount}
         setPageNumber={setPageNumber}
+        assets = {assets}
       />
     </div>
   );
