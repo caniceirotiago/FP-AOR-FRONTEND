@@ -23,8 +23,8 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
   const { types, fetchAssetTypes } = useAssetTypeStore();
 
   useEffect(() => {
-    console.log("Modal open state changed:", isModalOpen);
-  }, [isModalOpen]);
+    console.log("Modal open state changed:", isOpen);
+  }, [isOpen]);
 
   
   useEffect(() => {

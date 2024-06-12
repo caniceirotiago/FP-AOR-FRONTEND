@@ -5,24 +5,24 @@ import { FormattedMessage } from "react-intl";
 import "react-datepicker/dist/react-datepicker.css";
 import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
 import useAssetTypeStore from "../../../stores/useAssetTypeStore.jsx";
+import useAssetStore from "../../../stores/useAssetStore.jsx";
 
-const EditAssetModal = ({ isOpen, onClose, asset }) => {
-    const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
-    useDialogModalStore();
-    const [assetData, setAssetData] = useState(asset);
+const EditAssetModal = ({ isOpen, onClose, assetId }) => {
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
+  const { assets } = useAssetStore();
+  const [assetData, setAssetData] = useState(null);
 
-    useEffect(() => {
-      // Update the assetData whenever the asset prop changes and it is not undefined
+  useEffect(() => {
+      const asset = assets.find(a => a.id === assetId);
       if (asset) {
           setAssetData(asset);
       }
-  }, [asset]);
-  
+  }, [assetId, assets]);
 
   const { types, fetchAssetTypes } = useAssetTypeStore();
 
   useEffect(() => {
-    fetchAssetTypes();
+      fetchAssetTypes();
   }, [fetchAssetTypes]);
 
   const handleChange = (e) => {
@@ -36,13 +36,10 @@ const EditAssetModal = ({ isOpen, onClose, asset }) => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    console.log("Asset data:", asset);
-    console.log("Asset Id:", asset.id);
-    // Remove the id field from assetData
-    const { id, ...updateData } = assetData;
-    console.log("Update data:", updateData);
-
-    const response = await assetService.updateAsset(asset.id, updateData);
+    console.log("Asset data:", assetData);
+    console.log("Asset Id:", assetData.id);
+    
+    const response = await assetService.updateAsset(assetData);
     if (response.ok) {
       setDialogMessage("Asset updated successfully!");
       setAlertType("success");
@@ -67,7 +64,7 @@ const handleSubmit = async (e) => {
 if (!isOpen) return null;
 
 
-console.log(asset);
+console.log(assetData);
   return (
     <div className={styles.modal}>
       <div className={styles.modalContent}>

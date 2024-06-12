@@ -3,25 +3,22 @@ import { useTable, usePagination } from 'react-table';
 import styles from './AssetTable.module.css'; 
 import { FaEye, FaEdit } from 'react-icons/fa';
 import EditAssetModal from '../AssetsModal/EditAssetModal.jsx';
+import useAssetStore from '../../../stores/useAssetStore.jsx';
 
-function AssetTable({ assets, pageCount, setPageNumber }) {
-    const [selectedAsset, setSelectedAsset] = useState(null); // Track selected asset for editing
+function AssetTable({ pageCount, setPageNumber }) {
+    const [selectedAssetId, setSelectedAssetId] = useState(null); // Track selected asset for editing
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const { assets, fetchAssets } = useAssetStore();
 
     const handleViewAsset = (assetId) => () => {
         console.log('Clicked on view asset:', assetId);
-        const selected = assets.find(asset => asset.id === assetId);
-        setSelectedAsset(selected);
         setIsEditModalOpen(true);
         //setViewOnlyMode;
     }
 
     const handleEditAsset = (assetId) => {
-        console.log('Clicked on Edit asset:', assetId);
-        console.log(' handleEditAsset assets', assets);
-        const selected = assets.find(asset => asset.id === assetId);
-        setSelectedAsset(selected);
-        console.log('Selected asset:', selected);
+        setSelectedAssetId(assetId);
+        console.log('Selected asset id:', assetId);
         setIsEditModalOpen(true);
     }
 
@@ -145,11 +142,11 @@ function AssetTable({ assets, pageCount, setPageNumber }) {
                     </tbody>
                 </table>
                 </div>
-        {isEditModalOpen && selectedAsset && (
+        {isEditModalOpen && selectedAssetId && (
             <EditAssetModal
                 isOpen={isEditModalOpen}
                 onClose={() => setIsEditModalOpen(false)}
-                asset={selectedAsset}
+                asset={selectedAssetId}
             />
         )}
     </div>

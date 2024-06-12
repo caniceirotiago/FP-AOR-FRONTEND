@@ -168,7 +168,6 @@ const InventoryPage = () => {
         )}
       </div>
       <AssetTable
-        assets={assets}
         pageCount={pageCount}
         setPageNumber={setPageNumber}
       />

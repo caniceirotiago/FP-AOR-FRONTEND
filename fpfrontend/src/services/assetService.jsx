@@ -61,12 +61,12 @@ const assetService = {
     }
   },
   
-  updateAsset: async (assetId, assetData) => {
+  updateAsset: async (assetData) => {
     console.log("Inside service Asset data:", assetData);
-      console.log("Inside service Asset Id:", assetId);
+      console.log("Inside service Asset Id:", assetData.id);
   
     try {
-      const response = await fetch(`${API_BASE_URL}/${assetId}`, {
+      const response = await fetch(`${API_BASE_URL}`, {
         method: "PUT",
         headers: getAuthHeaders(),
         body: JSON.stringify(assetData),
