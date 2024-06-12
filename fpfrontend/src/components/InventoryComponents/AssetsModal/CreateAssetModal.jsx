@@ -120,7 +120,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
             <label className={styles.label}>Stock Quantity</label>
             <input
               className={styles.input}
-              type="text"
+              type="number"
               name="stockQuantity"
               value={assetData.stockQuantity}
               onChange={handleChange}

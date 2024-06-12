@@ -6,71 +6,71 @@ import "react-datepicker/dist/react-datepicker.css";
 import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
 import useAssetsStore from "../../../stores/useAssetsStore.jsx";
 
-const EditAssetModal = ({ isOpen, onClose, selectedAssetId }) => {
-  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
+const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
+    useDialogModalStore();
   const [assetData, setAssetData] = useState(null);
   const { types } = useAssetsStore();
 
-
   useEffect(() => {
     if (!selectedAssetId) return;
-    
+
     const fetchAssetById = async () => {
       try {
-      const response = await assetService.getAssetById(selectedAssetId);
-      if (response.status === 200) {
-        const data = await response.json();
-        setAssetData(data);
-      } else {
-        console.error("Error fetching asset:", response.statusText);
+        const response = await assetService.getAssetById(selectedAssetId);
+        if (response.status === 200) {
+          const data = await response.json();
+          setAssetData(data);
+        } else {
+          console.error("Error fetching asset:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching asset:", error.message);
       }
-    } catch (error) {
-      console.error("Error fetching asset:", error.message);
-    }
-  };
-  fetchAssetById();
-}, [selectedAssetId]);
+    };
+    fetchAssetById();
+  }, [selectedAssetId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAssetData({
-        ...assetData,
-        [name]: value,
+      ...assetData,
+      [name]: value,
     });
-};
+  };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    console.log("Asset data:", assetData);
-    
-    
-    const response = await assetService.updateAsset(assetData);
-    if (response.ok) {
-      setDialogMessage("Asset updated successfully!");
-      setAlertType("success");
-      setIsDialogOpen(true);
-      setOnConfirm(() => {
-        onClose();
-        setIsDialogOpen(false);
-      });
-    } else {
-      console.error("Error updating asset:", response.statusText);
-      const data = await response.json();
-      setDialogMessage(data.errorMessage);
-      setAlertType(true);
-      setIsDialogOpen(true);
-      setOnConfirm(() => {});
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isViewOnly) {
+      onClose();
+      return;
     }
-  } catch (error) {
-    console.error("Error updating asset:", error);
-  }
-};
+    try {
+      const response = await assetService.updateAsset(assetData);
+      if (response.ok) {
+        setDialogMessage("Asset updated successfully!");
+        setAlertType("success");
+        setIsDialogOpen(true);
+        setOnConfirm(() => {
+          onClose();
+          setIsDialogOpen(false);
+        });
+      } else {
+        console.error("Error updating asset:", response.statusText);
+        const data = await response.json();
+        setDialogMessage(data.errorMessage);
+        setAlertType(true);
+        setIsDialogOpen(true);
+        setOnConfirm(() => {});
+      }
+    } catch (error) {
+      console.error("Error updating asset:", error);
+    }
+  };
 
-if (!isOpen || !assetData) return null;
+  if (!isOpen || !assetData) return null;
 
-
-console.log(assetData);
+  console.log(assetData);
   return (
     <div className={styles.modal}>
       <div className={styles.modalContent}>
@@ -86,6 +86,7 @@ console.log(assetData);
               name="name"
               value={assetData.name}
               onChange={handleChange}
+              disabled={isViewOnly}
               required
             />
             <label className={styles.label}>Type</label>
@@ -94,6 +95,7 @@ console.log(assetData);
               name="type"
               value={assetData.type}
               onChange={handleChange}
+              disabled={isViewOnly}
               required
             >
               <option value="">Select a type</option>
@@ -109,6 +111,7 @@ console.log(assetData);
               name="description"
               value={assetData.description}
               onChange={handleChange}
+              disabled={isViewOnly}
               required
             />
             <label className={styles.label}>Stock Quantity</label>
@@ -118,6 +121,7 @@ console.log(assetData);
               name="stockQuantity"
               value={assetData.stockQuantity}
               onChange={handleChange}
+              disabled={isViewOnly}
               required
             />
             <label className={styles.label}>Part Number</label>
@@ -127,6 +131,7 @@ console.log(assetData);
               name="partNumber"
               value={assetData.partNumber}
               onChange={handleChange}
+              disabled={isViewOnly}
               required
             />
             <label className={styles.label}>Manufacturer</label>
@@ -136,6 +141,7 @@ console.log(assetData);
               name="manufacturer"
               value={assetData.manufacturer}
               onChange={handleChange}
+              disabled={isViewOnly}
               required
             />
             <label className={styles.label}>Manufacturer Phone</label>
@@ -145,6 +151,7 @@ console.log(assetData);
               name="manufacturerPhone"
               value={assetData.manufacturerPhone}
               onChange={handleChange}
+              disabled={isViewOnly}
               required
             />
             <label className={styles.label}>Observations</label>
@@ -153,9 +160,10 @@ console.log(assetData);
               name="observations"
               value={assetData.observations}
               onChange={handleChange}
+              disabled={isViewOnly}
             />
-            <button type="submit" className={styles.button}>
-              Save
+             <button type="submit" className={styles.button}>
+             {isViewOnly ? "Back" : "Save"}
             </button>
           </form>
         </div>
