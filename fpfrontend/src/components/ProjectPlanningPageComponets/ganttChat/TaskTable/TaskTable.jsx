@@ -15,11 +15,11 @@ const TaskTable = ({ tasks }) => {
         </thead>
         <tbody>
           {tasks.map((task) => (
-            <tr key={task.id}>
-              <td>{task.id}</td>
-              <td>{task.name}</td>
-              <td>{task.start}</td>
-              <td>{task.end}</td>
+            <tr key={task.id} className={styles.tr}>
+              <td className={styles.td}>{task.id}</td>
+              <td className={styles.td}>{task.title}</td>
+              <td className={styles.td}>{task.plannedStartDate}</td>
+              <td className={styles.td}>{task.plannedEndDate}</td>
             </tr>
           ))}
         </tbody>

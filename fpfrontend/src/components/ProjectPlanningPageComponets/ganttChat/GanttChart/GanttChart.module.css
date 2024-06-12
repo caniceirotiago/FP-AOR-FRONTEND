@@ -2,6 +2,7 @@
   display: flex;
   height: 100%;
   width: 100%;
+  padding-right: 30px;
 }
 
 .ganttContainer {
@@ -115,11 +116,14 @@
 }
 
 .taskCircleStart {
-  left: -15px; /* Ajuste a posição conforme necessário */
+  left: -10px; /* Ajuste a posição conforme necessário */
 }
 
 .taskCircleEnd {
-  right: -15px; /* Ajuste a posição conforme necessário */
+  right: -10px; /* Ajuste a posição conforme necessário */
+}
+.circleDragHoovered {
+  background-color: blue;
 }
 
 .temporaryDependencyLine {
@@ -141,7 +145,7 @@
 
 .fixedLine {
   pointer-events: all;
-  stroke-width: 2px; /* Ajuste para um stroke-width menor */
+  stroke-width: 5px; /* Ajuste para um stroke-width menor */
   transition: stroke-width 0.3s ease, stroke 0.3s ease;
 }
 .fixedLine > * {
@@ -150,7 +154,7 @@
 }
 
 .fixedLine:hover {
-  stroke-width: 4px;
+  stroke-width: 10px;
   stroke: blue;
   cursor: pointer;
 }

@@ -1,14 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styles from './GanttChart.module.css';
 
-const GanttChart = ({ tasks, setTasks }) => {
+const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById, removeDependency }) => {
   const ganttRef = useRef(null);
   const [draggingTask, setDraggingTask] = useState(null);
   const [activeDependency, setActiveDependency] = useState(null);
   const [linePosition, setLinePosition] = useState(null);
+  const [circleDragHoovered, setCircleDragHoovered] = useState(null);
 
-  const startDate = new Date(Math.min(...tasks.map(task => new Date(task.start))));
-  const endDate = new Date(Math.max(...tasks.map(task => new Date(task.end))));
+
+
+  const startDate = new Date(Math.min(...tasks.map(task => new Date(task.plannedStartDate))));
+  const endDate = new Date(Math.max(...tasks.map(task => new Date(task.plannedEndDate))));
   const totalDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
 
   const handleDragStart = (e, taskId, type, handleType) => {
@@ -52,8 +55,8 @@ const GanttChart = ({ tasks, setTasks }) => {
     if (Math.abs(dayOffset) >= 1) {
       const updatedTasks = tasks.map(task => {
         if (task.id === taskId) {
-          const taskStartDate = new Date(task.start);
-          const taskEndDate = new Date(task.end);
+          const taskStartDate = new Date(task.plannedStartDate);
+          const taskEndDate = new Date(task.plannedEndDate);
           const newStartDate = new Date(taskStartDate.getTime() + roundedDayOffset * (1000 * 60 * 60 * 24));
           const newEndDate = new Date(taskEndDate.getTime() + roundedDayOffset * (1000 * 60 * 60 * 24));
 
@@ -74,59 +77,79 @@ const GanttChart = ({ tasks, setTasks }) => {
   };
 
   const validateTaskUpdate = (task, newStartDate, newEndDate, isDraggingHandle = false) => {
-    const dependencies = task.dependencies.map(depId => tasks.find(t => t.id === depId));
-    const isValidStartDate = dependencies.every(dep => newStartDate >= new Date(dep.end));
-    const dependentTasks = tasks.filter(t => t.dependencies.includes(task.id));
-    const isValidEndDate = dependentTasks.every(dep => newEndDate <= new Date(dep.start));
+    const prerequisites = task.prerequisites.map(depId => tasks.find(t => t.id === depId));
+    const isValidStartDate = prerequisites.every(dep => newStartDate >= new Date(dep.plannedEndDate));
+    const dependentTasks = tasks.filter(t => t.prerequisites.includes(task.id));
+    const isValidEndDate = dependentTasks.every(dep => newEndDate <= new Date(dep.plannedStartDate));
     const isValidDuration = newEndDate > newStartDate;
 
     if (isDraggingHandle && !isValidDuration) {
-      return task; // Prevents dragging to create a zero or negative duration task
+      return task; 
     }
 
     if (isValidStartDate && isValidEndDate && isValidDuration) {
-      return { ...task, start: newStartDate.toISOString().split('T')[0], end: newEndDate.toISOString().split('T')[0] };
+      return {
+        ...task,
+        plannedStartDate: newStartDate.toISOString().split('.')[0] + 'Z',
+        plannedEndDate: newEndDate.toISOString().split('.')[0] + 'Z'
+      };
     }
     return task;
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const sourceTaskId = Number(e.dataTransfer.getData('sourceTaskId'));
+    const type = e.dataTransfer.getData('type');
     const handleType = e.dataTransfer.getData('handleType');
+    const sourceTaskId = Number(e.dataTransfer.getData('sourceTaskId'));
     const targetTaskId = Number(e.target.dataset.taskId);
 
     if (activeDependency && handleType === 'dependency') {
+      const sourceTaskId = Number(e.dataTransfer.getData('sourceTaskId'));
+      setCircleDragHoovered(false);
       if (sourceTaskId !== targetTaskId) {
         const sourceTask = tasks.find(task => task.id === sourceTaskId);
         const targetTask = tasks.find(task => task.id === targetTaskId);
 
         if (sourceTask && targetTask) {
-          const sourceEndDate = new Date(sourceTask.end);
-          const targetStartDate = new Date(targetTask.start);
-          const targetEndDate = new Date(targetTask.end);
-          const sourceStartDate = new Date(sourceTask.start);
+          const sourceEndDate = new Date(sourceTask.plannedEndDate);
+          const targetStartDate = new Date(targetTask.plannedStartDate);
+          const targetEndDate = new Date(targetTask.plannedEndDate);
+          const sourceStartDate = new Date(sourceTask.plannedStartDate);
 
           if (sourceEndDate <= targetStartDate){
             setTasks(tasks.map(task => {
               if (task.id === targetTaskId) {
-                const dependencies = [...task.dependencies, sourceTaskId];
-                return { ...task, dependencies };
+                const prerequisites = [...task.prerequisites, sourceTaskId];
+                
+                return { ...task, prerequisites };
               }
               return task;
             }));
+            console.log("sourceTaskId", sourceTaskId);
+            addPreresquisiteTaskById(sourceTaskId, targetTaskId);
           } else if (sourceStartDate >= targetEndDate) {
             setTasks(tasks.map(task => {
               if (task.id === sourceTaskId) {
-                const dependencies = [...task.dependencies, targetTaskId];
-                return { ...task, dependencies };
+                const prerequisites = [...task.prerequisites, targetTaskId];
+                return { ...task, prerequisites };
               }
               return task;
             }));
+            console.log("targetTaskId", targetTaskId);
+            addPreresquisiteTaskById(targetTaskId, sourceTaskId);
           }
         }
       }
-    }
+    } else if (handleType === 'handle') {
+      try {
+        console.log("sourceTaskId", sourceTaskId);
+        updateTaskById(sourceTaskId);
+      }
+      catch (error) {
+        console.error("Error updating tasks:", error);
+      }
+    } 
 
     setDraggingTask(null);
     setActiveDependency(null);
@@ -134,13 +157,15 @@ const GanttChart = ({ tasks, setTasks }) => {
   };
 
   const handleDependencyDoubleClick = (taskId, depId) => {
+
     setTasks(tasks.map(task => {
       if (task.id === taskId) {
-        const updatedDependencies = task.dependencies.filter(dependency => dependency !== depId);
-        return { ...task, dependencies: updatedDependencies };
+        const updatedPrerequisites = task.prerequisites.filter(dependency => dependency !== depId);
+        return { ...task, prerequisites: updatedPrerequisites };
       }
       return task;
     }));
+    removeDependency(depId, taskId);
   };
 
   const generateTimeline = () => {
@@ -153,6 +178,12 @@ const GanttChart = ({ tasks, setTasks }) => {
     }
 
     return timeline;
+  };
+  const  circleDragEnter = () => {
+    setCircleDragHoovered(true);
+  };
+  const  circleDragLeave = () => {
+    setCircleDragHoovered(false);
   };
 
   const timeline = generateTimeline();
@@ -169,8 +200,8 @@ const GanttChart = ({ tasks, setTasks }) => {
         </div>
         <div className={styles.taskBars}>
           {tasks.map((task, index) => {
-            const taskStartDate = new Date(task.start);
-            const taskEndDate = new Date(task.end);
+            const taskStartDate = new Date(task.plannedStartDate);
+            const taskEndDate = new Date(task.plannedEndDate);
             const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 50px de largura
             const taskDuration = ((taskEndDate - taskStartDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 50px de largura
 
@@ -198,7 +229,7 @@ const GanttChart = ({ tasks, setTasks }) => {
                   onDrag={(e) => handleDrag(e, task.id, 'bar')}
                   onDragEnd={handleDrop}
                 >
-                  {task.name}
+                  {task.title}
                 </div>
                 <div
                   className={styles.taskHandleEnd}
@@ -208,20 +239,24 @@ const GanttChart = ({ tasks, setTasks }) => {
                   onDragEnd={handleDrop}
                 ></div>
                 <div
-                  className={styles.taskCircleStart}
+                  className={`${styles.taskCircleStart} ${circleDragHoovered && styles.circleDragHoovered}`}
                   draggable
                   data-task-id={task.id}
                   onDragStart={(e) => handleDragStart(e, task.id, 'start', 'dependency')}
                   onDrag={(e) => handleDrag(e, task.id, 'start')}
                   onDragEnd={handleDrop}
+                  onDragEnter={() => circleDragEnter()}
+                  onDragLeave={() => circleDragLeave()}
                 ></div>
                 <div
-                  className={styles.taskCircleEnd}
+                  className={`${styles.taskCircleEnd} ${circleDragHoovered && styles.circleDragHoovered}`}
                   draggable
                   data-task-id={task.id}
                   onDragStart={(e) => handleDragStart(e, task.id, 'end', 'dependency')}
                   onDrag={(e) => handleDrag(e, task.id, 'end')}
                   onDragEnd={handleDrop}
+                  onDragEnter={() => circleDragEnter()}
+                  onDragLeave={() => circleDragLeave()}
                 ></div>
               </div>
             );
@@ -241,12 +276,12 @@ const GanttChart = ({ tasks, setTasks }) => {
         {/* Renderizar linhas de dependência fixas */}
         <div className={styles.svgContainer}>
           {tasks.map((task) =>
-            task.dependencies.map((depId) => {
+            task.prerequisites.map((depId) => {
               const depTask = tasks.find((t) => t.id === depId);
               if (!depTask) return null;
 
-              const depEndDate = new Date(depTask.end);
-              const taskStartDate = new Date(task.start);
+              const depEndDate = new Date(depTask.plannedEndDate);
+              const taskStartDate = new Date(task.plannedStartDate);
 
               const depEndOffset = ((depEndDate - startDate) / (1000 * 60 * 60 * 24)) * 50;
               const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 50;
@@ -272,7 +307,7 @@ const GanttChart = ({ tasks, setTasks }) => {
                       x2="0"
                       y2={`${Math.abs((taskIndex - depIndex) * 40)}`}
                       stroke="red"
-                      strokeWidth="2"
+                      strokeWidth="6"
                       onDoubleClick={() => handleDependencyDoubleClick(task.id, depId)}
                     />
                   </svg>
@@ -287,13 +322,13 @@ const GanttChart = ({ tasks, setTasks }) => {
                     }}
                   >
                     <line
-                      className={styles.fixedLine}
+                      className={`${styles.fixedLine}`}
                       x1="0"
                       y1="0"
                       x2={`${Math.abs(taskStartOffset - depEndOffset) + 20}`}
                       y2="0"
                       stroke="red"
-                      strokeWidth="2"
+                      strokeWidth="6"
                       onDoubleClick={() => handleDependencyDoubleClick(task.id, depId)}
                     />
                   </svg>
