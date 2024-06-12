@@ -94,6 +94,31 @@ const assetService = {
     }
   },
 
+  getFilteredAssets: async (page, pageSize, filters = {}) => {
+    const filterParams = new URLSearchParams();
+
+    Object.keys(filters).forEach(key => {
+      if (filters[key]) {
+        filterParams.append(key, filters[key]);
+      }
+    });
+    filterParams.append('page', page);
+  filterParams.append('pageSize', pageSize);
+    try {
+      const response = await fetch(`${API_BASE_URL}/all/filter?${filterParams}`,
+        {
+          method: "GET",
+          headers: getAuthHeaders(),
+          credentials: "include",
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error("Error fetching projects:", error.message);
+      throw error;
+    }
+  },
+
 };
 
 export default assetService;
