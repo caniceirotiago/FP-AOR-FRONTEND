@@ -70,7 +70,6 @@ const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
 
   if (!isOpen || !assetData) return null;
 
-  console.log(assetData);
   return (
     <div className={styles.modal}>
       <div className={styles.modalContent}>
