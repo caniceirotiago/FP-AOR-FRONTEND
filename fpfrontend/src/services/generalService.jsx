@@ -101,6 +101,7 @@ const generalService = {
       throw error;
     }
   },
+  
 };
 
 export default generalService;

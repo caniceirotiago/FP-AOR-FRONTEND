@@ -5,7 +5,7 @@ import styles from './TaskManager.module.css';
 import taskService from '../../../services/taskService';
 
 
-const TaskManager = ({projectId}) => {
+const TaskManager = ({projectId, tasksUpdated }) => {
   const [tasks, setTasks] = useState( []);
 
 
@@ -33,7 +33,7 @@ const TaskManager = ({projectId}) => {
   useEffect(() => {
     fetchProjectTasks();
   }
-  , [projectId])
+  , [projectId, tasksUpdated])
 
   const addPreresquisiteTaskById = async (independentTaskId, dependentTaskId) => {
     try {

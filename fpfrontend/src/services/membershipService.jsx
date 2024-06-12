@@ -32,7 +32,28 @@ const membershipService = {
             console.error("Error fetching projects:", error.message);
             throw error;
         }
+    },
+    fetchSuggestionsByProjectId: async (firstLetter, projectId) => {
+      try {
+        const response = await fetch(`${MEMBER_BASE_URL}/first/letter/${projectId}?value=${firstLetter}`,
+          {
+            method: "GET",
+            headers: getAuthHeaders(),
+            credentials: "include",
+          }
+        );
+  
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch suggestions");
+        }
+        return response;
+      } catch (error) {
+        console.error("Error fetching suggestions:", error.message);
+        throw error;
+      }
     }
+    
+
 
   
 };
