@@ -10,7 +10,7 @@ import useDialogModalStore from '../../stores/useDialogModalStore.jsx';
 import taskService from '../../services/taskService.jsx';
 import useTaskStatesStore from '../../stores/useTaskStatesStore.jsx';
 
-const EditTaskModal = ({ isOpen, onClose, projectId, onTaskCreated, taskId }) => {
+const EditTaskModal = ({ isOpen, onClose, projectId, onTaskUpdate, taskId }) => {
     const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
     const {states, fetchTaskStates} = useTaskStatesStore();
     const [taskData, setTaskData] = useState({
@@ -73,29 +73,40 @@ const EditTaskModal = ({ isOpen, onClose, projectId, onTaskCreated, taskId }) =>
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const registeredExecutorsIds = taskData.registeredExecutors.map((executor) => executor.id);
+
+    
         const dataToSend = {
+            taskId: taskId,
             title: taskData.title,
             description: taskData.description,
-            plannedStartDate: taskData.plannedStartDate,
-            plannedEndDate: taskData.plannedEndDate,
-            responsibleId: taskData.responsibleId,
+            plannedStartDate: taskData.plannedStartDate ? new Date(taskData.plannedStartDate).toISOString() : null,
+            plannedEndDate: taskData.plannedEndDate ? new Date(taskData.plannedEndDate).toISOString() : null,
+            responsibleUserId: taskData.responsibleId.id,
             state: taskData.state,
-            registeredExecutors: taskData.registeredExecutors,
+            registeredExecutors: registeredExecutorsIds, 
             nonRegisteredExecutors: taskData.nonRegisteredExecutors,
-            dependentTasks: taskData.dependentTasks,
-            prerequisites: taskData.prerequisites,
+
         };
-        const response = await taskService.updateTask(taskId, dataToSend);
-        if (response.status === 200) {
+        console.log(dataToSend);
+        console.log("data to send");
+        const response = await taskService.detailedUpdateTask(dataToSend, projectId);
+        if (response.status === 204) {
             setDialogMessage('Task updated successfully');
-            setAlertType('success');
+            setAlertType(true);
             setIsDialogOpen(true);
+            setOnConfirm(() => {
+  
+            });
             onClose();
-            onTaskCreated();
+            onTaskUpdate();
         } else {
             setDialogMessage('An error occurred while updating the task');
             setAlertType('error');
             setIsDialogOpen(true);
+            setOnConfirm(() => {
+  
+            });
         }
     };
 

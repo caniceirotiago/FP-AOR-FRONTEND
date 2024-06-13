@@ -124,6 +124,21 @@ const projectService = {
       console.error("Error fetching task states:", error.message);
       throw error;
     }
+  },
+  detailedUpdateTask: async ( task, projectId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/detailed/${projectId}`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        credentials: "include",
+        body: JSON.stringify(task),
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error updating task:", error.message);
+      throw error;
+    }
   }
 
     

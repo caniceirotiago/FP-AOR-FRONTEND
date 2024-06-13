@@ -230,7 +230,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
           suggestion = fetchedSuggestions.find((suggestion) => suggestion?.username?.toLowerCase() === input?.toLowerCase());
           console.log(suggestion)
           setAttributes([...attributes, {id: suggestion?.id, username: input, photo: suggestion?.photo}]);
-          setTaskData({...taskData, registeredExecutors: [...registeredExecutors, {id: suggestion?.id, username: input, photo: suggestion?.photo}]});
+          setTaskData({...taskData, responsibleId: {id: suggestion?.id, username: input, photo: suggestion?.photo}});
           
         } else if(title === 'Registered executers'){
           if(attributes.find((attribute) => attribute.username === input)){

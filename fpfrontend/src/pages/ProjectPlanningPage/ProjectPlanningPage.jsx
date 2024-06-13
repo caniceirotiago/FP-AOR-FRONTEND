@@ -47,6 +47,10 @@ const ProjectPlanningPage = () => {
   const handleTaskCreated = () => {
     setTasksUpdated(!tasksUpdated); 
   };
+  const handleTaskUpdate = () => {
+    setTasksUpdated(!tasksUpdated); 
+  }
+  
   const handleSelectProject = (e) => {
     setSelectedProjectId(e.target.value);
   }
@@ -57,7 +61,7 @@ const ProjectPlanningPage = () => {
     
     <div className={styles.container}>
         <CreateTaskModal onTaskCreated={handleTaskCreated} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} projectId={selectedProjectId}/>
-        <EditTaskModal projectId={selectedProjectId} isOpen={isEditTaskModalOpen} onClose={() => setIsEditTaskModalOpen(false)} taskId={selectedTaskId}/>
+        <EditTaskModal onTaskUpdate={handleTaskUpdate} projectId={selectedProjectId} isOpen={isEditTaskModalOpen} onClose={() => setIsEditTaskModalOpen(false)} taskId={selectedTaskId}/>
            <div className={styles.controlPanel}>
            <div className={styles.btns}>
             <button onClick={handleClick} className={`${styles.iconButton} ${styles.createButton}`} data-text="Create">
