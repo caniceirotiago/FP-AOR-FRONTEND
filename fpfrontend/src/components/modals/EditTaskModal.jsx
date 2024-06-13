@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './CreateProjectModal.module.css';
 import useLabStore from '../../stores/useLabStore.jsx';
 import { FormattedMessage } from 'react-intl';
@@ -8,16 +8,51 @@ import 'react-datepicker/dist/react-datepicker.css';
 import projectService from '../../services/projectService.jsx';
 import useDialogModalStore from '../../stores/useDialogModalStore.jsx';
 import taskService from '../../services/taskService.jsx';
+import useTaskStatesStore from '../../stores/useTaskStatesStore.jsx';
 
-const EditTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
+const EditTaskModal = ({ isOpen, onClose, projectId, onTaskCreated, taskId }) => {
     const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
+    const {states, fetchTaskStates} = useTaskStatesStore();
     const [taskData, setTaskData] = useState({
         title: '',
         description: '',
         plannedStartDate: '',
         plannedEndDate: '',
         responsibleId: '',
+        state: '',
+        registeredExecutors: [],
+        nonRegisteredExecutors: '',
+        dependentTasks: [],
+        prerequisites: [],
+
     });
+
+    const fetchTaskDataById = async () => {
+        const response = await taskService.getTaskById(taskId);
+        if (response.status === 200) {
+            const data = await response.json();
+            setTaskData({
+                title: data.title,
+                description: data.description,
+                plannedStartDate: data.plannedStartDate,
+                plannedEndDate: data.plannedEndDate,
+                responsibleId: data.responsibleId,
+                state: data.state,
+                registeredExecutors: data.registeredExecutors,
+                nonRegisteredExecutors: data.nonRegisteredExecutors,
+                dependentTasks: data.dependentTasks,
+                prerequisites: data.prerequisites
+            });
+        }
+    };
+
+    useEffect (() => {
+        if (isOpen) {
+            fetchTaskStates();
+            fetchTaskDataById();
+        }
+    }
+    , [isOpen]);
 
 
 
@@ -34,11 +69,7 @@ const EditTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
         setTaskData((prevData) => ({ ...prevData, [dateType]: formattedDate }));
     };
 
-    const onAddingResponsibleChange = (newResponsible) => {
-        const responsibleId = newResponsible[0]?.user?.id;
-        console.log(responsibleId);
-        setTaskData((prevData) => ({ ...prevData, responsibleId: responsibleId }));
-    };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -50,7 +81,6 @@ const EditTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
             responsibleId: taskData.responsibleId,
             projectId: projectId,
         };
-        console.log(dataToSend);
         const response = await taskService.createTask(dataToSend, projectId);
         if (response.status === 204) {
             setDialogMessage("Task created successfully!");
@@ -69,6 +99,7 @@ const EditTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
             setOnConfirm(() => {});
         }
     };
+    console.log(projectId)
 
     if (!isOpen) return null;
     return (
@@ -85,6 +116,20 @@ const EditTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
                             value={taskData.title}
                             onChange={handleChange}
                         />
+                        <label className={styles.label}>State</label>
+                        <select
+                            className={styles.select}
+                            type="text"
+                            name="state"
+                            value={taskData.state}
+                            onChange={handleChange}
+                        >
+                            {states.map((state) => (
+                                <option key={state.id} value={state}>
+                                    {state}
+                                </option>
+                            ))}
+                        </select>
                         <label className={styles.label}>Description</label>
                         <textarea
                             className={styles.textarea}
@@ -108,7 +153,7 @@ const EditTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
                         />
 
                         <div className={styles.attributeEditor}>
-                            <AttributeEditor onAttributesChange={onAddingResponsibleChange} title="users" editMode={true} mainEntity={"task"} creationMode={true} projectId={projectId}/>
+                            <AttributeEditor projectId={projectId} creationMode={false} title="Responsible user" editMode={true} mainEntity={"task"}  taskResponsibleId={taskData.responsibleId}/>
                         </div>
                         <button type="submit" className={styles.button}>Submit</button>
                     </form>

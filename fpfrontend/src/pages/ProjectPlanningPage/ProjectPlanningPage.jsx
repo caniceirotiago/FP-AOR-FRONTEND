@@ -57,7 +57,7 @@ const ProjectPlanningPage = () => {
     
     <div className={styles.container}>
         <CreateTaskModal onTaskCreated={handleTaskCreated} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} projectId={selectedProjectId}/>
-        <EditTaskModal isOpen={isEditTaskModalOpen} onClose={() => setIsEditTaskModalOpen(false)} taskId={selectedTaskId}/>
+        <EditTaskModal projectId={selectedProjectId} isOpen={isEditTaskModalOpen} onClose={() => setIsEditTaskModalOpen(false)} taskId={selectedTaskId}/>
            <div className={styles.controlPanel}>
            <div className={styles.btns}>
             <button onClick={handleClick} className={`${styles.iconButton} ${styles.createButton}`} data-text="Create">

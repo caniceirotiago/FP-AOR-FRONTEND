@@ -4,6 +4,7 @@ import useProjectRolesStore from '../../../stores/useProjectRolesStore';
 
 const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole, editMode, createdBy, removeItem }) => {
     const { roles } = useProjectRolesStore();
+    
 
     const onChangeRole = (event) => {
         const role = event.target.value;
@@ -14,6 +15,7 @@ const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole,
     let isTheCreator
     if(title === "users" && createdBy) isTheCreator = createdBy.username === attribute.user.username;
 
+    console.log(attribute.photo)
     return (
         <>
         {(title === "keywords") &&
@@ -47,6 +49,16 @@ const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole,
                 </select>
                 </div>}
             {!attribute.accepted && <div className={styles.attributeName}>not accepted</div>}
+            </>
+        )}
+        {title === "Responsible user" &&
+        (
+            <>
+            <div className={styles.attributePhoto}>
+                <img src={attribute.photo} alt="user" className={styles.photo}/>
+            </div>
+            <div className={styles.attributeName}>{attribute.username}</div>
+           
             </>
         )}
          {(editMode && !isTheCreator) && (<button
