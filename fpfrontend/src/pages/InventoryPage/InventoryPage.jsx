@@ -16,12 +16,6 @@ const InventoryPage = () => {
   const { types, fetchAssetTypes, isEditModalOpen } = useAssetsStore();
   const [pageSize, setPageSize] = useState(getInitialPageSize());
   const [filtersVisible, setFiltersVisible] = useState(false);
-  const [filters, setFilters] = useState({
-    name: "",
-    type: "",
-    manufacturer: "",
-    partNumber: "",
-  });
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const defaultFilters = {
@@ -32,6 +26,7 @@ const InventoryPage = () => {
     sortBy: "",
     orderBy: "",
   };
+  const [filters, setFilters] = useState(defaultFilters);
    
   const [filterType, setFilterType] = useState("name", "type");
 
@@ -44,7 +39,6 @@ const InventoryPage = () => {
     } else if (width >= 1200) {
       return 10;
     }
-    //return 5;
   }
 
   const updatePageSize = () => {
@@ -129,7 +123,12 @@ const InventoryPage = () => {
       if (response.status === 200) {
         const data = await response.json();
         setAssets(data.assetsForPage);
-        setPageCount(Math.ceil(data.totalAssets / pageSize));
+        const newPageCount = Math.ceil(data.totalAssets / pageSize);
+        setPageCount(newPageCount);
+        // Validate and adjust the pageNumber if it exceeds pageCount
+        if (pageNumber > newPageCount) {
+          setPageNumber(newPageCount);
+        }
       } else {
         console.error("Error fetching assets:");
       }
@@ -140,6 +139,7 @@ const InventoryPage = () => {
   const handleClick = () => {
     setIsCreateModalOpen(true);
   };
+
 
   return (
     <div className={styles.inventoryPage}>
@@ -179,7 +179,7 @@ const InventoryPage = () => {
               value={filters[filterType]}
               onChange={handleFilterChange}
             />
-            <select name="type" onChange={handleFilterChange}>
+            <select name="type" value={filters.type} onChange={handleFilterChange}>
               <option value="">Select type</option>
               {types.map((assetType) => (
                 <option key={assetType} value={assetType}>
