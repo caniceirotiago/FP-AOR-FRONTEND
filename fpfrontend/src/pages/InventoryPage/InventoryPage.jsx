@@ -1,34 +1,33 @@
 import React, { useEffect, useState } from "react";
 import styles from "./InventoryPage.module.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import AssetTable from "../../components/InventoryComponents/AssetsTable/AssetTable.jsx";
 import CreateAssetModal from "../../components/InventoryComponents/AssetsModal/CreateAssetModal.jsx";
 import assetService from "../../services/assetService";
-import { FaTable, FaTh, FaPlus, FaFilter } from "react-icons/fa";
-import useAuthStore from "../../stores/useAuthStore.jsx";
+import { FaPlus, FaFilter } from "react-icons/fa";
 import useDeviceStore from "../../stores/useDeviceStore.jsx";
 import useAssetsStore from "../../stores/useAssetsStore.jsx";
 
 const InventoryPage = () => {
   const { dimensions } = useDeviceStore();
-  const { isAuthenticated } = useAuthStore();
-  const navigate = useNavigate();
   const location = useLocation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [assets, setAssets] = useState([]);
-  const { fetchAssetTypes, isEditModalOpen } = useAssetsStore();
+  const { types, fetchAssetTypes, isEditModalOpen } = useAssetsStore();
   const [pageSize, setPageSize] = useState(getInitialPageSize());
   const [filtersVisible, setFiltersVisible] = useState(false);
-  const [filters, setFilters] = useState({
-    name: "",
-    type: "",
-  });
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const defaultFilters = {
     name: "",
     type: "",
+    manufacturer: "",
+    partNumber: "",
+    sortBy: "",
+    orderBy: "",
   };
+  const [filters, setFilters] = useState(defaultFilters);
+   
   const [filterType, setFilterType] = useState("name", "type");
 
   function getInitialPageSize() {
@@ -38,9 +37,8 @@ const InventoryPage = () => {
     } else if (width < 1200 && width >= 600) {
       return 7;
     } else if (width >= 1200) {
-      return 15;
+      return 10;
     }
-    return 5;
   }
 
   const updatePageSize = () => {
@@ -52,22 +50,15 @@ const InventoryPage = () => {
     } else if (width < 1200 && width >= 600) {
       newPageSize = 7;
     } else if (width >= 1200) {
-      newPageSize = 15;
+      newPageSize = 10;
     }
     setPageSize(newPageSize);
   };
 
-  const handleResize = () => {
-    // Additional logic for resizing if needed
-  };
-
   useEffect(() => {
     updatePageSize();
-    handleResize();
-    window.addEventListener("resize", handleResize);
     window.addEventListener("resize", updatePageSize);
     return () => {
-      window.removeEventListener("resize", handleResize);
       window.removeEventListener("resize", updatePageSize);
     };
   }, [dimensions.width]);
@@ -101,11 +92,19 @@ const InventoryPage = () => {
     });
   };
 
+  const handleOrderChange = (e) => {
+    setFilters({
+      ...filters,
+      orderBy: e.target.value,
+    });
+  };
+  
   const handleClearFilters = () => {
     setFilters(defaultFilters);
-    if (isAuthenticated) navigate("/authenticatedhomepage");
-    else navigate("/homepage");
-  };
+    setFilterType("name"); // Reset filter type to default
+    setPageSize(getInitialPageSize()); // Reset page size (if needed)
+    setPageNumber(1);
+  };  
 
   const handleFilterTypeChange = (e) => {
     setFilterType(e.target.value);
@@ -114,47 +113,41 @@ const InventoryPage = () => {
     setFiltersVisible(!filtersVisible);
   };
 
-  /*
   useEffect(() => {
     const fetchAssets = async () => {
-      const response = await assetService.getFilteredAssets(pageNumber, pageSize, filters);
+      const response = await assetService.getFilteredAssets(
+        pageNumber,
+        pageSize,
+        filters
+      );
       if (response.status === 200) {
         const data = await response.json();
-        setAssets(data.assetsForAPage);
-        setPageCount(Math.ceil(data.totalAssets / pageSize));
-      }
-         else{
-        console.error("Error fetching assets:");
-      }
-    };
-    fetchAssets();
-  }, [isModalOpen, pageNumber, pageSize, filters, isEditModalOpen]);
-  */
-
-  useEffect(() => {
-    const fetchAssets = async () => {
-      const response = await assetService.getAllAssets();
-      if (response.status === 200) {
-        const data = await response.json();
-        setAssets(data);
+        setAssets(data.assetsForPage);
+        const newPageCount = Math.ceil(data.totalAssets / pageSize);
+        setPageCount(newPageCount);
+        // Validate and adjust the pageNumber if it exceeds pageCount
+        if (pageNumber > newPageCount) {
+          setPageNumber(newPageCount);
+        }
       } else {
         console.error("Error fetching assets:");
       }
     };
     fetchAssets();
-  }, [isModalOpen, pageNumber, pageSize, filters, isEditModalOpen]);
+  }, [isCreateModalOpen, pageNumber, pageSize, filters, isEditModalOpen]);
 
   const handleClick = () => {
-    setIsModalOpen(true);
+    setIsCreateModalOpen(true);
   };
+
 
   return (
     <div className={styles.inventoryPage}>
       <div className={styles.controlPanel}>
         <div className={styles.btns}>
           <CreateAssetModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
+            isOpen={isCreateModalOpen}
+            onClose={() => isCreateModalOpen(false)}
           />
           <button
             onClick={handleClick}
@@ -175,17 +168,67 @@ const InventoryPage = () => {
           <div className={styles.filters}>
             <select value={filterType} onChange={handleFilterTypeChange}>
               <option value="name">Name</option>
-              <option value="type">Type</option>
+              <option value="manufacturer">Manufacturer</option>
+              <option value="partNumber">Part Number</option>
             </select>
-            {/* Add filter inputs here */}
+            <input
+              name={filterType}
+              placeholder={
+                filterType.charAt(0).toUpperCase() + filterType.slice(1)
+              }
+              value={filters[filterType]}
+              onChange={handleFilterChange}
+            />
+            <select name="type" value={filters.type} onChange={handleFilterChange}>
+              <option value="">Select type</option>
+              {types.map((assetType) => (
+                <option key={assetType} value={assetType}>
+                  {assetType}
+                </option>
+              ))}
+            </select>
+            <select name="sortBy" value={filters.sortBy} onChange={handleSortChange}>
+              <option value="">Sort By</option>
+              <option value="type">Type</option>
+              <option value="manufacturer">Manufacturer</option>
+              <option value="partNumber">Part Number</option>
+            </select>
+            <select name="orderBy" value={filters.orderBy} onChange={handleOrderChange}>
+              <option value="">Order By</option>
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+            <button onClick={handleClearFilters}>Clear Filters</button>
           </div>
         )}
       </div>
+      <div className={styles.assetsPanel}>
       <AssetTable
         pageCount={pageCount}
         setPageNumber={setPageNumber}
         assets={assets}
       />
+      <div className={styles.pagination}>
+          <button onClick={() => setPageNumber(1)} disabled={pageNumber === 1}>
+            {'<<'}
+          </button>
+          <button onClick={() => setPageNumber(pageNumber - 1)} disabled={pageNumber === 1}>
+            {'<'}
+          </button>
+          <button onClick={() => setPageNumber(pageNumber + 1)} disabled={pageNumber === pageCount}>
+            {'>'}
+          </button>
+          <button onClick={() => setPageNumber(pageCount)} disabled={pageNumber === pageCount}>
+            {'>>'}
+          </button>
+          <span>
+            Page{' '}
+            <strong>
+              {pageNumber} of {pageCount}
+            </strong>
+          </span>
+        </div>
+        </div>
     </div>
   );
 };

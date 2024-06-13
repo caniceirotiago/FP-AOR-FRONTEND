@@ -33,20 +33,6 @@ const assetService = {
     }
   },
 
-  getAllAssets: async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}`, {
-        method: "GET",
-        headers: getAuthHeaders(),
-        credentials: "include",
-      });
-      return response;
-    } catch (error) {
-      console.error("Error fetching assets:", error.message);
-      throw error;
-    }
-  },
-
   getAssetById: async (assetId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/id/${assetId}`, {
@@ -75,10 +61,7 @@ const assetService = {
     }
   },
   
-  updateAsset: async (assetData) => {
-    console.log("Inside service Asset data:", assetData);
-      console.log("Inside service Asset Id:", assetData.id);
-  
+  updateAsset: async (assetData) => {  
     try {
       const response = await fetch(`${API_BASE_URL}`, {
         method: "PUT",
@@ -94,9 +77,22 @@ const assetService = {
     }
   },
 
+  getAllAssets: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      return response;
+    } catch (error) {
+      console.error("Error fetching assets:", error.message);
+      throw error;
+    }
+  },
+
   getFilteredAssets: async (page, pageSize, filters = {}) => {
     const filterParams = new URLSearchParams();
-
     Object.keys(filters).forEach(key => {
       if (filters[key]) {
         filterParams.append(key, filters[key]);

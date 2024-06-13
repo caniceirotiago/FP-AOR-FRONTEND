@@ -39,6 +39,7 @@ body.theme-light {
   --text-color4: black;
   --positive-color: #50C878;
   --negative-color: #FF6347;
+  --disabled-background:  #edf0f0;
 
 
 }
