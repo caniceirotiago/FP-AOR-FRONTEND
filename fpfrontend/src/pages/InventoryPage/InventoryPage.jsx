@@ -42,9 +42,9 @@ const InventoryPage = () => {
     } else if (width < 1200 && width >= 600) {
       return 7;
     } else if (width >= 1200) {
-      return 15;
+      return 10;
     }
-    return 5;
+    //return 5;
   }
 
   const updatePageSize = () => {
@@ -56,22 +56,15 @@ const InventoryPage = () => {
     } else if (width < 1200 && width >= 600) {
       newPageSize = 7;
     } else if (width >= 1200) {
-      newPageSize = 15;
+      newPageSize = 10;
     }
     setPageSize(newPageSize);
   };
 
-  const handleResize = () => {
-    // Additional logic for resizing if needed
-  };
-
   useEffect(() => {
     updatePageSize();
-    handleResize();
-    window.addEventListener("resize", handleResize);
     window.addEventListener("resize", updatePageSize);
     return () => {
-      window.removeEventListener("resize", handleResize);
       window.removeEventListener("resize", updatePageSize);
     };
   }, [dimensions.width]);
@@ -209,11 +202,33 @@ const InventoryPage = () => {
           </div>
         )}
       </div>
+      <div className={styles.assetsPanel}>
       <AssetTable
         pageCount={pageCount}
         setPageNumber={setPageNumber}
         assets={assets}
       />
+      <div className={styles.pagination}>
+          <button onClick={() => setPageNumber(1)} disabled={pageNumber === 1}>
+            {'<<'}
+          </button>
+          <button onClick={() => setPageNumber(pageNumber - 1)} disabled={pageNumber === 1}>
+            {'<'}
+          </button>
+          <button onClick={() => setPageNumber(pageNumber + 1)} disabled={pageNumber === pageCount}>
+            {'>'}
+          </button>
+          <button onClick={() => setPageNumber(pageCount)} disabled={pageNumber === pageCount}>
+            {'>>'}
+          </button>
+          <span>
+            Page{' '}
+            <strong>
+              {pageNumber} of {pageCount}
+            </strong>
+          </span>
+        </div>
+        </div>
     </div>
   );
 };
