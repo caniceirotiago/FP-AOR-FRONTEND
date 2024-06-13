@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styles from './GanttChart.module.css';
 
-const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById, removeDependency }) => {
+const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById, removeDependency, handleEditTaskClick }) => {
   const ganttRef = useRef(null);
   const [draggingTask, setDraggingTask] = useState(null);
   const [activeDependency, setActiveDependency] = useState(null);
@@ -168,6 +168,10 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
     removeDependency(depId, taskId);
   };
 
+  const handleTaskDoubleClick = (taskId) => {
+    handleEditTaskClick(taskId);
+  };
+
   const generateTimeline = () => {
     const timeline = [];
     let currentDate = new Date(startDate);
@@ -207,13 +211,14 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
 
             return (
               <div
+                onDoubleClick={() => handleTaskDoubleClick(task.id)}
                 key={task.id}
                 className={styles.taskBar}
                 data-task-id={task.id}
                 style={{
                   left: `${taskStartOffset}px`,
                   width: `${taskDuration}px`,
-                  top: `${index * 40}px` // Ajuste a altura da barra
+                  top: `${index * 40}px` 
                 }}
               >
                 <div

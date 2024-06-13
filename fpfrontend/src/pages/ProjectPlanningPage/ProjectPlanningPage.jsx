@@ -5,15 +5,17 @@ import projectService from '../../services/projectService';
 import membershipService from '../../services/membershipService';
 import { FaPlus, FaFilter } from 'react-icons/fa';
 import CreateTaskModal from '../../components/modals/CreateTaskModal';
-import { useParams } from 'react-router-dom';
+import  useProjectStore  from '../../stores/useProjectStore';
+import EditTaskModal from '../../components/modals/EditTaskModal';
 
 const ProjectPlanningPage = () => {
   const [accessibleProjectsIds, setAccessibleProjectsIds] = useState([]);
-  const [projectId, setProjectId] = useState();
   const [filtersVisible, setFiltersVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [tasksUpdated, setTasksUpdated] = useState(false); 
-  const { projectIdParams } = useParams();
+  const { selectedProjectId, setSelectedProjectId } = useProjectStore();
   
   const fetchProjetsIdByloggedUser = async () => {
  
@@ -29,7 +31,7 @@ const ProjectPlanningPage = () => {
   useEffect(() => {
     fetchProjetsIdByloggedUser();
   }
-  , [projectId]);
+  , [selectedProjectId]);
 
   const toggleFiltersVisibility = () => {
     setFiltersVisible(!filtersVisible);
@@ -38,22 +40,26 @@ const ProjectPlanningPage = () => {
     console.log("clicked");
     setIsModalOpen(true);
   }
+  const handleEditTaskClick = (taskId) => {
+    setSelectedTaskId(taskId);
+    setIsEditTaskModalOpen(true);
+  }
   const handleTaskCreated = () => {
     setTasksUpdated(!tasksUpdated); 
   };
   const handleSelectProject = (e) => {
-    setProjectId(e.target.value);
+    setSelectedProjectId(e.target.value);
   }
 
  
-  console.log(projectId);
+  console.log(selectedProjectId);
   return (
     
     <div className={styles.container}>
-      
-            <div className={styles.controlPanel}>
-        <div className={styles.btns}>
-        <CreateTaskModal onTaskCreated={handleTaskCreated} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} projectId={projectId}/>
+        <CreateTaskModal onTaskCreated={handleTaskCreated} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} projectId={selectedProjectId}/>
+        <EditTaskModal isOpen={isEditTaskModalOpen} onClose={() => setIsEditTaskModalOpen(false)} taskId={selectedTaskId}/>
+           <div className={styles.controlPanel}>
+           <div className={styles.btns}>
             <button onClick={handleClick} className={`${styles.iconButton} ${styles.createButton}`} data-text="Create">
               <FaPlus  className={styles.svgIcon} />
             </button>
@@ -73,7 +79,7 @@ const ProjectPlanningPage = () => {
           </select>
         )}
       </div>
-      <TaskManager projectId={projectId} tasksUpdated={tasksUpdated}/>
+      <TaskManager handleEditTaskClick={handleEditTaskClick} projectId={selectedProjectId} tasksUpdated={tasksUpdated}/>
     </div>
   );
 };
