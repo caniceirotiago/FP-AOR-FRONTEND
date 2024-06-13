@@ -114,30 +114,15 @@ const InventoryPage = () => {
     setFiltersVisible(!filtersVisible);
   };
 
-  /*
   useEffect(() => {
-    const fetchAssets = async () => {
-      const response = await assetService.getFilteredAssets(pageNumber, pageSize, filters);
+      const fetchAssets = async () => {
+        const response = await assetService.getFilteredAssets(pageNumber, pageSize, filters);
       if (response.status === 200) {
         const data = await response.json();
-        setAssets(data.assetsForAPage);
+        setAssets(data.assetsForPage);
         setPageCount(Math.ceil(data.totalAssets / pageSize));
       }
          else{
-        console.error("Error fetching assets:");
-      }
-    };
-    fetchAssets();
-  }, [isModalOpen, pageNumber, pageSize, filters, isEditModalOpen]);
-  */
-
-  useEffect(() => {
-    const fetchAssets = async () => {
-      const response = await assetService.getAllAssets();
-      if (response.status === 200) {
-        const data = await response.json();
-        setAssets(data);
-      } else {
         console.error("Error fetching assets:");
       }
     };
