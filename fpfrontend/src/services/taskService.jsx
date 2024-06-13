@@ -96,6 +96,49 @@ const projectService = {
       console.error("Error removing dependency:", error.message);
       throw error;
     }
+  },
+  getTaskById: async (taskId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${taskId}`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error fetching task by id:", error.message);
+      throw error;
+    }
+  },
+  fetchAllStates: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/states`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error fetching task states:", error.message);
+      throw error;
+    }
+  },
+  detailedUpdateTask: async ( task, projectId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/detailed/${projectId}`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        credentials: "include",
+        body: JSON.stringify(task),
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error updating task:", error.message);
+      throw error;
+    }
   }
 
     

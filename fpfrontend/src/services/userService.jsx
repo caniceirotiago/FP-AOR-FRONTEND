@@ -98,6 +98,8 @@ const userService = {
       throw error;
     }
   },
+
+
   fetchUserInfo: async (usernameProfile) => {
     try {
       const response = await fetch(`${API_BASE_URL}/info/${usernameProfile}`, {

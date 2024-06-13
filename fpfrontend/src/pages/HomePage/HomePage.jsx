@@ -13,6 +13,7 @@ import useProjectStatesStore from '../../stores/useProjectStatesStore.jsx';
 import { FaTable, FaTh, FaPlus, FaFilter } from 'react-icons/fa';
 import useAuthStore from '../../stores/useAuthStore.jsx';
 import useDeviceStore from '../../stores/useDeviceStore.jsx';
+import useProjectStore from '../../stores/useProjectStore.jsx';
 
 const HomePage = () => {
   const {  dimensions, deviceType } = useDeviceStore(); 

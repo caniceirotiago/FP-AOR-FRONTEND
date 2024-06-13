@@ -10,9 +10,10 @@ import userService from "../../services/userService";
 import projectService from "../../services/projectService.jsx";
 import useConfigurationStore from "../../stores/useConfigurationStore";
 import membershipService from "../../services/membershipService";
+import { set } from "date-fns";
 
 
-const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username, projectId, createdBy }) => {
+const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username, projectId, createdBy, taskResponsibleId, registeredExecutors, setTaskData, taskData }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
@@ -22,11 +23,21 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   const {configurations} = useConfigurationStore();
 
   
+  
+  
   useEffect(() => {
     if(!creationMode){
-      fetchAttributes();
+      if(taskResponsibleId){
+        console.log("taskResponsibleId")
+        setAttributes([taskResponsibleId]);
+      } else if(registeredExecutors){
+        setAttributes(registeredExecutors);
+      }
+      else{
+         fetchAttributes();
+      }
     }
-  }, []);
+  }, [taskResponsibleId]);
 
   useEffect(() => {
     if (onAttributesChange) {
@@ -60,14 +71,16 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
 
 
   const fetchSuggestions = async (firstLetter) => {
-    if(creationMode && title === 'users' && mainEntity === 'task'){
+    if((creationMode && title === 'users' && mainEntity === 'task') || title === 'Responsible user' || title === 'Registered executers'){
       try {
+        console.log("fetching suggestions")
+
         const response = await membershipService.fetchSuggestionsByProjectId(firstLetter, projectId);
         if (response.status === 200) {
           const data = await response.json();
-          console.log(data);
-          setFetchedSuggestions(data); // Store fetched suggestions
-          setSuggestions(data); // Initially, set suggestions to fetched data
+          console.log(data)
+          setFetchedSuggestions(data); 
+          setSuggestions(data); 
         } else {
           throw new Error("Failed to fetch suggestions");
         }
@@ -102,7 +115,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
 
   const filterSuggestions = (query) => {
     const filtered = fetchedSuggestions.filter((item) =>
-      getItemProperty(item).toLowerCase().startsWith(query.toLowerCase())
+      getItemProperty(item)?.toLowerCase()?.startsWith(query.toLowerCase())
     );
     setSuggestions(filtered);
   };
@@ -167,7 +180,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       console.warn("User not in suggestions. Not adding.");
       return;
     }
-    if(title === 'users' && creationMode && mainEntity ==='task' && attributes.length === 1){
+    if((title === 'users' && creationMode && mainEntity ==='task' && attributes.length === 1) || (title === 'Responsible user'&& attributes.length === 1)){
       console.warn("Only one user can be assigned to a task as responsible. Not adding.");
       return;
     }
@@ -206,10 +219,29 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       }
 
       if (!creationMode) {
+        console.log("adding item")
         let response
+        let suggestion
         if(title === 'users' && mainEntity === 'project'){
           response = await userService.addUserToProject(projectId, input);
-        }else{
+        } else if(title === 'Responsible user'){
+          console.log("adding responsible user : suggesstion") 
+          console.log(fetchedSuggestions)
+          suggestion = fetchedSuggestions.find((suggestion) => suggestion?.username?.toLowerCase() === input?.toLowerCase());
+          console.log(suggestion)
+          setAttributes([...attributes, {id: suggestion?.id, username: input, photo: suggestion?.photo}]);
+          setTaskData({...taskData, responsibleId: {id: suggestion?.id, username: input, photo: suggestion?.photo}});
+          
+        } else if(title === 'Registered executers'){
+          if(attributes.find((attribute) => attribute.username === input)){
+            console.warn("Duplicate user. Not adding.");
+            return;
+          }
+          suggestion = fetchedSuggestions.find((suggestion) => suggestion?.username?.toLowerCase() === input?.toLowerCase());
+          setAttributes([...attributes, {id: suggestion?.id, username: input, photo: suggestion?.photo}]);
+          setTaskData({...taskData, registeredExecutors: [...registeredExecutors, {id: suggestion?.id, username: input, photo: suggestion?.photo}]});
+        }
+        else{
           response = await generalService.addItem(title, data, mainEntity, projectId);
         }
         if (response.status === 204) {
@@ -220,11 +252,11 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       } else {
           let suggestion
           if(title === 'users'){
-            suggestion = fetchedSuggestions.find((suggestion) => suggestion.username.toLowerCase() === input.toLowerCase());
+            suggestion = fetchedSuggestions.find((suggestion) => suggestion?.username?.toLowerCase() === input?.toLowerCase());
             setAttributes([...attributes, {user:{id: suggestion?.id, username: input, photo: suggestion?.photo, role: suggestion?.role, accepted: suggestion?.isAccepted} }]);
           }
           else{
-            suggestion = fetchedSuggestions.find((suggestion) => suggestion.name.toLowerCase() === input.toLowerCase());
+            suggestion = fetchedSuggestions.find((suggestion) => suggestion?.name?.toLowerCase() === input?.toLowerCase());
           setAttributes([...attributes, { id: suggestion?.id, name: input, type: suggestion?.type ?? selectedOption }]);
           }
         
@@ -261,7 +293,14 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
         let response
         if(title === 'users' && mainEntity === 'project'){
           response = await userService.removeUserFromProject(projectId, attributeToRemove.user.username);
-        }else{
+        }else if((title === 'Responsible user') && !creationMode){
+          setAttributes([]);
+          setTaskData({...taskData, responsibleId: null});
+        }else if((title === 'Registered executers') && !creationMode){
+          setAttributes(attributes.filter((attribute) => attribute.username !== attributeToRemove.username));
+          setTaskData({...taskData, registeredExecutors: registeredExecutors.filter((attribute) => attribute.username !== attributeToRemove.username)});
+        }
+        else{
          response = await generalService.removeItem(title, attributeToRemove.id, mainEntity, projectId);
         }
         if (response.status === 204) {
@@ -291,13 +330,17 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     switch (title) {
       case 'users':
         return { label: suggestion.username, value: suggestion.username };
+      case 'Responsible user':
+        return { label: suggestion.username, value: suggestion.username };
+      case 'Registered executers':
+        return { label: suggestion.username, value: suggestion.username };
       default:
         return { label: suggestion.name + ' - ' + suggestion.type, value: suggestion.name };
     }
   };
 
   const elementTitle =
-    title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
+    title.charAt(0).toUpperCase() + title?.slice(1)?.toLowerCase();
   
     const maxProjectMembersConfig = configurations.get('maxProjectMembers');
     const isPossibleToJoin = (maxProjectMembersConfig ? attributes.length < maxProjectMembersConfig : true) && !attributes.some((attribute) => attribute.user?.username === localStorage.getItem('username'));

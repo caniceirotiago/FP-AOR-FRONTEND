@@ -5,7 +5,7 @@ import styles from './TaskManager.module.css';
 import taskService from '../../../services/taskService';
 
 
-const TaskManager = ({projectId, tasksUpdated }) => {
+const TaskManager = ({projectId, tasksUpdated, handleEditTaskClick }) => {
   const [tasks, setTasks] = useState( []);
 
 
@@ -96,13 +96,14 @@ const TaskManager = ({projectId, tasksUpdated }) => {
   console.log(tasks);
   return (
     <div className={styles.container}>
-      <TaskTable tasks={tasks} />
+      <TaskTable tasks={tasks} handleEditTaskClick={handleEditTaskClick}/>
       <GanttChart 
          tasks={tasks} 
          setTasks={setTasks}
           updateTaskById={updateTaskById} 
           addPreresquisiteTaskById={addPreresquisiteTaskById} 
-          removeDependency={removeDependency}/>
+          removeDependency={removeDependency}
+          handleEditTaskClick={handleEditTaskClick}/>
     </div>
   );
 };

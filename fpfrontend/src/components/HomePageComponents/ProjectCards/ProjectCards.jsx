@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styles from './ProjectCards.module.css';
 import { useNavigate } from 'react-router';
-import useProjectStatesStore from '../../../stores/useProjectStatesStore';
 import useConfigurationStore from '../../../stores/useConfigurationStore';
 import useLoginModalStore from '../../../stores/useLoginModalStore';
+import useProjectStore from '../../../stores/useProjectStore';
 
 const stateColors = {
   PLANNING: 'var(--color-planning)',
@@ -15,7 +15,7 @@ const stateColors = {
 
 function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setPageSize, pageNumber, setPageNumber, isAuthenticated, labs }) {
   const navigate = useNavigate();
-
+  const {setSelectedProjectId} = useProjectStore();
   const { configurations, fetchConfigurations } = useConfigurationStore();
   const [maxProjectMembers, setMaxProjectMembers] = useState(null);
   const {setIsLoginModalOpen} = useLoginModalStore();
@@ -37,6 +37,14 @@ function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setP
     if(isAuthenticated)navigate(`/projectpage/${projectId}`);
     else setIsLoginModalOpen(true);
   };
+  const handleClickToOpenProjectPlanningPage = (e, projectId) => {
+    e.stopPropagation();
+   if(isAuthenticated){
+    setSelectedProjectId(projectId);
+    navigate(`/projectplanning`);
+   } 
+  };
+
 
   const renderMemberThumbnails = (members) => {
     const memberThumbnails = members.slice(0, 3).map(member => (
@@ -51,6 +59,17 @@ function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setP
 
     return memberThumbnails;
   };
+
+
+
+
+  const canSeeAndEditProjectPlanning = (project) => {
+    return project?.members?.some(
+        (user) =>
+            user.userId === parseInt(localStorage.getItem("userId")) &&
+            user.accepted
+    );
+}
 
   return (
     <div className={styles.mainContainer}>
@@ -67,6 +86,8 @@ function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setP
             <div className={styles.topSection}>
               <div className={styles.border}></div>
               <div className={styles.thumbnails}>
+                {canSeeAndEditProjectPlanning(project) && 
+                <button onClick={(e) =>handleClickToOpenProjectPlanningPage(e, project.id)}>Plan</button>}
                 {renderMemberThumbnails(project.members)}
               </div>
             </div>
