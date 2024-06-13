@@ -10,8 +10,6 @@ import userService from "../../services/userService";
 import projectService from "../../services/projectService.jsx";
 import useConfigurationStore from "../../stores/useConfigurationStore";
 import membershipService from "../../services/membershipService";
-import { set } from "date-fns";
-
 
 const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username, projectId, createdBy, taskResponsibleId, registeredExecutors, setTaskData, taskData }) => {
   const [input, setInput] = useState("");
@@ -22,9 +20,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   const selectTypeModal = useSelectTypeModal();
   const {configurations} = useConfigurationStore();
 
-  
-  
-  
+  // Initialize attributes based on creation mode and initial values
   useEffect(() => {
     if(!creationMode){
       if(taskResponsibleId){
@@ -39,12 +35,14 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     }
   }, [taskResponsibleId]);
 
+  // Notify changes in attributes
   useEffect(() => {
     if (onAttributesChange) {
       onAttributesChange(attributes);
     }
   }, [attributes]);
 
+  // Determine fetch function based on the main entity
   const getFetchFunction = (title) => {
     switch (mainEntity) {
       case 'user':
@@ -54,6 +52,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     }
   };
 
+  // Fetch attributes from API
   const fetchAttributes = async () => {
     try {
       const response = await getFetchFunction(title);
@@ -69,7 +68,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   };
 
 
-
+// Fetch suggestions from API based on the first letter
   const fetchSuggestions = async (firstLetter) => {
     if((creationMode && title === 'users' && mainEntity === 'task') || title === 'Responsible user' || title === 'Registered executers'){
       try {
@@ -103,7 +102,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     }
     
   };
-
+// Get item property based on the title
   const getItemProperty = (item) => {
     switch (title) {
       case 'users':
@@ -112,7 +111,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
         return item.name;
     }
   };
-
+// Filter suggestions based on user query
   const filterSuggestions = (query) => {
     const filtered = fetchedSuggestions.filter((item) =>
       getItemProperty(item)?.toLowerCase()?.startsWith(query.toLowerCase())
@@ -120,7 +119,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     setSuggestions(filtered);
   };
 
-
+// Handle input change in the search field
   const handleInputChange = (newValue, { action }) => {
     if (action === "input-change") {
       setInput(newValue);
@@ -135,7 +134,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     }
   };
 
-  
+  // Handle change in the selected item
   const handleSelectChange = (selectedOption) => {
     if (selectedOption) {
       setInput(selectedOption.value); // Set input value to selected option value
@@ -145,7 +144,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       setSelectedValue(null); // Reset selected value
     }
   };
-
+  // Update user role in a project
   const handleChangeUserProjectRole = async (userId, role) => {
     try {
       const response = await projectService.updateProjecUserRole(projectId, userId, role);
@@ -159,11 +158,11 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     }
   };
 
-
+  // Add a new item to the list
   const addItem = async () => {
     let existingAttribute 
     let existingUser
-
+    // Check if the input already exists in the fetched suggestions
     if(title !== 'users'){
       existingAttribute = fetchedSuggestions.some((suggestion) =>
         suggestion?.name?.toLowerCase() === input.toLowerCase()
@@ -175,22 +174,25 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     );
     }
    
-
+    // Ensure the user exists in suggestions
     if (title === 'users' && !existingUser) {
       console.warn("User not in suggestions. Not adding.");
       return;
     }
+    // Ensure only one user can be responsible for a task
     if((title === 'users' && creationMode && mainEntity ==='task' && attributes.length === 1) || (title === 'Responsible user'&& attributes.length === 1)){
       console.warn("Only one user can be assigned to a task as responsible. Not adding.");
       return;
     }
 
     try {
+      // Ensure the input is not empty and does not exceed character limit
       if (!input) return;
       if (input.length > 25) {
         console.warn("Input exceeds maximum character limit. Not adding.");
         return;
       }
+      // Ensure no duplicate attributes/users
       if(title !== 'users'){
         if (attributes.some((attribute) => attribute.name?.toLowerCase() === input.toLowerCase())) {
           console.warn("Duplicate attribute. Not adding.");
@@ -205,7 +207,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       
 
       let selectedOption = null;
-
+      // Prompt user to select type for skills or interests
       if (!existingAttribute && (title === 'skills' || title === 'interests')) {
         const options = title === 'skills' ? ["KNOWLEDGE", "SOFTWARE", "HARDWARE", "TOOLS"] : ["TOPICS", "CAUSES", "KNOWLEDGE_AREAS"];
         selectTypeModal.setOptions(options);
@@ -217,7 +219,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       if(title === 'keywords'){
         delete data.type;
       }
-
+      // Add item to the server or state
       if (!creationMode) {
         console.log("adding item")
         let response
@@ -267,6 +269,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       clearInput();
     }
   };
+  // Request to join a project
   const askToJoinProject = async () => {
     try {
       const response = await projectService.askToJoinProject(projectId);
@@ -280,13 +283,13 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     }
   };
 
-
+  // Clear input field and reset suggestions
   const clearInput = () => {
     setInput("");
     setSelectedValue(null);
     setSuggestions([]);
   };
-
+  // Remove an item from the list
   const removeItem = async (attributeToRemove) => {
     try {
       if(!creationMode){
@@ -325,7 +328,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       console.error("Error removing item:", error.message);
     }
   };
-
+  // Get label and value for a suggestion item
   const getLabelValue = (suggestion) => {
     switch (title) {
       case 'users':
@@ -338,10 +341,10 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
         return { label: suggestion.name + ' - ' + suggestion.type, value: suggestion.name };
     }
   };
-
+  // Capitalize the title for display
   const elementTitle =
     title.charAt(0).toUpperCase() + title?.slice(1)?.toLowerCase();
-  
+    // Determine if it's possible to join the project
     const maxProjectMembersConfig = configurations.get('maxProjectMembers');
     const isPossibleToJoin = (maxProjectMembersConfig ? attributes.length < maxProjectMembersConfig : true) && !attributes.some((attribute) => attribute.user?.username === localStorage.getItem('username'));
 
