@@ -79,27 +79,30 @@ const EditTaskModal = ({ isOpen, onClose, projectId, onTaskCreated, taskId }) =>
             plannedStartDate: taskData.plannedStartDate,
             plannedEndDate: taskData.plannedEndDate,
             responsibleId: taskData.responsibleId,
-            projectId: projectId,
+            state: taskData.state,
+            registeredExecutors: taskData.registeredExecutors,
+            nonRegisteredExecutors: taskData.nonRegisteredExecutors,
+            dependentTasks: taskData.dependentTasks,
+            prerequisites: taskData.prerequisites,
         };
-        const response = await taskService.createTask(dataToSend, projectId);
-        if (response.status === 204) {
-            setDialogMessage("Task created successfully!");
-            setAlertType(true);
+        const response = await taskService.updateTask(taskId, dataToSend);
+        if (response.status === 200) {
+            setDialogMessage('Task updated successfully');
+            setAlertType('success');
             setIsDialogOpen(true);
-            setOnConfirm(() => {
-                onTaskCreated();
-                onClose();
-                setIsDialogOpen(false);
-            });
+            onClose();
+            onTaskCreated();
         } else {
-            const data = await response.json();
-            setDialogMessage(data.errorMessage);
-            setAlertType(true);
+            setDialogMessage('An error occurred while updating the task');
+            setAlertType('error');
             setIsDialogOpen(true);
-            setOnConfirm(() => {});
         }
     };
-    console.log(projectId)
+
+
+
+
+    console.log(taskData)
 
     if (!isOpen) return null;
     return (
@@ -153,8 +156,18 @@ const EditTaskModal = ({ isOpen, onClose, projectId, onTaskCreated, taskId }) =>
                         />
 
                         <div className={styles.attributeEditor}>
-                            <AttributeEditor projectId={projectId} creationMode={false} title="Responsible user" editMode={true} mainEntity={"task"}  taskResponsibleId={taskData.responsibleId}/>
+                            <AttributeEditor  taskData={taskData} setTaskData={setTaskData} projectId={projectId} creationMode={false} title="Responsible user" editMode={true} mainEntity={"task"}  taskResponsibleId={taskData.responsibleId}/>
                         </div>
+                        <div className={styles.attributeEditor}>
+                            <AttributeEditor taskData={taskData} setTaskData={setTaskData} projectId={projectId} creationMode={false} title="Registered executers" editMode={true} mainEntity={"task"}  registeredExecutors={taskData.registeredExecutors}/>
+                        </div>
+                        <label className={styles.label}>Non Registered Executers</label>
+                        <textarea
+                            className={styles.textarea}
+                            name="nonRegisteredExecutors"
+                            value={taskData.nonRegisteredExecutors}
+                            onChange={handleChange}
+                        />
                         <button type="submit" className={styles.button}>Submit</button>
                     </form>
                 </div>

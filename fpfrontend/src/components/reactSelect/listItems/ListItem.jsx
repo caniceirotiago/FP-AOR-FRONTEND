@@ -51,7 +51,7 @@ const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole,
             {!attribute.accepted && <div className={styles.attributeName}>not accepted</div>}
             </>
         )}
-        {title === "Responsible user" &&
+        {(title === "Responsible user" || title==="Registered executers") &&
         (
             <>
             <div className={styles.attributePhoto}>
@@ -61,6 +61,7 @@ const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole,
            
             </>
         )}
+
          {(editMode && !isTheCreator) && (<button
                     className={styles.removeButton}
                     onClick={() => removeItem(attribute)}

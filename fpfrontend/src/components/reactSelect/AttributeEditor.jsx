@@ -13,7 +13,7 @@ import membershipService from "../../services/membershipService";
 import { set } from "date-fns";
 
 
-const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username, projectId, createdBy, taskResponsibleId }) => {
+const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username, projectId, createdBy, taskResponsibleId, registeredExecutors, setTaskData, taskData }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
@@ -28,8 +28,12 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   useEffect(() => {
     if(!creationMode){
       if(taskResponsibleId){
+        console.log("taskResponsibleId")
         setAttributes([taskResponsibleId]);
-      }else{
+      } else if(registeredExecutors){
+        setAttributes(registeredExecutors);
+      }
+      else{
          fetchAttributes();
       }
     }
@@ -67,7 +71,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
 
 
   const fetchSuggestions = async (firstLetter) => {
-    if((creationMode && title === 'users' && mainEntity === 'task') || title === 'Responsible user'){
+    if((creationMode && title === 'users' && mainEntity === 'task') || title === 'Responsible user' || title === 'Registered executers'){
       try {
         console.log("fetching suggestions")
 
@@ -226,7 +230,16 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
           suggestion = fetchedSuggestions.find((suggestion) => suggestion?.username?.toLowerCase() === input?.toLowerCase());
           console.log(suggestion)
           setAttributes([...attributes, {id: suggestion?.id, username: input, photo: suggestion?.photo}]);
+          setTaskData({...taskData, registeredExecutors: [...registeredExecutors, {id: suggestion?.id, username: input, photo: suggestion?.photo}]});
           
+        } else if(title === 'Registered executers'){
+          if(attributes.find((attribute) => attribute.username === input)){
+            console.warn("Duplicate user. Not adding.");
+            return;
+          }
+          suggestion = fetchedSuggestions.find((suggestion) => suggestion?.username?.toLowerCase() === input?.toLowerCase());
+          setAttributes([...attributes, {id: suggestion?.id, username: input, photo: suggestion?.photo}]);
+          setTaskData({...taskData, registeredExecutors: [...registeredExecutors, {id: suggestion?.id, username: input, photo: suggestion?.photo}]});
         }
         else{
           response = await generalService.addItem(title, data, mainEntity, projectId);
@@ -280,8 +293,12 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
         let response
         if(title === 'users' && mainEntity === 'project'){
           response = await userService.removeUserFromProject(projectId, attributeToRemove.user.username);
-        }else if(title === 'Responsible user' && !creationMode){
+        }else if((title === 'Responsible user') && !creationMode){
           setAttributes([]);
+          setTaskData({...taskData, responsibleId: null});
+        }else if((title === 'Registered executers') && !creationMode){
+          setAttributes(attributes.filter((attribute) => attribute.username !== attributeToRemove.username));
+          setTaskData({...taskData, registeredExecutors: registeredExecutors.filter((attribute) => attribute.username !== attributeToRemove.username)});
         }
         else{
          response = await generalService.removeItem(title, attributeToRemove.id, mainEntity, projectId);
@@ -314,6 +331,8 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       case 'users':
         return { label: suggestion.username, value: suggestion.username };
       case 'Responsible user':
+        return { label: suggestion.username, value: suggestion.username };
+      case 'Registered executers':
         return { label: suggestion.username, value: suggestion.username };
       default:
         return { label: suggestion.name + ' - ' + suggestion.type, value: suggestion.name };
