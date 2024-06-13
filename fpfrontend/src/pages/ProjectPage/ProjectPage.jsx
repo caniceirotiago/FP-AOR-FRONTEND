@@ -12,8 +12,13 @@ import styles from "./ProjectPage.module.css";
 import { FaEdit, FaCheck } from "react-icons/fa";
 import ApprovalModal from "../../components/modals/ApprovalModal.jsx";
 import LogsList from "../../components/ProjectPageComponents/LogsList/LogsList.jsx";
+import useProjectStore from "../../stores/useProjectStore.jsx";
+import { useNavigate } from "react-router";
+
 
 const ProjectPage = () => {
+  const navigate = useNavigate();
+  const {setSelectedProjectId} = useProjectStore();
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
   const [projectLogs, setProjectLogs] = useState([]);
   const [approveOrReject, setApproveOrReject] = useState("");
@@ -94,6 +99,12 @@ const ProjectPage = () => {
     setIsApprovalModalOpen(true);
   };
 
+  const handleClickToOpenProjectPlanningPage = () => {
+    setSelectedProjectId(id);
+    navigate(`/projectplanning`);
+    console.log("Project Planning Page");
+}
+
   
   const canEdit =
     projectInfo.members &&
@@ -103,6 +114,14 @@ const ProjectPage = () => {
         user.role === "PROJECT_MANAGER" &&
         user.accepted
     );
+  const canSeeAndEditProjectPlanning =
+    projectInfo.members &&
+    projectInfo.members.some(
+      (user) =>
+        user.userId === parseInt(localStorage.getItem("userId")) && 
+        user.accepted
+    );
+
   const isInApprovalMode =
     localStorage.getItem("role") === "1" && projectInfo.state === "READY";
   return (
@@ -187,6 +206,12 @@ const ProjectPage = () => {
                   updateProjectInfo={handleUpdateProjectInfo}
                 />
               </div>
+              {canSeeAndEditProjectPlanning && (
+                  <div>
+                    <button onClick={() =>handleClickToOpenProjectPlanningPage()}>Project Planning</button>
+                  </div>
+                )
+              }
               <div className={styles.usersContainer}>
                 <AttributeEditor
                   title="users"

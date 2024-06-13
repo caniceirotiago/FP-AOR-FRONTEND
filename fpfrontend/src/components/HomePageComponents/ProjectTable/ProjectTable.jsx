@@ -27,6 +27,14 @@ function ProjectTable({ projects, pageCount, setPageNumber }) {
 
     const data = useMemo(() => projects, [projects]);
 
+    const canSeeAndEditProjectPlanning = (project) => {
+        return project?.members?.some(
+            (user) =>
+                user.userId === parseInt(localStorage.getItem("userId")) &&
+                user.accepted
+        );
+    }
+
     const columns = useMemo(
         () => [
             {
@@ -74,14 +82,16 @@ function ProjectTable({ projects, pageCount, setPageNumber }) {
                         <button onClick={handleClickToOpenProjectPage(value)} className={styles.actionButton}>
                             <FaEye /> View
                         </button>
-                        <button onClick={handleClickToOpenProjectPlanningPage(value)} className={styles.actionButton}>
-                            <FaProjectDiagram /> Plan
-                        </button>
+                        {canSeeAndEditProjectPlanning(projects.find(project => project.id === value)) && (
+                            <button onClick={handleClickToOpenProjectPlanningPage(value)} className={styles.actionButton}>
+                                <FaProjectDiagram /> Plan
+                            </button>
+                        )}
                     </div>
                 )
             }
         ],
-        []
+        [projects]
     );
 
     const {
@@ -105,6 +115,10 @@ function ProjectTable({ projects, pageCount, setPageNumber }) {
     useEffect(() => {
         setPageNumber(pageIndex + 1); 
     }, [pageIndex, setPageNumber]);
+
+
+
+    console.log(projects);
 
     return (
         <div className={styles.tableContainer}>
