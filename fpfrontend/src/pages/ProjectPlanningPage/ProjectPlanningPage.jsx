@@ -5,6 +5,7 @@ import projectService from '../../services/projectService';
 import membershipService from '../../services/membershipService';
 import { FaPlus, FaFilter } from 'react-icons/fa';
 import CreateTaskModal from '../../components/modals/CreateTaskModal';
+import { useParams } from 'react-router-dom';
 
 const ProjectPlanningPage = () => {
   const [accessibleProjectsIds, setAccessibleProjectsIds] = useState([]);
@@ -12,7 +13,8 @@ const ProjectPlanningPage = () => {
   const [filtersVisible, setFiltersVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tasksUpdated, setTasksUpdated] = useState(false); 
-
+  const { projectIdParams } = useParams();
+  
   const fetchProjetsIdByloggedUser = async () => {
  
     try {

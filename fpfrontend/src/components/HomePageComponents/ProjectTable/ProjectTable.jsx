@@ -17,6 +17,9 @@ function ProjectTable({ projects, pageCount, setPageNumber }) {
     const handleClickToOpenProjectPage = (projectId) => () => {
         navigate(`/projectpage/${projectId}`);
     }
+    const handleClickToOpenProjectPlanningPage = (projectId) => () => {
+        navigate(`/projectplanning/${projectId}`);
+    }
 
     const data = useMemo(() => projects, [projects]);
 
@@ -67,7 +70,7 @@ function ProjectTable({ projects, pageCount, setPageNumber }) {
                         <button onClick={handleClickToOpenProjectPage(value)} className={styles.actionButton}>
                             <FaEye /> View
                         </button>
-                        <button onClick={() => console.log(value)} className={styles.actionButton}>
+                        <button onClick={handleClickToOpenProjectPlanningPage(value)} className={styles.actionButton}>
                             <FaProjectDiagram /> Plan
                         </button>
                     </div>

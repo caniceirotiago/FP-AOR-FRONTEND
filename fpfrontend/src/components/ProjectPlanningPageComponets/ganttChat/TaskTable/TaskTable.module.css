@@ -1,23 +1,32 @@
 .taskTable {
-    min-width: 300px;
-    margin-right: 20px;
-  }
-  
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .table th, .table td {
-    border: 1px solid black;
-    padding: 10px;
-    text-align: left;
-  }
-  .tr {
-    background-color: #f2f2f2;
-  }
-  .td {
-    background-color: #f2f2f2;
-    padding: 9px 2px;
-  }
-  
+  min-width: 300px;
+  margin-right: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  border: 1px solid black;
+  padding: 10px;
+  text-align: left;
+  white-space: nowrap;           
+  overflow: hidden;              
+  text-overflow: ellipsis;      
+  max-width: 150px;             
+}
+
+.tr {
+  background-color: #f2f2f2;
+}
+
+.td {
+  background-color: #f2f2f2;
+  padding: 9px 2px;
+  white-space: nowrap;          
+  overflow: hidden;              
+  text-overflow: ellipsis;      
+  max-width: 100px;              
+}
