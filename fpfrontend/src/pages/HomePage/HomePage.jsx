@@ -35,6 +35,7 @@ const HomePage = () => {
     projectKeywords: '',
     projectSkills: '',
     sortBy: '',
+    orderBy: '',
     laboratory: ''
   };
   const [filters, setFilters] = useState({
@@ -141,6 +142,13 @@ const HomePage = () => {
     });
   };
 
+  const handleOrderChange = (e) => {
+    setFilters({
+      ...filters,
+      orderBy: e.target.value,
+    });
+  };
+
   const handleFilterTypeChange = (e) => {
     setFilterType(e.target.value);
   };
@@ -204,6 +212,7 @@ const HomePage = () => {
             <input
               name={filterType}
               placeholder={filterType.charAt(0).toUpperCase() + filterType.slice(1)}
+              value={filters[filterType]}
               onChange={handleFilterChange}
             />
             <select name="state" value={filters.state} onChange={handleFilterChange}>
@@ -223,6 +232,11 @@ const HomePage = () => {
               <option value="creationDate">Creation Date</option>
               <option value="openPositions">Open Positions</option>
               <option value="state">State</option>
+            </select>
+            <select name="orderBy" value={filters.orderBy} onChange={handleOrderChange}>
+              <option value="">Order By</option>
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
             </select>
             <button onClick={handleClearFilters}>Clear Filters</button>
           </div>
