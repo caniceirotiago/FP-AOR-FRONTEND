@@ -3,11 +3,11 @@ import TaskTable from './TaskTable/TaskTable';
 import GanttChart from './GanttChart/GanttChart';
 import styles from './TaskManager.module.css';
 import taskService from '../../../services/taskService';
-
+import  useDeviceStore  from '../../../stores/useDeviceStore';
 
 const TaskManager = ({projectId, tasksUpdated, handleEditTaskClick }) => {
   const [tasks, setTasks] = useState( []);
-
+  const {dimensions, setDimensions} = useDeviceStore();
 
   const fetchProjectTasks = async () => {
     if(!projectId) return;
@@ -96,7 +96,7 @@ const TaskManager = ({projectId, tasksUpdated, handleEditTaskClick }) => {
   console.log(tasks);
   return (
     <div className={styles.container}>
-      <TaskTable tasks={tasks} handleEditTaskClick={handleEditTaskClick}/>
+      {dimensions.width > 1250 && <TaskTable tasks={tasks} handleEditTaskClick={handleEditTaskClick}/>}
       <GanttChart 
          tasks={tasks} 
          setTasks={setTasks}

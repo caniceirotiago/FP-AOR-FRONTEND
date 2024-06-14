@@ -8,6 +8,21 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
   const [linePosition, setLinePosition] = useState(null);
   const [circleDragHoovered, setCircleDragHoovered] = useState(null);
   const [shiftPressed, setShiftPressed] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState({ scrollX: 0, scrollY: 0 });
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollLeft, scrollTop } = ganttRef.current;
+      setScrollPosition({ scrollX: scrollLeft, scrollY: scrollTop });
+    };
+
+    const ganttElement = ganttRef.current;
+    ganttElement.addEventListener('scroll', handleScroll);
+
+    return () => {
+      ganttElement.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -67,16 +82,16 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
 
     if (handleType === 'dependency') {
       setLinePosition({ 
-        startX: initialX, 
-        startY: initialY, 
-        endX: e.clientX - ganttRect.left, 
-        endY: e.clientY - ganttRect.top 
+        startX: initialX + scrollPosition.scrollX, 
+        startY: initialY -27 + scrollPosition.scrollY, 
+        endX: e.clientX - ganttRect.left + scrollPosition.scrollX, 
+        endY: e.clientY - ganttRect.top-27 + scrollPosition.scrollY
       });
       return;
     }
 
     const deltaX = e.clientX - lastX;
-    const dayOffset = deltaX / 40; // Cada dia tem 40px de largura
+    const dayOffset = deltaX / 70; 
     const roundedDayOffset = Math.round(dayOffset);
 
     if (Math.abs(roundedDayOffset) >= 1) {
@@ -274,8 +289,8 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
           {tasks.map((task, index) => {
             const taskStartDate = new Date(task.plannedStartDate);
             const taskEndDate = new Date(task.plannedEndDate);
-            const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 40; // Cada dia tem 40px de largura
-            const taskDuration = ((taskEndDate - taskStartDate) / (1000 * 60 * 60 * 24)) * 40; // Cada dia tem 40px de largura
+            const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 40px de largura
+            const taskDuration = ((taskEndDate - taskStartDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 40px de largura
 
             return (
               <div
@@ -356,8 +371,8 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
               const depEndDate = new Date(depTask.plannedEndDate);
               const taskStartDate = new Date(task.plannedStartDate);
 
-              const depEndOffset = ((depEndDate - startDate) / (1000 * 60 * 60 * 24)) * 40;
-              const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 40;
+              const depEndOffset = ((depEndDate - startDate) / (1000 * 60 * 60 * 24)) * 50;
+              const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 50;
               const depIndex = tasks.findIndex((t) => t.id === depId);
               const taskIndex = tasks.findIndex((t) => t.id === task.id);
 
