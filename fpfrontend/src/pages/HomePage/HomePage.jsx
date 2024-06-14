@@ -29,14 +29,6 @@ const HomePage = () => {
   const { laboratories, fetchLaboratories } = useLabStore();
   const location = useLocation();
   const [filtersVisible, setFiltersVisible] = useState(false);
-  const [filters, setFilters] = useState({
-    name: '',
-    state: '',
-    projectKeywords: '',
-    projectSkills: '',
-    sortBy: '',
-    laboratory: ''
-  });
   const defaultFilters = {
     name: '',
     state: '',
@@ -45,6 +37,9 @@ const HomePage = () => {
     sortBy: '',
     laboratory: ''
   };
+  const [filters, setFilters] = useState({
+    defaultFilters
+  });
   const { states, fetchProjectStates } = useProjectStatesStore();
   const [filterType, setFilterType] = useState('name');
   
@@ -54,9 +49,9 @@ const HomePage = () => {
     if (width < 600) {
       return 5;
     } else if (width < 1200 && width >= 600) {
-      return 7;
+      return 6;
     } else if (width >= 1200) {
-      return 15;
+      return 8;
     }
     return 5;
   }
@@ -68,9 +63,9 @@ const HomePage = () => {
     if (width < 600) {
       newPageSize = 5;
     } else if (width < 1200 && width >= 600) {
-      newPageSize = 7;
+      newPageSize = 6;
     } else if (width >= 1200) {
-      newPageSize = 15;
+      newPageSize = 8;
     }
     setPageSize(newPageSize);
   };
@@ -119,7 +114,12 @@ const HomePage = () => {
       if (response.status === 200) {
         const data = await response.json();
         setProjects(data.projectsForAPage);
-        setPageCount(Math.ceil(data.totalProjects / pageSize));
+        const newPageCount = Math.ceil(data.totalProjects / pageSize);
+        setPageCount(newPageCount);
+        // Validate and adjust the pageNumber if it exceeds pageCount
+        if (pageNumber > newPageCount) {
+          setPageNumber(newPageCount);
+        }
       }
     };
     if (!isAuthenticated) setView('cards');
@@ -151,6 +151,9 @@ const HomePage = () => {
 
   const handleClearFilters = () => {
     setFilters(defaultFilters);
+    setFilterType("name"); // Reset filter type to default
+    setPageSize(getInitialPageSize());
+    setPageNumber(1);
     if (isAuthenticated) navigate('/authenticatedhomepage');
     else navigate('/homepage');
   };
@@ -203,19 +206,19 @@ const HomePage = () => {
               placeholder={filterType.charAt(0).toUpperCase() + filterType.slice(1)}
               onChange={handleFilterChange}
             />
-            <select name="state" onChange={handleFilterChange}>
+            <select name="state" value={filters.state} onChange={handleFilterChange}>
               <option value="">Select State</option>
               {states.map((state) => (
                 <option key={state} value={state}>{state}</option>
               ))}
             </select>
-            <select name="laboratory" onChange={handleFilterChange}>
+            <select name="laboratory" value={filters.laboratory} onChange={handleFilterChange}>
               <option value="">Select Laboratory</option>
               {laboratories.map((lab) => (
                 <option key={lab.id} value={lab.id}>{lab.location}</option>
               ))}
             </select>
-            <select name="sortBy" onChange={handleSortChange}>
+            <select name="sortBy" value={filters.sortBy} onChange={handleSortChange}>
               <option value="">Sort By</option>
               <option value="creationDate">Creation Date</option>
               <option value="openPositions">Open Positions</option>

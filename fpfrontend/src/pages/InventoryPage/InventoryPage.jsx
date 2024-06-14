@@ -35,10 +35,11 @@ const InventoryPage = () => {
     if (width < 600) {
       return 5;
     } else if (width < 1200 && width >= 600) {
-      return 7;
+      return 6;
     } else if (width >= 1200) {
-      return 10;
+      return 8;
     }
+    return 5;
   }
 
   const updatePageSize = () => {
@@ -48,9 +49,9 @@ const InventoryPage = () => {
     if (width < 600) {
       newPageSize = 5;
     } else if (width < 1200 && width >= 600) {
-      newPageSize = 7;
+      newPageSize = 6;
     } else if (width >= 1200) {
-      newPageSize = 10;
+      newPageSize = 8;
     }
     setPageSize(newPageSize);
   };
