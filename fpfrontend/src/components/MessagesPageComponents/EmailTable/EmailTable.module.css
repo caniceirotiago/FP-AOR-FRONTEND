@@ -1,0 +1,15 @@
+.emailTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .emailTable th, .emailTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .emailTable th {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
+  
