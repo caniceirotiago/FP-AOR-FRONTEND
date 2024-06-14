@@ -6,8 +6,8 @@ import ListItem from "./listItems/ListItem";
 import { useSelect } from "downshift";
 import useSelectTypeModal from "../../stores/useSelectTypeModal";
 import SelectTypeModal from "../modals/SelectTypeModal.jsx";
-import useQuantitySelectModal from "../../stores/useQuantitySelectModal";
-import QuantitySelectModal from "../modals/QuantitySelectModal.jsx";
+import useSelectQuantityModalStore from "../../stores/useSelectQuantityModalStore.jsx";
+import QuantitySelectModal from "../modals/SelectQuantityModal.jsx";
 import userService from "../../services/userService";
 import projectService from "../../services/projectService.jsx";
 import useConfigurationStore from "../../stores/useConfigurationStore";
@@ -34,7 +34,7 @@ const AttributeEditor = ({
   const [selectedValue, setSelectedValue] = useState(null);
   const { configurations } = useConfigurationStore();
   const selectTypeModal = useSelectTypeModal();
-  const selectQuantityModal = useQuantitySelectModal();
+  const selectQuantityModal = useSelectQuantityModalStore();
 
   // Initialize attributes based on creation mode and initial values
   useEffect(() => {
@@ -259,8 +259,11 @@ const AttributeEditor = ({
         selectTypeModal.setShowModal(true);
         selectedOption = await selectTypeModal.waitForSelection();
       }
-      const data = { name: input, type: selectedOption };
 
+      const data = { name: input, type: selectedOption };
+      if (title === "keywords") {
+        delete data.type;
+      }
 
       if (title === "assets") {
         const suggestion = fetchedSuggestions.find(
@@ -269,20 +272,10 @@ const AttributeEditor = ({
         );
         if (suggestion) {
           selectQuantityModal.setShowModal(true);
-          const quantity = await selectQuantityModal.waitForQuantity();
-          if (quantity) {
-            const data = {
-              name: suggestion.name,
-              usedQuantity: quantity,
-            };
+          await selectQuantityModal.waitForQuantity();
         }
       }
-    }
 
-
-      if (title === "keywords") {
-        delete data.type;
-      }
       // Add item to the server or state
       if (!creationMode) {
         console.log("adding item");
