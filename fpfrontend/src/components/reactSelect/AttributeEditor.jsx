@@ -7,7 +7,7 @@ import { useSelect } from "downshift";
 import useSelectTypeModal from "../../stores/useSelectTypeModal";
 import SelectTypeModal from "../modals/SelectTypeModal.jsx";
 import useSelectQuantityModalStore from "../../stores/useSelectQuantityModalStore.jsx";
-import QuantitySelectModal from "../modals/SelectQuantityModal.jsx";
+import SelectQuantityModal from "../modals/SelectQuantityModal.jsx";
 import userService from "../../services/userService";
 import projectService from "../../services/projectService.jsx";
 import useConfigurationStore from "../../stores/useConfigurationStore";
@@ -34,7 +34,7 @@ const AttributeEditor = ({
   const [selectedValue, setSelectedValue] = useState(null);
   const { configurations } = useConfigurationStore();
   const selectTypeModal = useSelectTypeModal();
-  const selectQuantityModal = useSelectQuantityModalStore();
+  const usedQuantity = useSelectQuantityModalStore();
 
   // Initialize attributes based on creation mode and initial values
   useEffect(() => {
@@ -260,19 +260,21 @@ const AttributeEditor = ({
         selectedOption = await selectTypeModal.waitForSelection();
       }
 
-      const data = { name: input, type: selectedOption };
+      let data = { name: input, type: selectedOption };
       if (title === "keywords") {
         delete data.type;
       }
 
+      let selectedQuantity = null;
       if (title === "assets") {
         const suggestion = fetchedSuggestions.find(
           (suggestion) =>
             suggestion?.name?.toLowerCase() === input?.toLowerCase()
         );
         if (suggestion) {
-          selectQuantityModal.setShowModal(true);
-          await selectQuantityModal.waitForQuantity();
+          usedQuantity.setShowModal(true);
+          selectedQuantity = await usedQuantity.waitForQuantity();
+          data = { ...data, usedQuantity: selectedQuantity }; // Update `data` with selected quantity
         }
       }
 
@@ -576,7 +578,7 @@ const AttributeEditor = ({
           )}
         </div>
         <SelectTypeModal />
-        <QuantitySelectModal />
+        <SelectQuantityModal />
       </div>
     </div>
   );

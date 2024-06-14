@@ -3,10 +3,9 @@ import React, { useState } from "react";
 import useSelectQuantityModalStore from "../../stores/useSelectQuantityModalStore";
 import styles from "./SelectTypeModal.module.css";
 
-const QuantitySelectModal = () => {
+const SelectQuantityModal = () => {
   const [quantity, setQuantity] = useState(1);
-  const { showModal, setShowModal, resolveSelection } =
-  useSelectQuantityModalStore();
+  const { showModal, setShowModal, resolveSelection } = useSelectQuantityModalStore();
 
   const handleConfirm = () => {
     resolveSelection(quantity);
@@ -20,7 +19,8 @@ const QuantitySelectModal = () => {
           <input
             type="number"
             value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
+            onChange={(e) => setQuantity(parseInt(e.target.value))}
+            min="1"
           />
           <button onClick={handleConfirm}>Confirm</button>
         </div>
@@ -29,4 +29,4 @@ const QuantitySelectModal = () => {
   );
 };
 
-export default QuantitySelectModal;
+export default SelectQuantityModal;
