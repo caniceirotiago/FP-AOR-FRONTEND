@@ -24,7 +24,7 @@ const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole,
             <div className={styles.attributeName}>{attribute.name}</div>
             </>
         )}
-        {(title === "interests" || title === "skills") &&
+        {(title === "interests" || title === "skills" || title ==="assets") &&
         (
             <>
             <div className={styles.attributeName}>{attribute.name}</div>

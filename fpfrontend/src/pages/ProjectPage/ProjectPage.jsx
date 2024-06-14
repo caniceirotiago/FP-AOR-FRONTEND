@@ -15,10 +15,9 @@ import LogsList from "../../components/ProjectPageComponents/LogsList/LogsList.j
 import useProjectStore from "../../stores/useProjectStore.jsx";
 import { useNavigate } from "react-router";
 
-
 const ProjectPage = () => {
   const navigate = useNavigate();
-  const {setSelectedProjectId} = useProjectStore();
+  const { setSelectedProjectId } = useProjectStore();
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
   const [projectLogs, setProjectLogs] = useState([]);
   const [approveOrReject, setApproveOrReject] = useState("");
@@ -103,9 +102,8 @@ const ProjectPage = () => {
     setSelectedProjectId(id);
     navigate(`/projectplanning`);
     console.log("Project Planning Page");
-}
+  };
 
-  
   const canEdit =
     projectInfo.members &&
     projectInfo.members.some(
@@ -118,12 +116,13 @@ const ProjectPage = () => {
     projectInfo.members &&
     projectInfo.members.some(
       (user) =>
-        user.userId === parseInt(localStorage.getItem("userId")) && 
+        user.userId === parseInt(localStorage.getItem("userId")) &&
         user.accepted
     );
 
   const isInApprovalMode =
     localStorage.getItem("role") === "1" && projectInfo.state === "READY";
+
   return (
     <>
       {isTheProjectNotExistant ? (
@@ -207,11 +206,14 @@ const ProjectPage = () => {
                 />
               </div>
               {canSeeAndEditProjectPlanning && (
-                  <div>
-                    <button onClick={() =>handleClickToOpenProjectPlanningPage()}>Project Planning</button>
-                  </div>
-                )
-              }
+                <div>
+                  <button
+                    onClick={() => handleClickToOpenProjectPlanningPage()}
+                  >
+                    Project Planning
+                  </button>
+                </div>
+              )}
               <div className={styles.usersContainer}>
                 <AttributeEditor
                   title="users"
@@ -235,6 +237,13 @@ const ProjectPage = () => {
               />
               <AttributeEditor
                 title="keywords"
+                editMode={isEditing}
+                mainEntity={"project"}
+                creationMode={false}
+                projectId={id}
+              />
+                  <AttributeEditor
+                title="assets"
                 editMode={isEditing}
                 mainEntity={"project"}
                 creationMode={false}

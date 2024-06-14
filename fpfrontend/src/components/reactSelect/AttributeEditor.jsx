@@ -11,26 +11,38 @@ import projectService from "../../services/projectService.jsx";
 import useConfigurationStore from "../../stores/useConfigurationStore";
 import membershipService from "../../services/membershipService";
 
-const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttributesChange, username, projectId, createdBy, taskResponsibleId, registeredExecutors, setTaskData, taskData }) => {
+const AttributeEditor = ({
+  title,
+  editMode,
+  creationMode,
+  mainEntity,
+  onAttributesChange,
+  username,
+  projectId,
+  createdBy,
+  taskResponsibleId,
+  registeredExecutors,
+  setTaskData,
+  taskData,
+}) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
   const [attributes, setAttributes] = useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
   const selectTypeModal = useSelectTypeModal();
-  const {configurations} = useConfigurationStore();
+  const { configurations } = useConfigurationStore();
 
   // Initialize attributes based on creation mode and initial values
   useEffect(() => {
-    if(!creationMode){
-      if(taskResponsibleId){
-        console.log("taskResponsibleId")
+    if (!creationMode) {
+      if (taskResponsibleId) {
+        console.log("taskResponsibleId");
         setAttributes([taskResponsibleId]);
-      } else if(registeredExecutors){
+      } else if (registeredExecutors) {
         setAttributes(registeredExecutors);
-      }
-      else{
-         fetchAttributes();
+      } else {
+        fetchAttributes();
       }
     }
   }, [taskResponsibleId]);
@@ -45,9 +57,9 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   // Determine fetch function based on the main entity
   const getFetchFunction = (title) => {
     switch (mainEntity) {
-      case 'user':
+      case "user":
         return generalService.fetchUserAttributes(title, username);
-      case 'project':
+      case "project":
         return generalService.fetchProjectAttributes(title, projectId);
     }
   };
@@ -67,19 +79,25 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     }
   };
 
-
-// Fetch suggestions from API based on the first letter
+  // Fetch suggestions from API based on the first letter
   const fetchSuggestions = async (firstLetter) => {
-    if((creationMode && title === 'users' && mainEntity === 'task') || title === 'Responsible user' || title === 'Registered executers'){
+    if (
+      (creationMode && title === "users" && mainEntity === "task") ||
+      title === "Responsible user" ||
+      title === "Registered executers"
+    ) {
       try {
-        console.log("fetching suggestions")
+        console.log("fetching suggestions");
 
-        const response = await membershipService.fetchSuggestionsByProjectId(firstLetter, projectId);
+        const response = await membershipService.fetchSuggestionsByProjectId(
+          firstLetter,
+          projectId
+        );
         if (response.status === 200) {
           const data = await response.json();
-          console.log(data)
-          setFetchedSuggestions(data); 
-          setSuggestions(data); 
+          console.log(data);
+          setFetchedSuggestions(data);
+          setSuggestions(data);
         } else {
           throw new Error("Failed to fetch suggestions");
         }
@@ -88,7 +106,10 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       }
     } else {
       try {
-        const response = await generalService.fetchSuggestions(title, firstLetter);
+        const response = await generalService.fetchSuggestions(
+          title,
+          firstLetter
+        );
         if (response.status === 200) {
           const data = await response.json();
           setFetchedSuggestions(data); // Store fetched suggestions
@@ -100,18 +121,17 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
         console.error("Error fetching suggestions:", error.message);
       }
     }
-    
   };
-// Get item property based on the title
+  // Get item property based on the title
   const getItemProperty = (item) => {
     switch (title) {
-      case 'users':
+      case "users":
         return item.username;
       default:
         return item.name;
     }
   };
-// Filter suggestions based on user query
+  // Filter suggestions based on user query
   const filterSuggestions = (query) => {
     const filtered = fetchedSuggestions.filter((item) =>
       getItemProperty(item)?.toLowerCase()?.startsWith(query.toLowerCase())
@@ -119,7 +139,7 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
     setSuggestions(filtered);
   };
 
-// Handle input change in the search field
+  // Handle input change in the search field
   const handleInputChange = (newValue, { action }) => {
     if (action === "input-change") {
       setInput(newValue);
@@ -147,7 +167,11 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   // Update user role in a project
   const handleChangeUserProjectRole = async (userId, role) => {
     try {
-      const response = await projectService.updateProjecUserRole(projectId, userId, role);
+      const response = await projectService.updateProjecUserRole(
+        projectId,
+        userId,
+        role
+      );
       if (response.status === 204) {
         fetchAttributes();
       } else {
@@ -160,28 +184,35 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
 
   // Add a new item to the list
   const addItem = async () => {
-    let existingAttribute 
-    let existingUser
+    let existingAttribute;
+    let existingUser;
     // Check if the input already exists in the fetched suggestions
-    if(title !== 'users'){
-      existingAttribute = fetchedSuggestions.some((suggestion) =>
-        suggestion?.name?.toLowerCase() === input.toLowerCase()
+    if (title !== "users") {
+      existingAttribute = fetchedSuggestions.some(
+        (suggestion) => suggestion?.name?.toLowerCase() === input.toLowerCase()
+      );
+    } else {
+      existingUser = fetchedSuggestions.some(
+        (suggestion) =>
+          suggestion?.username?.toLowerCase() === input.toLowerCase()
       );
     }
-    else{
-      existingUser = fetchedSuggestions.some((suggestion) =>
-      suggestion?.username?.toLowerCase() === input.toLowerCase()
-    );
-    }
-   
     // Ensure the user exists in suggestions
-    if (title === 'users' && !existingUser) {
+    if (title === "users" && !existingUser) {
       console.warn("User not in suggestions. Not adding.");
       return;
     }
     // Ensure only one user can be responsible for a task
-    if((title === 'users' && creationMode && mainEntity ==='task' && attributes.length === 1) || (title === 'Responsible user'&& attributes.length === 1)){
-      console.warn("Only one user can be assigned to a task as responsible. Not adding.");
+    if (
+      (title === "users" &&
+        creationMode &&
+        mainEntity === "task" &&
+        attributes.length === 1) ||
+      (title === "Responsible user" && attributes.length === 1)
+    ) {
+      console.warn(
+        "Only one user can be assigned to a task as responsible. Not adding."
+      );
       return;
     }
 
@@ -193,58 +224,106 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
         return;
       }
       // Ensure no duplicate attributes/users
-      if(title !== 'users'){
-        if (attributes.some((attribute) => attribute.name?.toLowerCase() === input.toLowerCase())) {
+      if (title !== "users") {
+        if (
+          attributes.some(
+            (attribute) => attribute.name?.toLowerCase() === input.toLowerCase()
+          )
+        ) {
           console.warn("Duplicate attribute. Not adding.");
           return;
         }
-      }else{
-        if (attributes.some((attribute) => attribute.username?.toLowerCase() === input.toLowerCase())) {
+      } else {
+        if (
+          attributes.some(
+            (attribute) =>
+              attribute.username?.toLowerCase() === input.toLowerCase()
+          )
+        ) {
           console.warn("Duplicate user. Not adding.");
           return;
         }
       }
-      
 
       let selectedOption = null;
       // Prompt user to select type for skills or interests
-      if (!existingAttribute && (title === 'skills' || title === 'interests')) {
-        const options = title === 'skills' ? ["KNOWLEDGE", "SOFTWARE", "HARDWARE", "TOOLS"] : ["TOPICS", "CAUSES", "KNOWLEDGE_AREAS"];
+      if (!existingAttribute && (title === "skills" || title === "interests")) {
+        const options =
+          title === "skills"
+            ? ["KNOWLEDGE", "SOFTWARE", "HARDWARE", "TOOLS"]
+            : ["TOPICS", "CAUSES", "KNOWLEDGE_AREAS"];
         selectTypeModal.setOptions(options);
         selectTypeModal.setShowModal(true);
         selectedOption = await selectTypeModal.waitForSelection();
       }
+      if (title === "assets") {
+      }
 
       const data = { name: input, type: selectedOption };
-      if(title === 'keywords'){
+      if (title === "keywords") {
         delete data.type;
       }
       // Add item to the server or state
       if (!creationMode) {
-        console.log("adding item")
-        let response
-        let suggestion
-        if(title === 'users' && mainEntity === 'project'){
+        console.log("adding item");
+        let response;
+        let suggestion;
+        if (title === "users" && mainEntity === "project") {
           response = await userService.addUserToProject(projectId, input);
-        } else if(title === 'Responsible user'){
-          console.log("adding responsible user : suggesstion") 
-          console.log(fetchedSuggestions)
-          suggestion = fetchedSuggestions.find((suggestion) => suggestion?.username?.toLowerCase() === input?.toLowerCase());
-          console.log(suggestion)
-          setAttributes([...attributes, {id: suggestion?.id, username: input, photo: suggestion?.photo}]);
-          setTaskData({...taskData, responsibleId: {id: suggestion?.id, username: input, photo: suggestion?.photo}});
-          
-        } else if(title === 'Registered executers'){
-          if(attributes.find((attribute) => attribute.username === input)){
+        } else if (title === "Responsible user") {
+          console.log("adding responsible user : suggesstion");
+          console.log(fetchedSuggestions);
+          suggestion = fetchedSuggestions.find(
+            (suggestion) =>
+              suggestion?.username?.toLowerCase() === input?.toLowerCase()
+          );
+          console.log(suggestion);
+          setAttributes([
+            ...attributes,
+            { id: suggestion?.id, username: input, photo: suggestion?.photo },
+          ]);
+          setTaskData({
+            ...taskData,
+            responsibleId: {
+              id: suggestion?.id,
+              username: input,
+              photo: suggestion?.photo,
+            },
+          });
+        } else if (title === "Registered executers") {
+          if (attributes.find((attribute) => attribute.username === input)) {
             console.warn("Duplicate user. Not adding.");
             return;
           }
-          suggestion = fetchedSuggestions.find((suggestion) => suggestion?.username?.toLowerCase() === input?.toLowerCase());
-          setAttributes([...attributes, {id: suggestion?.id, username: input, photo: suggestion?.photo}]);
-          setTaskData({...taskData, registeredExecutors: [...registeredExecutors, {id: suggestion?.id, username: input, photo: suggestion?.photo}]});
-        }
-        else{
-          response = await generalService.addItem(title, data, mainEntity, projectId);
+          suggestion = fetchedSuggestions.find(
+            (suggestion) =>
+              suggestion?.username?.toLowerCase() === input?.toLowerCase()
+          );
+          setAttributes([
+            ...attributes,
+            { id: suggestion?.id, username: input, photo: suggestion?.photo },
+          ]);
+          setTaskData({
+            ...taskData,
+            registeredExecutors: [
+              ...registeredExecutors,
+              { id: suggestion?.id, username: input, photo: suggestion?.photo },
+            ],
+          });
+        } else if (title === "assets") {
+          console.log("adding asset");
+          suggestion = fetchedSuggestions.find(
+            (suggestion) =>
+              suggestion?.name?.toLowerCase() === input?.toLowerCase()
+          );
+          setAttributes([...attributes, { id: suggestion?.id, name: input }]);
+        } else {
+          response = await generalService.addItem(
+            title,
+            data,
+            mainEntity,
+            projectId
+          );
         }
         if (response.status === 204) {
           fetchAttributes();
@@ -252,16 +331,44 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
           throw new Error("Failed to add item");
         }
       } else {
-          let suggestion
-          if(title === 'users'){
-            suggestion = fetchedSuggestions.find((suggestion) => suggestion?.username?.toLowerCase() === input?.toLowerCase());
-            setAttributes([...attributes, {user:{id: suggestion?.id, username: input, photo: suggestion?.photo, role: suggestion?.role, accepted: suggestion?.isAccepted} }]);
-          }
-          else{
-            suggestion = fetchedSuggestions.find((suggestion) => suggestion?.name?.toLowerCase() === input?.toLowerCase());
-          setAttributes([...attributes, { id: suggestion?.id, name: input, type: suggestion?.type ?? selectedOption }]);
-          }
-        
+        let suggestion;
+        if (title === "users") {
+          suggestion = fetchedSuggestions.find(
+            (suggestion) =>
+              suggestion?.username?.toLowerCase() === input?.toLowerCase()
+          );
+          setAttributes([
+            ...attributes,
+            {
+              user: {
+                id: suggestion?.id,
+                username: input,
+                photo: suggestion?.photo,
+                role: suggestion?.role,
+                accepted: suggestion?.isAccepted,
+              },
+            },
+          ]);
+        } else if (title === "assets") {
+          suggestion = fetchedSuggestions.find(
+            (suggestion) =>
+              suggestion?.name?.toLowerCase() === input?.toLowerCase()
+          );
+          setAttributes([...attributes, { id: suggestion?.id, name: input }]);
+        } else {
+          suggestion = fetchedSuggestions.find(
+            (suggestion) =>
+              suggestion?.name?.toLowerCase() === input?.toLowerCase()
+          );
+          setAttributes([
+            ...attributes,
+            {
+              id: suggestion?.id,
+              name: input,
+              type: suggestion?.type ?? selectedOption,
+            },
+          ]);
+        }
       }
     } catch (error) {
       console.error("Error adding item:", error.message);
@@ -269,12 +376,24 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
       clearInput();
     }
   };
+
   // Request to join a project
   const askToJoinProject = async () => {
     try {
       const response = await projectService.askToJoinProject(projectId);
       if (response.status === 204) {
-        setAttributes([...attributes, {user:{id: localStorage.getItem("userId"), username: localStorage.getItem("username"), photo: localStorage.getItem("photo"), role: "NORMAL_USER", accepted: false} }]);
+        setAttributes([
+          ...attributes,
+          {
+            user: {
+              id: localStorage.getItem("userId"),
+              username: localStorage.getItem("username"),
+              photo: localStorage.getItem("photo"),
+              role: "NORMAL_USER",
+              accepted: false,
+            },
+          },
+        ]);
       } else {
         throw new Error("Failed to ask to join project");
       }
@@ -292,19 +411,35 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
   // Remove an item from the list
   const removeItem = async (attributeToRemove) => {
     try {
-      if(!creationMode){
-        let response
-        if(title === 'users' && mainEntity === 'project'){
-          response = await userService.removeUserFromProject(projectId, attributeToRemove.user.username);
-        }else if((title === 'Responsible user') && !creationMode){
+      if (!creationMode) {
+        let response;
+        if (title === "users" && mainEntity === "project") {
+          response = await userService.removeUserFromProject(
+            projectId,
+            attributeToRemove.user.username
+          );
+        } else if (title === "Responsible user" && !creationMode) {
           setAttributes([]);
-          setTaskData({...taskData, responsibleId: null});
-        }else if((title === 'Registered executers') && !creationMode){
-          setAttributes(attributes.filter((attribute) => attribute.username !== attributeToRemove.username));
-          setTaskData({...taskData, registeredExecutors: registeredExecutors.filter((attribute) => attribute.username !== attributeToRemove.username)});
-        }
-        else{
-         response = await generalService.removeItem(title, attributeToRemove.id, mainEntity, projectId);
+          setTaskData({ ...taskData, responsibleId: null });
+        } else if (title === "Registered executers" && !creationMode) {
+          setAttributes(
+            attributes.filter(
+              (attribute) => attribute.username !== attributeToRemove.username
+            )
+          );
+          setTaskData({
+            ...taskData,
+            registeredExecutors: registeredExecutors.filter(
+              (attribute) => attribute.username !== attributeToRemove.username
+            ),
+          });
+        } else {
+          response = await generalService.removeItem(
+            title,
+            attributeToRemove.id,
+            mainEntity,
+            projectId
+          );
         }
         if (response.status === 204) {
           fetchAttributes();
@@ -313,86 +448,119 @@ const AttributeEditor = ({ title, editMode, creationMode, mainEntity, onAttribut
         }
       }
 
-      if (title === 'users' && mainEntity === 'project') {
+      if (title === "users" && mainEntity === "project") {
         setAttributes(
-          attributes.filter((attribute) => attribute.user.username !== attributeToRemove.user.username)
+          attributes.filter(
+            (attribute) =>
+              attribute.user.username !== attributeToRemove.user.username
+          )
         );
-      }else{
+      } else {
         setAttributes(
-        attributes.filter((attribute) => attribute.name !== attributeToRemove.name)
-      );
+          attributes.filter(
+            (attribute) => attribute.name !== attributeToRemove.name
+          )
+        );
       }
-      
-      
     } catch (error) {
       console.error("Error removing item:", error.message);
     }
   };
+
   // Get label and value for a suggestion item
   const getLabelValue = (suggestion) => {
     switch (title) {
-      case 'users':
+      case "users":
         return { label: suggestion.username, value: suggestion.username };
-      case 'Responsible user':
+      case "Responsible user":
         return { label: suggestion.username, value: suggestion.username };
-      case 'Registered executers':
+      case "Registered executers":
         return { label: suggestion.username, value: suggestion.username };
       default:
-        return { label: suggestion.name + ' - ' + suggestion.type, value: suggestion.name };
+        return {
+          label: suggestion.name + " - " + suggestion.type,
+          value: suggestion.name,
+        };
     }
   };
+
   // Capitalize the title for display
   const elementTitle =
     title.charAt(0).toUpperCase() + title?.slice(1)?.toLowerCase();
-    // Determine if it's possible to join the project
-    const maxProjectMembersConfig = configurations.get('maxProjectMembers');
-    const isPossibleToJoin = (maxProjectMembersConfig ? attributes.length < maxProjectMembersConfig : true) && !attributes.some((attribute) => attribute.user?.username === localStorage.getItem('username'));
-
+  // Determine if it's possible to join the project
+  const maxProjectMembersConfig = configurations.get("maxProjectMembers");
+  const isPossibleToJoin =
+    (maxProjectMembersConfig
+      ? attributes.length < maxProjectMembersConfig
+      : true) &&
+    !attributes.some(
+      (attribute) =>
+        attribute.user?.username === localStorage.getItem("username")
+    );
 
   return (
     <div className={styles.container}>
-      {(creationMode && title === 'users' && mainEntity === 'task') ? <h2>Responsible</h2> : <h2>{elementTitle}</h2>}
-      
-      {title === 'users' && !creationMode &&  <>{isPossibleToJoin ? <button onClick={askToJoinProject}>Ask To Join</button> : null}</>}
+      {creationMode && title === "users" && mainEntity === "task" ? (
+        <h2>Responsible</h2>
+      ) : (
+        <h2>{elementTitle}</h2>
+      )}
+
+      {title === "users" && !creationMode && (
+        <>
+          {isPossibleToJoin ? (
+            <button onClick={askToJoinProject}>Ask To Join</button>
+          ) : null}
+        </>
+      )}
       <div className={styles.innerContainer}>
         <div className={styles.existingAttributes}>
           <div className={styles.userAttributeContainer}>
             <ul className={styles.attributeList}>
               {attributes.map((attribute) => (
                 <li className={styles.attribute} key={attribute.id}>
-                  <ListItem removeItem={removeItem} title={title} attribute={attribute} creationMode={creationMode} handleChangeUserProjectRole={handleChangeUserProjectRole} editMode={editMode} createdBy={createdBy}/>                
+                  <ListItem
+                    removeItem={removeItem}
+                    title={title}
+                    attribute={attribute}
+                    creationMode={creationMode}
+                    handleChangeUserProjectRole={handleChangeUserProjectRole}
+                    editMode={editMode}
+                    createdBy={createdBy}
+                  />
                 </li>
               ))}
             </ul>
           </div>
           {editMode && (
-        <div className={styles.addAttribute}>
-          <div className={styles.selectAddContainer}>
-            <Select
-              className="react-select-container"
-              classNamePrefix="react-select"
-              value={selectedValue}
-              onInputChange={handleInputChange}
-              onChange={handleSelectChange}
-              options={suggestions.map(getLabelValue)}
-              inputValue={input}
-              noOptionsMessage={() => "No suggestions found"}
-              placeholder={`Add new ${title}`}
-              isClearable
-              styles={{
-                control: (base) => ({
-                  ...base,
-                  width: "300px", 
-                }),
-                input: (base) => ({
-                  ...base,
-                  width: "100%", 
-                }),
-              }}
-            />
-            <div onClick={addItem}>Add</div>
-          </div>
-        </div>)}
+            <div className={styles.addAttribute}>
+              <div className={styles.selectAddContainer}>
+                <Select
+                  className="react-select-container"
+                  classNamePrefix="react-select"
+                  value={selectedValue}
+                  onInputChange={handleInputChange}
+                  onChange={handleSelectChange}
+                  options={suggestions.map(getLabelValue)}
+                  inputValue={input}
+                  noOptionsMessage={() => "No suggestions found"}
+                  placeholder={`Add new ${title}`}
+                  isClearable
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      width: "300px",
+                    }),
+                    input: (base) => ({
+                      ...base,
+                      width: "100%",
+                    }),
+                  }}
+                />
+                <div onClick={addItem}>Add</div>
+              </div>
+            </div>
+          )}
         </div>
         <SelectTypeModal />
       </div>

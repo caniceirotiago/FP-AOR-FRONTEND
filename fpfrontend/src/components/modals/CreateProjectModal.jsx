@@ -145,6 +145,7 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
                             <AttributeEditor title="skills" editMode={true} mainEntity={"project"} creationMode={true} onAttributesChange={handleSkillChange} />
                             <AttributeEditor title="keywords" editMode={true} mainEntity={"project"} creationMode={true} onAttributesChange={handleKeywordChange} />
                             <AttributeEditor title="users" editMode={true} mainEntity={"project"} creationMode={true} onAttributesChange={handleUserChange} />
+                            <AttributeEditor title="assets" editMode={true} mainEntity={"project"} creationMode={true} onAttributesChange={handleAssetChange} />
                         </div>
                         <button type="submit" className={styles.button}>Submit</button>
                     </form>
