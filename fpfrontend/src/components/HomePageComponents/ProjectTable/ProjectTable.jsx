@@ -116,10 +116,6 @@ function ProjectTable({ projects, pageCount, setPageNumber }) {
         setPageNumber(pageIndex + 1); 
     }, [pageIndex, setPageNumber]);
 
-
-
-    console.log(projects);
-
     return (
         <div className={styles.tableContainer}>
             <div className={styles.tblHeader}>

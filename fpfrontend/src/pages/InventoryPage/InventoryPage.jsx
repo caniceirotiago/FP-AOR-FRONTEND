@@ -16,7 +16,7 @@ const InventoryPage = () => {
   const { types, fetchAssetTypes, isEditModalOpen } = useAssetsStore();
   const [pageSize, setPageSize] = useState(getInitialPageSize());
   const [filtersVisible, setFiltersVisible] = useState(false);
-  const [pageCount, setPageCount] = useState(0);
+  const [pageCount, setPageCount] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
   const defaultFilters = {
     name: "",
@@ -124,7 +124,8 @@ const InventoryPage = () => {
       if (response.status === 200) {
         const data = await response.json();
         setAssets(data.assetsForPage);
-        const newPageCount = Math.ceil(data.totalAssets / pageSize);
+        const totalAssets = data.totalAssets;
+        const newPageCount = Math.ceil(totalAssets / pageSize) || 1; // Ensure pageCount is at least 1
         setPageCount(newPageCount);
         // Validate and adjust the pageNumber if it exceeds pageCount
         if (pageNumber > newPageCount) {
