@@ -1,8 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
-import userService from "../../services/userService";
-import { useEffect } from "react";
 import ProfileForm from "../forms/profileForm/ProfileForm.jsx";
 import styles from "./UserProfileBasicElements.module.css";
 import PasswordForm from "../auth regist/changePasswordForm/PasswordForm.jsx";
