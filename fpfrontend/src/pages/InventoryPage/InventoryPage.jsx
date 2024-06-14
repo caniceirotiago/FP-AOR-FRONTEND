@@ -149,7 +149,7 @@ const InventoryPage = () => {
         <div className={styles.btns}>
           <CreateAssetModal
             isOpen={isCreateModalOpen}
-            onClose={() => isCreateModalOpen(false)}
+            onClose={() => setIsCreateModalOpen(false)}
           />
           <button
             onClick={handleClick}
