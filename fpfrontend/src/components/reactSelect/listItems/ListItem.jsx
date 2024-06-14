@@ -1,4 +1,4 @@
-import react from 'react';
+import React from 'react';
 import styles from './ListItem.module.css';
 import useProjectRolesStore from '../../../stores/useProjectRolesStore';
 
@@ -15,7 +15,6 @@ const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole,
     let isTheCreator
     if(title === "users" && createdBy) isTheCreator = createdBy.username === attribute.user.username;
 
-    console.log(attribute.photo)
     return (
         <>
         {(title === "keywords") &&
