@@ -24,11 +24,18 @@ const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole,
             <div className={styles.attributeName}>{attribute.name}</div>
             </>
         )}
-        {(title === "interests" || title === "skills" || title ==="assets") &&
+        {(title === "interests" || title === "skills") &&
         (
             <>
             <div className={styles.attributeName}>{attribute.name}</div>
             <div className={styles.attributeValue}>{attribute.type}</div>
+            </>
+        )}
+         {(title ==="assets") &&
+        (
+            <>
+            <div className={styles.attributeName}>{attribute.name}</div>
+            <div className={styles.attributeValue}>{attribute.usedQuantity}</div>
             </>
         )}
         {title === "users" &&
