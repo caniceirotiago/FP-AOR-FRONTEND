@@ -89,7 +89,7 @@ const generalService = {
       if (mainEntity === "project") {
         requestBody = { id: id, projectId: mainEntityId};
       }
-      const response = await fetch(`${API_BASE_URL}${apiUrl}/remove/${mainEntity}`, {
+      const response = await fetch(`${API_BASE_URL}${apiUrl}/remove/${mainEntity}/${mainEntityId}`, {
         method: "PUT",
         headers: getAuthHeaders(),
         credentials: "include",

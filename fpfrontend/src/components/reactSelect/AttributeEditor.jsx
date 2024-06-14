@@ -6,6 +6,8 @@ import ListItem from "./listItems/ListItem";
 import { useSelect } from "downshift";
 import useSelectTypeModal from "../../stores/useSelectTypeModal";
 import SelectTypeModal from "../modals/SelectTypeModal.jsx";
+import useSelectQuantityModalStore from "../../stores/useSelectQuantityModalStore.jsx";
+import QuantitySelectModal from "../modals/SelectQuantityModal.jsx";
 import userService from "../../services/userService";
 import projectService from "../../services/projectService.jsx";
 import useConfigurationStore from "../../stores/useConfigurationStore";
@@ -30,8 +32,9 @@ const AttributeEditor = ({
   const [fetchedSuggestions, setFetchedSuggestions] = useState([]);
   const [attributes, setAttributes] = useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
-  const selectTypeModal = useSelectTypeModal();
   const { configurations } = useConfigurationStore();
+  const selectTypeModal = useSelectTypeModal();
+  const selectQuantityModal = useSelectQuantityModalStore();
 
   // Initialize attributes based on creation mode and initial values
   useEffect(() => {
@@ -256,13 +259,23 @@ const AttributeEditor = ({
         selectTypeModal.setShowModal(true);
         selectedOption = await selectTypeModal.waitForSelection();
       }
-      if (title === "assets") {
-      }
 
       const data = { name: input, type: selectedOption };
       if (title === "keywords") {
         delete data.type;
       }
+
+      if (title === "assets") {
+        const suggestion = fetchedSuggestions.find(
+          (suggestion) =>
+            suggestion?.name?.toLowerCase() === input?.toLowerCase()
+        );
+        if (suggestion) {
+          selectQuantityModal.setShowModal(true);
+          await selectQuantityModal.waitForQuantity();
+        }
+      }
+
       // Add item to the server or state
       if (!creationMode) {
         console.log("adding item");
@@ -563,6 +576,7 @@ const AttributeEditor = ({
           )}
         </div>
         <SelectTypeModal />
+        <QuantitySelectModal />
       </div>
     </div>
   );
