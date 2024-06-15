@@ -324,6 +324,19 @@ const AttributeEditor = ({
               { id: suggestion?.id, username: input, photo: suggestion?.photo },
             ],
           });
+        } else if (title === "assets") {
+          suggestion = fetchedSuggestions.find(
+            (suggestion) =>
+              suggestion?.name?.toLowerCase() === input?.toLowerCase()
+          );
+          if (!suggestion) {
+            console.warn("No matching suggestion found. Not adding asset.");
+            return;
+          }
+          setAttributes([
+            ...attributes,
+            { id: suggestion?.id, name: input, usedQuantity: selectedQuantity },
+          ]);
         } else {
           response = await generalService.addItem(
             title,
@@ -361,6 +374,10 @@ const AttributeEditor = ({
             (suggestion) =>
               suggestion?.name?.toLowerCase() === input?.toLowerCase()
           );
+          if (!suggestion) {
+            console.warn("No matching suggestion found. Not adding asset.");
+            return;
+          }
           setAttributes([...attributes, { id: suggestion?.id, name: input, usedQuantity: selectedQuantity }]);
         }  else {
           suggestion = fetchedSuggestions.find(

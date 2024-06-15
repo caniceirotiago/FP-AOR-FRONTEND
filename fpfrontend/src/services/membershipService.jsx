@@ -21,7 +21,7 @@ const membershipService = {
 
     getProjectIdsByuserId: async () => {
         try {
-            const response = await fetch(`${MEMBER_BASE_URL}/projectids-byuserid/securitycontext`, {
+            const response = await fetch(`${MEMBER_BASE_URL}/projectIds/byUserId/securityContext`, {
                 method: "GET",
                 headers: getAuthHeaders(),
                 credentials: "include",
