@@ -66,11 +66,16 @@ const generalService = {
   },
 
   addItem: async (apiUrl, data, mainEntity, mainEntityId) => {
+    console.log("addItem function called"); // Check if function is called
     if (mainEntity === "project") {
       data = { ...data, projectId: mainEntityId };
       console.log("add item general service: ", data);
     }
     try {
+      console.log("add item general service: data »» ", data);
+      console.log("add item general service: API_BASE_URL »» ", API_BASE_URL);
+      console.log("add item general service: apiUrl »» ", apiUrl);
+      console.log("add item general service: mainEntity »» ", mainEntity);
       const response = await fetch(`${API_BASE_URL}${apiUrl}/add/${mainEntity}`, {
         method: "POST",
         headers: getAuthHeaders(),
