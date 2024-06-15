@@ -20,7 +20,7 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
         skills: [],
         keywords: [],
         users: [],
-        assets: ''
+        assets: []
     });
 
     useEffect(() => {
@@ -37,6 +37,7 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
         setProjectData((prevData) => ({ ...prevData, users: newUsers }));
     };
     const handleAssetChange = (newAssets) => {
+        console.log(newAssets);
         setProjectData((prevData) => ({ ...prevData, assets: newAssets }));
     };
 
