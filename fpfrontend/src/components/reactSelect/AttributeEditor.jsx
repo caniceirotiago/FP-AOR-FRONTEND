@@ -334,16 +334,10 @@ const AttributeEditor = ({
             console.warn("No matching suggestion found. Not adding asset.");
             return;
           }
-
           setAttributes([
             ...attributes,
             { id: suggestion?.id, name: input, usedQuantity: selectedQuantity },
           ]);
-
-          // Create a new object excluding the 'type' field
-          const { type, ...payload } = data;
-          console.log("Payload without type: ", payload);
-
           response = await generalService.addItem(
             title,
             data,
@@ -351,7 +345,6 @@ const AttributeEditor = ({
             projectId
           );
         } else {
-          console.log("await generalService.addItem called"); // Check if function is called
           response = await generalService.addItem(
             title,
             data,

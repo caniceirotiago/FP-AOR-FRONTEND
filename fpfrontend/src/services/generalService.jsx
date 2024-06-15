@@ -28,11 +28,14 @@ const generalService = {
   },
   fetchProjectAttributes: async (apiUrl, projectId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${apiUrl}/project/${projectId}`, {
-        method: "GET",
-        headers: getAuthHeaders(),
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${API_BASE_URL}${apiUrl}/project/${projectId}`,
+        {
+          method: "GET",
+          headers: getAuthHeaders(),
+          credentials: "include",
+        }
+      );
 
       if (response.status !== 200) {
         throw new Error("Failed to fetch inputs");
@@ -66,22 +69,19 @@ const generalService = {
   },
 
   addItem: async (apiUrl, data, mainEntity, mainEntityId) => {
-    console.log("addItem function called"); // Check if function is called
     if (mainEntity === "project") {
       data = { ...data, projectId: mainEntityId };
-      console.log("add item general service: ", data);
     }
     try {
-      console.log("add item general service: data »» ", data);
-      console.log("add item general service: API_BASE_URL »» ", API_BASE_URL);
-      console.log("add item general service: apiUrl »» ", apiUrl);
-      console.log("add item general service: mainEntity »» ", mainEntity);
-      const response = await fetch(`${API_BASE_URL}${apiUrl}/add/${mainEntity}`, {
-        method: "POST",
-        headers: getAuthHeaders(),
-        credentials: "include",
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `${API_BASE_URL}${apiUrl}/add/${mainEntity}`,
+        {
+          method: "POST",
+          headers: getAuthHeaders(),
+          credentials: "include",
+          body: JSON.stringify(data),
+        }
+      );
       return response;
     } catch (error) {
       console.error("Error fetching suggestions:", error.message);
@@ -93,21 +93,23 @@ const generalService = {
     try {
       let requestBody = { id: id };
       if (mainEntity === "project") {
-        requestBody = { id: id, projectId: mainEntityId};
+        requestBody = { id: id, projectId: mainEntityId };
       }
-      const response = await fetch(`${API_BASE_URL}${apiUrl}/remove/${mainEntity}/${mainEntityId}`, {
-        method: "PUT",
-        headers: getAuthHeaders(),
-        credentials: "include",
-        body: JSON.stringify(requestBody),
-      });
+      const response = await fetch(
+        `${API_BASE_URL}${apiUrl}/remove/${mainEntity}/${mainEntityId}`,
+        {
+          method: "PUT",
+          headers: getAuthHeaders(),
+          credentials: "include",
+          body: JSON.stringify(requestBody),
+        }
+      );
       return response;
     } catch (error) {
       console.error("Error fetching suggestions:", error.message);
       throw error;
     }
   },
-  
 };
 
 export default generalService;
