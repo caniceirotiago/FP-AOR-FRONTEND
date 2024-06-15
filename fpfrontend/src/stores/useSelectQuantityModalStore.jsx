@@ -8,8 +8,7 @@ const useSelectQuantityModalStore = create((set) => ({
   setShowModal: (show) => set({ showModal: show }),
   resolveSelection: (usedQuantity) => set((state) => {
     if (state.resolver) {
-      state.resolver(usedQuantity
-      );
+      state.resolver(usedQuantity);
     }
     return { usedQuantity, resolver: null };
   }),
@@ -22,3 +21,4 @@ const useSelectQuantityModalStore = create((set) => ({
 }));
 
 export default useSelectQuantityModalStore;
+

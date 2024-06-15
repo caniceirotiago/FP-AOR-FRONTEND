@@ -64,8 +64,10 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
             conclusionDate: projectData.conclusionDate,
             skills: projectData.skills.map(skill => ({ name: skill.name, type: skill.type })),
             keywords: projectData.keywords.map(keyword => ({ name: keyword.name })),
+            assets: projectData.assets.map(asset => ({ name: asset.name, usedQuantity: asset.usedQuantity })),
             users: projectData.users.map(user => ({ username: user.user.username }))
         };
+        console.log(dataToSend);
         const response = await projectService.createProject(dataToSend);
         if (response.status === 204) {
             setDialogMessage("Project created successfully!");
