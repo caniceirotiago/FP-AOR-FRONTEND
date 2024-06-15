@@ -1,11 +1,11 @@
 import React from 'react';
 import styles from './MessagesPage.module.css';
+import Email from '../../components/MessagesPageComponents/Email';
 
 const MessagesPage = () => {
-  // Just to test hasAccess
   return (
     <div className={styles.MessagesPage} >
-      Messages
+      <Email/>
     </div>
   );
 };
