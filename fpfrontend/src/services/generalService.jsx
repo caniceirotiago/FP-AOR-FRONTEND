@@ -68,6 +68,7 @@ const generalService = {
   addItem: async (apiUrl, data, mainEntity, mainEntityId) => {
     if (mainEntity === "project") {
       data = { ...data, projectId: mainEntityId };
+      console.log("add item general service: ", data);
     }
     try {
       const response = await fetch(`${API_BASE_URL}${apiUrl}/add/${mainEntity}`, {

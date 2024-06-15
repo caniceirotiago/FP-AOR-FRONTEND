@@ -3,7 +3,6 @@ import Select from "react-select";
 import styles from "./AttributeEditor.module.css";
 import generalService from "../../services/generalService";
 import ListItem from "./listItems/ListItem";
-import { useSelect } from "downshift";
 import useSelectTypeModal from "../../stores/useSelectTypeModal";
 import SelectTypeModal from "../modals/SelectTypeModal.jsx";
 import useSelectQuantityModalStore from "../../stores/useSelectQuantityModalStore.jsx";
@@ -325,13 +324,6 @@ const AttributeEditor = ({
               { id: suggestion?.id, username: input, photo: suggestion?.photo },
             ],
           });
-        } else if (title === "assets") {
-          console.log("adding asset");
-          suggestion = fetchedSuggestions.find(
-            (suggestion) =>
-              suggestion?.name?.toLowerCase() === input?.toLowerCase()
-          );
-          setAttributes([...attributes, { id: suggestion?.id, name: input }]);
         } else {
           response = await generalService.addItem(
             title,
@@ -369,8 +361,8 @@ const AttributeEditor = ({
             (suggestion) =>
               suggestion?.name?.toLowerCase() === input?.toLowerCase()
           );
-          setAttributes([...attributes, { id: suggestion?.id, name: input }]);
-        } else {
+          setAttributes([...attributes, { id: suggestion?.id, name: input, usedQuantity: selectedQuantity }]);
+        }  else {
           suggestion = fetchedSuggestions.find(
             (suggestion) =>
               suggestion?.name?.toLowerCase() === input?.toLowerCase()

@@ -1,7 +1,7 @@
 // src/components/SelectQuantityModal.jsx
 import React, { useState } from "react";
 import useSelectQuantityModalStore from "../../stores/useSelectQuantityModalStore";
-import styles from "./SelectTypeModal.module.css";
+import styles from "./SelectQuantityModal.module.css";
 
 const SelectQuantityModal = () => {
   const [quantity, setQuantity] = useState(1);
