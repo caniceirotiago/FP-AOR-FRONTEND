@@ -3,6 +3,7 @@ import styles from './Email.module.css';
 import EmailTable from './EmailTable/EmailTable';
 import ComposeEmailModal from './ComposeEmailModal/ComposeEmailModal';
 import { FaInbox, FaPaperPlane, FaPlus } from 'react-icons/fa';
+import individualMessageService from '../../services/individualMessageService';
 
 const Email = () => {
   const [view, setView] = useState('inbox');
@@ -15,18 +16,6 @@ const Email = () => {
     setSelectedUser(null);
     setComposeModalOpen(true);
   };
-
-  const createDefaultUsers = () => {
-    // Simulação de usuários
-    const defaultUsers = [
-      { id: 1, username: 'user1' },
-      { id: 2, username: 'user2' },
-      { id: 3, username: 'user3' },
-    ];
-    
-    setUsers(defaultUsers);
-  };
-
 
 
   const fetchMessages = async (userId) => {
@@ -42,10 +31,13 @@ const Email = () => {
   }, [selectedUser]);
 
   const sendMessage = async (message) => {
-    // Substitua pelo código para enviar a mensagem
-    const response = await individualMessageService.sendMessage(message);
-    console.log('response:', response);
+    const oldMessages = messages;
     setMessages((prevMessages) => [...prevMessages, message]);
+    const response = await individualMessageService.sendMessage(message);
+    if (!response.ok) {
+      setMessages(oldMessages);
+    }
+    console.log('response:', response);
   };
 
   return (

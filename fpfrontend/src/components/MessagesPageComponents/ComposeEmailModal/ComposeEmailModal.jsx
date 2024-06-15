@@ -56,7 +56,7 @@ const ComposeEmailModal = ({ onClose, messages, sendMessage, selectedUser, users
     e.preventDefault();
     if (inputText.trim() && subject.trim() && currentUser) {
       const newMessage = {
-        senderId: sessionStorage.getItem('userId'),
+        senderId: localStorage.getItem('userId'),
         recipientId: currentUser.id,
         content: inputText,
         subject: subject 
