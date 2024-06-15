@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Body, Container, Button } from '@react-email/components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInbox, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import styles from './Email.module.css';
 import EmailTable from './EmailTable/EmailTable';
 import ComposeEmailModal from './ComposeEmailModal/ComposeEmailModal';
+import { FaInbox, FaPaperPlane, FaPlus } from 'react-icons/fa';
 
 const Email = () => {
   const [view, setView] = useState('inbox');
@@ -45,22 +43,35 @@ const Email = () => {
 
   const sendMessage = async (message) => {
     // Substitua pelo código para enviar a mensagem
+    const response = await individualMessageService.sendMessage(message);
+    console.log('response:', response);
     setMessages((prevMessages) => [...prevMessages, message]);
   };
 
   return (
-    <Body>
-      <Container className={styles.emailContainer}>
-        <div className={styles.controlBar}>
-          <Button onClick={() => setView('inbox')}>
-            <FontAwesomeIcon icon={faInbox} /> Inbox
-          </Button>
-          <Button onClick={() => setView('sent')}>
-            <FontAwesomeIcon icon={faPaperPlane} /> Sent
-          </Button>
-          <Button onClick={handleComposeClick}>
-            <FontAwesomeIcon icon={faPaperPlane} /> Compose Email
-          </Button>
+      <div className={styles.emailContainer}>
+        <div className={styles.controlPanel}>
+          <div className={styles.btns}>
+            <button
+             onClick={() => setView('inbox')}
+             className={`${styles.iconButton} ${styles.createButton}`}
+              data-text="Inbox">
+              <FaInbox className={styles.svgIcon}/> 
+            </button>
+            <button
+              onClick={() => setView('sent')}
+              className={`${styles.iconButton} ${styles.createButton}`}
+              data-text="Sent">
+              <FaPaperPlane className={styles.svgIcon}/> 
+            </button>
+            <button 
+              onClick={handleComposeClick}
+              className={`${styles.iconButton} ${styles.createButton}`}
+              data-text="Compose">
+              <FaPlus className={styles.svgIcon}/> 
+            </button>
+          </div>
+
         </div>
         <div className={styles.emailTable}>
           <EmailTable view={view} onSelectUser={(user) => {
@@ -77,8 +88,8 @@ const Email = () => {
             users={users}
           />
         )}
-      </Container>
-    </Body>
+      </div>
+
   );
 };
 

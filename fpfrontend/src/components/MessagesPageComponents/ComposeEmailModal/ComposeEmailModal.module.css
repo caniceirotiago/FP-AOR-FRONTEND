@@ -49,6 +49,7 @@
 
 .inputArea {
   display: flex;
+  flex-direction: column;
   border-top: 1px solid #ddd;
   padding: 10px;
 }
@@ -56,13 +57,13 @@
 .input {
   flex-grow: 1;
   padding: 10px;
+  margin-bottom: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
 .button {
   padding: 10px;
-  margin-left: 10px;
   border: none;
   border-radius: 4px;
   background: #007bff;
