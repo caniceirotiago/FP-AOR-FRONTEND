@@ -10,6 +10,7 @@ const SelectQuantityModal = () => {
   const handleConfirm = () => {
     resolveSelection(quantity);
     setShowModal(false);
+    setQuantity(1);
   };
 
   return (
