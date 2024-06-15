@@ -274,6 +274,7 @@ const AttributeEditor = ({
           usedQuantity.setShowModal(true);
           selectedQuantity = await usedQuantity.waitForQuantity();
           data = { ...data, usedQuantity: selectedQuantity }; // Update `data` with selected quantity
+          delete data.type;
         }
       }
 
