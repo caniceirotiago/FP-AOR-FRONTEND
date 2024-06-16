@@ -11,7 +11,7 @@
 }
 
 .modalContent {
-  background-color: var(--color-planning);
+  background-color: var(--btn-background2);
   width: 80%;
   height: 60%;
   overflow-y: auto;
@@ -41,7 +41,7 @@
   max-height: 80%;
   overflow-y: auto;
   margin-bottom: 20px;
-  color: var(--text-color3);
+  color: var(--text-color);
 }
 
 .input,

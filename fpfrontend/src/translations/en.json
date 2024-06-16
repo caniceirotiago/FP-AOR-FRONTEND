@@ -78,6 +78,10 @@
     "editBtnProfFormFalse": "Exit Edit Mode",
     "updateUserBasicInformations": "Update User Basic Informations",
     "register": "Register",
-    "saveFields": "Save Fields"
+    "saveFields": "Save Fields",
+    "sendMsgBtn": "Send",
+    "chatGroup": "Group Chat Project nº",
+    "typeMessagePlaceholder": "Type your message here"
+
     }
   

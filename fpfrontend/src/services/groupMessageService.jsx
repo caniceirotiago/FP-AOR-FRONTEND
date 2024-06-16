@@ -16,21 +16,6 @@ const checkStatus = (response) => {
 };
 
 const groupMessageService = {
-  sendGroupMessage: async (message) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/${message.projectId}`, {
-        method: "POST",
-        headers: getAuthHeaders(),
-        body: JSON.stringify(message),
-        credentials: "include",
-      });
-      checkStatus(response);
-      return response;
-    } catch (error) {
-      console.error("Error sending group message:", error.message);
-      throw error;
-    }
-  },
 
   getAllGroupMessages: async (projectId) => {
     try {
@@ -43,6 +28,24 @@ const groupMessageService = {
       return response;
     } catch (error) {
       console.error("Error fetching group messages:", error.message);
+      throw error;
+    }
+  },
+
+  
+
+  sendGroupMessage: async (message) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${message.groupId}`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(message),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error sending group message:", error.message);
       throw error;
     }
   },
