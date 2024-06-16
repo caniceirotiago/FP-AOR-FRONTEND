@@ -17,7 +17,7 @@ const GroupChatModal = () => {
   const navigate = useNavigate();
   const messagesEndRef = useRef(null);
 
-  // Fetch messages when the modal is open and a project is selected
+  // Fetch messages when the modal is open and a project is selected, and then mark all previous as read
   useEffect(() => {
     const fetchMessages = async () => {
       if (isGroupChatModalOpen && selectedChatProject) {
@@ -27,8 +27,6 @@ const GroupChatModal = () => {
             selectedChatProject.projectId
           );
           const fetchedMessages = await response.json();
-          console.log("Fetched Messages:", fetchedMessages); // Log fetched data
-
           const formattedMessages = fetchedMessages.map((msg) => ({
             id: msg.messageId,
             position: msg.senderId === 1 ? "right" : "left",
@@ -41,7 +39,6 @@ const GroupChatModal = () => {
               navigate(`/projectpage/${msg.groupId}`);
             },
           }));
-
           setMessages(formattedMessages);
         } catch (err) {
           console.error("Failed to fetch group messages:", err);
@@ -54,6 +51,24 @@ const GroupChatModal = () => {
 
     fetchMessages();
   }, [isGroupChatModalOpen, selectedChatProject, navigate]);
+
+  useEffect(() => {
+  const markMessagesAsRead = async () => {
+    try {
+      const markReadDto = {
+        sentTime: new Date().toISOString(),
+        groupId: selectedChatProject.projectId
+      };
+      console.log("Marking messages as read:", markReadDto);
+      const response = await groupMessageService.markMessagesAsRead(markReadDto);
+      console.log("Messages marked as read:", response);
+    } catch (err) {
+      console.error("Failed to mark messages as read:", err);
+      setError("Failed to mark messages as read");
+    }
+  };
+  markMessagesAsRead();
+}, []);
 
   // Scroll to bottom when messages update
   useEffect(() => {

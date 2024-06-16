@@ -32,8 +32,6 @@ const groupMessageService = {
     }
   },
 
-  
-
   sendGroupMessage: async (message) => {
     try {
       const response = await fetch(`${API_BASE_URL}/${message.groupId}`, {
@@ -50,9 +48,9 @@ const groupMessageService = {
     }
   },
 
-  markMessagesAsRead: async (projectId, markReadDto) => {
+  markMessagesAsRead: async (markReadDto) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/read/${projectId}`, {
+      const response = await fetch(`${API_BASE_URL}/read/${markReadDto.groupId}`, {
         method: "PUT",
         headers: getAuthHeaders(),
         body: JSON.stringify({ markReadDto }),
