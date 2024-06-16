@@ -16,21 +16,6 @@ const checkStatus = (response) => {
 };
 
 const groupMessageService = {
-  sendGroupMessage: async (message) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/${message.projectId}`, {
-        method: "POST",
-        headers: getAuthHeaders(),
-        body: JSON.stringify(message),
-        credentials: "include",
-      });
-      checkStatus(response);
-      return response;
-    } catch (error) {
-      console.error("Error sending group message:", error.message);
-      throw error;
-    }
-  },
 
   getAllGroupMessages: async (projectId) => {
     try {
@@ -47,9 +32,25 @@ const groupMessageService = {
     }
   },
 
-  markMessagesAsRead: async (projectId, markReadDto) => {
+  sendGroupMessage: async (message) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/read/${projectId}`, {
+      const response = await fetch(`${API_BASE_URL}/${message.groupId}`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(message),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error sending group message:", error.message);
+      throw error;
+    }
+  },
+
+  markMessagesAsRead: async (markReadDto) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/read/${markReadDto.groupId}`, {
         method: "PUT",
         headers: getAuthHeaders(),
         body: JSON.stringify({ markReadDto }),

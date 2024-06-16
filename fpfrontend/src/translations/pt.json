@@ -78,6 +78,9 @@
     "editBtnProfFormFalse": "Sair do Modo de Edição",
     "updateUserBasicInformations": "Atualizar Informações Básicas",
     "register": "Registar",
-    "saveFields": "Gravar Dados"
+    "saveFields": "Gravar Dados",
+    "sendMsgBtn": "Enviar",
+    "chatGroup": "Chat do Projecto nº",
+    "typeMessagePlaceholder": "Escreva a sua mensagem"
   }
   
