@@ -4,11 +4,14 @@ import Select from 'react-select';
 import 'react-chat-elements/dist/main.css';
 import styles from './ComposeEmailModal.module.css';
 import generalService from '../../../services/generalService';
+import individualMessageService from '../../../services/individualMessageService';
 
-const ComposeEmailModal = ({ onClose, messages, sendMessage, selectedUser, users }) => {
+const ComposeEmailModal = ({ onClose, initialSelectedUser }) => {
+  const [selectedUser, setSelectedUser] = useState(initialSelectedUser);
+  const [messagesModal, setMessagesModal] = useState([]);
   const [inputText, setInputText] = useState('');
   const [subject, setSubject] = useState(''); 
-  const [currentUser, setCurrentUser] = useState(selectedUser || null);
+  const [currentUser, setCurrentUser] = useState(initialSelectedUser || null);
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef(null);
@@ -24,6 +27,18 @@ const ComposeEmailModal = ({ onClose, messages, sendMessage, selectedUser, users
       setSuggestedUsers(data);
     } catch (error) {
       console.error('Error fetching suggestions:', error.message);
+    }
+  };
+
+  const fetchMessagesModal = async (otherUserId) => {
+    const userId = localStorage.getItem('userId');
+    try {
+      const response = await individualMessageService.fetchMessagesBetweenTwoUsers(userId, otherUserId);
+      const data = await response.json();
+      console.log('data:', data);
+      setMessagesModal(data);
+    } catch (error) {
+      console.error('Error fetching messages:', error.message);
     }
   };
 
@@ -50,7 +65,44 @@ const ComposeEmailModal = ({ onClose, messages, sendMessage, selectedUser, users
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messagesModal]);
+
+  useEffect(() => {
+    if (currentUser) {
+      console.log('currentUser:', currentUser);
+      fetchMessagesModal(currentUser.id);
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (initialSelectedUser) {
+      setCurrentUser(initialSelectedUser);
+      fetchMessagesModal(initialSelectedUser.id);
+    }
+  }, [initialSelectedUser]);
+
+  const sendMessage = async (message) => {
+    const oldMessages = messagesModal;
+    const formattedMessage = {
+      ...message,
+      sender: {
+        id: message.senderId,
+        username: localStorage.getItem('username'), // Supondo que o username do remetente esteja salvo no localStorage
+        photo: localStorage.getItem('photo'), // Supondo que a foto do remetente esteja salva no localStorage
+      },
+      recipient: {
+        id: currentUser.id,
+        username: currentUser.username,
+      },
+      sentAt: new Date().toISOString(),
+    };
+    setMessagesModal((prevMessages) => [...prevMessages, formattedMessage]);
+    const response = await individualMessageService.sendMessage(message);
+    if (!response.ok) {
+      setMessagesModal(oldMessages);
+    }
+    console.log('response:', response);
+  };
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -66,6 +118,8 @@ const ComposeEmailModal = ({ onClose, messages, sendMessage, selectedUser, users
       setSubject(''); // Limpar o campo de assunto após o envio
     }
   };
+
+  console.log('messages', messagesModal);
 
   return (
     <div className={styles.modalOverlay}>
@@ -87,16 +141,25 @@ const ComposeEmailModal = ({ onClose, messages, sendMessage, selectedUser, users
         <div className={styles.messagesContainer}>
           {currentUser && (
             <>
-              {messages.map((msg, index) => (
-                <MessageBox
-                  key={index}
-                  position={msg.senderId === sessionStorage.getItem('userId') ? 'right' : 'left'}
-                  type="text"
-                  text={msg.content}
-                  date={new Date(msg.sentAt)}
-                  title={msg.senderUsername}
-                />
-              ))}
+              {messagesModal.map((msg, index) => {
+                const userId = localStorage.getItem('userId');
+                const isSentByCurrentUser = msg.sender && String(msg.sender.id) === String(userId);
+                const displayName = isSentByCurrentUser ? 'You' : msg.sender ? msg.sender.username : 'Unknown';
+                const avatar = msg?.sender ? msg.sender.photo : null;
+                const text = `${msg.subject ? `${msg.subject}: ` : ''}${msg.content}`;
+
+                return (
+                  <MessageBox
+                    key={index}
+                    avatar={avatar}
+                    position={isSentByCurrentUser ? 'right' : 'left'}
+                    type="text"
+                    date={new Date(msg.sentAt)}
+                    title={displayName}
+                    text={text}
+                  />
+                );
+              })}
               <div ref={messagesEndRef} />
             </>
           )}

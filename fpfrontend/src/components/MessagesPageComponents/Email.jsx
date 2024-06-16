@@ -12,33 +12,43 @@ const Email = () => {
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
 
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    if (view === 'inbox') {
+      fetchReceivedMessages(userId);
+    } else if (view === 'sent') {
+      fetchSentMessages(userId);
+    }
+  }, [view]);
+
+  const fetchReceivedMessages = async (userId) => {
+    try {
+      const response = await individualMessageService.fetchReceivedMessages(userId);
+      const data = await response.json();
+      setMessages(data);
+    } catch (error) {
+      console.error('Error fetching received messages:', error.message);
+    }
+  };
+
+  const fetchSentMessages = async (userId) => {
+    try {
+      const response = await individualMessageService.fetchSentMessages(userId);
+      const data = await response.json();
+      setMessages(data);
+    } catch (error) {
+      console.error('Error fetching sent messages:', error.message);
+    }
+  };
+
   const handleComposeClick = () => {
-    setSelectedUser(null);
+    setSelectedUser();
     setComposeModalOpen(true);
   };
 
 
-  const fetchMessages = async (userId) => {
-    // Substitua pelo código para buscar mensagens entre os usuários
-    const fetchedMessages = []; // Simulação de mensagens
-    setMessages(fetchedMessages);
-  };
 
-  useEffect(() => {
-    if (selectedUser) {
-      fetchMessages(selectedUser.id);
-    }
-  }, [selectedUser]);
 
-  const sendMessage = async (message) => {
-    const oldMessages = messages;
-    setMessages((prevMessages) => [...prevMessages, message]);
-    const response = await individualMessageService.sendMessage(message);
-    if (!response.ok) {
-      setMessages(oldMessages);
-    }
-    console.log('response:', response);
-  };
 
   return (
       <div className={styles.emailContainer}>
@@ -66,18 +76,19 @@ const Email = () => {
 
         </div>
         <div className={styles.emailTable}>
-          <EmailTable view={view} onSelectUser={(user) => {
+        <EmailTable 
+          view={view} 
+          messages={messages}
+          onSelectUser={(user) => {
             setSelectedUser(user);
             setComposeModalOpen(true);
-          }} />
+          }} 
+        />
         </div>
         {isComposeModalOpen && (
           <ComposeEmailModal
             onClose={() => setComposeModalOpen(false)}
-            messages={messages}
-            sendMessage={sendMessage}
-            selectedUser={selectedUser}
-            users={users}
+            initialSelectedUser={selectedUser}
           />
         )}
       </div>
