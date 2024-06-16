@@ -14,6 +14,8 @@ import ApprovalModal from "../../components/modals/ApprovalModal.jsx";
 import LogsList from "../../components/ProjectPageComponents/LogsList/LogsList.jsx";
 import useProjectStore from "../../stores/useProjectStore.jsx";
 import { useNavigate } from "react-router";
+import GroupChatModal from '../../components/ProjectPageComponents/GroupChat/GroupChatModal';
+import useGroupChatStore from '../../stores/useGroupChatStore';
 
 const ProjectPage = () => {
   const navigate = useNavigate();
@@ -37,6 +39,8 @@ const ProjectPage = () => {
   const { states, fetchProjectStates } = useProjectStatesStore();
   const { roles, fetchProjectRoles } = useProjectRolesStore();
   const { laboratories, fetchLaboratories } = useLabStore();
+  const { openGroupChatModal, setSelectedChatProject } = useGroupChatStore();
+
   const fetchProjectData = useCallback(async () => {
     try {
       const response = await projectService.getProjectById(id);
@@ -102,6 +106,15 @@ const ProjectPage = () => {
     setSelectedProjectId(id);
     navigate(`/projectplanning`);
     console.log("Project Planning Page");
+  };
+
+  const handleOpenGroupChat = () => {
+    const selectedProject = {
+      projectId: id,
+      projectName: projectInfo.name
+    };
+    setSelectedChatProject(selectedProject);
+    openGroupChatModal();
   };
 
   const canEdit =
@@ -253,6 +266,12 @@ const ProjectPage = () => {
             <div className={styles.attributesContainer}>
               <LogsList logs={projectLogs} />
             </div>
+            <div className={styles.chatButtonContainer}>
+              <button onClick={handleOpenGroupChat} className={styles.chatButton}>
+                Open Group Chat
+              </button>
+            </div>
+            <GroupChatModal/>
           </div>
         </div>
       )}

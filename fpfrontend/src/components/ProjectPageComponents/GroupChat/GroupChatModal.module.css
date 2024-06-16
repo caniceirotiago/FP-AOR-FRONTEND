@@ -1,0 +1,127 @@
+.modalOverlay {
+  position: fixed;
+  bottom: 0%;
+  right: 0%;
+  width: 30%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.modalContent {
+  background-color: var(--color-planning);
+  width: 80%;
+  height: 60%;
+  overflow-y: auto;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  max-height: 600px;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: var(--text-color2);
+}
+
+.messagesContainer {
+  flex-grow: 1;
+  max-height: 80%;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  color: var(--text-color3);
+}
+
+.input,
+.button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  border: 1px solid var(--btn-color1);
+  background-color: var(--btn-background1);
+  color: var(--text-color);
+  border-top: 1px solid var(--btn-color1);
+  padding: 10px;
+}
+
+.inputArea {
+  border-top: 1px solid var(--text-color2);
+  padding: 10px;
+}
+
+.input:focus,
+.button:hover {
+  border-color: var(--text-color2);
+  background-color: var(--color-in-progress);
+}
+
+.button {
+  cursor: pointer;
+  background-color: var(--color-in-progress);
+}
+
+:global .rce-mbox-right-notch,
+:global .rce-mbox-left-notch {
+  display: none !important;
+}
+:global .rce-mbox {
+  border-radius: 15px;
+  background-color: var(--card-background);
+}
+:global .rce-mbox.rce-mbox-right {
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  background-color: var(--card-background);
+}
+
+@media (max-width: 1320px) {
+  .modalOverlay {
+    width: 40%;
+  }
+}
+@media (max-width: 990px) {
+  .modalOverlay {
+    width: 60%;
+  }
+}
+@media (max-width: 790px) {
+  .modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--btn-color2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+  }
+  .modalContent {
+    width: 70%;
+    max-width: 600px;
+    height: 60%;
+    overflow-y: auto;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px var(--card-border);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    max-height: 600px;
+  }
+}
