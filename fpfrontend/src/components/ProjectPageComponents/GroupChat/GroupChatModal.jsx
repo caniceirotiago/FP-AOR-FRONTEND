@@ -6,6 +6,7 @@ import useGroupChatStore from "../../../stores/useGroupChatStore";
 import groupMessageService from "../../../services/groupMessageService";
 import { FormattedMessage } from "react-intl";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useGroupMessageWebSocket } from "../../../websockets/useGroupMessageWebSocket";
 
 const GroupChatModal = () => {
   const {
@@ -21,6 +22,35 @@ const GroupChatModal = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const messagesEndRef = useRef(null);
+
+  const handleIncomingMessage = (message) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        id: message.id,
+        position:
+          message.senderId === parseInt(localStorage.getItem("userId"))
+            ? "right"
+            : "left",
+        type: "text",
+        text: message.content,
+        date: new Date(message.sentTime),
+        status: message.isViewed ? "read" : "sent",
+        sender: {
+          id: message.senderId,
+          username: message.senderUsername,
+          photo: message.senderPhoto,
+        },
+        title: message.senderUsername,
+      },
+    ]);
+  };
+
+  const { sendMessage } = useGroupMessageWebSocket(
+    "ws://localhost:8080/FPBackend/ws/group/messages",
+    isGroupChatModalOpen,
+    handleIncomingMessage
+  );
 
   // Fetch messages when the modal is open and a project is selected
   useEffect(() => {
@@ -45,7 +75,7 @@ const GroupChatModal = () => {
             sender: {
               id: msg.sender.id,
               username: msg.sender.username,
-              photo: msg.sender.photo
+              photo: msg.sender.photo,
             },
             title: msg.sender.username,
           }));
@@ -74,9 +104,13 @@ const GroupChatModal = () => {
         groupId: selectedChatProject.projectId,
       };
       try {
-        // Send message with content and groupId
-        await groupMessageService.sendGroupMessage(newMessage);
-        
+        // Send message via WebSocket
+        sendMessage({
+          type: "GROUP_MESSAGE",
+          content: newMessage.content,
+          groupId: newMessage.groupId,
+        });
+
         // Update local messages state
         setMessages((prevMessages) => [
           ...prevMessages,
@@ -90,7 +124,7 @@ const GroupChatModal = () => {
             sender: {
               id: parseInt(localStorage.getItem("userId")),
               username: localStorage.getItem("username"),
-              photo: localStorage.getItem("photo")
+              photo: localStorage.getItem("photo"),
             },
             title: localStorage.getItem("username"),
           },
@@ -132,7 +166,8 @@ const GroupChatModal = () => {
           {loading && <p>Loading messages...</p>}
           {error && <p>{error}</p>}
           {messages.map((msg, index) => {
-            const isSentByCurrentUser = msg.sender.id === parseInt(localStorage.getItem('userId'));
+            const isSentByCurrentUser =
+              msg.sender.id === parseInt(localStorage.getItem("userId"));
             const displayName = isSentByCurrentUser ? "" : msg.sender.username;
             const displayAvatar = isSentByCurrentUser ? "" : msg.sender.photo;
             return (
@@ -145,7 +180,9 @@ const GroupChatModal = () => {
                 date={msg.date}
                 status={msg.status}
                 title={displayName}
-                onTitleClick={() => navigate(`/userProfile/${msg.sender.username}`)}
+                onTitleClick={() =>
+                  navigate(`/userProfile/${msg.sender.username}`)
+                }
               />
             );
           })}
