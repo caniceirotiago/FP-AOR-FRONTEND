@@ -124,6 +124,8 @@ const Email = () => {
         <ComposeEmailModal
           onClose={() => setComposeModalOpen(false)}
           initialSelectedUser={selectedUser}
+          isChatModalOpen={isComposeModalOpen}
+          setInitialSelectedUser={setSelectedUser}
         />
       )}
     </div>
