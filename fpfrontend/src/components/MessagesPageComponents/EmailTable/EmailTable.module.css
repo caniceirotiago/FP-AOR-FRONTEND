@@ -1,15 +1,69 @@
-.emailTable {
-    width: 100%;
-    border-collapse: collapse;
-  }
+.tableContainer {
+
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.tblHeader {
+  background-color: rgba(255, 255, 255, 0.9);
+  width: 100%;
+}
+
+.tblContent {
+  margin-top: 0px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.header {
+  padding: 20px 15px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--text-color);
+  text-transform: uppercase;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.cell {
+  padding: 15px;
+  text-align: left;
+  vertical-align: middle;
+  font-weight: 300;
+  font-size: 12px;
+  color: var(--text-color4);
+  border-bottom: solid 1px rgba(255, 255, 255, 0.9);
+  white-space: nowrap;           /* Força o texto a ficar em uma linha */
+  overflow: hidden;              /* Esconde o texto que ultrapassa o espaço disponível */
+  text-overflow: ellipsis;       /* Adiciona reticências para texto que ultrapassa o espaço */
+  max-width: 150px;              /* Define a largura máxima */
+  max-height: 1.2em;             /* Define a altura máxima */
+  line-height: 1.2em;            /* Define a altura da linha */
+ 
   
-  .emailTable th, .emailTable td {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-  
-  .emailTable th {
-    background-color: #f2f2f2;
-    text-align: left;
-  }
-  
+}
+
+.row:hover {
+  background-color: rgba(241, 241, 241, 0.8);
+}
+.userPhoto{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.photo{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 10px;
+}

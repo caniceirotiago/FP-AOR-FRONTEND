@@ -5,13 +5,19 @@
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+
 }
+
 .controlPanel {
   display: flex;
   flex-direction: row;
   width: 100%;
-  justify-content:space-between;
+  justify-content: space-between;
   align-items: center;
+}
+.emailTable {
+  margin: 30px;
+  width: 100%;
 }
 
 .btns {
@@ -20,6 +26,20 @@
   gap: 10px;
   width: 300px;
   padding-top: 10px;
+}
+
+.searchInput {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.searchInput:focus {
+  border-color: var(--btn-background1);
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 .iconButton {
@@ -71,4 +91,32 @@
 .iconButton:hover::after {
   bottom: 15px;
   opacity: 1;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 0px 0px;
+  width: 100%;
+  padding-bottom: 30px;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  border: none;
+  background-color: var(--btn-background1);
+  color: var(--btn-color1);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: var(--btn-background2);
 }

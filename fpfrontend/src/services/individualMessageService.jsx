@@ -50,35 +50,21 @@ const individualMessageService = {
       throw error;
     }
   },
-  fetchReceivedMessages: async (userId) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/received/${userId}`, {
-        method: "GET",
-        headers: getAuthHeaders(),
-        credentials: "include",
-      });
-      checkStatus(response);
-      return response;
-    } catch (error) {
-      console.error("Error fetching received messages:", error.message);
-      throw error;
-    }
+  fetchFilteredMessages: async (userId, type, page, pageSize, filters) => {
+    const params = new URLSearchParams({
+        userId,
+        type,
+        page,
+        pageSize,
+        ...filters
+    });
+    console.log(params.toString());
+
+    const response = await fetch(`${API_BASE_URL}/filter?${params.toString()}`);
+
+    return response.json();
   },
-  fetchSentMessages: async (userId) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/sent/${userId}`, {
-        method: "GET",
-        headers: getAuthHeaders(),
-        credentials: "include",
-      });
-      checkStatus(response);
-      return response;
-    } catch (error) {
-      console.error("Error fetching sent messages:", error.message);
-      throw error;
-    }
-  }
-      
+        
     
   
   

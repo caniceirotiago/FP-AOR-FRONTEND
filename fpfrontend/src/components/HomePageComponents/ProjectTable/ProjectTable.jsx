@@ -131,10 +131,7 @@ function ProjectTable({ projects, pageCount, setPageNumber }) {
                             </tr>
                         ))}
                     </thead>
-                </table>
-            </div>
-            <div className={styles.tblContent}>
-                <table {...getTableProps()} className={styles.table}>
+
                     <tbody {...getTableBodyProps()}>
                         {page.map(row => {
                             prepareRow(row);

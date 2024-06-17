@@ -10,91 +10,123 @@ const Email = () => {
   const [isComposeModalOpen, setComposeModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [pageCount, setPageCount] = useState(1);
+  const [filters, setFilters] = useState({ search: '' });
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
-    if (view === 'inbox') {
-      fetchReceivedMessages(userId);
-    } else if (view === 'sent') {
-      fetchSentMessages(userId);
-    }
-  }, [view]);
+    fetchMessages(userId);
+  }, [view, pageNumber, pageSize, filters]);
 
-  const fetchReceivedMessages = async (userId) => {
+  const fetchMessages = async (userId) => {
     try {
-      const response = await individualMessageService.fetchReceivedMessages(userId);
-      const data = await response.json();
-      setMessages(data);
+      const data = await individualMessageService.fetchFilteredMessages(userId, view, pageNumber, pageSize, filters);
+      setMessages(data.messages);
+      const newPageCount = Math.ceil(data.totalMessages / pageSize);
+      setPageCount(newPageCount);
+      if (newPageCount <= 1) {
+        setPageNumber(1);
+      }
     } catch (error) {
-      console.error('Error fetching received messages:', error.message);
-    }
-  };
-
-  const fetchSentMessages = async (userId) => {
-    try {
-      const response = await individualMessageService.fetchSentMessages(userId);
-      const data = await response.json();
-      setMessages(data);
-    } catch (error) {
-      console.error('Error fetching sent messages:', error.message);
+      console.error('Error fetching messages:', error.message);
     }
   };
 
   const handleComposeClick = () => {
-    setSelectedUser();
+    setSelectedUser(null);
     setComposeModalOpen(true);
   };
 
   const handleMsgClick = (msg) => {
-
     const userId = view === 'inbox' ? msg.sender.id : msg.recipient.id;
     const username = view === 'inbox' ? msg.sender.username : msg.recipient.username;
-    setSelectedUser({id: userId, username: username});
+    setSelectedUser({ id: userId, username: username });
     setComposeModalOpen(true);
-    
+  };
+
+  const handleFilterChange = (e) => {
+    setFilters({ ...filters, search: e.target.value });
   };
 
   return (
-      <div className={styles.emailContainer}>
-        <div className={styles.controlPanel}>
-          <div className={styles.btns}>
-            <button
-             onClick={() => setView('inbox')}
-             className={`${styles.iconButton} ${styles.createButton}`}
-              data-text="Inbox">
-              <FaInbox className={styles.svgIcon}/> 
-            </button>
-            <button
-              onClick={() => setView('sent')}
-              className={`${styles.iconButton} ${styles.createButton}`}
-              data-text="Sent">
-              <FaPaperPlane className={styles.svgIcon}/> 
-            </button>
-            <button 
-              onClick={handleComposeClick}
-              className={`${styles.iconButton} ${styles.createButton}`}
-              data-text="Compose">
-              <FaPlus className={styles.svgIcon}/> 
-            </button>
-          </div>
-
+    <div className={styles.emailContainer}>
+      <div className={styles.controlPanel}>
+        <div className={styles.btns}>
+          <button
+            onClick={() => setView('inbox')}
+            className={`${styles.iconButton} ${styles.createButton}`}
+            data-text="Inbox">
+            <FaInbox className={styles.svgIcon}/>
+          </button>
+          <button
+            onClick={() => setView('sent')}
+            className={`${styles.iconButton} ${styles.createButton}`}
+            data-text="Sent">
+            <FaPaperPlane className={styles.svgIcon}/>
+          </button>
+          <button
+            onClick={handleComposeClick}
+            className={`${styles.iconButton} ${styles.createButton}`}
+            data-text="Compose">
+            <FaPlus className={styles.svgIcon}/>
+          </button>
         </div>
-        <div className={styles.emailTable}>
-        <EmailTable 
-          view={view} 
-          messages={messages}
-          onSelectUser={handleMsgClick} 
+        <input
+          type="text"
+          placeholder="Search..."
+          value={filters.search}
+          onChange={handleFilterChange}
+          className={styles.searchInput}
         />
-        </div>
-        {isComposeModalOpen && (
-          <ComposeEmailModal
-            onClose={() => setComposeModalOpen(false)}
-            initialSelectedUser={selectedUser}
-          />
-        )}
       </div>
-
+      <div className={styles.emailTable}>
+        <EmailTable
+          view={view}
+          messages={messages}
+          onSelectUser={handleMsgClick}
+          pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
+          pageCount={pageCount}
+        />
+      </div>
+      <div className={styles.pagination}>
+          <button onClick={() => setPageNumber(1)} disabled={pageNumber === 1}>
+            {"<<"}
+          </button>
+          <button
+            onClick={() => setPageNumber(pageNumber - 1)}
+            disabled={pageNumber === 1}
+          >
+            {"<"}
+          </button>
+          <button
+            onClick={() => setPageNumber(pageNumber + 1)}
+            disabled={pageNumber === pageCount}
+          >
+            {">"}
+          </button>
+          <button
+            onClick={() => setPageNumber(pageCount)}
+            disabled={pageNumber === pageCount}
+          >
+            {">>"}
+          </button>
+          <span>
+            Page{" "}
+            <strong>
+              {pageNumber} of {pageCount}
+            </strong>
+          </span>
+        </div>
+      {isComposeModalOpen && (
+        <ComposeEmailModal
+          onClose={() => setComposeModalOpen(false)}
+          initialSelectedUser={selectedUser}
+        />
+      )}
+    </div>
   );
 };
 
