@@ -90,6 +90,13 @@ const GroupChatModal = () => {
   reset();
 }, [location.pathname, reset]);
 
+  // Function to handle sending message when Enter key is pressed
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSendMessage();
+    }
+  };
+
   if (!isGroupChatModalOpen) return null;
 
   return (
@@ -127,6 +134,7 @@ const GroupChatModal = () => {
                 onChange={(e) => setInputText(e.target.value)}
                 className={styles.input}
                 maxLength={1000}
+                onKeyDown={handleKeyPress}
               />
             )}
           </FormattedMessage>
