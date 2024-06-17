@@ -8,14 +8,18 @@ import { FormattedMessage } from "react-intl";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const GroupChatModal = () => {
-  const { isGroupChatModalOpen, selectedChatProject, closeGroupChatModal, reset } =
-    useGroupChatStore();
+  const {
+    isGroupChatModalOpen,
+    selectedChatProject,
+    closeGroupChatModal,
+    reset,
+  } = useGroupChatStore();
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-    const location = useLocation();
+  const location = useLocation();
   const messagesEndRef = useRef(null);
 
   // Fetch messages when the modal is open and a project is selected
@@ -30,12 +34,16 @@ const GroupChatModal = () => {
           const fetchedMessages = await response.json();
           const formattedMessages = fetchedMessages.map((msg) => ({
             id: msg.messageId,
-            position: msg.senderId === parseInt(localStorage.getItem("userId")) ? "right" : "left",
+            position:
+              msg.senderId === parseInt(localStorage.getItem("userId"))
+                ? "right"
+                : "left",
             type: "text",
             text: msg.content,
             date: new Date(msg.sentTime),
-            title: msg.groupId,
             status: msg.isViewed ? "read" : "sent",
+            title: msg.senderId,
+            onTitleClick: () => {navigate(`/userProfile/${msg.senderId}`)}
           }));
           setMessages(formattedMessages);
         } catch (err) {
@@ -65,30 +73,31 @@ const GroupChatModal = () => {
         // Send message with content and groupId
         await groupMessageService.sendGroupMessage(newMessage);
         // Update local messages state
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          ...newMessage,
-          position: "right",
-          type: "text",
-          text: newMessage.content,
-          date: new Date(),
-          title: selectedChatProject.projectId,
-          status: "sent",
-        },
-      ]);
-      setInputText(""); // Clear input text
-      messagesEndRef.current?.scrollIntoView(); // Scroll to bottom
-    } catch (err) {
-      console.error("Failed to send message:", err);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            ...newMessage,
+            position: "right",
+            type: "text",
+            text: newMessage.content,
+            date: new Date(),
+            status: "sent",
+            title: newMessage.senderId === parseInt(localStorage.getItem("userId")),
+            onTitleClick: () => {navigate(`/userProfile/${newMessage.senderId}`)}
+          },
+        ]);
+        setInputText(""); // Clear input text
+        messagesEndRef.current?.scrollIntoView(); // Scroll to bottom
+      } catch (err) {
+        console.error("Failed to send message:", err);
+      }
     }
-  }
-};
+  };
 
- // Close modal on location change
- useEffect(() => {
-  reset();
-}, [location.pathname, reset]);
+  // Close modal on location change
+  useEffect(() => {
+    reset();
+  }, [location.pathname, reset]);
 
   // Function to handle sending message when Enter key is pressed
   const handleKeyPress = (event) => {
@@ -106,22 +115,35 @@ const GroupChatModal = () => {
           &times;
         </button>
         <h2>
-          {selectedChatProject.projectName}{" "}<FormattedMessage id="chatGroup"></FormattedMessage>
+          {selectedChatProject.projectName}{" "}
+          <FormattedMessage id="chatGroup"></FormattedMessage>
         </h2>
         <div className={styles.messagesContainer}>
           {loading && <p>Loading messages...</p>}
           {error && <p>{error}</p>}
-          {messages.map((msg) => (
-            <div key={msg.id}>
+          {messages.map((msg, index) => {
+            const userId = localStorage.getItem('userId');
+            const isSentByCurrentUser =
+              msg.sender && String(msg.sender.id) === String(userId);
+            const displayName = isSentByCurrentUser
+              ? "You"
+              : msg.sender
+              ? msg.sender.username
+              : "Unknown";
+            const avatar = msg?.sender ? msg.sender.photo : null;
+            return (
               <MessageBox
+                key={index}
+                avatar={avatar}
                 position={msg.position}
                 type={msg.type}
                 text={msg.text}
                 date={msg.date}
                 status={msg.status}
+                title={displayName}
               />
-            </div>
-          ))}
+            );
+          })}
           <div ref={messagesEndRef} />
         </div>
         <div className={styles.inputArea}>
