@@ -5,6 +5,7 @@ import 'react-chat-elements/dist/main.css';
 import styles from './ComposeEmailModal.module.css';
 import generalService from '../../../services/generalService';
 import individualMessageService from '../../../services/individualMessageService';
+import { set } from 'date-fns';
 
 const ComposeEmailModal = ({ onClose, initialSelectedUser }) => {
   const [selectedUser, setSelectedUser] = useState(initialSelectedUser);
@@ -16,6 +17,8 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser }) => {
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef(null);
 
+
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView();
   };
@@ -25,6 +28,7 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser }) => {
       const response = await generalService.fetchSuggestions('users', firstLetter);
       const data = await response.json();
       setSuggestedUsers(data);
+      console.log('suggestedUsers:', data);
     } catch (error) {
       console.error('Error fetching suggestions:', error.message);
     }
@@ -76,8 +80,8 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser }) => {
 
   useEffect(() => {
     if (initialSelectedUser) {
+      console.log('initialSelectedUser:', initialSelectedUser);
       setCurrentUser(initialSelectedUser);
-      fetchMessagesModal(initialSelectedUser.id);
     }
   }, [initialSelectedUser]);
 

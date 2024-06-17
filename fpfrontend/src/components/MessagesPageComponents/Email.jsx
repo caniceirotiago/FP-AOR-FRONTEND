@@ -46,9 +46,14 @@ const Email = () => {
     setComposeModalOpen(true);
   };
 
+  const handleMsgClick = (msg) => {
 
-
-
+    const userId = view === 'inbox' ? msg.sender.id : msg.recipient.id;
+    const username = view === 'inbox' ? msg.sender.username : msg.recipient.username;
+    setSelectedUser({id: userId, username: username});
+    setComposeModalOpen(true);
+    
+  };
 
   return (
       <div className={styles.emailContainer}>
@@ -79,10 +84,7 @@ const Email = () => {
         <EmailTable 
           view={view} 
           messages={messages}
-          onSelectUser={(user) => {
-            setSelectedUser(user);
-            setComposeModalOpen(true);
-          }} 
+          onSelectUser={handleMsgClick} 
         />
         </div>
         {isComposeModalOpen && (
