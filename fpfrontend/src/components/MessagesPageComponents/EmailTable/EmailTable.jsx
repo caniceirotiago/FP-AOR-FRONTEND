@@ -1,32 +1,38 @@
 import React from 'react';
 import styles from './EmailTable.module.css';
 
-const EmailTable = ({ view, messages, onSelectUser }) => {
-  console.log('messages:', messages);
+const EmailTable = ({ view, messages, onSelectUser, pageNumber, setPageNumber, pageCount }) => {
   const handleMsgClick = (msg) => {
     onSelectUser(msg);
-  }
-  
+  };
+
   return (
     <div className={styles.tableContainer}>
-      <table className={styles.emailTable}>
-        <thead>
+      <div className={styles.tblHeader}>
+      <table className={styles.table}>
+        <thead >
           <tr>
-            <th>{view === 'inbox' ? 'From' : 'To'}</th>
-            <th>Subject</th>
-            <th>Date</th>
+            <th></th>
+            <th className={styles.header}>{view === 'inbox' ? 'From' : 'To'}</th>
+            <th className={styles.header}>Subject</th>
+            <th className={styles.header}>Date</th>
+            <th className={styles.header}>Content</th>
           </tr>
         </thead>
         <tbody>
           {messages.map((msg, index) => (
-            <tr key={index} onClick={() => handleMsgClick(msg)}>
-              <td>{view === 'inbox' ? msg.sender.username : msg.recipient.username}</td>
-              <td>{msg.subject}</td>
-              <td>{new Date(msg.sentAt).toLocaleString()}</td>
+            <tr  className={styles.row} key={index} onClick={() => handleMsgClick(msg)}>
+              <td className={styles.cell} ><div className={styles.userPhoto}><img  className={styles.photo}src={view === 'inbox' ? msg.sender.photo : msg.recipient.photo} alt="userPhoto" /></div></td>
+              <td className={styles.cell} >{view === 'inbox' ? msg.sender.username : msg.recipient.username}</td>
+              <td className={styles.cell} >{msg.subject}</td>
+              <td className={styles.cell} >{new Date(msg.sentAt).toLocaleString()}</td>
+              <td className={styles.cell} >{msg.content}</td>
             </tr>
           ))}
         </tbody>
       </table>
+      
+      </div>
     </div>
   );
 };
