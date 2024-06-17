@@ -5,19 +5,20 @@ import styles from "./GroupChatModal.module.css";
 import useGroupChatStore from "../../../stores/useGroupChatStore";
 import groupMessageService from "../../../services/groupMessageService";
 import { FormattedMessage } from "react-intl";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const GroupChatModal = () => {
-  const { isGroupChatModalOpen, selectedChatProject, closeGroupChatModal } =
+  const { isGroupChatModalOpen, selectedChatProject, closeGroupChatModal, reset } =
     useGroupChatStore();
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+    const location = useLocation();
   const messagesEndRef = useRef(null);
 
-  // Fetch messages when the modal is open and a project is selected, and then mark all previous as read
+  // Fetch messages when the modal is open and a project is selected
   useEffect(() => {
     const fetchMessages = async () => {
       if (isGroupChatModalOpen && selectedChatProject) {
@@ -35,9 +36,6 @@ const GroupChatModal = () => {
             date: new Date(msg.sentTime),
             title: msg.groupId,
             status: msg.isViewed ? "read" : "sent",
-            onTitleClick: () => {
-              navigate(`/projectpage/${msg.groupId}`);
-            },
           }));
           setMessages(formattedMessages);
         } catch (err) {
@@ -63,11 +61,9 @@ const GroupChatModal = () => {
         content: inputText,
         groupId: selectedChatProject.projectId,
       };
-
       try {
         // Send message with content and groupId
         await groupMessageService.sendGroupMessage(newMessage);
-
         // Update local messages state
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -81,7 +77,6 @@ const GroupChatModal = () => {
           status: "sent",
         },
       ]);
-
       setInputText(""); // Clear input text
       messagesEndRef.current?.scrollIntoView(); // Scroll to bottom
     } catch (err) {
@@ -89,6 +84,11 @@ const GroupChatModal = () => {
     }
   }
 };
+
+ // Close modal on location change
+ useEffect(() => {
+  reset();
+}, [location.pathname, reset]);
 
   if (!isGroupChatModalOpen) return null;
 

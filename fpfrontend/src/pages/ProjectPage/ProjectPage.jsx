@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ProjectBasicInfo from "../../components/ProjectPageComponents/ProjectBasicInfo.jsx";
 import projectService from "../../services/projectService.jsx";
@@ -12,12 +12,12 @@ import { FaEdit, FaCheck } from "react-icons/fa";
 import ApprovalModal from "../../components/modals/ApprovalModal.jsx";
 import LogsList from "../../components/ProjectPageComponents/LogsList/LogsList.jsx";
 import useProjectStore from "../../stores/useProjectStore.jsx";
-import { useNavigate } from "react-router";
 import GroupChatModal from '../../components/ProjectPageComponents/GroupChat/GroupChatModal';
 import useGroupChatStore from '../../stores/useGroupChatStore';
 
 const ProjectPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { setSelectedProjectId } = useProjectStore();
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
   const [projectLogs, setProjectLogs] = useState([]);
@@ -110,12 +110,8 @@ const ProjectPage = () => {
   };
 
   const handleOpenGroupChat = () => {
-    const selectedProject = {
-      projectId: id,
-      projectName: projectInfo.name
-    };
-    setSelectedChatProject(selectedProject);
     openGroupChatModal();
+    setSelectedChatProject({ projectId: id, projectName: projectInfo.name });
   };
 
   const canEdit =
