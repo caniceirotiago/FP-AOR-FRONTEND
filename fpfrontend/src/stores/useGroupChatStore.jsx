@@ -1,5 +1,5 @@
 // src/stores/useGroupChatStore.js
-import create from 'zustand';
+import {create} from 'zustand';
 
 const useGroupChatStore = create((set) => ({
     isGroupChatModalOpen: false,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ProjectBasicInfo from "../../components/ProjectPageComponents/ProjectBasicInfo.jsx";
@@ -6,7 +6,6 @@ import projectService from "../../services/projectService.jsx";
 import AttributeEditor from "../../components/reactSelect/AttributeEditor.jsx";
 import useProjectStatesStore from "../../stores/useProjectStatesStore.jsx";
 import useLabStore from "../../stores/useLabStore.jsx";
-import { useCallback } from "react";
 import useProjectRolesStore from "../../stores/useProjectRolesStore.jsx";
 import styles from "./ProjectPage.module.css";
 import { FaEdit, FaCheck } from "react-icons/fa";
@@ -37,7 +36,7 @@ const ProjectPage = () => {
     users: [],
   });
   const { states, fetchProjectStates } = useProjectStatesStore();
-  const { roles, fetchProjectRoles } = useProjectRolesStore();
+  const { fetchProjectRoles } = useProjectRolesStore();
   const { laboratories, fetchLaboratories } = useLabStore();
   const { openGroupChatModal, setSelectedChatProject } = useGroupChatStore();
 
@@ -54,6 +53,7 @@ const ProjectPage = () => {
       console.error("Error fetching project data:", error.message);
     }
   }, [id]);
+
   const fetchProjectLogs = useCallback(async () => {
     try {
       const response = await projectService.getProjectLogsByProjectId(id);
@@ -75,9 +75,11 @@ const ProjectPage = () => {
   const handleEditModeTrue = (e) => {
     setIsEditing(true);
   };
+
   const handleEditModeFalse = (e) => {
     setIsEditing(false);
   };
+
   const handleUpdateProjectInfo = async () => {
     const projectUpdateData = {
       name: projectInfo.name,
@@ -89,7 +91,6 @@ const ProjectPage = () => {
         ? new Date(projectInfo.conclusionDate).toISOString()
         : null,
     };
-
     try {
       await projectService.updateProject(projectInfo.id, projectUpdateData);
       setIsEditing(false);
@@ -97,6 +98,7 @@ const ProjectPage = () => {
       console.error("Failed to update project info:", error);
     }
   };
+
   const handleApproveProject = async (wantToApprove) => {
     setApproveOrReject(wantToApprove ? "Approve Project" : "Reject Project");
     setIsApprovalModalOpen(true);
@@ -105,7 +107,6 @@ const ProjectPage = () => {
   const handleClickToOpenProjectPlanningPage = () => {
     setSelectedProjectId(id);
     navigate(`/projectplanning`);
-    console.log("Project Planning Page");
   };
 
   const handleOpenGroupChat = () => {

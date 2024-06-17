@@ -29,7 +29,7 @@ const GroupChatModal = () => {
           const fetchedMessages = await response.json();
           const formattedMessages = fetchedMessages.map((msg) => ({
             id: msg.messageId,
-            position: msg.senderId === 1 ? "right" : "left",
+            position: msg.senderId === parseInt(localStorage.getItem("userId")) ? "right" : "left",
             type: "text",
             text: msg.content,
             date: new Date(msg.sentTime),
@@ -51,24 +51,6 @@ const GroupChatModal = () => {
 
     fetchMessages();
   }, [isGroupChatModalOpen, selectedChatProject, navigate]);
-
-  useEffect(() => {
-  const markMessagesAsRead = async () => {
-    try {
-      const markReadDto = {
-        sentTime: new Date().toISOString(),
-        groupId: selectedChatProject.projectId
-      };
-      console.log("Marking messages as read:", markReadDto);
-      const response = await groupMessageService.markMessagesAsRead(markReadDto);
-      console.log("Messages marked as read:", response);
-    } catch (err) {
-      console.error("Failed to mark messages as read:", err);
-      setError("Failed to mark messages as read");
-    }
-  };
-  markMessagesAsRead();
-}, []);
 
   // Scroll to bottom when messages update
   useEffect(() => {
@@ -117,8 +99,7 @@ const GroupChatModal = () => {
           &times;
         </button>
         <h2>
-          <FormattedMessage id="chatGroup">Project Chat Group</FormattedMessage>{" "}
-          {selectedChatProject.projectId}
+          {selectedChatProject.projectName}{" "}<FormattedMessage id="chatGroup"></FormattedMessage>
         </h2>
         <div className={styles.messagesContainer}>
           {loading && <p>Loading messages...</p>}
