@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { MessageBox } from 'react-chat-elements';
 import Select from 'react-select';
 import 'react-chat-elements/dist/main.css';
@@ -6,16 +6,39 @@ import styles from './ComposeEmailModal.module.css';
 import generalService from '../../../services/generalService';
 import individualMessageService from '../../../services/individualMessageService';
 import { set } from 'date-fns';
+import useDomainStore from '../../../stores/useDomainStore';
+import Cookies from 'js-cookie';
+import {useIndividualMessageWebSocket} from '../../../websockets/useIndividualMessageWebSocket';
 
-const ComposeEmailModal = ({ onClose, initialSelectedUser }) => {
-  const [selectedUser, setSelectedUser] = useState(initialSelectedUser);
+
+
+
+const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setInitialSelectedUser }) => {
   const [messagesModal, setMessagesModal] = useState([]);
-  const [inputText, setInputText] = useState('');
-  const [subject, setSubject] = useState(''); 
-  const [currentUser, setCurrentUser] = useState(initialSelectedUser || null);
+  const [data, setData] = useState({
+    inputText: '',
+    subject: '',
+    currentUser: null,
+  });
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef(null);
+
+  const handleMessage = (message) => {
+    console.log("Received message:", message);
+  };
+
+  const wsUrl = useMemo(() => {
+    if(data.currentUser === null  ) return null;
+      const sessionToken = Cookies.get('sessionToken'); 
+      const sessionTokenUrl = sessionToken;
+      const receiverIdUrl = data.currentUser.id;
+      const newWsUrl = `ws://${useDomainStore.getState().domain}/emailChat/${sessionTokenUrl}/${receiverIdUrl}`;
+      
+    return `${newWsUrl}`;
+  }, [data.currentUser]);
+
+  const { sendWsMessage } = useIndividualMessageWebSocket(wsUrl, isChatModalOpen && wsUrl, handleMessage, onClose);
 
 
 
@@ -59,31 +82,33 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser }) => {
     }
   };
 
-  const handleSelectChange = (selectedOption) => {
-    if (selectedOption) {
-      setCurrentUser({ id: selectedOption.value, username: selectedOption.label });
-    } else {
-      setCurrentUser(null);
-    }
-  };
 
   useEffect(() => {
     scrollToBottom();
   }, [messagesModal]);
 
   useEffect(() => {
-    if (currentUser) {
-      console.log('currentUser:', currentUser);
-      fetchMessagesModal(currentUser.id);
+    if (data.currentUser) {
+      console.log('currentUser:', data.currentUser);
+      fetchMessagesModal(data.currentUser.id);
+      
+      setInitialSelectedUser(null);
     }
-  }, [currentUser]);
-
-  useEffect(() => {
     if (initialSelectedUser) {
-      console.log('initialSelectedUser:', initialSelectedUser);
-      setCurrentUser(initialSelectedUser);
+      setData({ ...data, currentUser: initialSelectedUser });
     }
-  }, [initialSelectedUser]);
+  }, [data.currentUser]);
+
+  const handleSelectChange = (selectedOption) => {
+    if (selectedOption) {
+      const selectedUser = suggestedUsers.find(user => user.id === selectedOption.value);
+      setData({ ...data, currentUser: selectedUser });
+    } else {
+      setData({ ...data, currentUser: null });
+    }
+  };
+
+
 
   const sendMessage = async (message) => {
     const oldMessages = messagesModal;
@@ -95,31 +120,30 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser }) => {
         photo: localStorage.getItem('photo'), // Supondo que a foto do remetente esteja salva no localStorage
       },
       recipient: {
-        id: currentUser.id,
-        username: currentUser.username,
+        id: data.currentUser.id,
+        username: data.currentUser.username,
       },
       sentAt: new Date().toISOString(),
     };
     setMessagesModal((prevMessages) => [...prevMessages, formattedMessage]);
-    const response = await individualMessageService.sendMessage(message);
-    if (!response.ok) {
-      setMessagesModal(oldMessages);
-    }
-    console.log('response:', response);
+    sendWsMessage(message);
+    // if (!response.ok) {
+    //   setMessagesModal(oldMessages);
+    // }
   };
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (inputText.trim() && subject.trim() && currentUser) {
+    if (data.inputText.trim() && data.subject.trim() && data.currentUser) {
       const newMessage = {
         senderId: localStorage.getItem('userId'),
-        recipientId: currentUser.id,
-        content: inputText,
-        subject: subject 
+        recipientId: data.currentUser.id,
+        content: data.inputText,
+        subject: data.subject 
       };
       sendMessage(newMessage);
-      setInputText('');
-      setSubject(''); // Limpar o campo de assunto após o envio
+      setData({ ...data, inputText: '', subject: '' });
+
     }
   };
 
@@ -129,11 +153,11 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser }) => {
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
         <button className={styles.closeButton} onClick={onClose}>&times;</button>
-        <h2>{currentUser ? `Message to ${currentUser.username}` : 'Select a user'}</h2>
+        <h2>{data.currentUser ? `Message to ${data.currentUser.username}` : 'Select a user'}</h2>
         <Select
           className="react-select-container"
           classNamePrefix="react-select"
-          value={currentUser ? { label: currentUser.username, value: currentUser.id } : null}
+          value={data.currentUser ? { label: data.currentUser.username, value: data.currentUser.id } : null}
           onInputChange={handleInputChange}
           onChange={handleSelectChange}
           options={suggestedUsers.map(user => ({ label: user.username, value: user.id }))}
@@ -143,7 +167,7 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser }) => {
           isClearable
         />
         <div className={styles.messagesContainer}>
-          {currentUser && (
+          {data.currentUser && (
             <>
               {messagesModal.map((msg, index) => {
                 const userId = localStorage.getItem('userId');
@@ -168,19 +192,19 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser }) => {
             </>
           )}
         </div>
-        {currentUser && (
+        {data.currentUser && (
           <form onSubmit={handleSendMessage} className={styles.inputArea}>
             <input
               type="text"
               placeholder="Type a subject..."
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
+              value={data.subject}
+              onChange={(e) => setData({ ...data, subject: e.target.value })}
               className={styles.input}
             />
             <textarea
               placeholder="Type a message..."
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
+              value={data.inputText}
+              onChange={(e) => setData({ ...data, inputText: e.target.value })}
               className={styles.input}
             />
             <button type="submit" className={styles.button}>Send</button>
