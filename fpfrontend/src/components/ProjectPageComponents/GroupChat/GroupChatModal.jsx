@@ -5,19 +5,20 @@ import styles from "./GroupChatModal.module.css";
 import useGroupChatStore from "../../../stores/useGroupChatStore";
 import groupMessageService from "../../../services/groupMessageService";
 import { FormattedMessage } from "react-intl";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const GroupChatModal = () => {
-  const { isGroupChatModalOpen, selectedChatProject, closeGroupChatModal } =
+  const { isGroupChatModalOpen, selectedChatProject, closeGroupChatModal, reset } =
     useGroupChatStore();
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+    const location = useLocation();
   const messagesEndRef = useRef(null);
 
-  // Fetch messages when the modal is open and a project is selected, and then mark all previous as read
+  // Fetch messages when the modal is open and a project is selected
   useEffect(() => {
     const fetchMessages = async () => {
       if (isGroupChatModalOpen && selectedChatProject) {
@@ -29,15 +30,12 @@ const GroupChatModal = () => {
           const fetchedMessages = await response.json();
           const formattedMessages = fetchedMessages.map((msg) => ({
             id: msg.messageId,
-            position: msg.senderId === 1 ? "right" : "left",
+            position: msg.senderId === parseInt(localStorage.getItem("userId")) ? "right" : "left",
             type: "text",
             text: msg.content,
             date: new Date(msg.sentTime),
             title: msg.groupId,
             status: msg.isViewed ? "read" : "sent",
-            onTitleClick: () => {
-              navigate(`/projectpage/${msg.groupId}`);
-            },
           }));
           setMessages(formattedMessages);
         } catch (err) {
@@ -52,24 +50,6 @@ const GroupChatModal = () => {
     fetchMessages();
   }, [isGroupChatModalOpen, selectedChatProject, navigate]);
 
-  useEffect(() => {
-  const markMessagesAsRead = async () => {
-    try {
-      const markReadDto = {
-        sentTime: new Date().toISOString(),
-        groupId: selectedChatProject.projectId
-      };
-      console.log("Marking messages as read:", markReadDto);
-      const response = await groupMessageService.markMessagesAsRead(markReadDto);
-      console.log("Messages marked as read:", response);
-    } catch (err) {
-      console.error("Failed to mark messages as read:", err);
-      setError("Failed to mark messages as read");
-    }
-  };
-  markMessagesAsRead();
-}, []);
-
   // Scroll to bottom when messages update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView();
@@ -81,11 +61,9 @@ const GroupChatModal = () => {
         content: inputText,
         groupId: selectedChatProject.projectId,
       };
-
       try {
         // Send message with content and groupId
         await groupMessageService.sendGroupMessage(newMessage);
-
         // Update local messages state
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -99,7 +77,6 @@ const GroupChatModal = () => {
           status: "sent",
         },
       ]);
-
       setInputText(""); // Clear input text
       messagesEndRef.current?.scrollIntoView(); // Scroll to bottom
     } catch (err) {
@@ -107,6 +84,11 @@ const GroupChatModal = () => {
     }
   }
 };
+
+ // Close modal on location change
+ useEffect(() => {
+  reset();
+}, [location.pathname, reset]);
 
   if (!isGroupChatModalOpen) return null;
 
@@ -117,8 +99,7 @@ const GroupChatModal = () => {
           &times;
         </button>
         <h2>
-          <FormattedMessage id="chatGroup">Project Chat Group</FormattedMessage>{" "}
-          {selectedChatProject.projectId}
+          {selectedChatProject.projectName}{" "}<FormattedMessage id="chatGroup"></FormattedMessage>
         </h2>
         <div className={styles.messagesContainer}>
           {loading && <p>Loading messages...</p>}
