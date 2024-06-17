@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { MessageBox, Input, Button } from "react-chat-elements";
+import { MessageBox, Button } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import styles from "./GroupChatModal.module.css";
 import useGroupChatStore from "../../../stores/useGroupChatStore";
@@ -35,15 +35,19 @@ const GroupChatModal = () => {
           const formattedMessages = fetchedMessages.map((msg) => ({
             id: msg.messageId,
             position:
-              msg.senderId === parseInt(localStorage.getItem("userId"))
+              msg.sender.id === parseInt(localStorage.getItem("userId"))
                 ? "right"
                 : "left",
             type: "text",
             text: msg.content,
             date: new Date(msg.sentTime),
             status: msg.isViewed ? "read" : "sent",
-            title: msg.senderId,
-            onTitleClick: () => {navigate(`/userProfile/${msg.senderId}`)}
+            sender: {
+              id: msg.sender.id,
+              username: msg.sender.username,
+              photo: msg.sender.photo
+            },
+            title: msg.sender.username,
           }));
           setMessages(formattedMessages);
         } catch (err) {
@@ -72,6 +76,7 @@ const GroupChatModal = () => {
       try {
         // Send message with content and groupId
         await groupMessageService.sendGroupMessage(newMessage);
+        
         // Update local messages state
         setMessages((prevMessages) => [
           ...prevMessages,
@@ -82,14 +87,19 @@ const GroupChatModal = () => {
             text: newMessage.content,
             date: new Date(),
             status: "sent",
-            title: newMessage.senderId === parseInt(localStorage.getItem("userId")),
-            onTitleClick: () => {navigate(`/userProfile/${newMessage.senderId}`)}
+            sender: {
+              id: parseInt(localStorage.getItem("userId")),
+              username: localStorage.getItem("username"),
+              photo: localStorage.getItem("photo")
+            },
+            title: localStorage.getItem("username"),
           },
         ]);
         setInputText(""); // Clear input text
         messagesEndRef.current?.scrollIntoView(); // Scroll to bottom
       } catch (err) {
         console.error("Failed to send message:", err);
+        setError("Failed to send message. Please try again.");
       }
     }
   };
@@ -122,25 +132,20 @@ const GroupChatModal = () => {
           {loading && <p>Loading messages...</p>}
           {error && <p>{error}</p>}
           {messages.map((msg, index) => {
-            const userId = localStorage.getItem('userId');
-            const isSentByCurrentUser =
-              msg.sender && String(msg.sender.id) === String(userId);
-            const displayName = isSentByCurrentUser
-              ? "You"
-              : msg.sender
-              ? msg.sender.username
-              : "Unknown";
-            const avatar = msg?.sender ? msg.sender.photo : null;
+            const isSentByCurrentUser = msg.sender.id === parseInt(localStorage.getItem('userId'));
+            const displayName = isSentByCurrentUser ? "" : msg.sender.username;
+            const displayAvatar = isSentByCurrentUser ? "" : msg.sender.photo;
             return (
               <MessageBox
                 key={index}
-                avatar={avatar}
+                avatar={displayAvatar}
                 position={msg.position}
                 type={msg.type}
                 text={msg.text}
                 date={msg.date}
                 status={msg.status}
                 title={displayName}
+                onTitleClick={() => navigate(`/userProfile/${msg.sender.username}`)}
               />
             );
           })}
