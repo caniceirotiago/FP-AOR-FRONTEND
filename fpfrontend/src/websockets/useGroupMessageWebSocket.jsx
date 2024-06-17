@@ -1,21 +1,11 @@
 import { useEffect, useRef } from 'react';
 import Cookies from 'js-cookie';
-import userService from '../services/userService';
+import groupMessageService from '../services/groupMessageService';
 import useAuthStore from '../stores/useAuthStore';
 
-
-
-export const useGlobalWebSocket = (url, shouldConnect) => {
+export const useGroupMessageWebSocket = (url, shouldConnect) => {
     const ws = useRef(null);
     const { logout } = useAuthStore();
-    const forcedLogout = async() => {
-        const response = await userService.logout();
-        if(!response.status === 204){
-            const message = {type: 'FORCED_LOGOUT_FAILED', content: 'Failed to logout user. Please try again.'};
-            sendMessage(message);
-        }
-        logout();
-    }
 
     useEffect(() => {
         if (!shouldConnect) return;
@@ -24,23 +14,24 @@ export const useGlobalWebSocket = (url, shouldConnect) => {
         const fullUrl = `${url}?sessionToken=${sessionToken}`;
         
         ws.current = new WebSocket(fullUrl);
-        console.log('Connecting Global WebSocket');
+        console.log('Connecting Group Message WebSocket');
 
         ws.current.onopen = () => {
-            console.log('WebSocket Global Connected', fullUrl);
+            console.log('WebSocket Group Message Connected', fullUrl);
         };
 
         ws.current.onerror = (error) => {
-            console.error('WebSocket Global Error:', error);
+            console.error('WebSocket Group Message Error:', error);
         };
 
         ws.current.onmessage = (e) => {
             try {
                 const message = JSON.parse(e.data);
-                console.log('WebSocket Global Message:', message);
+                console.log('WebSocket Group Message:', message);
 
-                if (message.type === 'FORCED_LOGOUT') {
-                    forcedLogout(); 
+                if (message.type === 'GROUP_MESSAGE') {
+                    // Handle the group message here
+                    handleGroupMessage(message);
                 }
             } catch (error) {
                 console.error('Error parsing message:', e.data, error);
@@ -50,7 +41,7 @@ export const useGlobalWebSocket = (url, shouldConnect) => {
         return () => {
             if (ws.current) {
                 ws.current.close();
-                console.log('WebSocket Global Disconnected', fullUrl);
+                console.log('WebSocket Group Message Disconnected', fullUrl);
             }
         };
     }, [url, shouldConnect]);
@@ -59,8 +50,14 @@ export const useGlobalWebSocket = (url, shouldConnect) => {
         if (ws.current && ws.current.readyState === WebSocket.OPEN) {
             ws.current.send(JSON.stringify(message));
         } else {
-            console.error("WebSocket Global is not open.");
+            console.error("WebSocket Group Message is not open.");
         }
+    };
+
+    const handleGroupMessage = (message) => {
+        // Implement your logic to handle the incoming group message
+        console.log('Received Group Message:', message);
+        // Example: You might want to update the state or notify the user
     };
 
     return { sendMessage };

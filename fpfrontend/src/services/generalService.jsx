@@ -84,7 +84,7 @@ const generalService = {
       );
       return response;
     } catch (error) {
-      console.error("Error fetching suggestions:", error.message);
+      console.error("Error adding item:", error.message);
       throw error;
     }
   },
