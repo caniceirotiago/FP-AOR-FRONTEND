@@ -1,6 +1,5 @@
-import React, { useCallback } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import ProjectBasicInfo from "../../components/ProjectPageComponents/ProjectBasicInfo.jsx";
 import projectService from "../../services/projectService.jsx";
 import AttributeEditor from "../../components/reactSelect/AttributeEditor.jsx";
@@ -12,12 +11,11 @@ import { FaEdit, FaCheck } from "react-icons/fa";
 import ApprovalModal from "../../components/modals/ApprovalModal.jsx";
 import LogsList from "../../components/ProjectPageComponents/LogsList/LogsList.jsx";
 import useProjectStore from "../../stores/useProjectStore.jsx";
-import GroupChatModal from '../../components/ProjectPageComponents/GroupChat/GroupChatModal';
-import useGroupChatStore from '../../stores/useGroupChatStore';
+import GroupChatModal from "../../components/ProjectPageComponents/GroupChat/GroupChatModal";
+
 
 const ProjectPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { setSelectedProjectId } = useProjectStore();
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
   const [projectLogs, setProjectLogs] = useState([]);
@@ -25,6 +23,9 @@ const ProjectPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const { id } = useParams();
   const [isTheProjectNotExistant, setIsTheProjectNotExistant] = useState();
+  const { states, fetchProjectStates } = useProjectStatesStore();
+  const { fetchProjectRoles } = useProjectRolesStore();
+  const { laboratories, fetchLaboratories } = useLabStore();
   const [projectInfo, setProjectInfo] = useState({
     name: "",
     description: "",
@@ -36,10 +37,7 @@ const ProjectPage = () => {
     users: [],
     assets: [],
   });
-  const { states, fetchProjectStates } = useProjectStatesStore();
-  const { fetchProjectRoles } = useProjectRolesStore();
-  const { laboratories, fetchLaboratories } = useLabStore();
-  
+
   const [isGroupChatModalOpen, setGroupChatModalOpen] = useState(false);
   const [selectedChatProject, setSelectedChatProject] = useState(null);
 
@@ -113,8 +111,8 @@ const ProjectPage = () => {
   };
 
   const handleOpenGroupChat = () => {
-    setGroupChatModalOpen(true);
     setSelectedChatProject({ projectId: id, projectName: projectInfo.name });
+    setGroupChatModalOpen(true);
   };
 
   const canEdit =
@@ -255,7 +253,7 @@ const ProjectPage = () => {
                 creationMode={false}
                 projectId={id}
               />
-                  <AttributeEditor
+              <AttributeEditor
                 title="assets"
                 editMode={isEditing}
                 mainEntity={"project"}
@@ -267,14 +265,19 @@ const ProjectPage = () => {
               <LogsList logs={projectLogs} />
             </div>
             <div className={styles.chatButtonContainer}>
-              <button onClick={handleOpenGroupChat} className={styles.chatButton}>
+              <button
+                onClick={handleOpenGroupChat}
+                className={styles.chatButton}
+              >
                 Open Group Chat
               </button>
             </div>
             <GroupChatModal
-          selectedProject={selectedChatProject}
-          isGroupChatModalOpen={isGroupChatModalOpen}        
-        />
+              selectedChatProject={selectedChatProject}
+              setSelectedChatProject={setSelectedChatProject}
+              isGroupChatModalOpen={isGroupChatModalOpen}
+              setGroupChatModalOpen={setGroupChatModalOpen}
+            />
           </div>
         </div>
       )}

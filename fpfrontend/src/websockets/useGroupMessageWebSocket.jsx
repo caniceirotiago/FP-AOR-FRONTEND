@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export const useGroupMessageWebSocket = (  url,  shouldConnect,  onMessageReceived,  closeGroupChatModal,  updateMessages) => {
+export const useGroupMessageWebSocket = ( url, shouldConnect, onMessageReceived, closeGroupChatModal, updateMessages) => {
   const ws = useRef(null);
 
   useEffect(() => {
@@ -21,13 +21,12 @@ export const useGroupMessageWebSocket = (  url,  shouldConnect,  onMessageReceiv
       try {
         const message = JSON.parse(e.data);
         console.log("WebSocket Group Message:", message);
-        if (message.type === "GROUP_MESSAGE" && onMessageReceived) {
-          onMessageReceived(message.data);
-        }
-        if (message.type === "markedAsReadMessages") {
+        if (message.type === "NEW_GROUP_MESSAGE")onMessageReceived(message.data);
+        
+        if(message.type === 'MARK_AS_READ'){
           console.log("Messages marked as read:", message.data);
           updateMessages(message.data);
-        }
+      }
       } catch (error) {
         console.error("Error parsing message:", e.data, error);
       }
@@ -42,9 +41,9 @@ export const useGroupMessageWebSocket = (  url,  shouldConnect,  onMessageReceiv
   }, [url, shouldConnect, onMessageReceived]);
 
   const sendGroupMessageWS = (data) => {
+    console.log('Sending WebSocket Message:', data);
     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-      const message = { type: "GROUP_MESSAGE", data: data };
-      ws.current.send(JSON.stringify(message));
+      ws.current.send(JSON.stringify(data));
     } else {
       console.error("WebSocket Group Message is not open.");
       closeGroupChatModal();
