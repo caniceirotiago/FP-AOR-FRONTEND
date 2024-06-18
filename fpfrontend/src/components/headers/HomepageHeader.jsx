@@ -13,9 +13,16 @@ import { Link } from 'react-router-dom';
 import logo from '../../assets/CriticalLogo.png';
 import logo2 from '../../assets/CriticalLogo2.png';
 import userService from '../../services/userService.jsx';
+import {notificationService} from '../../services/notificationService.jsx';
+import notificationStore from '../../stores/useNotificationStore.jsx';
+import ProtectedComponents from '../auth regist/ProtectedComponents.jsx';
+
+
+
 
 
 const HomepageHeader = () => {
+  
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationListOpen, setIsNotificationListOpen] = useState(false);
   const navMenuRef = useRef(null);
@@ -26,8 +33,11 @@ const HomepageHeader = () => {
   const { theme, toggleTheme } = useThemeStore();
   const { isLoginModalOpen , setIsLoginModalOpen} = useLoginModalStore();
   const { logout, isAuthenticated } = useAuthStore();
-  //const { notificationMap, setNotificationMap } = notificationStore();
-  //const totalNotifications = Array.from(notificationMap.values()).reduce((acc, list) => acc + list.length, 0);
+
+
+  const { notification, setNotification } = notificationStore();
+
+
   //const { openChatModal } = useChatModalStore();
   const locale = useTranslationStore((state) => state.locale);
   const handleSelectLanguage = (event) => {
@@ -36,15 +46,22 @@ const HomepageHeader = () => {
   };
   const updateLocale = useTranslationStore((state) => state.updateLocale);
 
-  //const fetchNotifications = async () => {
-  //  const notifications = await notificationService.getUserNotifications();
-  //  const notificationEntries = Object.entries(notifications).map(([user, notifs]) => [user, notifs]);
-  //  setNotificationMap(new Map(notificationEntries));
-  //}
 
-  //useEffect(() => {
-  //    fetchNotifications();
-  //}, [ token ]);
+
+  const fetchNotifications = async () => {
+   const notifications = await notificationService.getUserNotifications();
+
+   setNotification(notifications);
+
+   console.log("notifications fetched");
+  }
+
+  useEffect(() => {
+     fetchNotifications();
+  }, []);
+
+
+  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -63,65 +80,44 @@ const HomepageHeader = () => {
     };
   }, [isMenuOpen, isNotificationListOpen]); 
 
-//   const renderNotifications = () => {
-//     const entries = [];
-//     console.log(notificationMap);
-//     notificationMap.forEach((notifs, user) => {
-//       console.log(notifs);
-//       console.log(user);
-//       const truncateUsername = (username, maxLength) => {
-//         if (username.length > maxLength) {
-//           return `${username.substring(0, maxLength)}...`; 
-//         }
-//         return username;
-//       };
-//       const truncatedUser = truncateUsername(user, 4); 
-      
-//         const mostRecentNotificationHourDate = notifs.length > 0 ? notifs[notifs.length - 1].sentAt : null;
-//         console.log(mostRecentNotificationHourDate);
-//         entries.push(
-//           <IntlProvider locale={locale} messages={languages[locale]}>
-//             <div key={user} className={styles.notificationItem} onClick={() => handleNotificationClick('message', user)}>
-//                 <span className={styles.notificationCount}>{notifs.length}</span>
-//                 {notifs[0].photoUrl ? <img src={notifs[0].photoUrl} alt="User" className={styles.userImage} /> : null}
-//                 <span className={styles.notificationUsername}>{truncatedUser}</span>
-//                 {mostRecentNotificationHourDate ? ` ${new Date(mostRecentNotificationHourDate).toLocaleString(locale, {
-//                   year: 'numeric',
-//                   month: 'numeric',
-//                   day: 'numeric',
-//                   hour: '2-digit',
-//                   minute: '2-digit',
-//                   hour12: false 
-//                 })}` : 'No messages'}
-//             </div>
-//           </IntlProvider>
-//         );
-//     });
-//     if(entries.length === 0) {
-//         entries.push(
-//           <IntlProvider locale={locale} messages={languages[locale]}>
-//               <div key="no-notifications" className={styles.notificationItem}>
-//                 <FormattedMessage id="noNewNotifications">No new notifications</FormattedMessage>
-//               </div>
-//           </IntlProvider>
-//         );
-//     }
-//       return entries;
-//   };
-//  const markMessageNotificationsAsRead = async (userId) => {
-//     await notificationService.markMessageNotificationsAsRead(userId);
-//     fetchNotifications();
-//   };
+  const renderNotifications = () => {
+    const entries = [];
+    console.log(notification);
+    
+    notification.forEach((notifs) => {
+
+        const mostRecentNotificationHourDate = notifs.length > 0 ? notifs[notifs.length - 1].sentAt : null;
+        entries.push(
+            <div key={notifs.id} className={styles.notificationItem} onClick={() => handleNotificationClick('message')}>
+              
+               {notifs.content}
+            </div>
+        );
+    });
+    if(entries.length === 0) {
+        entries.push(
+              <div key="no-notifications" className={styles.notificationItem}>
+                <FormattedMessage id="noNewNotifications">No new notifications</FormattedMessage>
+              </div>
+        );
+    }
+      return entries;
+  };
+ const markMessageNotificationsAsRead = async (userId) => {
+    await notificationService.markMessageNotificationsAsRead(userId);
+    fetchNotifications();
+  };
   const username = localStorage.getItem("username");
   const photo = localStorage.getItem("photo") ; 
-//   const handleNotificationClick = (type, userId) => {
-//     if (type === 'message') {
-//       const user = { username: userId };
-//       openChatModal(user);
-//       markMessageNotificationsAsRead(userId);
-//     }
-//     setIsNotificationListOpen(false);
-//   };
+
+  const handleNotificationClick = (type, userId) => {
+    if (type === 'message') {
+      const user = { username: userId };
+     // openChatModal(user);
+      markMessageNotificationsAsRead(userId);
+    }
+    setIsNotificationListOpen(false);
+  };
 
   const handleToggleNavMenu = (event) => {
     event.stopPropagation(); 
@@ -165,12 +161,12 @@ const HomepageHeader = () => {
         null}
         <div className={styles.notificationSection}>
           <div  ref={notificationToggleButtonRef} className={styles.notificationBell} onClick = {handleToggleNotificationMenu}>
-            {/* <FaBell /> */}
-            {/*  */}
+            {isAuthenticated && <FaBell />}
+            
           </div>
           {isNotificationListOpen && (
             <div  ref={notificationMenuRef} className={styles.dropdownContent}>
-              {/* {renderNotifications()} */}
+              {renderNotifications()}
             </div>
           )}
         </div>

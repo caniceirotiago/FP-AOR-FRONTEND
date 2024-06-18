@@ -21,7 +21,7 @@ const EmailTable = ({ view, messages, onSelectUser, pageNumber, setPageNumber, p
         </thead>
         <tbody>
           {messages.map((msg, index) => (
-            <tr  className={styles.row} key={index} onClick={() => handleMsgClick(msg)}>
+            <tr  className={`${styles.row} ${!msg.viewed ? styles.notViewed: ''}`} key={index} onClick={() => handleMsgClick(msg)}>
               <td className={styles.cell} ><div className={styles.userPhoto}><img  className={styles.photo}src={view === 'inbox' ? msg.sender.photo : msg.recipient.photo} alt="userPhoto" /></div></td>
               <td className={styles.cell} >{view === 'inbox' ? msg.sender.username : msg.recipient.username}</td>
               <td className={styles.cell} >{msg.subject}</td>

@@ -49,6 +49,7 @@ const Email = () => {
   const handleFilterChange = (e) => {
     setFilters({ ...filters, search: e.target.value });
   };
+  console.log(messages);
 
   return (
     <div className={styles.emailContainer}>
