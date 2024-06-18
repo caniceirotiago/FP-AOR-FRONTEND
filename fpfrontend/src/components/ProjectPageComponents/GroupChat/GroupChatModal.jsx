@@ -29,6 +29,32 @@ const GroupChatModal = ({
   const location = useLocation();
   const messagesEndRef = useRef(null);
 
+  const [data, setData] = useState({
+    inputText: "",
+    subject: "",
+    currentUser: null,
+  });
+
+  const onMessage = useCallback(
+    (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+      console.log("mensagem no useCallback do Group Chat Messages:", message);
+
+      if (
+        data.currentUser &&
+        message.sender.id === data.currentUser.id &&
+        !message.viewed
+      ) {
+        const messageData = {
+          type: "MARK_AS_READ",
+          data: Array.isArray(message.id) ? message.id : [message.id],
+        };
+        sendGroupMessageWS(messageData);
+      }
+    },
+    [data.currentUser]
+  );
+
   const wsUrl = useMemo(() => {
     if (!selectedChatProject) return null;
 
@@ -42,10 +68,6 @@ const GroupChatModal = ({
 
     return `${newWsUrl}`;
   }, [selectedChatProject]);
-
-  const onMessage = (message) => {
-    setMessages((prevMessages) => [...prevMessages, message]);
-  };
 
   const { sendGroupMessageWS } = useGroupMessageWebSocket(
     wsUrl,
@@ -118,13 +140,6 @@ const GroupChatModal = ({
     sendGroupMessageWS(dataToSend);
   };
 
-  // Function to handle sending message when Enter key is pressed
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      handleSendMessage();
-    }
-  };
-
   const updateMessages = useCallback((messages) => {
     console.log("Messages to mark as read on updateMethod:", messages);
     setMessages((prevMessages) => {
@@ -191,7 +206,7 @@ const GroupChatModal = ({
           })}
           <div ref={messagesEndRef} />
         </div>
-        <div className={styles.inputArea}>
+        <form onSubmit={handleSendMessage} className={styles.inputArea}>
           <FormattedMessage id="typeMessagePlaceholder">
             {(placeholder) => (
               <input
@@ -201,20 +216,13 @@ const GroupChatModal = ({
                 onChange={(e) => setInputText(e.target.value)}
                 className={styles.input}
                 maxLength={1000}
-                onKeyDown={handleKeyPress}
               />
             )}
           </FormattedMessage>
-          <FormattedMessage id="sendMsgBtn">
-            {(text) => (
-              <Button
-                className={styles.button}
-                text={text}
-                onClick={handleSendMessage}
-              />
-            )}
-          </FormattedMessage>
-        </div>
+          <button type="submit" className={styles.button}>
+            Send
+          </button>
+        </form>
       </div>
     </div>
   );
