@@ -21,8 +21,7 @@ export const useIndividualMessageWebSocket = (url, shouldConnect, onMessage, clo
         ws.current.onmessage = (e) => {
             try {
                 const message = JSON.parse(e.data);
-     
-                if(message.type === 'receivedMessage')onMessage(message.data);
+                if(message.type === 'NEW_INDIVIDUAL_MESSAGE')onMessage(message.data);
                 if(message.type === 'markedAsReadMessages'){
                     console.log("Messages marked as read:", message.data);
                     updateMessages(message.data);
@@ -43,8 +42,7 @@ export const useIndividualMessageWebSocket = (url, shouldConnect, onMessage, clo
 
     const sendWsMessage = (data) => {
         if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-            const message = { type: 'sendMessage', data: data };
-            ws.current.send(JSON.stringify(message));
+            ws.current.send(JSON.stringify(data));
         } else {
             console.error("WebSocket Chat is not open.");
             closeChatModal();

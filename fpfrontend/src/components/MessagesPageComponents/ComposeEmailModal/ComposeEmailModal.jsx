@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { MessageBox } from 'react-chat-elements';
 import Select from 'react-select';
 import 'react-chat-elements/dist/main.css';
@@ -24,9 +24,29 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef(null);
 
-  const handleMessage = (message) => {
-    console.log("Received message:", message);
-  };
+  const onMessage = useCallback((message) => {
+
+    setMessagesModal((prevMessages) => [...prevMessages, message]);
+    if(data.currentUser && message.sender.id === data.currentUser.id){
+      console.log('Message received:', message);
+      const messageData = {type: 'MARK_AS_READ', data: [message.id]};
+      console.log('Message To mark as read:', messageData);
+      sendWsMessage(messageData);
+    }
+
+  }, []);
+
+  const updateMessages = useCallback((messages) => {
+    setMessagesModal((prevMessages) => {
+      const newMessages = prevMessages.map((msg) => {
+        if (messages.includes(msg.id)) {
+          return { ...msg, viewed: true };
+        }
+        return msg;
+      });
+      return newMessages;
+    });
+  }, []);
 
   const wsUrl = useMemo(() => {
     if(data.currentUser === null  ) return null;
@@ -38,13 +58,11 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
     return `${newWsUrl}`;
   }, [data.currentUser]);
 
-  const { sendWsMessage } = useIndividualMessageWebSocket(wsUrl, isChatModalOpen && wsUrl, handleMessage, onClose);
+  const { sendWsMessage } = useIndividualMessageWebSocket(wsUrl, isChatModalOpen && wsUrl, onMessage, onClose, updateMessages);
 
 
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView();
-  };
+
 
   const fetchSuggestedUsers = async (firstLetter) => {
     try {
@@ -62,7 +80,12 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
     try {
       const response = await individualMessageService.fetchMessagesBetweenTwoUsers(userId, otherUserId);
       const data = await response.json();
-      console.log('data:', data);
+      const messagesToMarkAsRead = data.filter((msg) => msg.sender.id === otherUserId && !msg.viewed).map((msg) => msg.id);
+      if (messagesToMarkAsRead.length > 0) {
+        const messageData = { type: 'MARK_AS_READ', data: messagesToMarkAsRead };
+        console.log('Messages to mark as read:', messageData);
+        sendWsMessage(messageData);
+      }
       setMessagesModal(data);
     } catch (error) {
       console.error('Error fetching messages:', error.message);
@@ -83,9 +106,7 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
   };
 
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messagesModal]);
+
 
   useEffect(() => {
     if (data.currentUser) {
@@ -126,7 +147,12 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
       sentAt: new Date().toISOString(),
     };
     setMessagesModal((prevMessages) => [...prevMessages, formattedMessage]);
-    sendWsMessage(message);
+    const dataToSend = {
+      type: 'NEW_INDIVIDUAL_MESSAGE',
+      data: message
+    };
+
+    sendWsMessage(dataToSend);
     // if (!response.ok) {
     //   setMessagesModal(oldMessages);
     // }
@@ -146,6 +172,12 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
 
     }
   };
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView();
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messagesModal]);
 
   console.log('messages', messagesModal);
 
@@ -185,6 +217,8 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
                     date={new Date(msg.sentAt)}
                     title={displayName}
                     text={text}
+                    status={msg.viewed ? 'read' : 'sent'}
+                    
                   />
                 );
               })}
