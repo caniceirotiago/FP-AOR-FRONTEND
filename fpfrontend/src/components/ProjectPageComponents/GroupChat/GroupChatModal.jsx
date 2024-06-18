@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { MessageBox, Button } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import styles from "./GroupChatModal.module.css";
@@ -23,33 +23,19 @@ const GroupChatModal = () => {
   const location = useLocation();
   const messagesEndRef = useRef(null);
 
-  const handleIncomingMessage = (message) => {
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      {
-        id: message.id,
-        position:
-          message.senderId === parseInt(localStorage.getItem("userId"))
-            ? "right"
-            : "left",
-        type: "text",
-        text: message.content,
-        date: new Date(message.sentTime),
-        status: message.isViewed ? "read" : "sent",
-        sender: {
-          id: message.senderId,
-          username: message.senderUsername,
-          photo: message.senderPhoto,
-        },
-        title: message.senderUsername,
-      },
-    ]);
-  };
+  const wsUrl = useMemo(() => {
+    if(data.currentUser === null  ) return null;
+      const sessionToken = Cookies.get('sessionToken'); 
+      const sessionTokenUrl = sessionToken;
+      const projectIdUrl = data.projectId;
+      const newWsUrl = `ws://${useDomainStore.getState().domain}/groupChat/${sessionTokenUrl}/${projectIdUrl}`;
+      
+    return `${newWsUrl}`;
+  }, [data.currentUser]);
 
-  const { sendMessage } = useGroupMessageWebSocket(
-    "ws://localhost:8080/FPBackend/ws/group/messages",
-    isGroupChatModalOpen,
-    handleIncomingMessage
+
+  const { sendGroupMessageWS } = useGroupMessageWebSocket(
+    wsUrl, isGroupChatModalOpen && wsUrl,    handleIncomingMessage, onClose, updateMessages
   );
 
   // Fetch messages when the modal is open and a project is selected
@@ -97,6 +83,31 @@ const GroupChatModal = () => {
     messagesEndRef.current?.scrollIntoView();
   }, [messages]);
 
+  const handleIncomingMessage = (message) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        id: message.id,
+        position:
+          message.senderId === parseInt(localStorage.getItem("userId"))
+            ? "right"
+            : "left",
+        type: "text",
+        text: message.content,
+        date: new Date(message.sentTime),
+        status: message.isViewed ? "read" : "sent",
+        sender: {
+          id: message.senderId,
+          username: message.senderUsername,
+          photo: message.senderPhoto,
+        },
+        title: message.senderUsername,
+      },
+    ]);
+  };
+
+  
+
   const handleSendMessage = async () => {
     if (inputText.trim()) {
       const newMessage = {
@@ -105,10 +116,13 @@ const GroupChatModal = () => {
       };
       try {
         // Send message via WebSocket
-        sendMessage({
+        sendGroupMessageWS({
           type: "GROUP_MESSAGE",
+          data:{
           content: newMessage.content,
-          groupId: newMessage.groupId,
+          senderId: newMessage.senderId,
+          groupId: newMessage.groupId
+          }
         });
 
         // Update local messages state
