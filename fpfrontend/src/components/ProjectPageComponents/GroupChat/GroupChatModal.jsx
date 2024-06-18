@@ -63,8 +63,24 @@ const GroupChatModal = ({
             selectedChatProject.projectId
           );
           const data = await response.json();
-          console.log("data:", data);
-          setMessages(data);
+          const formattedMessages = data.map((msg) => ({
+            id: msg.messageId,
+            position:
+              msg.sender.id === parseInt(localStorage.getItem("userId"))
+                ? "right"
+                : "left",
+            type: "text",
+            text: msg.content,
+            date: new Date(msg.sentTime),
+            status: msg.isViewed ? "read" : "sent",
+            sender: {
+              id: msg.sender.id,
+              username: msg.sender.username,
+              photo: msg.sender.photo,
+            },
+            title: msg.sender.username,
+          }));
+          setMessages(formattedMessages);
         } catch (err) {
           console.error("Failed to fetch group messages:", err);
           setError("Failed to load group messages");
@@ -74,7 +90,7 @@ const GroupChatModal = ({
       }
     };
     fetchMessages();
-  }, []);
+  }, [isGroupChatModalOpen, selectedChatProject, navigate]);
 
   // Scroll to bottom when messages update
   useEffect(() => {
@@ -90,6 +106,7 @@ const GroupChatModal = ({
         content: inputText,
       };
       sendMessage(newMessage);
+      setInputText("");
     }
   };
 
