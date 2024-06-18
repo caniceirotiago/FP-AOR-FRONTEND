@@ -25,12 +25,10 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
   const messagesEndRef = useRef(null);
 
   const onMessage = useCallback((message) => {
-
     setMessagesModal((prevMessages) => [...prevMessages, message]);
+
     if(data.currentUser && message.sender.id === data.currentUser.id){
-      console.log('Message received:', message);
-      const messageData = {type: 'MARK_AS_READ', data: [message.id]};
-      console.log('Message To mark as read:', messageData);
+      const messageData = {type: 'MARK_AS_READ', data: Array.isArray(message.id) ? message.id : [message.id] };
       sendWsMessage(messageData);
     }
 

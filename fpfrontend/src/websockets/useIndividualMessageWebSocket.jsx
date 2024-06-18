@@ -22,7 +22,7 @@ export const useIndividualMessageWebSocket = (url, shouldConnect, onMessage, clo
             try {
                 const message = JSON.parse(e.data);
                 if(message.type === 'NEW_INDIVIDUAL_MESSAGE')onMessage(message.data);
-                if(message.type === 'markedAsReadMessages'){
+                if(message.type === 'MARK_AS_READ'){
                     console.log("Messages marked as read:", message.data);
                     updateMessages(message.data);
                 }
@@ -41,6 +41,7 @@ export const useIndividualMessageWebSocket = (url, shouldConnect, onMessage, clo
     }, [url, shouldConnect, onMessage]);
 
     const sendWsMessage = (data) => {
+        console.log('Sending WebSocket Message:', data);
         if (ws.current && ws.current.readyState === WebSocket.OPEN) {
             ws.current.send(JSON.stringify(data));
         } else {
