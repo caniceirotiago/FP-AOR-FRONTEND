@@ -34,11 +34,14 @@ const ProjectPage = () => {
     keywords: [],
     skills: [],
     users: [],
+    assets: [],
   });
   const { states, fetchProjectStates } = useProjectStatesStore();
   const { fetchProjectRoles } = useProjectRolesStore();
   const { laboratories, fetchLaboratories } = useLabStore();
-  const { openGroupChatModal, setSelectedChatProject } = useGroupChatStore();
+  
+  const [isGroupChatModalOpen, setGroupChatModalOpen] = useState(false);
+  const [selectedChatProject, setSelectedChatProject] = useState(null);
 
   const fetchProjectData = useCallback(async () => {
     try {
@@ -110,7 +113,7 @@ const ProjectPage = () => {
   };
 
   const handleOpenGroupChat = () => {
-    openGroupChatModal();
+    setGroupChatModalOpen(true);
     setSelectedChatProject({ projectId: id, projectName: projectInfo.name });
   };
 
@@ -268,7 +271,10 @@ const ProjectPage = () => {
                 Open Group Chat
               </button>
             </div>
-            <GroupChatModal/>
+            <GroupChatModal
+          selectedProject={selectedChatProject}
+          isGroupChatModalOpen={isGroupChatModalOpen}        
+        />
           </div>
         </div>
       )}
