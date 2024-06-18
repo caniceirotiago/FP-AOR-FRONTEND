@@ -26,25 +26,30 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
 
   const onMessage = useCallback((message) => {
     setMessagesModal((prevMessages) => [...prevMessages, message]);
-
-    if(data.currentUser && message.sender.id === data.currentUser.id){
+    console.log('message:', message);
+    console.log('currentUser:', data.currentUser);
+    console.log('message.sender.id:', message.sender.id);
+    if(data.currentUser && message.sender.id === data.currentUser.id && !message.viewed){
       const messageData = {type: 'MARK_AS_READ', data: Array.isArray(message.id) ? message.id : [message.id] };
       sendWsMessage(messageData);
     }
 
-  }, []);
+  }, [data.currentUser]);
 
   const updateMessages = useCallback((messages) => {
+    console.log('Messages to mark as read on updateMethod:', messages);
     setMessagesModal((prevMessages) => {
-      const newMessages = prevMessages.map((msg) => {
-        if (messages.includes(msg.id)) {
-          return { ...msg, viewed: true };
+      const newMessages = prevMessages.map(msg => {
+        const found = messages.find(updateMsg => updateMsg.id === msg.id);
+        if(found){
+          return {...msg, viewed: true};
         }
         return msg;
       });
       return newMessages;
     });
   }, []);
+
 
   const wsUrl = useMemo(() => {
     if(data.currentUser === null  ) return null;
@@ -81,7 +86,6 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
       const messagesToMarkAsRead = data.filter((msg) => msg.sender.id === otherUserId && !msg.viewed).map((msg) => msg.id);
       if (messagesToMarkAsRead.length > 0) {
         const messageData = { type: 'MARK_AS_READ', data: messagesToMarkAsRead };
-        console.log('Messages to mark as read:', messageData);
         sendWsMessage(messageData);
       }
       setMessagesModal(data);
@@ -114,9 +118,9 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
       setInitialSelectedUser(null);
     }
     if (initialSelectedUser) {
-      setData({ ...data, currentUser: initialSelectedUser });
+      setData((prevData) => ({ ...prevData, currentUser: initialSelectedUser }));
     }
-  }, [data.currentUser]);
+  }, [data.currentUser, initialSelectedUser, setInitialSelectedUser]);
 
   const handleSelectChange = (selectedOption) => {
     if (selectedOption) {
@@ -144,7 +148,6 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
       },
       sentAt: new Date().toISOString(),
     };
-    setMessagesModal((prevMessages) => [...prevMessages, formattedMessage]);
     const dataToSend = {
       type: 'NEW_INDIVIDUAL_MESSAGE',
       data: message
@@ -177,7 +180,6 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
     scrollToBottom();
   }, [messagesModal]);
 
-  console.log('messages', messagesModal);
 
   return (
     <div className={styles.modalOverlay}>
