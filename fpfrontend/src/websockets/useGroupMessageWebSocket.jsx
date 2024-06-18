@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export const useGroupMessageWebSocket = ( url, shouldConnect, onMessageReceived, closeGroupChatModal, updateMessages) => {
+export const useGroupMessageWebSocket = ( url, shouldConnect, onMessage) => {
   const ws = useRef(null);
 
   useEffect(() => {
@@ -21,11 +21,10 @@ export const useGroupMessageWebSocket = ( url, shouldConnect, onMessageReceived,
       try {
         const message = JSON.parse(e.data);
         console.log("WebSocket Group Message:", message);
-        if (message.type === "NEW_GROUP_MESSAGE")onMessageReceived(message.data);
+        if (message.type === "NEW_GROUP_MESSAGE")onMessage(message.data);
         
         if(message.type === 'MARK_AS_READ'){
           console.log("Messages marked as read:", message.data);
-          updateMessages(message.data);
       }
       } catch (error) {
         console.error("Error parsing message:", e.data, error);
@@ -38,7 +37,7 @@ export const useGroupMessageWebSocket = ( url, shouldConnect, onMessageReceived,
         console.log("WebSocket Group Message Disconnected", url);
       }
     };
-  }, [url, shouldConnect, onMessageReceived]);
+  }, [url, shouldConnect, onMessage]);
 
   const sendGroupMessageWS = (data) => {
     console.log('Sending WebSocket Message:', data);
@@ -46,7 +45,7 @@ export const useGroupMessageWebSocket = ( url, shouldConnect, onMessageReceived,
       ws.current.send(JSON.stringify(data));
     } else {
       console.error("WebSocket Group Message is not open.");
-      closeGroupChatModal();
+      
     }
   };
 

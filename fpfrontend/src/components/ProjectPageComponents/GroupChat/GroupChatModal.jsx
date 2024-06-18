@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import { MessageBox, Button } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import styles from "./GroupChatModal.module.css";
@@ -6,8 +12,8 @@ import groupMessageService from "../../../services/groupMessageService";
 import { FormattedMessage } from "react-intl";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useGroupMessageWebSocket } from "../../../websockets/useGroupMessageWebSocket";
-import useDomainStore from '../../../stores/useDomainStore';
-import Cookies from 'js-cookie';
+import useDomainStore from "../../../stores/useDomainStore";
+import Cookies from "js-cookie";
 
 const GroupChatModal = ({
   isGroupChatModalOpen,
@@ -15,7 +21,6 @@ const GroupChatModal = ({
   selectedChatProject,
   setSelectedChatProject,
 }) => {
- 
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,7 +29,6 @@ const GroupChatModal = ({
   const location = useLocation();
   const messagesEndRef = useRef(null);
 
-
   const wsUrl = useMemo(() => {
     if (!selectedChatProject) return null;
 
@@ -32,21 +36,21 @@ const GroupChatModal = ({
     const sessionTokenUrl = sessionToken;
     const projectIdUrl = selectedChatProject.projectId;
     console.log("projectIdUrl:", projectIdUrl);
-    const newWsUrl = `ws://${useDomainStore.getState().domain}/groupChat/${sessionTokenUrl}/${projectIdUrl}`;
+    const newWsUrl = `ws://${
+      useDomainStore.getState().domain
+    }/groupChat/${sessionTokenUrl}/${projectIdUrl}`;
 
     return `${newWsUrl}`;
   }, [selectedChatProject]);
 
-  const handleIncomingMessage = (message) => {
-    setMessages((prevMessages) => [
-      ...prevMessages, message,
-    ]);
+  const onMessage = (message) => {
+    setMessages((prevMessages) => [...prevMessages, message]);
   };
 
   const { sendGroupMessageWS } = useGroupMessageWebSocket(
     wsUrl,
     isGroupChatModalOpen && wsUrl,
-    handleIncomingMessage
+    onMessage
   );
 
   // Fetch messages when the modal is open and a project is selected
@@ -77,27 +81,6 @@ const GroupChatModal = ({
     messagesEndRef.current?.scrollIntoView();
   }, [messages]);
 
-
-
-  const sendMessage = async (message) => {
-    const formattedMessage = {
-      ...message,
-      sender: {
-        id: message.senderId,
-        username: localStorage.getItem('username'),
-        photo: localStorage.getItem('photo'),
-      },
-      sentAt: new Date().toISOString(),
-    };
-    const dataToSend = {
-      type: 'NEW_GROUP_MESSAGE',
-      data: message
-    };
-
-    sendGroupMessageWS(dataToSend);
-
-  };
-
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (inputText.trim()) {
@@ -107,10 +90,37 @@ const GroupChatModal = ({
         content: inputText,
       };
       sendMessage(newMessage);
-      
     }
   };
 
+  const sendMessage = async (message) => {
+    const dataToSend = {
+      type: "NEW_GROUP_MESSAGE",
+      data: message,
+    };
+    sendGroupMessageWS(dataToSend);
+  };
+
+  // Function to handle sending message when Enter key is pressed
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSendMessage();
+    }
+  };
+
+  const updateMessages = useCallback((messages) => {
+    console.log("Messages to mark as read on updateMethod:", messages);
+    setMessages((prevMessages) => {
+      const newMessages = prevMessages.map((msg) => {
+        const found = messages.find((updateMsg) => updateMsg.id === msg.id);
+        if (found) {
+          return { ...msg, viewed: true };
+        }
+        return msg;
+      });
+      return newMessages;
+    });
+  }, []);
 
   const handleCloseGroupChatModal = () => {
     setGroupChatModalOpen(false);
@@ -123,19 +133,15 @@ const GroupChatModal = ({
     handleCloseGroupChatModal();
   }, [location.pathname]);
 
-  // Function to handle sending message when Enter key is pressed
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      handleSendMessage();
-    }
-  };
-
   if (!isGroupChatModalOpen) return null;
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <button className={styles.closeButton} onClick={handleCloseGroupChatModal}>
+        <button
+          className={styles.closeButton}
+          onClick={handleCloseGroupChatModal}
+        >
           &times;
         </button>
         <h2>
