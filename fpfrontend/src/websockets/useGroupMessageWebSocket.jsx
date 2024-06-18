@@ -1,12 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export const useGroupMessageWebSocket = (
-  url,
-  shouldConnect,
-  onMessageReceived,
-  closeGroupChatModal,
-  updateMessages
-) => {
+export const useGroupMessageWebSocket = (  url,  shouldConnect,  onMessageReceived,  closeGroupChatModal,  updateMessages) => {
   const ws = useRef(null);
 
   useEffect(() => {

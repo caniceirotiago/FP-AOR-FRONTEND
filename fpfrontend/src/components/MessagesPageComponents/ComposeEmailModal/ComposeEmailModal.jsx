@@ -11,8 +11,6 @@ import Cookies from 'js-cookie';
 import {useIndividualMessageWebSocket} from '../../../websockets/useIndividualMessageWebSocket';
 
 
-
-
 const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setInitialSelectedUser }) => {
   const [messagesModal, setMessagesModal] = useState([]);
   const [data, setData] = useState({
@@ -39,8 +37,6 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, isChatModalOpen, setI
   }, [data.currentUser]);
 
   const { sendWsMessage } = useIndividualMessageWebSocket(wsUrl, isChatModalOpen && wsUrl, handleMessage, onClose);
-
-
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView();
