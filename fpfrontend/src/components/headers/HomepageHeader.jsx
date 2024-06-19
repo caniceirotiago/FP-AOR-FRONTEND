@@ -21,6 +21,7 @@ import  useComposeEmailModal  from '../../stores/useComposeEmailModal.jsx';
 
 
 
+
 const HomepageHeader = () => {
   
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -106,7 +107,7 @@ const HomepageHeader = () => {
       return entries;
   };
  const markMessageNotificationsAsRead = async (notifId) => {
-    await notificationService.markMessageNotificationsAsRead(notifId);
+    await notificationService.markNotificationsAsRead(notifId);
     fetchNotifications();
   };
   const username = localStorage.getItem("username");
