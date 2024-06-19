@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { MessageBox, Button } from "react-chat-elements";
+import { MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import styles from "./GroupChatModal.module.css";
 import groupMessageService from "../../../services/groupMessageService";
@@ -85,24 +85,7 @@ const GroupChatModal = ({
             selectedChatProject.projectId
           );
           const data = await response.json();
-          const formattedMessages = data.map((msg) => ({
-            id: msg.messageId,
-            position:
-              msg.sender.id === parseInt(localStorage.getItem("userId"))
-                ? "right"
-                : "left",
-            type: "text",
-            text: msg.content,
-            date: new Date(msg.sentTime),
-            status: msg.isViewed ? "read" : "sent",
-            sender: {
-              id: msg.sender.id,
-              username: msg.sender.username,
-              photo: msg.sender.photo,
-            },
-            title: msg.sender.username,
-          }));
-          setMessages(formattedMessages);
+          setMessages(data);
         } catch (err) {
           console.error("Failed to fetch group messages:", err);
           setError("Failed to load group messages");
@@ -116,7 +99,9 @@ const GroupChatModal = ({
 
   // Scroll to bottom when messages update
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView();
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
   const handleSendMessage = (e) => {
@@ -192,11 +177,11 @@ const GroupChatModal = ({
               <MessageBox
                 key={index}
                 avatar={displayAvatar}
-                position={msg.position}
-                type={msg.type}
-                text={msg.text}
-                date={msg.date}
-                status={msg.status}
+                position={isSentByCurrentUser ? "right" : "left"}
+                type={"text"}
+                text={msg.content}
+                date={new Date(msg.sentTime)}
+                status={msg.isViewed ? "viewed" : "sent"}
                 title={displayName}
                 onTitleClick={() =>
                   navigate(`/userProfile/${msg.sender.username}`)
