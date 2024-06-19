@@ -16,7 +16,7 @@ import userService from '../../services/userService.jsx';
 import {notificationService} from '../../services/notificationService.jsx';
 import notificationStore from '../../stores/useNotificationStore.jsx';
 import ProtectedComponents from '../auth regist/ProtectedComponents.jsx';
-
+import  useComposeEmailModal  from '../../stores/useComposeEmailModal.jsx';
 
 
 
@@ -33,10 +33,12 @@ const HomepageHeader = () => {
   const { theme, toggleTheme } = useThemeStore();
   const { isLoginModalOpen , setIsLoginModalOpen} = useLoginModalStore();
   const { logout, isAuthenticated } = useAuthStore();
+  const {setSelectedUser, setComposeModalOpen} = useComposeEmailModal();
+
 
 
   const { notification, setNotification } = notificationStore();
-
+  const totalNotifications = notification.length;
 
   //const { openChatModal } = useChatModalStore();
   const locale = useTranslationStore((state) => state.locale);
@@ -88,7 +90,7 @@ const HomepageHeader = () => {
 
         const mostRecentNotificationHourDate = notifs.length > 0 ? notifs[notifs.length - 1].sentAt : null;
         entries.push(
-            <div key={notifs.id} className={styles.notificationItem} onClick={() => handleNotificationClick('message')}>
+            <div key={notifs.id} className={styles.notificationItem} onClick={() => handleNotificationClick(notifs)}>
               
                {notifs.content}
             </div>
@@ -103,19 +105,28 @@ const HomepageHeader = () => {
     }
       return entries;
   };
- const markMessageNotificationsAsRead = async (userId) => {
-    await notificationService.markMessageNotificationsAsRead(userId);
+ const markMessageNotificationsAsRead = async (notifId) => {
+    await notificationService.markMessageNotificationsAsRead(notifId);
     fetchNotifications();
   };
   const username = localStorage.getItem("username");
   const photo = localStorage.getItem("photo") ; 
 
-  const handleNotificationClick = (type, userId) => {
-    if (type === 'message') {
-      const user = { username: userId };
-     // openChatModal(user);
-      markMessageNotificationsAsRead(userId);
+  const handleNotificationClick = (notifs) => {
+    console.log(notifs);
+
+    switch(notifs.type) {
+      case 'INDIVIDUAL_MESSAGE':
+        navigate(`/messages`);
+        setSelectedUser({id: notifs.individualMessage.sender.id, username: notifs.individualMessage.sender.username});
+        setComposeModalOpen(true);
+        markMessageNotificationsAsRead(notifs.id);
+        break;
+
+      default:
+        break;
     }
+
     setIsNotificationListOpen(false);
   };
 
@@ -162,7 +173,8 @@ const HomepageHeader = () => {
         <div className={styles.notificationSection}>
           <div  ref={notificationToggleButtonRef} className={styles.notificationBell} onClick = {handleToggleNotificationMenu}>
             {isAuthenticated && <FaBell />}
-            
+            {totalNotifications === 0 ? null : <div className={styles.notificationNumber}>{totalNotifications}</div>}
+
           </div>
           {isNotificationListOpen && (
             <div  ref={notificationMenuRef} className={styles.dropdownContent}>
