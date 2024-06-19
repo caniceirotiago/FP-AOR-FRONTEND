@@ -44,10 +44,7 @@ const GroupChatModal = ({
 
       // Avoid processing the same message multiple times
       setMessages((prevMessages) => {
-        if (!prevMessages.some((msg) => msg.messageId === message.messageId)) {
           return [...prevMessages, message];
-        }
-        return prevMessages;
       });
 
       if (
