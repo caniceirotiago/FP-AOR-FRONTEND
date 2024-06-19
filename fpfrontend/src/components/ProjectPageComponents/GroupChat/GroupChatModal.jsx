@@ -1,20 +1,26 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
-import { MessageBox, Button } from "react-chat-elements";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
+import { MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import styles from "./GroupChatModal.module.css";
-import useGroupChatStore from "../../../stores/useGroupChatStore";
 import groupMessageService from "../../../services/groupMessageService";
 import { FormattedMessage } from "react-intl";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useGroupMessageWebSocket } from "../../../websockets/useGroupMessageWebSocket";
-import useDomainStore from '../../../stores/useDomainStore';
-import Cookies from 'js-cookie';
+import useDomainStore from "../../../stores/useDomainStore";
+import Cookies from "js-cookie";
 
-const GroupChatModal = (selectedProject, isGroupChatModalOpen) => {
-  const {
-    closeGroupChatModal,
-    reset,
-  } = useGroupChatStore();
+const GroupChatModal = ({
+  isGroupChatModalOpen,
+  setGroupChatModalOpen,
+  selectedChatProject,
+  setSelectedChatProject,
+}) => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,44 +28,66 @@ const GroupChatModal = (selectedProject, isGroupChatModalOpen) => {
   const navigate = useNavigate();
   const location = useLocation();
   const messagesEndRef = useRef(null);
+  const currentUser = useMemo(() => {
+    return { id: parseInt(localStorage.getItem("userId")), username: localStorage.getItem("username") };
+  }, []);
 
+
+  const onMessage = useCallback(
+    (message) => {
+      console.log("Received WebSocket message: == onMessage = useCallback: ", message);
+
+      // Avoid processing the same message multiple times
+      setMessages((prevMessages) => {
+        if (!prevMessages.some((msg) => msg.messageId === message.messageId)) {
+          return [...prevMessages, message];
+        }
+        return prevMessages;
+      });
+
+      if (
+        currentUser &&
+        message.sender.id === currentUser.id &&
+        !message.viewed
+      ) {
+        const messageData = {
+          type: "MARK_AS_READ",
+          data: Array.isArray(message.messageId) ? message.messageId : [message.messageId],
+        };
+        sendGroupMessageWS(messageData);
+      }
+    },
+    []
+  );
 
   const wsUrl = useMemo(() => {
+    if (!selectedChatProject) return null;
 
     const sessionToken = Cookies.get("sessionToken");
-    const sessionTokenUrl = sessionToken;
-    const projectIdUrl = selectedProject.projectId;
-    console.log("projectIdUrl:", projectIdUrl);
+    const projectIdUrl = selectedChatProject.projectId;
     const newWsUrl = `ws://${
       useDomainStore.getState().domain
-    }/groupChat/${sessionTokenUrl}/${projectIdUrl}`;
+    }/groupChat/${sessionToken}/${projectIdUrl}`;
 
     return `${newWsUrl}`;
-  }, [selectedProject.projectId]);
-
-  const handleIncomingMessage = (message) => {
-    setMessages((prevMessages) => [
-      ...prevMessages, message,
-    ]);
-  };
+  }, [selectedChatProject]);
 
   const { sendGroupMessageWS } = useGroupMessageWebSocket(
     wsUrl,
     isGroupChatModalOpen && wsUrl,
-    handleIncomingMessage
+    onMessage
   );
 
   // Fetch messages when the modal is open and a project is selected
   useEffect(() => {
     const fetchMessages = async () => {
-      if (isGroupChatModalOpen && selectedProject) {
+      if (isGroupChatModalOpen && selectedChatProject) {
         setLoading(true);
         try {
           const response = await groupMessageService.getAllGroupMessages(
-            selectedProject.projectId
+            selectedChatProject.projectId
           );
           const data = await response.json();
-          console.log("data:", data);
           setMessages(data);
         } catch (err) {
           console.error("Failed to fetch group messages:", err);
@@ -70,104 +98,93 @@ const GroupChatModal = (selectedProject, isGroupChatModalOpen) => {
       }
     };
     fetchMessages();
-  }, []);
+  }, [isGroupChatModalOpen, selectedChatProject, navigate]);
 
   // Scroll to bottom when messages update
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView();
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = (e) => {
+    e.preventDefault();
     if (inputText.trim()) {
       const newMessage = {
+        senderId: currentUser.id,
+        groupId: selectedChatProject.projectId,
         content: inputText,
-        senderId: parseInt(localStorage.getItem("userId")),
-        groupId: selectedProject.projectId,
       };
-      try {
-        // Send message via WebSocket
-        sendGroupMessageWS({
-          type: "GROUP_MESSAGE",
-          data: {
-            content: newMessage.content,
-            senderId: newMessage.senderId,
-            groupId: newMessage.groupId,
-          },
-        });
-
-        // Update local messages state
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          {
-            ...newMessage,
-            position: "right",
-            type: "text",
-            text: newMessage.content,
-            date: new Date(),
-            status: "sent",
-            sender: {
-              id: parseInt(localStorage.getItem("userId")),
-              username: localStorage.getItem("username"),
-              photo: localStorage.getItem("photo"),
-            },
-            title: localStorage.getItem("username"),
-          },
-        ]);
-        setInputText(""); // Clear input text
-        messagesEndRef.current?.scrollIntoView(); // Scroll to bottom
-      } catch (err) {
-        console.error("Failed to send message:", err);
-        setError("Failed to send message. Please try again.");
-      }
+      sendMessage(newMessage);
+      setInputText("");
     }
   };
 
+  const sendMessage = async (message) => {
+    const dataToSend = {
+      type: "NEW_GROUP_MESSAGE",
+      data: message,
+    };
+    sendGroupMessageWS(dataToSend);
+  };
+
+  const updateMessages = useCallback((messages) => {
+    console.log("Messages to mark as read on updateMethod:", messages);
+    setMessages((prevMessages) => {
+      const newMessages = prevMessages.map((msg) => {
+        const found = messages.find((updateMsg) => updateMsg.id === msg.id);
+        if (found) {
+          return { ...msg, viewed: true };
+        }
+        return msg;
+      });
+      return newMessages;
+    });
+  }, []);
+  
+
   const handleCloseGroupChatModal = () => {
-    setGroupChatModalOpen: false,
-    setSelectedProject: null;
+    setGroupChatModalOpen(false);
+    setSelectedChatProject(null);
+    setInputText("");
   };
 
   // Close modal on location change
   useEffect(() => {
     handleCloseGroupChatModal();
-  }, [location.pathname, reset]);
-
-  // Function to handle sending message when Enter key is pressed
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      handleSendMessage();
-    }
-  };
+  }, [location.pathname]);
 
   if (!isGroupChatModalOpen) return null;
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <button className={styles.closeButton} onClick={handleCloseGroupChatModal}>
+        <button
+          className={styles.closeButton}
+          onClick={handleCloseGroupChatModal}
+        >
           &times;
         </button>
         <h2>
-          {selectedProject.projectName}{" "}
+          {selectedChatProject.projectName}{" "}
           <FormattedMessage id="chatGroup"></FormattedMessage>
         </h2>
         <div className={styles.messagesContainer}>
           {loading && <p>Loading messages...</p>}
           {error && <p>{error}</p>}
           {messages.map((msg, index) => {
-            const isSentByCurrentUser =
-              msg.sender.id === parseInt(localStorage.getItem("userId"));
+            const isSentByCurrentUser = msg.sender.id === currentUser.id;
             const displayName = isSentByCurrentUser ? "" : msg.sender.username;
             const displayAvatar = isSentByCurrentUser ? "" : msg.sender.photo;
             return (
               <MessageBox
                 key={index}
                 avatar={displayAvatar}
-                position={msg.position}
-                type={msg.type}
-                text={msg.text}
-                date={msg.date}
-                status={msg.status}
+                position={isSentByCurrentUser ? "right" : "left"}
+                type={"text"}
+                text={msg.content}
+                date={new Date(msg.sentTime)}
+                status={msg.isViewed ? "viewed" : "sent"}
                 title={displayName}
                 onTitleClick={() =>
                   navigate(`/userProfile/${msg.sender.username}`)
@@ -177,7 +194,7 @@ const GroupChatModal = (selectedProject, isGroupChatModalOpen) => {
           })}
           <div ref={messagesEndRef} />
         </div>
-        <div className={styles.inputArea}>
+        <form onSubmit={handleSendMessage} className={styles.inputArea}>
           <FormattedMessage id="typeMessagePlaceholder">
             {(placeholder) => (
               <input
@@ -187,20 +204,13 @@ const GroupChatModal = (selectedProject, isGroupChatModalOpen) => {
                 onChange={(e) => setInputText(e.target.value)}
                 className={styles.input}
                 maxLength={1000}
-                onKeyDown={handleKeyPress}
               />
             )}
           </FormattedMessage>
-          <FormattedMessage id="sendMsgBtn">
-            {(text) => (
-              <Button
-                className={styles.button}
-                text={text}
-                onClick={handleSendMessage}
-              />
-            )}
-          </FormattedMessage>
-        </div>
+          <button type="submit" className={styles.button}>
+            Send
+          </button>
+        </form>
       </div>
     </div>
   );
