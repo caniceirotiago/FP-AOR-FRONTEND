@@ -52,6 +52,10 @@
   
 }
 
+.notViewed{
+  background-color: rgba(255, 223, 186, 0.8);
+}
+
 .row:hover {
   background-color: rgba(241, 241, 241, 0.8);
 }

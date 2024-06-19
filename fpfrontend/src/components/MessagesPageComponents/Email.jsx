@@ -4,11 +4,12 @@ import EmailTable from './EmailTable/EmailTable';
 import ComposeEmailModal from './ComposeEmailModal/ComposeEmailModal';
 import { FaInbox, FaPaperPlane, FaPlus } from 'react-icons/fa';
 import individualMessageService from '../../services/individualMessageService';
+import useComposeEmailModal from '../../stores/useComposeEmailModal';
 
 const Email = () => {
   const [view, setView] = useState('inbox');
-  const [isComposeModalOpen, setComposeModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const {selectedUser, setSelectedUser, isComposeModalOpen, setComposeModalOpen} = useComposeEmailModal();
+
   const [messages, setMessages] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -49,6 +50,7 @@ const Email = () => {
   const handleFilterChange = (e) => {
     setFilters({ ...filters, search: e.target.value });
   };
+  console.log(messages);
 
   return (
     <div className={styles.emailContainer}>
