@@ -32,6 +32,11 @@ const GroupChatModal = ({
     return { id: parseInt(localStorage.getItem("userId")), username: localStorage.getItem("username") };
   }, []);
 
+  const handleCloseGroupChatModal = () => {
+    setGroupChatModalOpen(false);
+    setSelectedChatProject(null);
+    setInputText("");
+  };
 
   const onMessage = useCallback(
     (message) => {
@@ -72,10 +77,26 @@ const GroupChatModal = ({
     return `${newWsUrl}`;
   }, [selectedChatProject]);
 
+  const updateMessages = useCallback((messages) => {
+    console.log("Messages to mark as read on updateMethod:", messages);
+    setMessages((prevMessages) => {
+      const newMessages = prevMessages.map((msg) => {
+        const found = messages.find((updateMsg) => updateMsg.id === msg.id);
+        if (found) {
+          return { ...msg, viewed: true };
+        }
+        return msg;
+      });
+      return newMessages;
+    });
+  }, []);
+
   const { sendGroupMessageWS } = useGroupMessageWebSocket(
     wsUrl,
     isGroupChatModalOpen && wsUrl,
-    onMessage
+    onMessage,
+    handleCloseGroupChatModal,
+    updateMessages
   );
 
   // Fetch messages when the modal is open and a project is selected
@@ -126,27 +147,6 @@ const GroupChatModal = ({
       data: message,
     };
     sendGroupMessageWS(dataToSend);
-  };
-
-  const updateMessages = useCallback((messages) => {
-    console.log("Messages to mark as read on updateMethod:", messages);
-    setMessages((prevMessages) => {
-      const newMessages = prevMessages.map((msg) => {
-        const found = messages.find((updateMsg) => updateMsg.id === msg.id);
-        if (found) {
-          return { ...msg, viewed: true };
-        }
-        return msg;
-      });
-      return newMessages;
-    });
-  }, []);
-  
-
-  const handleCloseGroupChatModal = () => {
-    setGroupChatModalOpen(false);
-    setSelectedChatProject(null);
-    setInputText("");
   };
 
   // Close modal on location change

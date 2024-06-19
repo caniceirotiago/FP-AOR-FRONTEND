@@ -47,7 +47,6 @@ export const useIndividualMessageWebSocket = (url, shouldConnect, onMessage, clo
         } else {
             console.error("WebSocket Chat is not open.");
             closeChatModal();
-
         }
     };
 
