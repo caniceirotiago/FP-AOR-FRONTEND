@@ -29,7 +29,10 @@ const GroupChatModal = ({
   const location = useLocation();
   const messagesEndRef = useRef(null);
   const currentUser = useMemo(() => {
-    return { id: parseInt(localStorage.getItem("userId")), username: localStorage.getItem("username") };
+    return {
+      id: parseInt(localStorage.getItem("userId")),
+      username: localStorage.getItem("username"),
+    };
   }, []);
 
   const handleCloseGroupChatModal = () => {
@@ -41,7 +44,7 @@ const GroupChatModal = ({
   const onMessage = useCallback(
     (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
-      
+
       if (
         currentUser &&
         message.sender.id === currentUser.id &&
@@ -49,7 +52,9 @@ const GroupChatModal = ({
       ) {
         const messageData = {
           type: "MARK_AS_READ",
-          data: Array.isArray(message.messageId) ? message.messageId : [message.messageId],
+          data: Array.isArray(message.messageId)
+            ? message.messageId
+            : [message.messageId],
         };
         sendGroupMessageWS(messageData);
         console.log("Sending mark as read:", messageData);
@@ -76,13 +81,14 @@ const GroupChatModal = ({
       const newMessages = prevMessages.map((msg) => {
         const found = messages.find((updateMsg) => updateMsg.id === msg.id);
         if (found) {
-          return { ...msg, viewed: true };
+          return { ...msg, viewed: msg.viewed };
         }
         return msg;
       });
       return newMessages;
     });
   }, []);
+  
 
   const { sendGroupMessageWS } = useGroupMessageWebSocket(
     wsUrl,
@@ -103,19 +109,17 @@ const GroupChatModal = ({
           );
           const data = await response.json();
 
-
           const messagesToMarkAsRead = data
-          .filter((msg) => msg.sender.id !== currentUser.id && !msg.viewed)
-          .map((msg) => msg.id);
-        if (messagesToMarkAsRead.length > 0) {
-          const messageData = {
-            type: "MARK_AS_READ",
-            data: messagesToMarkAsRead,
-          };
-          console.log("Sending mark as read:", messageData);
-          sendGroupMessageWS(messageData);
-        }
-
+            .filter((msg) => msg.sender.id !== currentUser.id && !msg.viewed)
+            .map((msg) => msg.id);
+          if (messagesToMarkAsRead.length > 0) {
+            const messageData = {
+              type: "MARK_AS_READ",
+              data: messagesToMarkAsRead,
+            };
+            console.log("Sending mark as read:", messageData);
+            sendGroupMessageWS(messageData);
+          }
 
           setMessages(data);
         } catch (err) {
