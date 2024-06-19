@@ -28,43 +28,46 @@ const GroupChatModal = ({
   const navigate = useNavigate();
   const location = useLocation();
   const messagesEndRef = useRef(null);
+  const currentUser = useMemo(() => {
+    return { id: parseInt(localStorage.getItem("userId")), username: localStorage.getItem("username") };
+  }, []);
 
-  const [data, setData] = useState({
-    inputText: "",
-    subject: "",
-    currentUser: null,
-  });
 
   const onMessage = useCallback(
     (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-      console.log("mensagem no useCallback do Group Chat Messages:", message);
+      console.log("Received WebSocket message: == onMessage = useCallback: ", message);
+
+      // Avoid processing the same message multiple times
+      setMessages((prevMessages) => {
+        if (!prevMessages.some((msg) => msg.messageId === message.messageId)) {
+          return [...prevMessages, message];
+        }
+        return prevMessages;
+      });
 
       if (
-        data.currentUser &&
-        message.sender.id === data.currentUser.id &&
+        currentUser &&
+        message.sender.id === currentUser.id &&
         !message.viewed
       ) {
         const messageData = {
           type: "MARK_AS_READ",
-          data: Array.isArray(message.id) ? message.id : [message.id],
+          data: Array.isArray(message.messageId) ? message.messageId : [message.messageId],
         };
         sendGroupMessageWS(messageData);
       }
     },
-    [data.currentUser]
+    []
   );
 
   const wsUrl = useMemo(() => {
     if (!selectedChatProject) return null;
 
     const sessionToken = Cookies.get("sessionToken");
-    const sessionTokenUrl = sessionToken;
     const projectIdUrl = selectedChatProject.projectId;
-    console.log("projectIdUrl:", projectIdUrl);
     const newWsUrl = `ws://${
       useDomainStore.getState().domain
-    }/groupChat/${sessionTokenUrl}/${projectIdUrl}`;
+    }/groupChat/${sessionToken}/${projectIdUrl}`;
 
     return `${newWsUrl}`;
   }, [selectedChatProject]);
@@ -108,8 +111,8 @@ const GroupChatModal = ({
     e.preventDefault();
     if (inputText.trim()) {
       const newMessage = {
-        senderId: parseInt(localStorage.getItem("userId")),
-        groupId: parseInt(selectedChatProject.projectId),
+        senderId: currentUser.id,
+        groupId: selectedChatProject.projectId,
         content: inputText,
       };
       sendMessage(newMessage);
@@ -138,6 +141,7 @@ const GroupChatModal = ({
       return newMessages;
     });
   }, []);
+  
 
   const handleCloseGroupChatModal = () => {
     setGroupChatModalOpen(false);
@@ -169,8 +173,7 @@ const GroupChatModal = ({
           {loading && <p>Loading messages...</p>}
           {error && <p>{error}</p>}
           {messages.map((msg, index) => {
-            const isSentByCurrentUser =
-              msg.sender.id === parseInt(localStorage.getItem("userId"));
+            const isSentByCurrentUser = msg.sender.id === currentUser.id;
             const displayName = isSentByCurrentUser ? "" : msg.sender.username;
             const displayAvatar = isSentByCurrentUser ? "" : msg.sender.photo;
             return (
