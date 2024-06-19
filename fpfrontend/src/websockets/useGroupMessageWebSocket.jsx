@@ -24,7 +24,7 @@ export const useGroupMessageWebSocket = ( url, shouldConnect, onMessage, closeCh
         if (message.type === "NEW_GROUP_MESSAGE")onMessage(message.data);
         
         if(message.type === 'MARK_AS_READ'){
-          console.log("Messages marked as read:", message.data);
+          console.log("WS - Messages marked as read:", message.data);
           updateMessages(message.data);
       }
       } catch (error) {
