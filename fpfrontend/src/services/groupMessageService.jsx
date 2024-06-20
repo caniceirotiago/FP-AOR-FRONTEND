@@ -32,6 +32,7 @@ const groupMessageService = {
     }
   },
 
+  /*
   sendGroupMessage: async (message) => {
     try {
       const response = await fetch(`${API_BASE_URL}/${message.groupId}`, {
@@ -47,22 +48,8 @@ const groupMessageService = {
       throw error;
     }
   },
+  */
 
-  markMessagesAsRead: async (markReadDto) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/read/${markReadDto.groupId}`, {
-        method: "PUT",
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ markReadDto }),
-        credentials: "include",
-      });
-      checkStatus(response);
-      return response.json();
-    } catch (error) {
-      console.error("Error marking messages as read:", error.message);
-      throw error;
-    }
-  },
 
 };
 

@@ -35,9 +35,6 @@ const ComposeEmailModal = ({
   const onMessage = useCallback(
     (message) => {
       setMessagesModal((prevMessages) => [...prevMessages, message]);
-      console.log("message:", message);
-      console.log("currentUser:", data.currentUser);
-      console.log("message.sender.id:", message.sender.id);
       if (
         data.currentUser &&
         message.sender.id === data.currentUser.id &&
@@ -95,7 +92,6 @@ const ComposeEmailModal = ({
       );
       const data = await response.json();
       setSuggestedUsers(data);
-      console.log("suggestedUsers:", data);
     } catch (error) {
       console.error("Error fetching suggestions:", error.message);
     }
@@ -141,7 +137,6 @@ const ComposeEmailModal = ({
 
   useEffect(() => {
     if (data.currentUser) {
-      console.log("currentUser:", data.currentUser);
       fetchMessagesModal(data.currentUser.id);
 
       setInitialSelectedUser(null);
@@ -166,29 +161,13 @@ const ComposeEmailModal = ({
   };
 
   const sendMessage = async (message) => {
-    const oldMessages = messagesModal;
-    const formattedMessage = {
-      ...message,
-      sender: {
-        id: message.senderId,
-        username: localStorage.getItem("username"), // Supondo que o username do remetente esteja salvo no localStorage
-        photo: localStorage.getItem("photo"), // Supondo que a foto do remetente esteja salva no localStorage
-      },
-      recipient: {
-        id: data.currentUser.id,
-        username: data.currentUser.username,
-      },
-      sentAt: new Date().toISOString(),
-    };
+    
     const dataToSend = {
       type: "NEW_INDIVIDUAL_MESSAGE",
       data: message,
     };
 
     sendWsMessage(dataToSend);
-    // if (!response.ok) {
-    //   setMessagesModal(oldMessages);
-    // }
   };
 
   const handleSendMessage = (e) => {

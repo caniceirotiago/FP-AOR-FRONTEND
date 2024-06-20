@@ -1,6 +1,12 @@
 import { useEffect, useRef } from "react";
 
-export const useGroupMessageWebSocket = ( url, shouldConnect, onMessage, closeChatModal, updateMessages) => {
+export const useGroupMessageWebSocket = (
+  url,
+  shouldConnect,
+  onMessage,
+  closeChatModal,
+  updateMessages
+) => {
   const ws = useRef(null);
 
   useEffect(() => {
@@ -21,12 +27,13 @@ export const useGroupMessageWebSocket = ( url, shouldConnect, onMessage, closeCh
       try {
         const message = JSON.parse(e.data);
         console.log("WebSocket Group Message:", message);
-        if (message.type === "NEW_GROUP_MESSAGE")onMessage(message.data);
-        
-        if(message.type === 'MARK_AS_READ'){
-          console.log("Messages marked as read:", message.data);
+        if (message.type === "NEW_GROUP_MESSAGE") {
+          onMessage(message.data);
+        }
+
+        if (message.type === "MARK_AS_READ") {
           updateMessages(message.data);
-      }
+        }
       } catch (error) {
         console.error("Error parsing message:", e.data, error);
       }
@@ -41,7 +48,8 @@ export const useGroupMessageWebSocket = ( url, shouldConnect, onMessage, closeCh
   }, [url, shouldConnect, onMessage]);
 
   const sendGroupMessageWS = (data) => {
-    console.log('Sending WebSocket Message:', data);
+    console.log("Sending WebSocket Message:", data);
+  
     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
       ws.current.send(JSON.stringify(data));
     } else {

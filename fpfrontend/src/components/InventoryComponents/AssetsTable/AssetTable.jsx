@@ -126,10 +126,7 @@ function AssetTable({ pageCount, setPageNumber, assets }) {
               </tr>
             ))}
           </thead>
-        </table>
-      </div>
-      <div className={styles.tblContent}>
-        <table {...getTableProps()} className={styles.table}>
+   
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row);
