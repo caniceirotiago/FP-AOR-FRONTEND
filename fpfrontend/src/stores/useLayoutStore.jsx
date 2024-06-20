@@ -1,5 +1,6 @@
 
 import {create} from 'zustand';
+import { persist } from 'zustand/middleware';
 
 /**
  * useLayoutStore (Zustand Store)
@@ -11,9 +12,19 @@ import {create} from 'zustand';
  */
 
 
-const useLayoutStore = create((set) => ({
-  isAsideExpanded: true,
-  toggleAside: () => set((state) => ({ isAsideExpanded: !state.isAsideExpanded })),
-}));
+const useLayoutStore = create(
+  persist(
+    (set) => ({
+      selectedView: 'table',
+      isAsideExpanded: true,
+      toggleAside: () => set((state) => ({ isAsideExpanded: !state.isAsideExpanded })),
+      setSelectedView: (view) => set(() => ({ selectedView: view })),
+    }),
+    {
+      name: 'layout-storage', 
+      getStorage: () => localStorage, 
+    }
+  )
+);
 
 export default useLayoutStore;

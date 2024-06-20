@@ -183,8 +183,8 @@ const HomepageHeader = () => {
         null}
         <div className={styles.notificationSection}>
           <div  ref={notificationToggleButtonRef} className={styles.notificationBell} onClick = {handleToggleNotificationMenu}>
-            {isAuthenticated && <FaBell />}
-            {totalNotifications === 0 ? null : <div className={styles.notificationNumber}>{totalNotifications}</div>}
+            {isAuthenticated && <><FaBell /> {(totalNotifications === 0 ) ? null : <div className={styles.notificationNumber}>{totalNotifications}</div>} </>}
+            
 
           </div>
           {isNotificationListOpen && (

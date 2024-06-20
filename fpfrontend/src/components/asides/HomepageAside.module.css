@@ -5,6 +5,7 @@
   background-color: var(--background-color1);
   border-right: solid 2px var(--card-border);
   transition: width 0.5s ease-in-out;
+  min-width: 220px;
 }
 
 .asideCollapsed {
@@ -12,6 +13,7 @@
   background-color: var(--background-color1);
   border-right: solid 2px var(--card-border);
   transition: width 0.5s ease-in-out;
+  min-width: 50px;
 }
 
 .toggleButton {

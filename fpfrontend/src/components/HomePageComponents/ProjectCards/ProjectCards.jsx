@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import useConfigurationStore from '../../../stores/useConfigurationStore';
 import useLoginModalStore from '../../../stores/useLoginModalStore';
 import useProjectStore from '../../../stores/useProjectStore';
+import { FaChartGantt } from "react-icons/fa6";
 
 const stateColors = {
   PLANNING: 'var(--color-planning)',
@@ -12,6 +13,14 @@ const stateColors = {
   FINISHED: 'var(--color-finished)',
   CANCELLED: 'var(--color-cancelled)'
 };
+const stateColorsBriefcaseBackground = {
+  PLANNING: 'linear-gradient(45deg, var(--color-planning) 0%, var(--briefcase-base-color)  100%)',
+  READY: 'linear-gradient(45deg, var(--color-ready) 0%, var(--briefcase-base-color) 100%',
+  IN_PROGRESS: 'linear-gradient(45deg, var(--color-in-progress) 0%, var(--briefcase-base-color) 100%)',
+  FINISHED: 'linear-gradient(45deg, var(--color-finished) 0%, var(--briefcase-base-color) 100%)',
+  CANCELLED: 'linear-gradient(45deg, var(--color-cancelled) 0%, var(--briefcase-base-color) 100%)'
+};
+
 
 function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setPageSize, pageNumber, setPageNumber, isAuthenticated, labs }) {
   const navigate = useNavigate();
@@ -44,11 +53,17 @@ function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setP
     navigate(`/projectplanning`);
    } 
   };
+  const handleUserPhotoClick = (e, member) => {
+    if(isAuthenticated){
+      e.stopPropagation();
+      navigate(`/userprofile/${member.user.username}`);
+    }
+  };
 
 
   const renderMemberThumbnails = (members) => {
     const memberThumbnails = members.slice(0, 3).map(member => (
-      <img key={member.id} src={member.user.photo || 'default-thumbnail.png'} alt={member.user.username} className={styles.thumbnail} />
+      <img key={member.id} src={member.user.photo || 'default-thumbnail.png'} alt={member.user.username} className={styles.thumbnail} onClick={(e) => handleUserPhotoClick(e,member)}/>
     ));
 
     if (members.length > 3) {
@@ -76,18 +91,18 @@ function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setP
      
       <div className={styles.cardContainer}>
         {projects.map(project => (
-          <div key={project.id} className={styles.card} onClick={handleClickToOpenProjectPage(project.id)}>
+          <div key={project.id} className={styles.card} onClick={handleClickToOpenProjectPage(project.id)} >
             <div className={styles.statusIndicator} style={{ backgroundColor: stateColors[project.state] }}></div>
             {maxProjectMembers && project.members.length < maxProjectMembers && (
               <div className={styles.vacancyIndicator}>
                 {maxProjectMembers - project.members.length} open slots
               </div>
             )}
-            <div className={styles.topSection}>
+            <div className={styles.topSection} style={{ backgroundImage: stateColorsBriefcaseBackground[project.state] }}>
               <div className={styles.border}></div>
-              <div className={styles.thumbnails}>
+              <div className={styles.thumbnails} >
                 {canSeeAndEditProjectPlanning(project) && 
-                <button onClick={(e) =>handleClickToOpenProjectPlanningPage(e, project.id)}>Plan</button>}
+                <div className={styles.projectPlaningBtn} onClick={(e) =>handleClickToOpenProjectPlanningPage(e, project.id)}><FaChartGantt/> </div>}
                 {renderMemberThumbnails(project.members)}
               </div>
             </div>
