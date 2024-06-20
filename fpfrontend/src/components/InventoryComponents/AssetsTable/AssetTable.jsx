@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { useTable, usePagination } from "react-table";
 import styles from "./AssetTable.module.css";
 import { FaEye, FaEdit } from "react-icons/fa";
+import { FormattedMessage, useIntl } from "react-intl";
 import EditAssetModal from "../AssetsModal/EditAssetModal.jsx";
 import useAssetsStore from "../../../stores/useAssetsStore.jsx";
 
-function AssetTable({ pageCount, setPageNumber, assets }) {
+function AssetTable({ pageCount, assets }) {
   const { isEditModalOpen, setEditModalOpen } = useAssetsStore();
   const [selectedAssetId, setSelectedAssetId] = useState(null);
   const [isViewOnly, setIsViewOnly] = useState(false);
@@ -27,43 +28,93 @@ function AssetTable({ pageCount, setPageNumber, assets }) {
   const columns = useMemo(
     () => [
       {
-        Header: "ID",
+        Header: (
+          <FormattedMessage
+            id="tableHeaderId"
+            defaultMessage="ID"
+          />
+        ),
         accessor: "id",
       },
       {
-        Header: "Name",
+        Header: (
+          <FormattedMessage
+            id="tableHeaderName"
+            defaultMessage="Name"
+          />
+        ),
         accessor: "name",
       },
       {
-        Header: "Type",
+        Header: (
+          <FormattedMessage
+            id="tableHeaderType"
+            defaultMessage="Type"
+          />
+        ),
         accessor: "type",
       },
       {
-        Header: "Description",
+        Header: (
+          <FormattedMessage
+            id="tableHeaderDescription"
+            defaultMessage="Description"
+          />
+        ),
         accessor: "description",
       },
       {
-        Header: "Stock Quantity",
+        Header: (
+          <FormattedMessage
+            id="tableHeaderStockQuantity"
+            defaultMessage="Stock Quantity"
+          />
+        ),
         accessor: "stockQuantity",
       },
       {
-        Header: "Part Number",
+        Header: (
+          <FormattedMessage
+            id="tableHeaderPartNumber"
+            defaultMessage="Part Number"
+          />
+        ),
         accessor: "partNumber",
       },
       {
-        Header: "Manufacturer",
+        Header: (
+          <FormattedMessage
+            id="tableHeaderManufacturer"
+            defaultMessage="Manufacturer"
+          />
+        ),
         accessor: "manufacturer",
       },
       {
-        Header: "Manufacturer Phone",
+        Header: (
+          <FormattedMessage
+            id="tableHeaderManufacturerPhone"
+            defaultMessage="Manufacturer Phone"
+          />
+        ),
         accessor: "manufacturerPhone",
       },
       {
-        Header: "Observations",
+        Header: (
+          <FormattedMessage
+            id="tableHeaderObservations"
+            defaultMessage="Observations"
+          />
+        ),
         accessor: "observations",
       },
       {
-        Header: "Actions",
+        Header: (
+          <FormattedMessage
+            id="tableHeaderActions"
+            defaultMessage="Actions"
+          />
+        ),
         id: "actions",
         accessor: "id",
         Cell: ({ value }) => (
@@ -72,13 +123,13 @@ function AssetTable({ pageCount, setPageNumber, assets }) {
               onClick={handleViewAsset(value)}
               className={styles.actionButton}
             >
-              <FaEye /> View
+              <FaEye /> <FormattedMessage id="actionView" defaultMessage="View" />
             </button>
             <button
               onClick={() => handleEditAsset(value)}
               className={styles.actionButton}
             >
-              <FaEdit /> Edit
+              <FaEdit /> <FormattedMessage id="actionEdit" defaultMessage="Edit" />
             </button>
           </div>
         ),
@@ -104,12 +155,6 @@ function AssetTable({ pageCount, setPageNumber, assets }) {
     },
     usePagination
   );
-
-  /*
-  useEffect(() => {
-    setPageNumber(pageIndex + 1);
-  }, [pageIndex, setPageNumber]);
-  */
 
   return (
     <div className={styles.tableContainer}>
