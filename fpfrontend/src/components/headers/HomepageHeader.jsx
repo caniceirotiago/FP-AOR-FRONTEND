@@ -56,11 +56,10 @@ const HomepageHeader = () => {
 
    setNotification(notifications);
 
-   console.log("notifications fetched");
   }
 
   useEffect(() => {
-     fetchNotifications();
+     if(isAuthenticated)fetchNotifications();
   }, []);
 
 
@@ -123,6 +122,17 @@ const HomepageHeader = () => {
         setComposeModalOpen(true);
         markMessageNotificationsAsRead(notifs.id);
         break;
+      case 'PROJECT_JOIN_REQUEST':
+        navigate(`/projectpage/${notifs.projectId}`);
+        markMessageNotificationsAsRead(notifs.id);
+        break;
+      case 'PROJECT_APPROVAL':
+        navigate(`/projectpage/${notifs.projectId}`);
+        markMessageNotificationsAsRead(notifs.id);
+      case 'TASK_RESPONSIBLE':
+        markMessageNotificationsAsRead(notifs.id);
+      case 'TASK_EXECUTER':
+        markMessageNotificationsAsRead(notifs.id);
 
       default:
         break;

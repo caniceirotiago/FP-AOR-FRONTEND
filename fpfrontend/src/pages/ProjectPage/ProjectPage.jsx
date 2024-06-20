@@ -69,7 +69,7 @@ const ProjectPage = () => {
     fetchProjectData();
     fetchLaboratories();
     fetchProjectRoles();
-    fetchProjectLogs();
+    if(canSeeAndEditProjectPlanning) fetchProjectLogs();
     fetchProjectStates();
   }, [isApprovalModalOpen]);
 
@@ -262,15 +262,17 @@ const ProjectPage = () => {
               />
             </div>
             <div className={styles.attributesContainer}>
-              <LogsList logs={projectLogs} />
+              {canSeeAndEditProjectPlanning && <LogsList logs={projectLogs} />}
             </div>
             <div className={styles.chatButtonContainer}>
+              {canSeeAndEditProjectPlanning &&
               <button
                 onClick={handleOpenGroupChat}
                 className={styles.chatButton}
               >
                 Open Group Chat
               </button>
+              }
             </div>
             <GroupChatModal
               selectedChatProject={selectedChatProject}
