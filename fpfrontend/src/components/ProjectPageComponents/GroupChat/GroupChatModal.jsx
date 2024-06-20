@@ -57,7 +57,6 @@ const GroupChatModal = ({
             : [message.messageId],
         };
         sendGroupMessageWS(messageData);
-        console.log("Sending mark as read:", messageData);
       }
     },
     [currentUser]
@@ -76,7 +75,6 @@ const GroupChatModal = ({
   }, [selectedChatProject]);
 
   const updateMessages = useCallback((messages) => {
-    console.log("Messages to mark as read on updateMethod:", messages);
     setMessages((prevMessages) => {
       const newMessages = prevMessages.map((msg) => {
         const found = messages.find((updateMsg) => updateMsg.id === msg.id);
@@ -108,19 +106,17 @@ const GroupChatModal = ({
             selectedChatProject.projectId
           );
           const data = await response.json();
-
           const messagesToMarkAsRead = data
-            .filter((msg) => msg.sender.id !== currentUser.id && !msg.viewed)
-            .map((msg) => msg.id);
-          if (messagesToMarkAsRead.length > 0) {
-            const messageData = {
-              type: "MARK_AS_READ",
-              data: messagesToMarkAsRead,
-            };
-            console.log("Sending mark as read in Fetch Messages: ", messageData);
-            sendGroupMessageWS(messageData);
-          }
-          setMessages(data);
+          .filter((msg) => msg.sender.id !== currentUser.id && !msg.viewed)
+          .map((msg) => msg.messageId);
+        if (messagesToMarkAsRead.length > 0) {
+          const messageData = {
+            type: "MARK_AS_READ",
+            data: messagesToMarkAsRead,
+          };
+          sendGroupMessageWS(messageData);
+        }
+        setMessages(data);
         } catch (err) {
           console.error("Failed to fetch group messages:", err);
           setError("Failed to load group messages");
