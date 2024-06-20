@@ -81,7 +81,7 @@ const GroupChatModal = ({
       const newMessages = prevMessages.map((msg) => {
         const found = messages.find((updateMsg) => updateMsg.id === msg.id);
         if (found) {
-          return { ...msg, viewed: msg.viewed };
+          return { ...msg, viewed: true };
         }
         return msg;
       });
@@ -117,10 +117,9 @@ const GroupChatModal = ({
               type: "MARK_AS_READ",
               data: messagesToMarkAsRead,
             };
-            console.log("Sending mark as read:", messageData);
+            console.log("Sending mark as read in Fetch Messages: ", messageData);
             sendGroupMessageWS(messageData);
           }
-
           setMessages(data);
         } catch (err) {
           console.error("Failed to fetch group messages:", err);
