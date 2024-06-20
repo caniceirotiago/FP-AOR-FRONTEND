@@ -49,6 +49,7 @@ export const useGroupMessageWebSocket = (
 
   const sendGroupMessageWS = (data) => {
     console.log("Sending WebSocket Message:", data);
+  
     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
       ws.current.send(JSON.stringify(data));
     } else {
