@@ -11,7 +11,6 @@ import "react-chat-elements/dist/main.css";
 import styles from "./ComposeEmailModal.module.css";
 import generalService from "../../../services/generalService";
 import individualMessageService from "../../../services/individualMessageService";
-import { set } from "date-fns";
 import useDomainStore from "../../../stores/useDomainStore";
 import Cookies from "js-cookie";
 import { useIndividualMessageWebSocket } from "../../../websockets/useIndividualMessageWebSocket";
@@ -51,7 +50,6 @@ const ComposeEmailModal = ({
   );
 
   const updateMessages = useCallback((messages) => {
-    console.log("Messages to mark as read on updateMethod:", messages);
     setMessagesModal((prevMessages) => {
       const newMessages = prevMessages.map((msg) => {
         const found = messages.find((updateMsg) => updateMsg.id === msg.id);

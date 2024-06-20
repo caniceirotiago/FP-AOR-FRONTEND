@@ -26,11 +26,9 @@ export const useGroupMessageWebSocket = (
     ws.current.onmessage = (e) => {
       try {
         const message = JSON.parse(e.data);
-        console.log("WebSocket Group Message:", message);
         if (message.type === "NEW_GROUP_MESSAGE") {
           onMessage(message.data);
         }
-
         if (message.type === "MARK_AS_READ") {
           updateMessages(message.data);
         }
@@ -49,7 +47,7 @@ export const useGroupMessageWebSocket = (
 
   const sendGroupMessageWS = (data) => {
     console.log("Sending WebSocket Message:", data);
-  
+
     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
       ws.current.send(JSON.stringify(data));
     } else {
