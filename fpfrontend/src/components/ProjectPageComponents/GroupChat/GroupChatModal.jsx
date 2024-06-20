@@ -29,7 +29,10 @@ const GroupChatModal = ({
   const location = useLocation();
   const messagesEndRef = useRef(null);
   const currentUser = useMemo(() => {
-    return { id: parseInt(localStorage.getItem("userId")), username: localStorage.getItem("username") };
+    return {
+      id: parseInt(localStorage.getItem("userId")),
+      username: localStorage.getItem("username"),
+    };
   }, []);
 
   const handleCloseGroupChatModal = () => {
@@ -40,26 +43,24 @@ const GroupChatModal = ({
 
   const onMessage = useCallback(
     (message) => {
-      console.log("Received WebSocket message: == onMessage = useCallback: ", message);
-
-      // Avoid processing the same message multiple times
-      setMessages((prevMessages) => {
-          return [...prevMessages, message];
-      });
+      setMessages((prevMessages) => [...prevMessages, message]);
 
       if (
         currentUser &&
         message.sender.id === currentUser.id &&
-        !message.viewed
+        !message.isViewed
       ) {
         const messageData = {
           type: "MARK_AS_READ",
-          data: Array.isArray(message.messageId) ? message.messageId : [message.messageId],
+          data: Array.isArray(message.messageId)
+            ? message.messageId
+            : [message.messageId],
         };
         sendGroupMessageWS(messageData);
+        console.log("Sending mark as read:", messageData);
       }
     },
-    []
+    [currentUser]
   );
 
   const wsUrl = useMemo(() => {
@@ -87,6 +88,7 @@ const GroupChatModal = ({
       return newMessages;
     });
   }, []);
+  
 
   const { sendGroupMessageWS } = useGroupMessageWebSocket(
     wsUrl,
@@ -106,6 +108,18 @@ const GroupChatModal = ({
             selectedChatProject.projectId
           );
           const data = await response.json();
+
+          const messagesToMarkAsRead = data
+            .filter((msg) => msg.sender.id !== currentUser.id && !msg.viewed)
+            .map((msg) => msg.id);
+          if (messagesToMarkAsRead.length > 0) {
+            const messageData = {
+              type: "MARK_AS_READ",
+              data: messagesToMarkAsRead,
+            };
+            console.log("Sending mark as read in Fetch Messages: ", messageData);
+            sendGroupMessageWS(messageData);
+          }
           setMessages(data);
         } catch (err) {
           console.error("Failed to fetch group messages:", err);
@@ -118,10 +132,11 @@ const GroupChatModal = ({
     fetchMessages();
   }, [isGroupChatModalOpen, selectedChatProject, navigate]);
 
+
   // Scroll to bottom when messages update
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current.scrollIntoView();
     }
   }, [messages]);
 
@@ -181,7 +196,7 @@ const GroupChatModal = ({
                 type={"text"}
                 text={msg.content}
                 date={new Date(msg.sentTime)}
-                status={msg.isViewed ? "viewed" : "sent"}
+                status={msg.viewed ? "read" : "sent"}
                 title={displayName}
                 onTitleClick={() =>
                   navigate(`/userProfile/${msg.sender.username}`)

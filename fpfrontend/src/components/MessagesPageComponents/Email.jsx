@@ -29,6 +29,7 @@ const Email = () => {
       setPageCount(newPageCount);
       if (newPageCount <= 1) {
         setPageNumber(1);
+        setPageCount(1);
       }
     } catch (error) {
       console.error('Error fetching messages:', error.message);
