@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./InventoryPage.module.css";
 import { useLocation } from "react-router-dom";
+import { FormattedMessage, useIntl } from "react-intl";
 import AssetTable from "../../components/InventoryComponents/AssetsTable/AssetTable.jsx";
 import CreateAssetModal from "../../components/InventoryComponents/AssetsModal/CreateAssetModal.jsx";
 import assetService from "../../services/assetService";
@@ -27,7 +28,7 @@ const InventoryPage = () => {
     orderBy: "",
   };
   const [filters, setFilters] = useState(defaultFilters);
-   
+
   const [filterType, setFilterType] = useState("name", "type");
 
   function getInitialPageSize() {
@@ -64,6 +65,8 @@ const InventoryPage = () => {
     };
   }, [dimensions.width]);
 
+  const intl = useIntl(); // Initialize useIntl hook
+
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const newFilters = {};
@@ -99,13 +102,13 @@ const InventoryPage = () => {
       orderBy: e.target.value,
     });
   };
-  
+
   const handleClearFilters = () => {
     setFilters(defaultFilters);
     setFilterType("name"); // Reset filter type to default
     setPageSize(getInitialPageSize()); // Reset page size (if needed)
     setPageNumber(1);
-  };  
+  };
 
   const handleFilterTypeChange = (e) => {
     setFilterType(e.target.value);
@@ -142,7 +145,6 @@ const InventoryPage = () => {
     setIsCreateModalOpen(true);
   };
 
-
   return (
     <div className={styles.inventoryPage}>
       <div className={styles.controlPanel}>
@@ -154,14 +156,14 @@ const InventoryPage = () => {
           <button
             onClick={handleClick}
             className={`${styles.iconButton} ${styles.createButton}`}
-            data-text="Create"
+            data-text={intl.formatMessage({ id: "createButtonText" })}
           >
             <FaPlus className={styles.svgIcon} />
           </button>
           <button
             onClick={toggleFiltersVisibility}
             className={styles.iconButton}
-            data-text="Filter"
+            data-text={intl.formatMessage({ id: "filterButtonText" })}
           >
             <FaFilter className={styles.svgIcon} />
           </button>
@@ -169,68 +171,146 @@ const InventoryPage = () => {
         {filtersVisible && (
           <div className={styles.filters}>
             <select value={filterType} onChange={handleFilterTypeChange}>
-              <option value="name">Name</option>
-              <option value="manufacturer">Manufacturer</option>
-              <option value="partNumber">Part Number</option>
+              <option value="name">
+                <FormattedMessage id="filterByName" defaultMessage="Name" />
+              </option>
+              <option value="manufacturer">
+                <FormattedMessage
+                  id="filterByManufacturer"
+                  defaultMessage="Manufacturer"
+                />
+              </option>
+              <option value="partNumber">
+                <FormattedMessage
+                  id="filterByPartNumber"
+                  defaultMessage="Part Number"
+                />
+              </option>
             </select>
             <input
               name={filterType}
-              placeholder={
-                filterType.charAt(0).toUpperCase() + filterType.slice(1)
-              }
+              placeholder={intl.formatMessage(
+                { id: "filterPlaceholder" },
+                {
+                  type:
+                    filterType.charAt(0).toUpperCase() + filterType.slice(1),
+                }
+              )}
               value={filters[filterType]}
               onChange={handleFilterChange}
             />
-            <select name="type" value={filters.type} onChange={handleFilterChange}>
-              <option value="">Select type</option>
+            <select
+              name="type"
+              value={filters.type}
+              onChange={handleFilterChange}
+            >
+              <option value="">
+                <FormattedMessage
+                  id="selectType"
+                  defaultMessage="Select type"
+                />
+              </option>
               {types.map((assetType) => (
                 <option key={assetType} value={assetType}>
                   {assetType}
                 </option>
               ))}
             </select>
-            <select name="sortBy" value={filters.sortBy} onChange={handleSortChange}>
-              <option value="">Sort By</option>
-              <option value="type">Type</option>
-              <option value="manufacturer">Manufacturer</option>
-              <option value="partNumber">Part Number</option>
+            <select
+              name="sortBy"
+              value={filters.sortBy}
+              onChange={handleSortChange}
+            >
+              <option value="">
+                <FormattedMessage id="sortBy" defaultMessage="Sort By" />
+              </option>
+              <option value="type">
+                <FormattedMessage id="sortByType" defaultMessage="Type" />
+              </option>
+              <option value="manufacturer">
+                {" "}
+                <FormattedMessage
+                  id="sortByManufacturer"
+                  defaultMessage="Manufacturer"
+                />
+              </option>
+              <option value="partNumber">
+                {" "}
+                <FormattedMessage
+                  id="sortByPartNumber"
+                  defaultMessage="Part Number"
+                />
+              </option>
             </select>
-            <select name="orderBy" value={filters.orderBy} onChange={handleOrderChange}>
-              <option value="">Order By</option>
-              <option value="asc">Ascending</option>
-              <option value="desc">Descending</option>
+            <select
+              name="orderBy"
+              value={filters.orderBy}
+              onChange={handleOrderChange}
+            >
+              <option value="">
+                <FormattedMessage id="orderBy" defaultMessage="Order By" />
+              </option>
+              <option value="asc">
+                {" "}
+                <FormattedMessage
+                  id="orderByAscending"
+                  defaultMessage="Ascending"
+                />
+              </option>
+              <option value="desc">
+                {" "}
+                <FormattedMessage
+                  id="orderByDescending"
+                  defaultMessage="Descending"
+                />
+              </option>
             </select>
-            <button onClick={handleClearFilters}>Clear Filters</button>
+            <button onClick={handleClearFilters}>
+              <FormattedMessage
+                id="clearFilters"
+                defaultMessage="Clear Filters"
+              />
+            </button>
           </div>
         )}
       </div>
       <div className={styles.assetsPanel}>
-      <AssetTable
-        pageCount={pageCount}
-        setPageNumber={setPageNumber}
-        assets={assets}
-      />
-      <div className={styles.pagination}>
+        <AssetTable
+          pageCount={pageCount}
+          setPageNumber={setPageNumber}
+          assets={assets}
+        />
+        <div className={styles.pagination}>
           <button onClick={() => setPageNumber(1)} disabled={pageNumber === 1}>
-            {'<<'}
+            {"<<"}
           </button>
-          <button onClick={() => setPageNumber(pageNumber - 1)} disabled={pageNumber === 1}>
-            {'<'}
+          <button
+            onClick={() => setPageNumber(pageNumber - 1)}
+            disabled={pageNumber === 1}
+          >
+            {"<"}
           </button>
-          <button onClick={() => setPageNumber(pageNumber + 1)} disabled={pageNumber === pageCount}>
-            {'>'}
+          <button
+            onClick={() => setPageNumber(pageNumber + 1)}
+            disabled={pageNumber === pageCount}
+          >
+            {">"}
           </button>
-          <button onClick={() => setPageNumber(pageCount)} disabled={pageNumber === pageCount}>
-            {'>>'}
+          <button
+            onClick={() => setPageNumber(pageCount)}
+            disabled={pageNumber === pageCount}
+          >
+            {">>"}
           </button>
           <span>
-            Page{' '}
+            <FormattedMessage id="pageInfo" defaultMessage="Page" />{" "}
             <strong>
-              {pageNumber} of {pageCount}
+              {pageNumber} <FormattedMessage id="ofInfo" defaultMessage="of" />{" "}
+              {pageCount}
             </strong>
           </span>
         </div>
-        </div>
+      </div>
     </div>
   );
 };
