@@ -143,11 +143,12 @@ const projectService = {
       const response = await fetch(
         `${MEMBER_BASE_URL}/ask/join/${projectId}`,
         {
-          method: "PUT",
+          method: "POST",
           headers: getAuthHeaders(),
           credentials: "include",
         }
       );
+      console.log(response);
       checkStatus(response);
       return response;
     } catch (error) {

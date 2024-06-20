@@ -21,6 +21,7 @@ import  useComposeEmailModal  from '../../stores/useComposeEmailModal.jsx';
 
 
 
+
 const HomepageHeader = () => {
   
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -55,11 +56,10 @@ const HomepageHeader = () => {
 
    setNotification(notifications);
 
-   console.log("notifications fetched");
   }
 
   useEffect(() => {
-     fetchNotifications();
+     if(isAuthenticated)fetchNotifications();
   }, []);
 
 
@@ -106,7 +106,7 @@ const HomepageHeader = () => {
       return entries;
   };
  const markMessageNotificationsAsRead = async (notifId) => {
-    await notificationService.markMessageNotificationsAsRead(notifId);
+    await notificationService.markNotificationsAsRead(notifId);
     fetchNotifications();
   };
   const username = localStorage.getItem("username");
@@ -122,6 +122,17 @@ const HomepageHeader = () => {
         setComposeModalOpen(true);
         markMessageNotificationsAsRead(notifs.id);
         break;
+      case 'PROJECT_JOIN_REQUEST':
+        navigate(`/projectpage/${notifs.projectId}`);
+        markMessageNotificationsAsRead(notifs.id);
+        break;
+      case 'PROJECT_APPROVAL':
+        navigate(`/projectpage/${notifs.projectId}`);
+        markMessageNotificationsAsRead(notifs.id);
+      case 'TASK_RESPONSIBLE':
+        markMessageNotificationsAsRead(notifs.id);
+      case 'TASK_EXECUTER':
+        markMessageNotificationsAsRead(notifs.id);
 
       default:
         break;
