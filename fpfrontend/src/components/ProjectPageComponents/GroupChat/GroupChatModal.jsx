@@ -75,11 +75,12 @@ const GroupChatModal = ({
     return `${newWsUrl}`;
   }, [selectedChatProject]);
 
-  const updateMessages = useCallback((messageIds) => {
-    console.log("Messages to mark as read on updateMethod:", messageIds);
+  const updateMessages = useCallback((messages) => {
+    console.log("Messages to mark as read on updateMethod:", messages);
     setMessages((prevMessages) => {
       const newMessages = prevMessages.map((msg) => {
-        if (messageIds.includes(msg.id)) {
+        const found = messages.find((updateMsg) => updateMsg.id === msg.id);
+        if (found) {
           return { ...msg, viewed: true };
         }
         return msg;
@@ -129,7 +130,7 @@ const GroupChatModal = ({
       }
     };
     fetchMessages();
-  }, [isGroupChatModalOpen, selectedChatProject, navigate, sendGroupMessageWS, currentUser.id]);
+  }, [isGroupChatModalOpen, selectedChatProject, navigate]);
 
 
   // Scroll to bottom when messages update
