@@ -106,7 +106,7 @@ const InventoryPage = () => {
   const handleClearFilters = () => {
     setFilters(defaultFilters);
     setFilterType("name"); // Reset filter type to default
-    setPageSize(getInitialPageSize()); // Reset page size (if needed)
+    setPageSize(getInitialPageSize()); // Reset page size to default
     setPageNumber(1);
   };
 
@@ -280,6 +280,7 @@ const InventoryPage = () => {
           setPageNumber={setPageNumber}
           assets={assets}
         />
+        {pageCount > 1 && (
         <div className={styles.pagination}>
           <button onClick={() => setPageNumber(1)} disabled={pageNumber === 1}>
             {"<<"}
@@ -305,11 +306,13 @@ const InventoryPage = () => {
           <span>
             <FormattedMessage id="pageInfo" defaultMessage="Page" />{" "}
             <strong>
-              {pageNumber} <FormattedMessage id="ofInfo" defaultMessage="of" />{" "}
+              {pageNumber}
+               <FormattedMessage id="ofInfo" defaultMessage="of" />{" "}
               {pageCount}
             </strong>
           </span>
         </div>
+        )}
       </div>
     </div>
   );

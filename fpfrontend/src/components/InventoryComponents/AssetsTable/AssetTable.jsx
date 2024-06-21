@@ -28,30 +28,15 @@ function AssetTable({ pageCount, assets }) {
   const columns = useMemo(
     () => [
       {
-        Header: (
-          <FormattedMessage
-            id="tableHeaderId"
-            defaultMessage="ID"
-          />
-        ),
+        Header: <FormattedMessage id="tableHeaderId" defaultMessage="ID" />,
         accessor: "id",
       },
       {
-        Header: (
-          <FormattedMessage
-            id="tableHeaderName"
-            defaultMessage="Name"
-          />
-        ),
+        Header: <FormattedMessage id="tableHeaderName" defaultMessage="Name" />,
         accessor: "name",
       },
       {
-        Header: (
-          <FormattedMessage
-            id="tableHeaderType"
-            defaultMessage="Type"
-          />
-        ),
+        Header: <FormattedMessage id="tableHeaderType" defaultMessage="Type" />,
         accessor: "type",
       },
       {
@@ -110,10 +95,7 @@ function AssetTable({ pageCount, assets }) {
       },
       {
         Header: (
-          <FormattedMessage
-            id="tableHeaderActions"
-            defaultMessage="Actions"
-          />
+          <FormattedMessage id="tableHeaderActions" defaultMessage="Actions" />
         ),
         id: "actions",
         accessor: "id",
@@ -123,13 +105,15 @@ function AssetTable({ pageCount, assets }) {
               onClick={handleViewAsset(value)}
               className={styles.actionButton}
             >
-              <FaEye /> <FormattedMessage id="actionView" defaultMessage="View" />
+              <FaEye />{" "}
+              <FormattedMessage id="actionView" defaultMessage="View" />
             </button>
             <button
               onClick={() => handleEditAsset(value)}
               className={styles.actionButton}
             >
-              <FaEdit /> <FormattedMessage id="actionEdit" defaultMessage="Edit" />
+              <FaEdit />{" "}
+              <FormattedMessage id="actionEdit" defaultMessage="Edit" />
             </button>
           </div>
         ),
@@ -171,7 +155,7 @@ function AssetTable({ pageCount, assets }) {
               </tr>
             ))}
           </thead>
-   
+
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row);

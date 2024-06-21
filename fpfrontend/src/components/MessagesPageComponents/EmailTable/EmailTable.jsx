@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './EmailTable.module.css';
 
-const EmailTable = ({ view, messages, onSelectUser, pageNumber, setPageNumber, pageCount }) => {
+const EmailTable = ({ view, messages, onSelectUser }) => {
   const handleMsgClick = (msg) => {
     onSelectUser(msg);
   };
