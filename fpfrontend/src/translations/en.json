@@ -110,7 +110,17 @@
     "tableHeaderObservations": "Observations",
     "tableHeaderActions": "Actions",
     "actionView": "View",
-    "actionEdit": "Edit"
+    "actionEdit": "Edit",
+    "assetName": "Asset Name",
+    "type": "Type",
+    "description": "Description",
+    "stockQuantity": "Stock Quantity",
+    "partNumber": "Part Number",
+    "manufacturer": "Manufacturer",
+    "manufacturerPhone": "Manufacturer Phone",
+    "observations": "Observations",
+    "submitButton": "Submit",
+    "assetCreatedSuccess": "Asset created successfully!"
 
     }
   

@@ -4,7 +4,7 @@ import styles from "./CreateAssetModal.module.css";
 import "react-datepicker/dist/react-datepicker.css";
 import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
 import useAssetTypeStore from "../../../stores/useAssetsStore.jsx";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 
 const CreateAssetModal = ({ isOpen, onClose }) => {
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
@@ -40,7 +40,11 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
       const response = await assetService.createAsset(assetData);
       if (response.ok) {
         // Handle success
-        setDialogMessage("Asset created successfully!");
+        setDialogMessage(
+          <FormattedMessage
+          id="assetCreatedSuccess"
+          defaultMessage="Asset created successfully!"
+        />);
         setAlertType("success");
         setIsDialogOpen(true);
         setOnConfirm(() => {
@@ -80,7 +84,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
         </div>
         <div className={styles.formContainer}>
           <form className={styles.form} onSubmit={handleSubmit}>
-            <label className={styles.label}>Asset Name</label>
+            <label className={styles.label}><FormattedMessage id="assetName" defaultMessage="Asset Name" /></label>
             <input
               className={styles.input}
               type="text"
@@ -89,7 +93,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               required
             />
-            <label className={styles.label}>Type</label>
+            <label className={styles.label}><FormattedMessage id="type" defaultMessage="Type" /></label>
             <select
               className={styles.select}
               name="type"
@@ -97,14 +101,14 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               required
             >
-              <option value="">Select a type</option>
+              <option value=""><FormattedMessage id="selectType" defaultMessage="Select a type" /></option>
               {types.map((type) => (
                 <option key={type} value={type}>
                   {type}
                 </option>
               ))}
             </select>
-            <label className={styles.label}>Description</label>
+            <label className={styles.label}><FormattedMessage id="description" defaultMessage="Description" /></label>
             <textarea
               className={styles.textarea}
               name="description"
@@ -112,7 +116,10 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               required
             />
-            <label className={styles.label}>Stock Quantity</label>
+            <label className={styles.label}><FormattedMessage
+                id="stockQuantity"
+                defaultMessage="Stock Quantity"
+              /></label>
             <input
               className={styles.input}
               type="number"
@@ -121,7 +128,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               required
             />
-            <label className={styles.label}>Part Number</label>
+            <label className={styles.label}><FormattedMessage id="partNumber" defaultMessage="Part Number" /></label>
             <input
               className={styles.input}
               type="text"
@@ -130,7 +137,10 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               required
             />
-            <label className={styles.label}>Manufacturer</label>
+            <label className={styles.label}><FormattedMessage
+                id="manufacturer"
+                defaultMessage="Manufacturer"
+              /></label>
             <input
               className={styles.input}
               type="text"
@@ -139,7 +149,10 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               required
             />
-            <label className={styles.label}>Manufacturer Phone</label>
+            <label className={styles.label}> <FormattedMessage
+                id="manufacturerPhone"
+                defaultMessage="Manufacturer Phone"
+              /></label>
             <input
               className={styles.input}
               type="text"
@@ -148,7 +161,10 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               required
             />
-            <label className={styles.label}>Observations</label>
+            <label className={styles.label}><FormattedMessage
+                id="observations"
+                defaultMessage="Observations"
+              /></label>
             <textarea
               className={styles.textarea}
               name="observations"
@@ -156,7 +172,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
             />
             <button type="submit" className={styles.button}>
-              Submit
+            <FormattedMessage id="submitButton" defaultMessage="Submit" />
             </button>
           </form>
         </div>

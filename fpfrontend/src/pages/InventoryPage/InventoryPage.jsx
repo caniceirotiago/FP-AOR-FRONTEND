@@ -65,7 +65,7 @@ const InventoryPage = () => {
     };
   }, [dimensions.width]);
 
-  const intl = useIntl(); // Initialize useIntl hook
+  const intl = useIntl();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);

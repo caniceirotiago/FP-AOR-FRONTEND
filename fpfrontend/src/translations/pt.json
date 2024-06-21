@@ -110,6 +110,16 @@
     "tableHeaderObservations": "Observações",
     "tableHeaderActions": "Acções",
     "actionView": "Ver",
-    "actionEdit": "Editar"
+    "actionEdit": "Editar",
+    "assetName": "Nome",
+    "type": "Tipo",
+    "description": "Descrição",
+    "stockQuantity": "Quantidade em Stock",
+    "partNumber": "Número de Série",
+    "manufacturer": "Fabricante",
+    "manufacturerPhone": "Contacto do Fabricante",
+    "observations": "Observações",
+    "submitButton": "Enviar",
+    "assetCreatedSuccess": "Ativo criado com sucesso!"
   }
   
