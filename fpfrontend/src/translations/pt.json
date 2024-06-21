@@ -141,6 +141,25 @@
   "add": "Adicionar",
   "remove": "Remover",
   "cancel": "Cancelar",
-  "confirm": "Confirmar"
-
+  "confirm": "Confirmar",
+  "tableHeaderState": "Estado",
+  "tableHeaderCreationDate": "Data Criação Date",
+  "tableHeaderFinalDate": "Data Final",
+  "tableHeaderLaboratory": "Laboratório",
+  "tableHeaderMembers": "Número de Membros",
+  "tableHeaderCreatedBy": "Criado por",
+  "actionPlan": "Plano",
+  "openSlots": "{slots} vagas disponíveis",
+  "members": "Membros",
+  "cardsButtonText": "Cartões",
+  "tableButtonText": "Tabela",
+  "inbox": "Recebidos",
+  "sent": "Enviados",
+  "compose": "Compor",
+  "searchPlaceholder": "Procurar",
+  "from": "De",
+  "to": "Para",
+  "subject": "Assunto",
+  "date": "Data",
+  "content": "Mensagem"
 }

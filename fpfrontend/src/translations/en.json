@@ -141,6 +141,25 @@
   "add": "Add",
   "remove": "Remove",
   "cancel": "Cancel",
-  "confirm": "Confirm"
-
+  "confirm": "Confirm",
+  "tableHeaderState": "State",
+  "tableHeaderCreationDate": "Creation Date",
+  "tableHeaderFinalDate": "Final Date",
+  "tableHeaderLaboratory": "Laboratory",
+  "tableHeaderMembers": "Number of Members",
+  "tableHeaderCreatedBy": "Created By",
+  "actionPlan": "Plan",
+  "openSlots": "{slots} open slots",
+  "members": "Members",
+  "cardsButtonText": "Cards",
+  "tableButtonText": "Table",
+  "inbox": "Inbox",
+  "sent": "Sent",
+  "compose": "Compose",
+  "searchPlaceholder": "Search",
+  "from": "From",
+  "to": "To",
+  "subject": "Subject",
+  "date": "Date",
+  "content": "Content"
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./HomePage.module.css";
 import ProjectTable from "../../components/HomePageComponents/ProjectTable/ProjectTable.jsx";
 import ProtectedComponents from "../../components/auth regist/ProtectedComponents";
@@ -43,6 +44,7 @@ const HomePage = () => {
   });
   const { states, fetchProjectStates } = useProjectStatesStore();
   const [filterType, setFilterType] = useState("name");
+  const intl = useIntl();
 
   function getInitialPageSize() {
     const width = dimensions.width;
@@ -184,6 +186,10 @@ const HomePage = () => {
     }
   };
 
+  const buttonText = view === "table"
+    ? intl.formatMessage({ id: "cardsButtonText" })
+    : intl.formatMessage({ id: "tableButtonText" });
+
   const toggleFiltersVisibility = () => {
     setFiltersVisible(!filtersVisible);
   };
@@ -200,7 +206,7 @@ const HomePage = () => {
             <button
               onClick={handleClick}
               className={`${styles.iconButton} ${styles.createButton}`}
-              data-text="Create"
+              data-text={intl.formatMessage({ id: "createButtonText" })}
             >
               <FaPlus className={styles.svgIcon} />
             </button>
@@ -210,7 +216,7 @@ const HomePage = () => {
               <button
                 onClick={toggleView}
                 className={styles.iconButton}
-                data-text={view === "table" ? "Cards" : "Table"}
+                data-text={buttonText}
               >
                 {view === "table" ? (
                   <FaTh className={styles.svgIcon} />
@@ -223,7 +229,7 @@ const HomePage = () => {
           <button
             onClick={toggleFiltersVisibility}
             className={styles.iconButton}
-            data-text="Filter"
+            data-text={intl.formatMessage({ id: "filterButtonText" })}
           >
             <FaFilter className={styles.svgIcon} />
           </button>
@@ -295,26 +301,12 @@ const HomePage = () => {
           <ProjectTable
             projects={projects}
             pageCount={pageCount}
-            filters={filters}
-            setFilters={setFilters}
-            pageSize={pageSize}
-            setPageSize={setPageSize}
             setPageNumber={setPageNumber}
-            pageNumber={pageNumber}
-            labs={laboratories}
           />
         ) : (
           <ProjectCards
-            pageNumber={pageNumber}
-            projects={projects}
-            pageCount={pageCount}
-            filters={filters}
-            setFilters={setFilters}
-            pageSize={pageSize}
-            setPageSize={setPageSize}
-            setPageNumber={setPageNumber}
+            projects={projects}          
             isAuthenticated={isAuthenticated}
-            labs={laboratories}
           />
         )}{pageCount > 1 && (
           <div className={styles.pagination}>
@@ -340,14 +332,15 @@ const HomePage = () => {
             {">>"}
           </button>
           <span>
-            Page{" "}
+          <FormattedMessage id="pageInfo" defaultMessage="Page" />{" "}
             <strong>
-              {pageNumber} of {pageCount}
+              {pageNumber} 
+              <FormattedMessage id="ofInfo" defaultMessage="of" />{" "}
+               {pageCount}
             </strong>
           </span>
         </div>
         )}
-        
       </div>
     </div>
   );
