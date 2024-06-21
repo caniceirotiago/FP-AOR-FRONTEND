@@ -109,7 +109,8 @@
   gap: 5px;
   padding: 0px 0px;
   width: 100%;
-  padding-bottom: 30px;
+  padding-bottom: 60px;
+  
 }
 
 .pagination button {
@@ -120,6 +121,7 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  
 }
 
 .pagination button:disabled {

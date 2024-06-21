@@ -13,13 +13,14 @@ import useProjectStatesStore from "../../stores/useProjectStatesStore.jsx";
 import { FaTable, FaTh, FaPlus, FaFilter } from "react-icons/fa";
 import useAuthStore from "../../stores/useAuthStore.jsx";
 import useDeviceStore from "../../stores/useDeviceStore.jsx";
+import useLayoutStore from "../../stores/useLayoutStore.jsx";
 
 const HomePage = () => {
   const { dimensions, deviceType } = useDeviceStore();
   const { isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedView, setSelectedView] = useState("table");
+  const {selectedView, setSelectedView} = useLayoutStore();
   const { view, setView } = useTableCardView();
   const [projects, setProjects] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
@@ -49,8 +50,10 @@ const HomePage = () => {
       return 5;
     } else if (width < 1200 && width >= 600) {
       return 6;
-    } else if (width >= 1200) {
-      return 8;
+    } else if (width < 1600 && width >= 1200) {
+      return 10;
+    }else if (width >= 1600) {
+      return 20;
     }
     return 5;
   }
@@ -63,8 +66,10 @@ const HomePage = () => {
       newPageSize = 5;
     } else if (width < 1200 && width >= 600) {
       newPageSize = 6;
-    } else if (width >= 1200) {
-      newPageSize = 8;
+    } else if (width < 1600 && width >= 1200) {
+      newPageSize = 10;
+    }else if (width >= 1600) {
+      newPageSize = 20;
     }
     setPageSize(newPageSize);
   };
@@ -311,8 +316,8 @@ const HomePage = () => {
             isAuthenticated={isAuthenticated}
             labs={laboratories}
           />
-        )}
-        <div className={styles.pagination}>
+        )}{pageCount > 1 && (
+          <div className={styles.pagination}>
           <button onClick={() => setPageNumber(1)} disabled={pageNumber === 1}>
             {"<<"}
           </button>
@@ -341,6 +346,8 @@ const HomePage = () => {
             </strong>
           </span>
         </div>
+        )}
+        
       </div>
     </div>
   );

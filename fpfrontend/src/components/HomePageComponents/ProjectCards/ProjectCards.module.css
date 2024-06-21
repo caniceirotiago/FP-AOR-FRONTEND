@@ -26,7 +26,7 @@
   background: var(--card-background);
   padding: 5px;
   overflow: hidden;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 20px 0px;
+  box-shadow: var(--card-shadow);
   transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   cursor: pointer;
   position: relative;
@@ -43,7 +43,7 @@
   border-radius: 15px;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(45deg, rgb(4, 159, 187) 0%, rgb(80, 246, 255) 100%);
+  background: blue;
   position: relative;
 }
 
@@ -96,6 +96,24 @@
   object-fit: cover;
   border: 2px solid white;
 }
+.thumbnail:hover {
+  animation: shake 0.5s;
+}
+.projectPlaningBtn {
+  background: var(--color-planning);
+  color: var(--text-color2);
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 17px;
+  position: absolute;
+  top: 107px;
+  right: 10px;
+}
+
+.projectPlaningBtn:hover {
+  background: #ffc107;
+  animation: shake 0.5s;
+}
 
 .moreMembers {
   font-size: 12px;
@@ -119,7 +137,7 @@
   padding: 2px 5px;
   border-radius: 5px;
   font-size: 10px;
-  color: var(--btn-background1);
+  color: var(--vacancies-color);
   z-index: 1;
 }
 
@@ -165,5 +183,20 @@
 .item:nth-child(2) {
   border-left: 1px solid rgba(255, 255, 255, 0.126);
   border-right: 1px solid rgba(255, 255, 255, 0.126);
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateX(0px) rotate(-10deg);
+  }
+  50% {
+    transform: translateX(0px) rotate(10deg);
+  }
+  75% {
+    transform: translateX(0px) rotate(-10deg);
+  }
 }
 
