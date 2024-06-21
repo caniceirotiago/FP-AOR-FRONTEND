@@ -101,7 +101,7 @@ function ProjectCards({ projects, pageCount, filters, setFilters, pageSize, setP
             <div className={styles.topSection} style={{ backgroundImage: stateColorsBriefcaseBackground[project.state] }}>
               <div className={styles.border}></div>
               <div className={styles.thumbnails} >
-                {canSeeAndEditProjectPlanning(project) && 
+                {(canSeeAndEditProjectPlanning(project) && isAuthenticated) && 
                 <div className={styles.projectPlaningBtn} onClick={(e) =>handleClickToOpenProjectPlanningPage(e, project.id)}><FaChartGantt/> </div>}
                 {renderMemberThumbnails(project.members)}
               </div>

@@ -43,6 +43,8 @@ body.theme-light {
   --vacancies-color: #8458f4;
   --card-shadow: rgba(4, 0, 255, 0.155)  0px 7px 20px 0px;
   --briefcase-base-color:  rgb(80, 246, 255);
+  --active-aside-item-color: #b9cbdd;
+  --hover-aside-item-color: #dbe1e8;
 
 }
 
@@ -69,6 +71,8 @@ body.theme-dark {
   --vacancies-color: #a4c7fc;
   --card-shadow: rgba(252, 252, 252, 0.209)  2px 2px 7px 2px;
   --briefcase-base-color:  rgb(39, 59, 237);
+  --active-aside-item-color: #2b435d;
+  --hover-aside-item-color: #424e5c;
 
 }
 

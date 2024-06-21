@@ -5,7 +5,7 @@
   background-color: var(--background-color1);
   border-right: solid 2px var(--card-border);
   transition: width 0.5s ease-in-out;
-  min-width: 220px;
+  width: 220px;
 }
 
 .asideCollapsed {
@@ -35,11 +35,22 @@
   color: var(--text-color4);
   text-decoration: none;
   height: 20px;
+  border-radius: 3px;
+  overflow: hidden;
 }
 
+.menuItem.active {
+  background-color: var(--active-aside-item-color); /* Define a cor de fundo para o item ativo */
+}
 .icon {
   margin-right: 10px; 
   transition: transform 0.5s ease; 
+}
+
+.icon.active {
+  background-color: var(--selected-icon-background); /* Define a cor de fundo ao redor do ícone ativo */
+  border-radius: 50%; /* Torna o fundo do ícone em formato de círculo */
+  padding: 5px;
 }
 
 .menuText {
@@ -65,7 +76,7 @@
 }
 
 .menuItem:hover, .menuItem a:hover {
-  background-color: var(--background-color1);
+  background-color: var(--hover-aside-item-color); 
 }
 .asideExpanded, .asideCollapsed {
   transition: width 0.5s ease-in-out, padding 0.5s ease-in-out;
