@@ -92,7 +92,7 @@ const Email = () => {
         </div>
         <input
           type="text"
-          placeholder={<FormattedMessage id="searchPlaceholder" defaultMessage="Search" />}
+          placeholder={intl.formatMessage({ id: "searchPlaceholder" })}
           value={filters.search}
           onChange={handleFilterChange}
           className={styles.searchInput}

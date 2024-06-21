@@ -156,6 +156,10 @@
   "inbox": "Inbox",
   "sent": "Sent",
   "compose": "Compose",
-  "searchPlaceholder": "Search"
-
+  "searchPlaceholder": "Search",
+  "from": "From",
+  "to": "To",
+  "subject": "Subject",
+  "date": "Date",
+  "content": "Content"
 }

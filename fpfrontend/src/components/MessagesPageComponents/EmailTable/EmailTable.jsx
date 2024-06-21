@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import styles from './EmailTable.module.css';
 
 const EmailTable = ({ view, messages, onSelectUser }) => {
@@ -13,10 +14,22 @@ const EmailTable = ({ view, messages, onSelectUser }) => {
         <thead >
           <tr>
             <th></th>
-            <th className={styles.header}>{view === 'inbox' ? 'From' : 'To'}</th>
-            <th className={styles.header}>Subject</th>
-            <th className={styles.header}>Date</th>
-            <th className={styles.header}>Content</th>
+            <th className={styles.header}>
+            {view === 'inbox' ? (
+                  <FormattedMessage id="from" defaultMessage="From" />
+                ) : (
+                  <FormattedMessage id="to" defaultMessage="To" />
+                )}
+                </th>
+                <th className={styles.header}>
+                <FormattedMessage id="subject" defaultMessage="Subject" />
+              </th>
+              <th className={styles.header}>
+                <FormattedMessage id="date" defaultMessage="Date" />
+              </th>
+              <th className={styles.header}>
+                <FormattedMessage id="content" defaultMessage="Content" />
+              </th>
           </tr>
         </thead>
         <tbody>

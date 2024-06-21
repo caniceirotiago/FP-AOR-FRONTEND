@@ -156,6 +156,10 @@
   "inbox": "Recebidos",
   "sent": "Enviados",
   "compose": "Compor",
-  "searchPlaceholder": "Procurar"
-
+  "searchPlaceholder": "Procurar",
+  "from": "De",
+  "to": "Para",
+  "subject": "Assunto",
+  "date": "Data",
+  "content": "Mensagem"
 }
