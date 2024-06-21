@@ -172,7 +172,11 @@
   "skills": "Habilidades",
   "selectState": "Selecione Estado",
   "selectLaboratory": "Selecione Laboratório",
-  "openPositions": "Vagas Disponíveis"
+  "openPositions": "Vagas Disponíveis",
+  "notInSuggestions" : "Sugestão não encontrada.",
+  "onlyOneResponsible" : "Tarefa apenas pode ter um responsável.",
+  "maxInputLenght" : "Ultrapassou o limite máximo de caracteres.",
+  "duplicateAttribute" : "Atributo duplicado."
 
 
 

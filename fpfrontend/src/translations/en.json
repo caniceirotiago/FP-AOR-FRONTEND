@@ -171,7 +171,11 @@
   "skills": "Skills",
   "selectState": "Select State",
   "selectLaboratory": "Select Laboratory",
-  "openPositions": "Open Positions"
+  "openPositions": "Open Positions",
+  "notInSuggestions" : "Not found in suggestions. Not adding.",
+  "onlyOneResponsible" : "Only one user can be assigned to a task as responsible. Not adding.",
+  "maxInputLenght" : "Input exceeds maximum character limit. Not adding.",
+  "duplicateAttribute" : "Duplicate attribute. Not adding."
 
   
 }
