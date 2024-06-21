@@ -38,7 +38,6 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
     setProjectData((prevData) => ({ ...prevData, users: newUsers }));
   };
   const handleAssetChange = (newAssets) => {
-    console.log(newAssets);
     setProjectData((prevData) => ({ ...prevData, assets: newAssets }));
   };
 
@@ -100,7 +99,7 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
       });
     } else {
       const data = await response.json();
-      setDialogMessage(data.errorMessage);
+      setDialogMessage(data.message);
       setAlertType(true);
       setIsDialogOpen(true);
       setOnConfirm(() => {});

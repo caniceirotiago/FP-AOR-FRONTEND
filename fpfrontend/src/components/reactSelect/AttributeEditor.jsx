@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import Select from "react-select";
 import styles from "./AttributeEditor.module.css";
 import generalService from "../../services/generalService";
@@ -11,6 +11,7 @@ import SelectQuantityModal from "../modals/SelectQuantityModal.jsx";
 import userService from "../../services/userService";
 import projectService from "../../services/projectService.jsx";
 import useConfigurationStore from "../../stores/useConfigurationStore";
+import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import membershipService from "../../services/membershipService";
 
 const AttributeEditor = ({
@@ -35,7 +36,8 @@ const AttributeEditor = ({
   const { configurations } = useConfigurationStore();
   const selectTypeModal = useSelectTypeModal();
   const usedQuantity = useSelectQuantityModalStore();
-  const intl = useIntl();
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
+    useDialogModalStore();
 
   // Initialize attributes based on creation mode and initial values
   useEffect(() => {
@@ -91,15 +93,12 @@ const AttributeEditor = ({
       title === "Registered executers"
     ) {
       try {
-        console.log("fetching suggestions");
-
         const response = await membershipService.fetchSuggestionsByProjectId(
           firstLetter,
           projectId
         );
         if (response.status === 200) {
           const data = await response.json();
-          console.log(data);
           setFetchedSuggestions(data);
           setSuggestions(data);
         } else {
@@ -203,7 +202,17 @@ const AttributeEditor = ({
     }
     // Ensure the user exists in suggestions
     if (title === "users" && !existingUser) {
-      console.warn("User not in suggestions. Not adding.");
+      setDialogMessage(
+        <FormattedMessage
+          id="notInSuggestions"
+          defaultMessage="Not found in suggestions. Not adding."
+        />
+      );
+      setAlertType(true);
+      setIsDialogOpen(true);
+      setOnConfirm(() => {
+        setIsDialogOpen(false);
+      });
       return;
     }
     // Ensure only one user can be responsible for a task
@@ -214,17 +223,35 @@ const AttributeEditor = ({
         attributes.length === 1) ||
       (title === "Responsible user" && attributes.length === 1)
     ) {
-      console.warn(
-        "Only one user can be assigned to a task as responsible. Not adding."
+      setDialogMessage(
+        <FormattedMessage
+          id="onlyOneResponsible"
+          defaultMessage="Only one user can be assigned to a task as responsible. Not adding."
+        />
       );
+      setAlertType(true);
+      setIsDialogOpen(true);
+      setOnConfirm(() => {
+        setIsDialogOpen(false);
+      });
       return;
     }
-
     try {
       // Ensure the input is not empty and does not exceed character limit
       if (!input) return;
       if (input.length > 25) {
-        console.warn("Input exceeds maximum character limit. Not adding.");
+        setDialogMessage(
+          <FormattedMessage
+            id="maxInputLenght"
+            defaultMessage="Input exceeds maximum character limit. Not adding."
+          />
+        );
+        setAlertType(true);
+        setIsDialogOpen(true);
+        setOnConfirm(() => {
+          setIsDialogOpen(false);
+        });
+
         return;
       }
       // Ensure no duplicate attributes/users
@@ -234,7 +261,17 @@ const AttributeEditor = ({
             (attribute) => attribute.name?.toLowerCase() === input.toLowerCase()
           )
         ) {
-          console.warn("Duplicate attribute. Not adding.");
+          setDialogMessage(
+            <FormattedMessage
+              id="duplicateAttribute"
+              defaultMessage="Duplicate attribute. Not adding."
+            />
+          );
+          setAlertType(true);
+          setIsDialogOpen(true);
+          setOnConfirm(() => {
+            setIsDialogOpen(false);
+          });
           return;
         }
       } else {
@@ -244,7 +281,17 @@ const AttributeEditor = ({
               attribute.username?.toLowerCase() === input.toLowerCase()
           )
         ) {
-          console.warn("Duplicate user. Not adding.");
+          setDialogMessage(
+            <FormattedMessage
+              id="duplicateAttribute"
+              defaultMessage="Duplicate attribute. Not adding."
+            />
+          );
+          setAlertType(true);
+          setIsDialogOpen(true);
+          setOnConfirm(() => {
+            setIsDialogOpen(false);
+          });
           return;
         }
       }
@@ -282,19 +329,15 @@ const AttributeEditor = ({
 
       // Add item to the server or state
       if (!creationMode) {
-        console.log("adding item");
         let response;
         let suggestion;
         if (title === "users" && mainEntity === "project") {
           response = await userService.addUserToProject(projectId, input);
         } else if (title === "Responsible user") {
-          console.log("adding responsible user : suggesstion");
-          console.log(fetchedSuggestions);
           suggestion = fetchedSuggestions.find(
             (suggestion) =>
               suggestion?.username?.toLowerCase() === input?.toLowerCase()
           );
-          console.log(suggestion);
           setAttributes([
             ...attributes,
             { id: suggestion?.id, username: input, photo: suggestion?.photo },
@@ -309,7 +352,17 @@ const AttributeEditor = ({
           });
         } else if (title === "Registered executers") {
           if (attributes.find((attribute) => attribute.username === input)) {
-            console.warn("Duplicate user. Not adding.");
+            setDialogMessage(
+              <FormattedMessage
+                id="duplicateAttribute"
+                defaultMessage="Duplicate attribute. Not adding."
+              />
+            );
+            setAlertType(true);
+            setIsDialogOpen(true);
+            setOnConfirm(() => {
+              setIsDialogOpen(false);
+            });
             return;
           }
           suggestion = fetchedSuggestions.find(
@@ -333,7 +386,17 @@ const AttributeEditor = ({
               suggestion?.name?.toLowerCase() === input?.toLowerCase()
           );
           if (!suggestion) {
-            console.warn("No matching suggestion found. Not adding asset.");
+            setDialogMessage(
+              <FormattedMessage
+                id="notInSuggestions"
+                defaultMessage="Not found in suggestions. Not adding."
+              />
+            );
+            setAlertType(true);
+            setIsDialogOpen(true);
+            setOnConfirm(() => {
+              setIsDialogOpen(false);
+            });
             return;
           }
           setAttributes([
@@ -384,7 +447,17 @@ const AttributeEditor = ({
               suggestion?.name?.toLowerCase() === input?.toLowerCase()
           );
           if (!suggestion) {
-            console.warn("No matching suggestion found. Not adding asset.");
+            setDialogMessage(
+              <FormattedMessage
+                id="notInSuggestions"
+                defaultMessage="Not found in suggestions. Not adding."
+              />
+            );
+            setAlertType(true);
+            setIsDialogOpen(true);
+            setOnConfirm(() => {
+              setIsDialogOpen(false);
+            });
             return;
           }
           setAttributes([
@@ -545,7 +618,10 @@ const AttributeEditor = ({
       {title === "users" && !creationMode && (
         <>
           {isPossibleToJoin ? (
-            <button onClick={askToJoinProject}> <FormattedMessage id="askToJoin" defaultMessage="Ask To Join" /></button>
+            <button onClick={askToJoinProject}>
+              {" "}
+              <FormattedMessage id="askToJoin" defaultMessage="Ask To Join" />
+            </button>
           ) : null}
         </>
       )}
@@ -580,7 +656,10 @@ const AttributeEditor = ({
                   options={suggestions.map(getLabelValue)}
                   inputValue={input}
                   noOptionsMessage={() => (
-                    <FormattedMessage id="noSuggestionsFound" defaultMessage="No suggestions found" />
+                    <FormattedMessage
+                      id="noSuggestionsFound"
+                      defaultMessage="No suggestions found"
+                    />
                   )}
                   placeholder={
                     <FormattedMessage
@@ -601,7 +680,9 @@ const AttributeEditor = ({
                     }),
                   }}
                 />
-                <div onClick={addItem}><FormattedMessage id="add" defaultMessage="Add" /></div>
+                <div onClick={addItem}>
+                  <FormattedMessage id="add" defaultMessage="Add" />
+                </div>
               </div>
             </div>
           )}
