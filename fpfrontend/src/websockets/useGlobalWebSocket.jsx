@@ -7,8 +7,13 @@ import useNotificationStore from '../stores/useNotificationStore';
 
 
 export const useGlobalWebSocket = (url, shouldConnect) => {
-    const audioRef = useRef(new Audio('../assets/notification.wav')); // Substitua pelo caminho correto do arquivo de som
+    const audioRef = useRef(null);
 
+    useEffect(() => {
+        audioRef.current = new Audio('/level-up-191997.mp3');
+        audioRef.current.load();  
+      }, []);
+    
     const {addNotification} = useNotificationStore();
     const ws = useRef(null);
     const { logout } = useAuthStore();
@@ -51,7 +56,9 @@ export const useGlobalWebSocket = (url, shouldConnect) => {
                     console.log("Notification received");
                     
                     addNotification(message.data);
-
+                    if (audioRef.current) {
+                        audioRef.current.play().catch(error => console.error("Error playing audio:", error));
+                      }
                 }
             } catch (error) {
                 console.error('Error parsing message:', e.data, error);

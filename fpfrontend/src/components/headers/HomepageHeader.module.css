@@ -342,34 +342,30 @@ margin-left: 15px;
   z-index: 100; 
   display: none;
   flex-direction: column;
-  width: 280px; 
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto; 
 }
 .menuBurger:hover, .dropdownContent, .dropdownContent:hover {
 display: flex; 
 }
 
-.dropdownContent div {
-padding: 10px 20px;
-text-align: left;
-border-bottom: 1px solid #ddd;
-cursor: pointer;
-}
 
 .dropdownContent div:last-child {
 border-bottom: none;
 }
 
-.dropdownContent div:hover {
-background-color: var(--secondary-color);
-}
 
 
 .dropdownContent div {
-  padding: 10px 20px;
+  padding: 5px 0px;
+  margin: 0px 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
   cursor: pointer;
+
 }
+
 
 .dropdownContent div:last-child {
   border-bottom: none;
@@ -384,15 +380,15 @@ background-color: var(--secondary-color);
 }
 .notificationItem {
   display: flex;
-  flex-direction: row;
-  padding: 0px;
+  flex-direction: column;
+  padding: 10px;
   color: var(--text-color);
   cursor: pointer;
   transition: background-color 0.3s;
-  gap: 05px;
-  width: 85%;
+  gap: 5px;
   border-bottom: 1px solid var(--divider-color);
-  align-items: center;
+  align-items: flex-start;
+  
 }
 
 .notificationItem:last-child {
@@ -400,17 +396,28 @@ background-color: var(--secondary-color);
 }
 
 .notificationItem:hover {
-  background-color: var(--hover-background-color);
+  background-color: var(--hover-aside-item-color);
 }
 
-.notificationHeader {
+.notificationContent {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.notificationMeta {
+  display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 10px;
+  font-size: 0.8rem;
+  color: var(--secondary-text-color);
 }
 
 .notificationDate {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: var(--secondary-text-color);
 }
 
@@ -419,13 +426,32 @@ background-color: var(--secondary-color);
   color: #fff;
   border-radius: 50%;
   font-size: 0.75rem;
-  padding: 4px 4px;
+  padding: 1px 1px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 10px;
-  height: 10px;
+  min-width: 20px;
+  height: 20px;
 }
+
+.notificationHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+
+  .notificationContent {
+    font-size: 0.8rem;
+  }
+
+  .notificationMeta {
+    font-size: 0.7rem;
+  }
+}
+
 
 .userImage {
   width: 32px;
@@ -439,3 +465,4 @@ background-color: var(--secondary-color);
     display: none !important;
   }
 }
+

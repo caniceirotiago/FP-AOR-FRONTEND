@@ -7,23 +7,20 @@ import { FaBars, FaMoon, FaSun, FaSignOutAlt, FaBell, FaSignInAlt } from 'react-
 import useTranslationStore from '../../stores/useTranslationsStore';
 import { FormattedMessage } from "react-intl";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
-import useLoginModalStore from '../../stores/useLoginModalStore.jsx'
-import useAuthStore from '../../stores/useAuthStore.jsx'
+import useLoginModalStore from '../../stores/useLoginModalStore.jsx';
+import useAuthStore from '../../stores/useAuthStore.jsx';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/CriticalLogo.png';
 import logo2 from '../../assets/CriticalLogo2.png';
 import userService from '../../services/userService.jsx';
-import {notificationService} from '../../services/notificationService.jsx';
+import { notificationService } from '../../services/notificationService.jsx';
 import notificationStore from '../../stores/useNotificationStore.jsx';
 import ProtectedComponents from '../auth regist/ProtectedComponents.jsx';
-import  useComposeEmailModal  from '../../stores/useComposeEmailModal.jsx';
-
-
-
-
+import useComposeEmailModal from '../../stores/useComposeEmailModal.jsx';
+import useGroupChatModalStore from '../../stores/useGroupChatModalStore.jsx';
+import { set } from 'date-fns';
 
 const HomepageHeader = () => {
-  
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationListOpen, setIsNotificationListOpen] = useState(false);
   const navMenuRef = useRef(null);
@@ -32,196 +29,248 @@ const HomepageHeader = () => {
   const notificationToggleButtonRef = useRef(null);
   const navigate = useNavigate();
   const { theme, toggleTheme } = useThemeStore();
-  const { isLoginModalOpen , setIsLoginModalOpen} = useLoginModalStore();
+  const { isLoginModalOpen, setIsLoginModalOpen } = useLoginModalStore();
   const { logout, isAuthenticated } = useAuthStore();
-  const {setSelectedUser, setComposeModalOpen} = useComposeEmailModal();
-
-
-
+  const { setSelectedUser, setComposeModalOpen } = useComposeEmailModal();
+  const { setGroupChatModalOpen, setSelectedChatProject } = useGroupChatModalStore();
   const { notification, setNotification } = notificationStore();
   const totalNotifications = notification.length;
-
-  //const { openChatModal } = useChatModalStore();
   const locale = useTranslationStore((state) => state.locale);
+
   const handleSelectLanguage = (event) => {
     const newLocale = event.target.value;
     updateLocale(newLocale);
   };
   const updateLocale = useTranslationStore((state) => state.updateLocale);
 
-
-
   const fetchNotifications = async () => {
-   const notifications = await notificationService.getUserNotifications();
-
-   setNotification(notifications);
-
-  }
+    const notifications = await notificationService.getUserNotifications();
+    setNotification(notifications);
+  };
 
   useEffect(() => {
-     if(isAuthenticated)fetchNotifications();
-  }, []);
-
-
-  
+    if (isAuthenticated) fetchNotifications();
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navMenuRef.current && !navMenuRef.current.contains(event.target) &&
-        !navToggleButtonRef.current.contains(event.target) && isMenuOpen) {
+          !navToggleButtonRef.current.contains(event.target) && isMenuOpen) {
         setIsMenuOpen(false);
       }
       if (notificationMenuRef.current && !notificationMenuRef.current.contains(event.target) &&
           !notificationToggleButtonRef.current.contains(event.target) && isNotificationListOpen) {
-          setIsNotificationListOpen(false);
+        setIsNotificationListOpen(false);
       }
     };
     document.addEventListener("mouseup", handleClickOutside);
     return () => {
-        document.removeEventListener("mouseup", handleClickOutside);
+      document.removeEventListener("mouseup", handleClickOutside);
     };
-  }, [isMenuOpen, isNotificationListOpen]); 
+  }, [isMenuOpen, isNotificationListOpen]);
+
+  const groupNotifications = (notifications) => {
+    const grouped = {};
+    notifications.forEach(notif => {
+      if (notif.type === 'GROUP_MESSAGE' || notif.type === 'INDIVIDUAL_MESSAGE') {
+        const key = notif.projectId || notif.individualMessage.sender.id;
+        if (!grouped[key]) {
+          grouped[key] = [];
+        }
+        grouped[key].push(notif);
+      } else {
+        grouped[notif.id] = [notif];
+      }
+    });
+    return grouped;
+  };
+  const handleCleanAllNotifications = async () => {
+    for (const notif of notification) {
+      await notificationService.markNotificationsAsRead(notif.id);
+    }
+    fetchNotifications();
+    setIsNotificationListOpen(false);
+  };
 
   const renderNotifications = () => {
+    const groupedNotifications = groupNotifications(notification);
     const entries = [];
-    console.log(notification);
     
-    notification.forEach((notifs) => {
-
-        const mostRecentNotificationHourDate = notifs.length > 0 ? notifs[notifs.length - 1].sentAt : null;
-        entries.push(
-            <div key={notifs.id} className={styles.notificationItem} onClick={() => handleNotificationClick(notifs)}>
-              
-               {notifs.content}
-            </div>
-        );
-    });
-    if(entries.length === 0) {
-        entries.push(
-              <div key="no-notifications" className={styles.notificationItem}>
-                <FormattedMessage id="noNewNotifications">No new notifications</FormattedMessage>
-              </div>
-        );
+    if (notification.length > 0) {
+      entries.push(
+        <div key="notificationHeader" className={styles.notificationItem} onClick={handleCleanAllNotifications}>
+          <FormattedMessage id="markAllNotificationsAsRead">Mark all notificatons as read</FormattedMessage>
+        </div>
+      );
     }
-      return entries;
+    
+    // Ordenar as notificações agrupadas pela data mais recente
+    const sortedKeys = Object.keys(groupedNotifications).sort((a, b) => {
+      const aLastNotif = groupedNotifications[a][groupedNotifications[a].length - 1];
+      const bLastNotif = groupedNotifications[b][groupedNotifications[b].length - 1];
+      return new Date(bLastNotif.dateTime) - new Date(aLastNotif.dateTime);
+    });
+    
+    sortedKeys.forEach(key => {
+      const notifs = groupedNotifications[key];
+      const mostRecentNotification = notifs[notifs.length - 1];
+      const count = notifs.length;
+    
+      let formattedDate = "";
+      let formattedTime = "";
+    
+      if (mostRecentNotification.dateTime) {
+        const date = new Date(mostRecentNotification.dateTime);
+        formattedDate = date.toLocaleDateString('pt-BR');
+        formattedTime = date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      }
+    
+      entries.push(
+        <div key={key} className={styles.notificationItem} onClick={() => handleNotificationClick(notifs)}>
+          <div className={styles.notificationContent}>
+            <span>{mostRecentNotification.content}</span>
+            <div className={styles.notificationMeta}>
+              {count > 1 && <span className={styles.notificationCount}>{count}</span>}
+              <span className={styles.notificationDate}>{formattedDate} {formattedTime}</span>
+              
+            </div>
+          </div>
+        </div>
+      );
+    });
+    
+    if (entries.length === 0) {
+      entries.push(
+        <div key="no-notifications" className={styles.notificationItem}>
+          <FormattedMessage id="noNewNotifications">No new notifications</FormattedMessage>
+        </div>
+      );
+    }
+    
+    return entries;
   };
- const markMessageNotificationsAsRead = async (notifId) => {
-    await notificationService.markNotificationsAsRead(notifId);
+  
+  
+
+  const markMessageNotificationsAsRead = async (notifIds) => {
+    for (const notifId of notifIds) {
+      await notificationService.markNotificationsAsRead(notifId);
+    }
     fetchNotifications();
   };
-  const username = localStorage.getItem("username");
-  const photo = localStorage.getItem("photo") ; 
 
   const handleNotificationClick = (notifs) => {
-    console.log(notifs);
+    const notif = notifs[0];
 
-    switch(notifs.type) {
+    switch (notif.type) {
       case 'INDIVIDUAL_MESSAGE':
         navigate(`/messages`);
-        setSelectedUser({id: notifs.individualMessage.sender.id, username: notifs.individualMessage.sender.username});
+        setSelectedUser({ id: notif.individualMessage.sender.id, username: notif.individualMessage.sender.username });
         setComposeModalOpen(true);
-        markMessageNotificationsAsRead(notifs.id);
+        break;
+      case 'GROUP_MESSAGE':
+        navigate(`/projectpage/${notif.projectId}`);
+        setTimeout(() => {
+          setSelectedChatProject(notif.projectId);
+          setGroupChatModalOpen(true);
+        }, 10);
         break;
       case 'PROJECT_JOIN_REQUEST':
-        navigate(`/projectpage/${notifs.projectId}`);
-        markMessageNotificationsAsRead(notifs.id);
-        break;
       case 'PROJECT_APPROVAL':
-        navigate(`/projectpage/${notifs.projectId}`);
-        markMessageNotificationsAsRead(notifs.id);
       case 'TASK_RESPONSIBLE':
-        markMessageNotificationsAsRead(notifs.id);
       case 'TASK_EXECUTER':
-        markMessageNotificationsAsRead(notifs.id);
-
+        navigate(`/projectpage/${notif.projectId}`);
+        break;
       default:
         break;
     }
+
+    const notifIds = notifs.map(n => n.id);
+    markMessageNotificationsAsRead(notifIds);
 
     setIsNotificationListOpen(false);
   };
 
   const handleToggleNavMenu = (event) => {
-    event.stopPropagation(); 
+    event.stopPropagation();
     setIsMenuOpen(!isMenuOpen);
   };
 
   const handleToggleNotificationMenu = (event) => {
-    event.stopPropagation(); 
+    event.stopPropagation();
     setIsNotificationListOpen(!isNotificationListOpen);
   };
+
   const handleOpenLoginModal = (event) => {
     setIsLoginModalOpen(true);
-  }
+  };
+
   const handleLogout = async (event) => {
     const response = await userService.logout();
-    logout(); 
+    logout();
     navigate('/homepage');
-  }
-  const handleHomepageNavigate = () => {
-    if(!isAuthenticated)navigate('/homepage');
-    else navigate(`/authenticatedHomepage`);
+  };
 
-  }
+  const handleHomepageNavigate = () => {
+    if (!isAuthenticated) navigate('/homepage');
+    else navigate(`/authenticatedHomepage`);
+  };
+
+  const username = localStorage.getItem("username");
+  const photo = localStorage.getItem("photo");
+  console.log(notification);
 
   return (
     <header className={styles.header}>
       <div className={styles.logoContainer} onClick={handleHomepageNavigate}>
         {theme === "light" ? <img src={logo} alt="Logo" className={styles.logo} /> : <img src={logo2} alt="Logo" className={styles.logo} />}
       </div>
-      
       <div className={styles.rightAligned}>
         {isAuthenticated ? (
           <>
-          <div className={styles.usernameDisplay} onClick={() => navigate(`/userProfile/${username}`)}>
-            {username}
-          </div>
-          <div className={styles.userPhoto} >
-            <img src={photo} alt="User" className={styles.userImage} onClick={() => navigate(`/userProfile/${username}`)}/>
-          </div>
-          </>) : 
-        null}
+            <div className={styles.usernameDisplay} onClick={() => navigate(`/userProfile/${username}`)}>
+              {username}
+            </div>
+            <div className={styles.userPhoto}>
+              <img src={photo} alt="User" className={styles.userImage} onClick={() => navigate(`/userProfile/${username}`)} />
+            </div>
+          </>
+        ) : null}
         <div className={styles.notificationSection}>
-          <div  ref={notificationToggleButtonRef} className={styles.notificationBell} onClick = {handleToggleNotificationMenu}>
-            {isAuthenticated && <><FaBell /> {(totalNotifications === 0 ) ? null : <div className={styles.notificationNumber}>{totalNotifications}</div>} </>}
-            
-
+          <div ref={notificationToggleButtonRef} className={styles.notificationBell} onClick={handleToggleNotificationMenu}>
+            {isAuthenticated && <><FaBell /> {(totalNotifications === 0) ? null : <div className={styles.notificationNumber}>{totalNotifications}</div>} </>}
           </div>
           {isNotificationListOpen && (
-            <div  ref={notificationMenuRef} className={styles.dropdownContent}>
+            <div ref={notificationMenuRef} className={styles.dropdownContent}>
               {renderNotifications()}
             </div>
           )}
         </div>
         {!isAuthenticated && 
-        <div onClick={handleOpenLoginModal} className={styles.accessBtn}>
-              <FaSignInAlt /> <FormattedMessage id="access">Access</FormattedMessage>
-        </div>
+          <div onClick={handleOpenLoginModal} className={styles.accessBtn}>
+            <FaSignInAlt /> <FormattedMessage id="access">Access</FormattedMessage>
+          </div>
         }
-        <div  ref={navToggleButtonRef} className={styles.menuBurger} onClick={handleToggleNavMenu}>
+        <div ref={navToggleButtonRef} className={styles.menuBurger} onClick={handleToggleNavMenu}>
           <FaBars />
         </div>
         {isMenuOpen && (
-          <div  ref={navMenuRef} className={styles.dropdownContent}>
-            
+          <div ref={navMenuRef} className={styles.dropdownContent}>
             <div onClick={toggleTheme}>
               {theme === 'dark' ? <FaSun /> : <FaMoon />} {theme === 'dark' ? <FormattedMessage id="lightMode">Light Mode</FormattedMessage> : <FormattedMessage id="darkMode">Dark Mode</FormattedMessage>}
             </div>
             <div className={styles.languageSelection}>
               <select className={styles.languageSelector} onChange={handleSelectLanguage} defaultValue={locale}>
-                {["en", "pt"].map(language => (<option
-                key={language}>{language}</option>))}
+                {["en", "pt"].map(language => (<option key={language}>{language}</option>))}
               </select>
               {locale === "pt" && <span className={`${styles.flag} fi fi-pt`}></span>}
               {locale === "en" && <span className={`${styles.flag} fi fi-gb`}></span>}
             </div>
             {isAuthenticated ? (
-            <div onClick={handleLogout}>
-              <FaSignOutAlt /> <FormattedMessage id="logout">Logout</FormattedMessage>
-            </div>)
-            :
-            null
-            }         
+              <div onClick={handleLogout}>
+                <FaSignOutAlt /> <FormattedMessage id="logout">Logout</FormattedMessage>
+              </div>
+            ) : null}
           </div>
         )}
       </div>
