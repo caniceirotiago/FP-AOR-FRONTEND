@@ -17,6 +17,7 @@ import {notificationService} from '../../services/notificationService.jsx';
 import notificationStore from '../../stores/useNotificationStore.jsx';
 import ProtectedComponents from '../auth regist/ProtectedComponents.jsx';
 import  useComposeEmailModal  from '../../stores/useComposeEmailModal.jsx';
+import useGroupChatModalStore from '../../stores/useGroupChatModalStore.jsx';
 
 
 
@@ -35,6 +36,8 @@ const HomepageHeader = () => {
   const { isLoginModalOpen , setIsLoginModalOpen} = useLoginModalStore();
   const { logout, isAuthenticated } = useAuthStore();
   const {setSelectedUser, setComposeModalOpen} = useComposeEmailModal();
+  const {setGroupChatModalOpen, setSelectedChatProject} = useGroupChatModalStore();
+
 
 
 
@@ -133,6 +136,14 @@ const HomepageHeader = () => {
         markMessageNotificationsAsRead(notifs.id);
       case 'TASK_EXECUTER':
         markMessageNotificationsAsRead(notifs.id);
+      case 'GROUP_MESSAGE':
+        navigate(`/projectpage/${notifs.projectId}`);
+
+        setTimeout(() => {
+          setSelectedChatProject(notifs.projectId);
+          setGroupChatModalOpen(true);
+        }, 10);
+        
 
       default:
         break;

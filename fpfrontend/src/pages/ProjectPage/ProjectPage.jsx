@@ -13,6 +13,7 @@ import ApprovalModal from "../../components/modals/ApprovalModal.jsx";
 import LogsList from "../../components/ProjectPageComponents/LogsList/LogsList.jsx";
 import useProjectStore from "../../stores/useProjectStore.jsx";
 import GroupChatModal from "../../components/ProjectPageComponents/GroupChat/GroupChatModal";
+import useGroupChatModalStore from "../../stores/useGroupChatModalStore"; 
 
 
 const ProjectPage = () => {
@@ -39,8 +40,8 @@ const ProjectPage = () => {
     assets: [],
   });
 
-  const [isGroupChatModalOpen, setGroupChatModalOpen] = useState(false);
-  const [selectedChatProject, setSelectedChatProject] = useState(null);
+  const {isGroupChatModalOpen, setGroupChatModalOpen, selectedChatProject, setSelectedChatProject} = useGroupChatModalStore();
+
   const intl = useIntl();
 
   const fetchProjectData = useCallback(async () => {

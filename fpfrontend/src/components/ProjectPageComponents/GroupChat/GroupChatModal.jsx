@@ -157,10 +157,10 @@ const GroupChatModal = ({
     sendGroupMessageWS(dataToSend);
   };
 
-  // Close modal on location change
+  //Close modal on location change
   useEffect(() => {
     handleCloseGroupChatModal();
-  }, [location.pathname]);
+  }, []);
 
   if (!isGroupChatModalOpen) return null;
 
