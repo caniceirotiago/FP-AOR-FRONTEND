@@ -78,7 +78,9 @@ const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
         </div>
         <div className={styles.formContainer}>
           <form className={styles.form} onSubmit={handleSubmit}>
-            <label className={styles.label}>Asset Name</label>
+          <label className={styles.label}>
+              <FormattedMessage id="assetName" defaultMessage="Asset Name" />
+            </label>
             <input
               className={styles.input}
               type="text"
@@ -88,7 +90,9 @@ const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
               disabled={isViewOnly}
               required
             />
-            <label className={styles.label}>Type</label>
+            <label className={styles.label}>
+              <FormattedMessage id="type" defaultMessage="Type" />
+            </label>
             <select
               className={styles.select}
               name="type"
@@ -97,14 +101,18 @@ const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
               disabled={isViewOnly}
               required
             >
-              <option value="">Select a type</option>
+                <option value="">
+                <FormattedMessage id="selectType" defaultMessage="Select type" />
+              </option>
               {types.map((type) => (
                 <option key={type} value={type}>
                   {type}
                 </option>
               ))}
             </select>
-            <label className={styles.label}>Description</label>
+            <label className={styles.label}>
+              <FormattedMessage id="description" defaultMessage="Description" />
+            </label>
             <textarea
               className={styles.textarea}
               name="description"
@@ -113,7 +121,9 @@ const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
               disabled={isViewOnly}
               required
             />
-            <label className={styles.label}>Stock Quantity</label>
+            <label className={styles.label}>
+              <FormattedMessage id="stockQuantity" defaultMessage="Stock Quantity" />
+            </label>
             <input
               className={styles.input}
               type="number"
@@ -123,7 +133,9 @@ const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
               disabled={isViewOnly}
               required
             />
-            <label className={styles.label}>Part Number</label>
+            <label className={styles.label}>
+              <FormattedMessage id="partNumber" defaultMessage="Part Number" />
+            </label>
             <input
               className={styles.input}
               type="text"
@@ -133,7 +145,9 @@ const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
               disabled={isViewOnly}
               required
             />
-            <label className={styles.label}>Manufacturer</label>
+             <label className={styles.label}>
+              <FormattedMessage id="manufacturer" defaultMessage="Manufacturer" />
+            </label>
             <input
               className={styles.input}
               type="text"
@@ -143,7 +157,9 @@ const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
               disabled={isViewOnly}
               required
             />
-            <label className={styles.label}>Manufacturer Phone</label>
+             <label className={styles.label}>
+              <FormattedMessage id="manufacturerPhone" defaultMessage="Manufacturer Phone" />
+            </label>
             <input
               className={styles.input}
               type="text"
@@ -153,7 +169,9 @@ const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
               disabled={isViewOnly}
               required
             />
-            <label className={styles.label}>Observations</label>
+            <label className={styles.label}>
+              <FormattedMessage id="observations" defaultMessage="Observations" />
+            </label>
             <textarea
               className={styles.textarea}
               name="observations"
@@ -162,7 +180,7 @@ const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
               disabled={isViewOnly}
             />
              <button type="submit" className={styles.button}>
-             {isViewOnly ? "Back" : "Save"}
+              {isViewOnly ? <FormattedMessage id="back" defaultMessage="Back" /> : <FormattedMessage id="saveFields" defaultMessage="Save" />}
             </button>
           </form>
         </div>
