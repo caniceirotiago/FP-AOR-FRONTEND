@@ -7,12 +7,14 @@ import React, {
 } from "react";
 import { MessageBox } from "react-chat-elements";
 import Select from "react-select";
+import Cookies from "js-cookie";
+import { FormattedMessage, useIntl } from "react-intl";
 import "react-chat-elements/dist/main.css";
 import styles from "./ComposeEmailModal.module.css";
 import generalService from "../../../services/generalService";
 import individualMessageService from "../../../services/individualMessageService";
 import useDomainStore from "../../../stores/useDomainStore";
-import Cookies from "js-cookie";
+
 import { useIndividualMessageWebSocket } from "../../../websockets/useIndividualMessageWebSocket";
 
 const ComposeEmailModal = ({
@@ -30,6 +32,7 @@ const ComposeEmailModal = ({
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
+  const intl = useIntl();
 
   const onMessage = useCallback(
     (message) => {
@@ -195,9 +198,15 @@ const ComposeEmailModal = ({
           &times;
         </button>
         <h2>
-          {data.currentUser
-            ? `Message to ${data.currentUser.username}`
-            : "Select a user"}
+          {data.currentUser ? (
+            <FormattedMessage
+              id="messageTo"
+              defaultMessage={`Message to ${data.currentUser.username}`}
+              values={{ username: data.currentUser.username }}
+            />
+          ) : (
+            <FormattedMessage id="selectUser" defaultMessage="Select a user" />
+          )}
         </h2>
         <Select
           className="react-select-container"
@@ -213,10 +222,14 @@ const ComposeEmailModal = ({
             label: user.username,
             value: user.id,
           }))}
+          
+
           inputValue={inputValue}
-          noOptionsMessage={() => "No suggestions found"}
-          placeholder="Type to search users"
+          noOptionsMessage={() => intl.formatMessage({ id: "noSuggestionsFound", defaultMessage: "No suggestions found" })}
+          placeholder={intl.formatMessage({ id: "typeToSearch", defaultMessage: "Type to search users" })}
           isClearable
+
+
         />
         <div className={styles.messagesContainer}>
           {data.currentUser && (
@@ -256,19 +269,19 @@ const ComposeEmailModal = ({
           <form onSubmit={handleSendMessage} className={styles.inputArea}>
             <input
               type="text"
-              placeholder="Type a subject..."
+              placeholder={intl.formatMessage({ id: "typeSubject", defaultMessage: "Type a subject" })}
               value={data.subject}
               onChange={(e) => setData({ ...data, subject: e.target.value })}
               className={styles.input}
             />
             <textarea
-              placeholder="Type a message..."
-              value={data.inputText}
+               placeholder={intl.formatMessage({ id: "typeMessage", defaultMessage: "Type a message" })}
+               value={data.inputText}
               onChange={(e) => setData({ ...data, inputText: e.target.value })}
               className={styles.input}
             />
             <button type="submit" className={styles.button}>
-              Send
+            <FormattedMessage id="sendMsgBtn" defaultMessage="Send" />
             </button>
           </form>
         )}

@@ -216,7 +216,7 @@ const GroupChatModal = ({
             )}
           </FormattedMessage>
           <button type="submit" className={styles.button}>
-            Send
+          <FormattedMessage id="sendMsgBtn" defaultMessage="Send" />
           </button>
         </form>
       </div>

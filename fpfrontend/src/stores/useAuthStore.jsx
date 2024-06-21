@@ -17,7 +17,7 @@ const isSessionTokenValid = () => {
 };
 
 
-const useAuthStore = create((set, get) => ({
+const useAuthStore = create((set) => ({
   isAuthenticated: !!Cookies.get('sessionToken'),
   login: () => {
     set({ isAuthenticated: true });

@@ -26,7 +26,7 @@ const Email = () => {
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     fetchMessages(userId);
-  }, [view, pageNumber, pageSize, filters]);
+  }, [view, pageNumber, pageSize, filters, isComposeModalOpen]);
 
   const fetchMessages = async (userId) => {
     try {

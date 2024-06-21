@@ -13,8 +13,7 @@ const EmailTable = ({ view, messages, onSelectUser }) => {
       <table className={styles.table}>
         <thead >
           <tr>
-            <th></th>
-            <th className={styles.header}>
+                      <th className={styles.header}>
             {view === 'inbox' ? (
                   <FormattedMessage id="from" defaultMessage="From" />
                 ) : (
@@ -35,8 +34,12 @@ const EmailTable = ({ view, messages, onSelectUser }) => {
         <tbody>
           {messages.map((msg, index) => (
             <tr  className={`${styles.row} ${(!msg.viewed && view === 'inbox') ? styles.notViewed: ''}`} key={index} onClick={() => handleMsgClick(msg)}>
-              <td className={styles.cell} ><div className={styles.userPhoto}><img  className={styles.photo}src={view === 'inbox' ? msg.sender.photo : msg.recipient.photo} alt="userPhoto" /></div></td>
-              <td className={styles.cell} >{view === 'inbox' ? msg.sender.username : msg.recipient.username}</td>
+               <td className={styles.cell}>
+                  
+                    <img className={styles.photo} src={view === 'inbox' ? msg.sender.photo : msg.recipient.photo} alt="userPhoto" />
+                    <span className={styles.username}>{view === 'inbox' ? msg.sender.username : msg.recipient.username}</span>
+                  
+                </td>
               <td className={styles.cell} >{msg.subject}</td>
               <td className={styles.cell} >{new Date(msg.sentAt).toLocaleString()}</td>
               <td className={styles.cell} >{msg.content}</td>

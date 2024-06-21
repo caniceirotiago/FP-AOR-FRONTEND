@@ -1,5 +1,4 @@
 .tableContainer {
-
   background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -26,7 +25,7 @@
 
 .header {
   padding: 20px 15px;
-  text-align: left;
+  text-align: center;
   font-weight: 500;
   font-size: 12px;
   color: var(--text-color);
@@ -36,7 +35,7 @@
 
 .cell {
   padding: 15px;
-  text-align: left;
+  text-align: center;
   vertical-align: middle;
   font-weight: 300;
   font-size: 12px;
@@ -45,11 +44,9 @@
   white-space: nowrap;           /* Força o texto a ficar em uma linha */
   overflow: hidden;              /* Esconde o texto que ultrapassa o espaço disponível */
   text-overflow: ellipsis;       /* Adiciona reticências para texto que ultrapassa o espaço */
-  max-width: 150px;              /* Define a largura máxima */
-  max-height: 1.2em;             /* Define a altura máxima */
-  line-height: 1.2em;            /* Define a altura da linha */
- 
-  
+  max-width: 150px;              
+  max-height: 1.2em;             
+  line-height: 1.2em;            
 }
 
 .notViewed{
@@ -59,12 +56,14 @@
 .row:hover {
   background-color: rgba(241, 241, 241, 0.8);
 }
+
 .userPhoto{
   width: 20px;
   height: 20px;
   border-radius: 50%;
   margin-right: 10px;
 }
+
 .photo{
   width: 20px;
   height: 20px;

@@ -21,7 +21,7 @@ const HomePage = () => {
   const { isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const {selectedView, setSelectedView} = useLayoutStore();
+  const { selectedView, setSelectedView } = useLayoutStore();
   const { view, setView } = useTableCardView();
   const [projects, setProjects] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
@@ -54,7 +54,7 @@ const HomePage = () => {
       return 6;
     } else if (width < 1600 && width >= 1200) {
       return 10;
-    }else if (width >= 1600) {
+    } else if (width >= 1600) {
       return 20;
     }
     return 5;
@@ -70,7 +70,7 @@ const HomePage = () => {
       newPageSize = 6;
     } else if (width < 1600 && width >= 1200) {
       newPageSize = 10;
-    }else if (width >= 1600) {
+    } else if (width >= 1600) {
       newPageSize = 20;
     }
     setPageSize(newPageSize);
@@ -186,9 +186,10 @@ const HomePage = () => {
     }
   };
 
-  const buttonText = view === "table"
-    ? intl.formatMessage({ id: "cardsButtonText" })
-    : intl.formatMessage({ id: "tableButtonText" });
+  const buttonText =
+    view === "table"
+      ? intl.formatMessage({ id: "cardsButtonText" })
+      : intl.formatMessage({ id: "tableButtonText" });
 
   const toggleFiltersVisibility = () => {
     setFiltersVisible(!filtersVisible);
@@ -237,15 +238,25 @@ const HomePage = () => {
         {filtersVisible && (
           <div className={styles.filters}>
             <select value={filterType} onChange={handleFilterTypeChange}>
-              <option value="name">Name</option>
-              <option value="keywords">Keywords</option>
-              <option value="skills">Skills</option>
+              <option value="name">
+                <FormattedMessage id="filterByName" defaultMessage="Name" />
+              </option>
+              <option value="keywords">
+                <FormattedMessage id="keywords" defaultMessage="Keywords" />
+              </option>
+              <option value="skills">
+                <FormattedMessage id="skills" defaultMessage="Skills" />
+              </option>
             </select>
             <input
               name={filterType}
-              placeholder={
-                filterType.charAt(0).toUpperCase() + filterType.slice(1)
-              }
+              placeholder={intl.formatMessage(
+                { id: "filterPlaceholder" },
+                {
+                  type:
+                    filterType.charAt(0).toUpperCase() + filterType.slice(1),
+                }
+              )}
               value={filters[filterType]}
               onChange={handleFilterChange}
             />
@@ -254,7 +265,12 @@ const HomePage = () => {
               value={filters.state}
               onChange={handleFilterChange}
             >
-              <option value="">Select State</option>
+              <option value="">
+                <FormattedMessage
+                  id="selectState"
+                  defaultMessage="Select State"
+                />
+              </option>
               {states.map((state) => (
                 <option key={state} value={state}>
                   {state}
@@ -266,7 +282,12 @@ const HomePage = () => {
               value={filters.laboratory}
               onChange={handleFilterChange}
             >
-              <option value="">Select Laboratory</option>
+              <option value="">
+                <FormattedMessage
+                  id="selectLaboratory"
+                  defaultMessage="Select Laboratory"
+                />
+              </option>
               {laboratories.map((lab) => (
                 <option key={lab.id} value={lab.id}>
                   {lab.location}
@@ -278,21 +299,57 @@ const HomePage = () => {
               value={filters.sortBy}
               onChange={handleSortChange}
             >
-              <option value="">Sort By</option>
-              <option value="creationDate">Creation Date</option>
-              <option value="openPositions">Open Positions</option>
-              <option value="state">State</option>
+              <option value="">
+                <FormattedMessage id="sortBy" defaultMessage="Sort By" />
+              </option>
+              <option value="creationDate">
+                {" "}
+                <FormattedMessage
+                  id="tableHeaderCreationDate"
+                  defaultMessage="Creation Date"
+                />
+              </option>
+              <option value="openPositions">
+                <FormattedMessage
+                  id="openPositions"
+                  defaultMessage="Open Positions"
+                />
+              </option>
+              <option value="state">
+                <FormattedMessage
+                  id="tableHeaderState"
+                  defaultMessage="State"
+                />
+              </option>
             </select>
             <select
               name="orderBy"
               value={filters.orderBy}
               onChange={handleOrderChange}
             >
-              <option value="">Order By</option>
-              <option value="asc">Ascending</option>
-              <option value="desc">Descending</option>
+              <option value="">
+                <FormattedMessage id="orderBy" defaultMessage="Order By" />
+              </option>
+              <option value="asc">
+                <FormattedMessage
+                  id="orderByAscending"
+                  defaultMessage="Ascending"
+                />
+              </option>
+              <option value="desc">
+                <FormattedMessage
+                  id="orderByDescending"
+                  defaultMessage="Descending"
+                />
+              </option>
             </select>
-            <button onClick={handleClearFilters}>Clear Filters</button>
+            <button onClick={handleClearFilters}>
+              {" "}
+              <FormattedMessage
+                id="clearFilters"
+                defaultMessage="Clear Filters"
+              />
+            </button>
           </div>
         )}
       </div>
@@ -304,42 +361,42 @@ const HomePage = () => {
             setPageNumber={setPageNumber}
           />
         ) : (
-          <ProjectCards
-            projects={projects}          
-            isAuthenticated={isAuthenticated}
-          />
-        )}{pageCount > 1 && (
+          <ProjectCards projects={projects} isAuthenticated={isAuthenticated} />
+        )}
+        {pageCount > 1 && (
           <div className={styles.pagination}>
-          <button onClick={() => setPageNumber(1)} disabled={pageNumber === 1}>
-            {"<<"}
-          </button>
-          <button
-            onClick={() => setPageNumber(pageNumber - 1)}
-            disabled={pageNumber === 1}
-          >
-            {"<"}
-          </button>
-          <button
-            onClick={() => setPageNumber(pageNumber + 1)}
-            disabled={pageNumber === pageCount}
-          >
-            {">"}
-          </button>
-          <button
-            onClick={() => setPageNumber(pageCount)}
-            disabled={pageNumber === pageCount}
-          >
-            {">>"}
-          </button>
-          <span>
-          <FormattedMessage id="pageInfo" defaultMessage="Page" />{" "}
-            <strong>
-              {pageNumber} 
-              <FormattedMessage id="ofInfo" defaultMessage="of" />{" "}
-               {pageCount}
-            </strong>
-          </span>
-        </div>
+            <button
+              onClick={() => setPageNumber(1)}
+              disabled={pageNumber === 1}
+            >
+              {"<<"}
+            </button>
+            <button
+              onClick={() => setPageNumber(pageNumber - 1)}
+              disabled={pageNumber === 1}
+            >
+              {"<"}
+            </button>
+            <button
+              onClick={() => setPageNumber(pageNumber + 1)}
+              disabled={pageNumber === pageCount}
+            >
+              {">"}
+            </button>
+            <button
+              onClick={() => setPageNumber(pageCount)}
+              disabled={pageNumber === pageCount}
+            >
+              {">>"}
+            </button>
+            <span>
+              <FormattedMessage id="pageInfo" defaultMessage="Page" />{" "}
+              <strong>
+                {pageNumber}
+                <FormattedMessage id="ofInfo" defaultMessage="of" /> {pageCount}
+              </strong>
+            </span>
+          </div>
         )}
       </div>
     </div>
