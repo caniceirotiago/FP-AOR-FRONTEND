@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useParams, useNavigate } from "react-router-dom";
 import ProjectBasicInfo from "../../components/ProjectPageComponents/ProjectBasicInfo.jsx";
 import projectService from "../../services/projectService.jsx";
@@ -22,7 +23,7 @@ const ProjectPage = () => {
   const [approveOrReject, setApproveOrReject] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const { id } = useParams();
-  const [isTheProjectNotExistant, setIsTheProjectNotExistant] = useState();
+  const [isTheProjectNotExistant, setIsTheProjectNotExistant] = useState(false);
   const { states, fetchProjectStates } = useProjectStatesStore();
   const { fetchProjectRoles } = useProjectRolesStore();
   const { laboratories, fetchLaboratories } = useLabStore();
@@ -40,6 +41,7 @@ const ProjectPage = () => {
 
   const [isGroupChatModalOpen, setGroupChatModalOpen] = useState(false);
   const [selectedChatProject, setSelectedChatProject] = useState(null);
+  const intl = useIntl();
 
   const fetchProjectData = useCallback(async () => {
     try {
@@ -69,7 +71,7 @@ const ProjectPage = () => {
     fetchProjectData();
     fetchLaboratories();
     fetchProjectRoles();
-    if(canSeeAndEditProjectPlanning) fetchProjectLogs();
+    if (canSeeAndEditProjectPlanning) fetchProjectLogs();
     fetchProjectStates();
   }, [isApprovalModalOpen]);
 
@@ -101,7 +103,17 @@ const ProjectPage = () => {
   };
 
   const handleApproveProject = async (wantToApprove) => {
-    setApproveOrReject(wantToApprove ? "Approve Project" : "Reject Project");
+    setApproveOrReject(
+      wantToApprove
+        ? intl.formatMessage({
+            id: "approveProject",
+            defaultMessage: "Approve Project",
+          })
+        : intl.formatMessage({
+            id: "rejectProject",
+            defaultMessage: "Reject Project",
+          })
+    );
     setIsApprovalModalOpen(true);
   };
 
@@ -138,7 +150,12 @@ const ProjectPage = () => {
     <>
       {isTheProjectNotExistant ? (
         <div className={styles.projectPage}>
-          <h1>Project Not Found</h1>
+          <h1>
+            <FormattedMessage
+              id="projectNotFound"
+              defaultMessage="Project Not Found"
+            />
+          </h1>
         </div>
       ) : (
         <div className={styles.projectPage}>
@@ -158,7 +175,10 @@ const ProjectPage = () => {
                       <button
                         onClick={handleEditModeTrue}
                         className={`${styles.iconButton} ${styles.createButton}`}
-                        data-text="Edit"
+                        data-text={intl.formatMessage({
+                          id: "editBtnProfForm",
+                          defaultMessage: "Edit",
+                        })}
                       >
                         <FaEdit className={styles.svgIcon} />
                       </button>
@@ -167,7 +187,10 @@ const ProjectPage = () => {
                       <button
                         onClick={handleEditModeFalse}
                         className={`${styles.iconButton} ${styles.createButton}`}
-                        data-text="Back"
+                        data-text={intl.formatMessage({
+                          id: "back",
+                          defaultMessage: "Back",
+                        })}
                       >
                         <FaCheck className={styles.svgIcon} />
                       </button>
@@ -180,19 +203,28 @@ const ProjectPage = () => {
                 <>
                   <div className={styles.approvalDiv}>
                     <p className={styles.approvalText}>
-                      This project is waiting for approval!
+                      <FormattedMessage
+                        id="waitingForApproval"
+                        defaultMessage="This project is waiting for approval!"
+                      />
                     </p>
                     <button
                       className={styles.approvalBtn}
                       onClick={() => handleApproveProject(true)}
                     >
-                      Approve Project
+                      <FormattedMessage
+                        id="approveProject"
+                        defaultMessage="Approve Project"
+                      />
                     </button>
                     <button
                       className={styles.rejectBtn}
                       onClick={() => handleApproveProject(false)}
                     >
-                      Reject Project
+                      <FormattedMessage
+                        id="rejectProject"
+                        defaultMessage="Reject Project"
+                      />
                     </button>
                   </div>
                 </>
@@ -221,7 +253,10 @@ const ProjectPage = () => {
                   <button
                     onClick={() => handleClickToOpenProjectPlanningPage()}
                   >
-                    Project Planning
+                    <FormattedMessage
+                      id="projectPlanning"
+                      defaultMessage="Project Planning"
+                    />
                   </button>
                 </div>
               )}
@@ -265,14 +300,14 @@ const ProjectPage = () => {
               {canSeeAndEditProjectPlanning && <LogsList logs={projectLogs} />}
             </div>
             <div className={styles.chatButtonContainer}>
-              {canSeeAndEditProjectPlanning &&
-              <button
-                onClick={handleOpenGroupChat}
-                className={styles.chatButton}
-              >
-                Open Group Chat
-              </button>
-              }
+              {canSeeAndEditProjectPlanning && (
+                <button
+                  onClick={handleOpenGroupChat}
+                  className={styles.chatButton}
+                >
+                  Open Group Chat
+                </button>
+              )}
             </div>
             <GroupChatModal
               selectedChatProject={selectedChatProject}

@@ -1,5 +1,6 @@
 // src/components/SelectTypeModal.jsx
 import React from 'react';
+import { FormattedMessage } from "react-intl";
 import useSelectTypeModal from '../../stores/useSelectTypeModal';
 import styles from './SelectTypeModal.module.css';
 
@@ -17,7 +18,7 @@ const SelectTypeModal = () => {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
-        <h2>Select Type</h2>
+        <h2><FormattedMessage id="selectType" defaultMessage="Select Type" /></h2>
         <ul>
           {options.map((option) => (
             <li key={option} onClick={() => handleSelect(option)}>
@@ -25,7 +26,7 @@ const SelectTypeModal = () => {
             </li>
           ))}
         </ul>
-        <button onClick={reset}>Cancel</button>
+        <button onClick={reset}><FormattedMessage id="cancel" defaultMessage="Cancel" /></button>
       </div>
     </div>
   );

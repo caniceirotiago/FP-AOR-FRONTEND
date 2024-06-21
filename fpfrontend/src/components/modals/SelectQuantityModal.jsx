@@ -1,16 +1,16 @@
 // src/components/SelectQuantityModal.jsx
-import React, { useState } from "react";
+import React from "react";
+import { FormattedMessage } from "react-intl";
 import useSelectQuantityModalStore from "../../stores/useSelectQuantityModalStore";
 import styles from "./SelectQuantityModal.module.css";
 
 const SelectQuantityModal = () => {
-  const [quantity, setQuantity] = useState(1);
-  const { showModal, setShowModal, resolveSelection } = useSelectQuantityModalStore();
+  const { showModal, setShowModal, resolveSelection, usedQuantity, reset } = useSelectQuantityModalStore();
 
   const handleConfirm = () => {
-    resolveSelection(quantity);
+    resolveSelection(usedQuantity);
     setShowModal(false);
-    setQuantity(1);
+    reset();
   };
 
   return (
@@ -19,11 +19,12 @@ const SelectQuantityModal = () => {
         <div className={styles.modal}>
           <input
             type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(parseInt(e.target.value))}
+            value={usedQuantity}
+            onChange={(e) => resolveSelection(parseInt(e.target.value))}
             min="1"
           />
-          <button onClick={handleConfirm}>Confirm</button>
+          <button onClick={handleConfirm}><FormattedMessage id="confirm" defaultMessage="Confirm" /></button>
+          <button onClick={reset}><FormattedMessage id="cancel" defaultMessage="Cancel" /></button>
         </div>
       </div>
     )

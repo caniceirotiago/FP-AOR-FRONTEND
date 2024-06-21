@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import Select from "react-select";
 import styles from "./AttributeEditor.module.css";
 import generalService from "../../services/generalService";
@@ -34,6 +35,7 @@ const AttributeEditor = ({
   const { configurations } = useConfigurationStore();
   const selectTypeModal = useSelectTypeModal();
   const usedQuantity = useSelectQuantityModalStore();
+  const intl = useIntl();
 
   // Initialize attributes based on creation mode and initial values
   useEffect(() => {
@@ -543,7 +545,7 @@ const AttributeEditor = ({
       {title === "users" && !creationMode && (
         <>
           {isPossibleToJoin ? (
-            <button onClick={askToJoinProject}>Ask To Join</button>
+            <button onClick={askToJoinProject}> <FormattedMessage id="askToJoin" defaultMessage="Ask To Join" /></button>
           ) : null}
         </>
       )}
@@ -577,8 +579,16 @@ const AttributeEditor = ({
                   onChange={handleSelectChange}
                   options={suggestions.map(getLabelValue)}
                   inputValue={input}
-                  noOptionsMessage={() => "No suggestions found"}
-                  placeholder={`Add new ${title}`}
+                  noOptionsMessage={() => (
+                    <FormattedMessage id="noSuggestionsFound" defaultMessage="No suggestions found" />
+                  )}
+                  placeholder={
+                    <FormattedMessage
+                      id="addNew"
+                      defaultMessage={`Add new {title}`}
+                      values={{ title }}
+                    />
+                  }
                   isClearable
                   styles={{
                     control: (base) => ({
@@ -591,7 +601,7 @@ const AttributeEditor = ({
                     }),
                   }}
                 />
-                <div onClick={addItem}>Add</div>
+                <div onClick={addItem}><FormattedMessage id="add" defaultMessage="Add" /></div>
               </div>
             </div>
           )}

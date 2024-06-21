@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from "react";
+import { FormattedMessage } from "react-intl";
 import { useTable, usePagination } from "react-table";
 import styles from "./AssetTable.module.css";
 import { FaEye, FaEdit } from "react-icons/fa";
-import { FormattedMessage, useIntl } from "react-intl";
 import EditAssetModal from "../AssetsModal/EditAssetModal.jsx";
 import useAssetsStore from "../../../stores/useAssetsStore.jsx";
 

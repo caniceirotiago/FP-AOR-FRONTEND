@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import styles from "./ProjectBasicInfo.module.css";
-import Button from '../buttons/landingPageBtn/Button.jsx'
+import Button from "../buttons/landingPageBtn/Button.jsx";
 
-const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing, updateProjectInfo, onApprove, onReject, onCancel }) => {
+const ProjectBasicInfo = ({
+  projectInfo,
+  laboratories,
+  setProjectInfo,
+  isEditing,
+  updateProjectInfo,
+  onApprove,
+  onReject,
+  onCancel,
+}) => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setProjectInfo((prevInfo) => ({
@@ -38,13 +47,19 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
               className={styles.smallButton}
               onClick={() => handleStateChange("READY")}
             >
-              Mark as Ready
+              <FormattedMessage
+                id="markAsReady"
+                defaultMessage="Mark as Ready"
+              />
             </button>
             <button
               className={`${styles.smallButton} ${styles.cancelBtn}`}
               onClick={() => handleStateChange("CANCELLED")}
             >
-              Cancel Project
+              <FormattedMessage
+                id="cancelProject"
+                defaultMessage="Cancel Project"
+              />
             </button>
           </>
         );
@@ -55,13 +70,19 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
               className={styles.smallButton}
               onClick={() => handleStateChange("PLANNING")}
             >
-              Mark as Planning
+              <FormattedMessage
+                id="markAsPlanning"
+                defaultMessage="Mark as Planning"
+              />
             </button>
             <button
               className={`${styles.smallButton} ${styles.cancelBtn}`}
               onClick={() => handleStateChange("CANCELLED")}
             >
-              Cancel Project
+              <FormattedMessage
+                id="cancelProject"
+                defaultMessage="Cancel Project"
+              />
             </button>
           </>
         );
@@ -72,13 +93,19 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
               className={styles.smallButton}
               onClick={() => handleStateChange("FINISHED")}
             >
-              Mark as Finished
+              <FormattedMessage
+                id="markAsFinished"
+                defaultMessage="Mark as Finished"
+              />
             </button>
             <button
               className={`${styles.smallButton} ${styles.cancelBtn}`}
               onClick={() => handleStateChange("CANCELLED")}
             >
-              Cancel Project
+              <FormattedMessage
+                id="cancelProject"
+                defaultMessage="Cancel Project"
+              />
             </button>
           </>
         );
@@ -88,13 +115,18 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
   };
 
   if (!projectInfo) {
-    return null; 
+    return null;
   }
 
   return (
     <div className={styles.projectContainer}>
       <div className={styles.statusContainer}>
-        <label className={styles.label}>Project Status</label>
+        <label className={styles.label}>
+          <FormattedMessage
+            id="projectStatus"
+            defaultMessage="Project Status"
+          />
+        </label>
         <div className={styles.statusDisplay}>
           <span
             className={styles.statusIndicator}
@@ -108,7 +140,9 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
       </div>
       <div className={styles.formContainer}>
         <form className={styles.form}>
-          <label className={styles.label}>Project Name</label>
+          <label className={styles.label}>
+            <FormattedMessage id="projectName" defaultMessage="Project Name" />
+          </label>
           <input
             className={styles.input}
             type="text"
@@ -117,61 +151,82 @@ const ProjectBasicInfo = ({ projectInfo, laboratories, setProjectInfo, isEditing
             onChange={handleInputChange}
             disabled={!isEditing}
           />
-          <label className={styles.label}>Description</label>
+          <label className={styles.label}>
+            <FormattedMessage id="description" defaultMessage="Description" />
+          </label>
           <textarea
-              className={styles.textarea}
-              name="description"
-              value={projectInfo.description}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          <label className={styles.label}>Motivation</label>
+            className={styles.textarea}
+            name="description"
+            value={projectInfo.description}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+          />
+          <label className={styles.label}>
+            <FormattedMessage id="motivation" defaultMessage="Motivation" />
+          </label>
           <textarea
-              className={styles.textarea}
-              name="motivation"
-              value={projectInfo.motivation}
-              onChange={handleInputChange}
-              disabled={!isEditing}
+            className={styles.textarea}
+            name="motivation"
+            value={projectInfo.motivation}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+          />
+          <label className={styles.label}>
+            <FormattedMessage id="laboratoryId" defaultMessage="Laboratory" />
+          </label>
+          <select
+            className={styles.select}
+            name="laboratoryId"
+            id="laboratoryId-field"
+            value={projectInfo?.laboratory.id || ""}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+          >
+            <FormattedMessage
+              id="laboratoryPlaceholder"
+              defaultMessage="Select your laboratory"
+            >
+              {(placeholder) => (
+                <>
+                  <option value="">{placeholder}</option>
+                  {laboratories.map((lab) => (
+                    <option key={lab.id} value={lab.id}>
+                      {lab.location}
+                    </option>
+                  ))}
+                </>
+              )}
+            </FormattedMessage>
+          </select>
+          <label className={styles.label}>
+            <FormattedMessage
+              id="conclusionDate"
+              defaultMessage="Conclusion Date"
             />
-
-          <label className={styles.label}>Laboratory</label>
-          <FormattedMessage id="laboratoryPlaceholder" defaultMessage="Select your laboratory">
-            {(placeholder) => (
-              <select
-                className={styles.select}
-                name="laboratoryId"
-                id="laboratoryId-field"
-                value={projectInfo?.laboratory.id || ''}
-                onChange={handleInputChange}
-                disabled={!isEditing}
-              >
-                <option value="">{placeholder}</option>
-                {laboratories.map((lab) => (
-                  <option key={lab.id} value={lab.id}>
-                    {lab.location}
-                  </option>
-                ))}
-              </select>
-            )}
-          </FormattedMessage>
-          <label className={styles.label}>Conclusion Date</label>
+          </label>
           <input
             type="date"
             className={styles.datePicker}
             name="conclusionDate"
-            value={projectInfo.conclusionDate ? new Date(projectInfo.conclusionDate).toISOString().substring(0, 10) : ''}
+            value={
+              projectInfo.conclusionDate
+                ? new Date(projectInfo.conclusionDate)
+                    .toISOString()
+                    .substring(0, 10)
+                : ""
+            }
             onChange={handleInputChange}
             disabled={!isEditing}
           />
           {isEditing && (
             <div className={styles.buttonContainer}>
-            <Button
-              className={styles.button}
-              onClick={handleUpdateProject}
-              tradId="saveFields"
-              defaultText="Save Fields"
-              btnColor={"var(--btn-color2)"}
-            />
+              <Button
+                className={styles.button}
+                onClick={handleUpdateProject}
+                tradId="saveFields"
+                defaultText="Save Fields"
+                btnColor={"var(--btn-color2)"}
+              />
             </div>
           )}
         </form>

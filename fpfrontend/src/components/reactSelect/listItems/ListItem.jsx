@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from "react-intl";
 import styles from './ListItem.module.css';
 import useProjectRolesStore from '../../../stores/useProjectRolesStore';
 
@@ -72,7 +73,7 @@ const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole,
                     className={styles.removeButton}
                     onClick={() => removeItem(attribute)}
                   >
-                    Remove
+                    <FormattedMessage id="remove" defaultMessage="Remove" />
                   </button>)}
             
         </>

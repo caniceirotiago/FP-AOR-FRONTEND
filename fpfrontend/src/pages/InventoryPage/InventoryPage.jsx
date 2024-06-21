@@ -28,8 +28,8 @@ const InventoryPage = () => {
     orderBy: "",
   };
   const [filters, setFilters] = useState(defaultFilters);
-
   const [filterType, setFilterType] = useState("name", "type");
+  const intl = useIntl();
 
   function getInitialPageSize() {
     const width = dimensions.width;
@@ -65,7 +65,7 @@ const InventoryPage = () => {
     };
   }, [dimensions.width]);
 
-  const intl = useIntl();
+  
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
