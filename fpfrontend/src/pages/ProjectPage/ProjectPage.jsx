@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useParams, useNavigate } from "react-router-dom";
 import ProjectBasicInfo from "../../components/ProjectPageComponents/ProjectBasicInfo.jsx";
 import projectService from "../../services/projectService.jsx";
@@ -12,7 +13,7 @@ import ApprovalModal from "../../components/modals/ApprovalModal.jsx";
 import LogsList from "../../components/ProjectPageComponents/LogsList/LogsList.jsx";
 import useProjectStore from "../../stores/useProjectStore.jsx";
 import GroupChatModal from "../../components/ProjectPageComponents/GroupChat/GroupChatModal";
-import { FormattedMessage, useIntl } from "react-intl";
+
 
 const ProjectPage = () => {
   const navigate = useNavigate();
@@ -40,7 +41,6 @@ const ProjectPage = () => {
 
   const [isGroupChatModalOpen, setGroupChatModalOpen] = useState(false);
   const [selectedChatProject, setSelectedChatProject] = useState(null);
-
   const intl = useIntl();
 
   const fetchProjectData = useCallback(async () => {

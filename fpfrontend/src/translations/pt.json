@@ -134,5 +134,13 @@
   "markAsPlanning": "Marcar em Planeamento",
   "markAsFinished": "Marcar como Terminado",
   "cancelProject": "Cancelar Projeto",
-  "projectStatus": "Estado do Projeto"
+  "projectStatus": "Estado do Projeto",
+  "askToJoin": "Solicitar ser membro",
+  "noSuggestionsFound": "Nenhuma sugestão encontrada",
+  "addNew": "Adicionar novo {title}",
+  "add": "Adicionar",
+  "remove": "Remover",
+  "cancel": "Cancelar",
+  "confirm": "Confirmar"
+
 }

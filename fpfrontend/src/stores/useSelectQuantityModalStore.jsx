@@ -3,7 +3,7 @@ import {create} from 'zustand';
 
 const useSelectQuantityModalStore = create((set) => ({
   showModal: false,
-  usedQuantity: null,
+  usedQuantity: 1,
   resolver: null,
   setShowModal: (show) => set({ showModal: show }),
   resolveSelection: (usedQuantity) => set((state) => {
@@ -17,8 +17,7 @@ const useSelectQuantityModalStore = create((set) => ({
       set({ resolver: resolve });
     });
   },
-  reset: () => set({ showModal: false, usedQuantity: null, resolver: null }),
+  reset: () => set({ showModal: false, usedQuantity: 1, resolver: null }),
 }));
 
 export default useSelectQuantityModalStore;
-
