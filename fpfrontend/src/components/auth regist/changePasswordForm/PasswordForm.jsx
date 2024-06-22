@@ -3,7 +3,6 @@ import styles from './PasswordForm.module.css';
 import {  FormattedMessage } from 'react-intl';
 import { validatePassword } from '../../../utils/validators/userValidators';
 import userService from '../../../services/userService';
-import { useNavigate } from 'react-router-dom';
 import useDialogModalStore from '../../../stores/useDialogModalStore';
 import DialogMultipleMessagesModalStore from '../../../stores/useDialogMultipleMessagesModalStore';
 import Button from '../../buttons/landingPageBtn/Button.jsx'
@@ -21,7 +20,6 @@ const PasswordForm = () => {
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
   const { setDialogMultipleMessages, setDialogMultipleMessagesTitle, setIsDialogMultipleMessagesOpen } = DialogMultipleMessagesModalStore();
 
-  const navigate = useNavigate();
   const [passwords, setPasswords] = useState({
     oldPassword: '',
     newPassword: '',
@@ -68,7 +66,12 @@ const checkPasswordStrength = (password) => {
       try {
         const response = await userService.updateUserPassword( oldPassword, newPassword );
         if(response.status === 204){
-          setDialogMessage('Password Changed Successfully');
+                    setDialogMessage(
+            <FormattedMessage
+              id="passwordUpdateSuccess"
+              defaultMessage="Password Changed Successfully!"
+            />
+          );
           setIsDialogOpen(true);
           setAlertType(true);
           setOnConfirm(async () => {
@@ -76,7 +79,11 @@ const checkPasswordStrength = (password) => {
           });
         }
         else{
-          setDialogMessage('Not able to change password, contact support.');
+          setDialogMessage(
+            <FormattedMessage
+              id="passwordUpdateFail"
+              defaultMessage="Not able to change password, contact support."
+            /> );
           setIsDialogOpen(true);
           setAlertType(true);
           setOnConfirm(async () => {

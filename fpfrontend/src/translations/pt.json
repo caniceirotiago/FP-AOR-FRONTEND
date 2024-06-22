@@ -4,6 +4,7 @@
   "emailPlaceholder": "Digite seu email",
   "password": "Palavra-passe",
   "passwordPlaceholder": "Digite sua palavra-passe",
+  "repeatPassword": "Confirme Palavra-passe",
   "confirmPasswordPlaceholder": "Confirme sua palavra-passe",
   "username": "Alcunha",
   "usernamePlaceholder": "Digite sua alcunha",
@@ -173,11 +174,10 @@
   "selectState": "Selecione Estado",
   "selectLaboratory": "Selecione Laboratório",
   "openPositions": "Vagas Disponíveis",
-  "notInSuggestions" : "Sugestão não encontrada.",
-  "onlyOneResponsible" : "Tarefa apenas pode ter um responsável.",
-  "maxInputLenght" : "Ultrapassou o limite máximo de caracteres.",
-  "duplicateAttribute" : "Atributo duplicado."
-
-
-
+  "notInSuggestions": "Sugestão não encontrada.",
+  "onlyOneResponsible": "Tarefa apenas pode ter um responsável.",
+  "maxInputLenght": "Ultrapassou o limite máximo de caracteres.",
+  "duplicateAttribute": "Atributo duplicado.",
+  "profileUpdateSuccess": "Perfil atualizado com sucesso!",
+  "profileUpdateFail": "Falha ao atualizar o perfil. Tente novamente."
 }

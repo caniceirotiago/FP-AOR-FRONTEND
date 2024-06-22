@@ -4,6 +4,7 @@
   "emailPlaceholder": "Enter your email",
   "password": "Password",
   "passwordPlaceholder": "Enter your password",
+  "repeatPassword": "Confirm password",
   "confirmPasswordPlaceholder": "Confirm your password",
   "username": "Username",
   "usernamePlaceholder": "Enter your username",
@@ -172,10 +173,12 @@
   "selectState": "Select State",
   "selectLaboratory": "Select Laboratory",
   "openPositions": "Open Positions",
-  "notInSuggestions" : "Not found in suggestions. Not adding.",
-  "onlyOneResponsible" : "Only one user can be assigned to a task as responsible. Not adding.",
-  "maxInputLenght" : "Input exceeds maximum character limit. Not adding.",
-  "duplicateAttribute" : "Duplicate attribute. Not adding."
-
-  
+  "notInSuggestions": "Not found in suggestions. Not adding.",
+  "onlyOneResponsible": "Only one user can be assigned to a task as responsible. Not adding.",
+  "maxInputLenght": "Input exceeds maximum character limit. Not adding.",
+  "duplicateAttribute": "Duplicate attribute. Not adding.",
+  "profileUpdateSuccess": "Profile updated successfully!",
+  "profileUpdateFail": "Failed to update profile. Please try again.",
+  "passwordUpdateSuccess" : "Password Changed Successfully!",
+  "passwordUpdateFail" : "Not able to change password, contact support."
 }
