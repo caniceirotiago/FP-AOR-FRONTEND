@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import assetService from "../../../services/assetService";
 import styles from "./EditAssetModal.module.css";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import "react-datepicker/dist/react-datepicker.css";
 import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
 import useAssetsStore from "../../../stores/useAssetsStore.jsx";
@@ -11,6 +11,7 @@ const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
     useDialogModalStore();
   const [assetData, setAssetData] = useState(null);
   const { types } = useAssetsStore();
+  const intl = useIntl();
 
   useEffect(() => {
     if (!selectedAssetId) return;
@@ -48,7 +49,7 @@ const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
     try {
       const response = await assetService.updateAsset(assetData);
       if (response.ok) {
-        setDialogMessage("Asset updated successfully!");
+        setDialogMessage(intl.formatMessage({ id: "assetUpdatedSuccess", defaultMessage: "Asset updated successfully!" }));
         setAlertType("success");
         setIsDialogOpen(true);
         setOnConfirm(() => {
