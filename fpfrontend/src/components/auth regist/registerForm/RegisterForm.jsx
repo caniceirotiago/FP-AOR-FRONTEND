@@ -139,7 +139,9 @@ const RegisterForm = ( ) => {
          <form className={styles.registrationForm}>
             <div className={styles.formContent}>
                <div className={styles.formSection1}>
-                  <label className={styles.label} id="email-label" htmlFor="email-field"><FormattedMessage id="email">Email</FormattedMessage></label>
+                  <label className={styles.label} id="email-label" htmlFor="email-field">
+                  <FormattedMessage id="email" defaultMessage="Email" />
+                  </label>
                   <FormattedMessage id="emailPlaceholder">{(value) => (<input
                      className={styles.input} 
                      type="email"
@@ -151,7 +153,7 @@ const RegisterForm = ( ) => {
                      placeholder={value} 
                   />)}</FormattedMessage>
                   <label className={styles.label} id="password-label" htmlFor="password-field">
-                     Password
+                  <FormattedMessage id="password" defaultMessage="Password" />
                   </label>
                   <FormattedMessage id="passwordPlaceholder">{(value) => (<input
                      className={styles.input}
@@ -171,7 +173,9 @@ const RegisterForm = ( ) => {
                                 {passwordError}
                             </div>
                         )}
-                  <label className={styles.label} id="password-label2" htmlFor="password2-field">Repeat Password</label>
+                  <label className={styles.label} id="password-label2" htmlFor="password2-field">
+                  <FormattedMessage id="repeatPassword" defaultMessage="Repeat Password" />
+                  </label>
                   <FormattedMessage id="passwordPlaceholder">{(value) => (<input
                      className={styles.input}
                      type="password"
@@ -182,7 +186,9 @@ const RegisterForm = ( ) => {
                      maxLength="25"
                      placeholder={value}
                   />)}</FormattedMessage>
-                  <label className={styles.label} id="username-label" htmlFor="username-field">Username</label>
+                  <label className={styles.label} id="username-label" htmlFor="username-field">
+                  <FormattedMessage id="username" defaultMessage="Username" />
+                  </label>
                   <FormattedMessage id="usernamePlaceholder">{(value) => (<input
                      className={styles.input}
                      type="text"
@@ -193,7 +199,9 @@ const RegisterForm = ( ) => {
                      maxLength="25"
                      placeholder={value}
                   />)}</FormattedMessage>
-                  <label className={styles.label} id="first-name-label" htmlFor="firstname-field"><FormattedMessage id="firstName">First Name</FormattedMessage></label>
+                  <label className={styles.label} id="first-name-label" htmlFor="firstname-field">
+                     <FormattedMessage id="firstName" defaultMessage="First Name"></FormattedMessage>
+                     </label>
                   <FormattedMessage id="firstNamePlaceholder">{(value) => (<input
                      className={styles.input}
                      type="text"
@@ -204,7 +212,9 @@ const RegisterForm = ( ) => {
                      maxLength="35"
                      placeholder={value}
                   />)}</FormattedMessage>
-                  <label  className={styles.label} id="last-name-label" htmlFor="lastname-field"><FormattedMessage id="lastName">Last Name</FormattedMessage></label>
+                  <label  className={styles.label} id="last-name-label" htmlFor="lastname-field">
+                  <FormattedMessage id="lastName" defaultMessage="Last Name"></FormattedMessage>
+                  </label>
                   <FormattedMessage id="lastNamePlaceholder">{(value) => (<input
                      className={styles.input}
                      type="text"
@@ -217,7 +227,7 @@ const RegisterForm = ( ) => {
                   />)}</FormattedMessage>
                   <div>
                      <label className={styles.label} htmlFor="laboratoryId-field">
-                           <FormattedMessage id="laboratoryId" defaultMessage="Laboratory" />
+                           <FormattedMessage id="laboratoryId" defaultMessage="Laboratory"></FormattedMessage>
                      </label>
                      <FormattedMessage id="laboratoryPlaceholder" defaultMessage="Select your laboratory">
                            {(placeholder) => (
