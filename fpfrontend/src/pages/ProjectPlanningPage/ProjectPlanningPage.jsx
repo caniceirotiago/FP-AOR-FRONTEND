@@ -3,7 +3,7 @@ import styles from './ProjectPlanningPage.module.css'
 import TaskManager from '../../components/ProjectPlanningPageComponets/ganttChat/TaskManager';
 import projectService from '../../services/projectService';
 import membershipService from '../../services/membershipService';
-import { FaPlus, FaFilter } from 'react-icons/fa';
+import { FaPlus, FaArrowCircleRight } from 'react-icons/fa';
 import CreateTaskModal from '../../components/modals/CreateTaskModal';
 import  useProjectStore  from '../../stores/useProjectStore';
 import EditTaskModal from '../../components/modals/EditTaskModal';
@@ -23,6 +23,9 @@ const ProjectPlanningPage = () => {
       const response = await membershipService.getProjectIdsByuserId();
       const data = await response.json();
       setAccessibleProjectsIds(data);
+      if (!selectedProjectId && data.length > 0) {
+        setSelectedProjectId(data[0].id);
+      }
     } catch (error) {
       console.error("Error fetching projects:", error);
     }
@@ -30,6 +33,7 @@ const ProjectPlanningPage = () => {
 
   useEffect(() => {
     fetchProjetsIdByloggedUser();
+    
   }
   , [selectedProjectId]);
 
@@ -63,25 +67,23 @@ const ProjectPlanningPage = () => {
         <CreateTaskModal onTaskCreated={handleTaskCreated} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} projectId={selectedProjectId}/>
         <EditTaskModal onTaskUpdate={handleTaskUpdate} projectId={selectedProjectId} isOpen={isEditTaskModalOpen} onClose={() => setIsEditTaskModalOpen(false)} taskId={selectedTaskId}/>
            <div className={styles.controlPanel}>
-           <div className={styles.btns}>
-            <button onClick={handleClick} className={`${styles.iconButton} ${styles.createButton}`} data-text="Create">
-              <FaPlus  className={styles.svgIcon} />
-            </button>
-
-          <button onClick={toggleFiltersVisibility} className={styles.iconButton} data-text="Filter">
-            <FaFilter className={styles.svgIcon} />
-          </button>
-        </div>
-        {filtersVisible && (
-          <select onChange={handleSelectProject}>
-            <option value="">Select a project</option>
-            {accessibleProjectsIds.map((projectId) => (
-              <option key={projectId} value={projectId}>
-                {projectId}
-              </option>
-            ))}
-          </select>
-        )}
+            <div className={styles.btns}>
+              <button onClick={handleClick} className={`${styles.iconButton} ${styles.createButton}`} data-text="Task">
+                <FaPlus  className={styles.svgIcon} />
+              </button>
+          </div>
+          <div className={styles.selectProjectDiv}>
+            <h4>Change Project</h4>
+            <select className={styles.selectProject} onChange={handleSelectProject} value={selectedProjectId}>
+               
+              {accessibleProjectsIds.map((project) => (
+                <option key={project.id} value={project.id}>
+                  {project.name}
+                </option>
+              ))}
+            </select>
+          </div>
+         
       </div>
       <TaskManager handleEditTaskClick={handleEditTaskClick} projectId={selectedProjectId} tasksUpdated={tasksUpdated}/>
     </div>

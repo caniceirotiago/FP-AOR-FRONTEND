@@ -218,7 +218,7 @@ const HomepageHeader = () => {
 
   const username = localStorage.getItem("username");
   const photo = localStorage.getItem("photo");
-  console.log(notification);
+  
 
   return (
     <header className={styles.header}>

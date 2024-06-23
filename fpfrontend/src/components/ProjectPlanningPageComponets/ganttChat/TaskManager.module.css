@@ -2,12 +2,52 @@
   display: flex;
   justify-content: flex-start;
   flex-grow: 1;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  padding-top: 30px;
+  padding-top: 10px;
+}
+.projectPlanningHeader{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  flex-direction: row;
+  width: 100%;
+  height: 5%;
+  gap: 20px;
+}
+.projectPlanningHeader h3{
+  font-size: 2em;
+  margin: 0px;
+  padding: 0px;
+  align-self: center;
+  justify-self: center;
+}
+.projectPlanningHeader p{
+  font-size: 1.3em;
+  margin: 0px;
+  padding: 0px;
+  align-self: center;
+  justify-self: center;
+}
+
+.projectPlanningBody{
+  display: flex;
+  justify-content: flex-start;
+  flex-grow: 1;
+  width: 100%;
+  height: 90%;
+  padding-top: 10px;
+
 }
 
 .title {
   font-size: 24px;
   margin-bottom: 20px;
+}
+.statusIndicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
 }
