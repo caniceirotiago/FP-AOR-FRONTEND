@@ -72,17 +72,26 @@
   bottom: 15px;
   opacity: 1;
 }
-.filters {
+.selectProjectDiv {
   justify-self: right;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  justify-content: center;
+  justify-content:flex-end;
   width: 100%;
   padding-top: 7px;
+  margin-right: 20px;
+}
+.selectProjectDiv h4 {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+  align-self: center;
 }
 
-.filters select, .filters input {
+.selectProjectDiv select{
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ddd;
@@ -91,7 +100,7 @@
   transition: all 0.3s ease;
 }
 
-.filters select:focus, .filters input:focus {
+.selectProjectDiv select:focus {
   border-color: var(--btn-background1);
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
