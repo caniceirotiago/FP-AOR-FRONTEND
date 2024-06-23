@@ -1,135 +1,89 @@
-/* AttributeEditor.module.css */
-
 .container {
-  width: 100%;
-  align-self: center;
-  background: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+  background-color: var(--atribute-editor-background);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.container h2 {
+  font-size: 18px;
+  margin: 0px;
+  padding: 5px;
+  color: var(--text-color4);
 }
 
 .innerContainer {
   display: flex;
   flex-direction: column;
-}
-.attribute{
-  border-bottom: solid 1px #ddd;
+  gap: 12px;
 }
 
-.existingAttributes,
-.addAttribute {
-  margin-bottom: 20px;
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+.existingAttributes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 
-.existingAttributes h3,
-.addAttribute h3 {
-  margin-bottom: 10px;
-  color: #333;
 }
 
 .userAttributeContainer {
-  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  min-height: 30px;
+  max-height: 200px;
   overflow-y: auto;
-  height: 200px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
 }
 
 .attributeList {
-  list-style: none;
+  list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
 .attribute {
+  padding: 8px;
+  border: 0px solid #ddd;
+  border-radius: 4px;
+  background-color: var(--listItem-background);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.3s ease;
+  margin-bottom: 4px;
 }
 
-.attribute:last-child {
-  border-bottom: none;
-}
-
-.attribute:hover {
-  background-color: #f1f1f1;
-}
-
-.attributeName {
-  flex-grow: 1;
-  color: #555;
-}
-
-.removeButton {
-  cursor: pointer;
-  background-color: #ff4d4f;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.removeButton:hover {
-  background-color: #ff7875;
+.addAttribute {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
 }
 
 .selectAddContainer {
   display: flex;
   align-items: center;
+  width: 100%;
   gap: 10px;
 }
 
-.react-select-container {
-  flex-grow: 1;
-}
-
-.react-select__control {
-  border-color: #0f6abe;
-  box-shadow: none;
-  transition: border-color 0.3s ease;
-}
-
-.react-select__control:hover {
-  border-color: #40a9ff;
-}
-
-.react-select__input {
+.select {
   width: 100%;
 }
 
-.react-select__placeholder {
-  color: #aaa;
-}
 
-.react-select__single-value {
-  color: #333;
-}
-
-.addAttribute button {
-  cursor: pointer;
-  background-color: #0f6abe;
-  color: white;
+.addBtn {
+  background-color: var(--btn-background2);
+  color: #fff;
+  padding: 4px 8px;
   border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
+  border-radius: 3px;
+  cursor: pointer;
   transition: background-color 0.3s ease;
+  width: 10%;
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.addAttribute button:hover {
-  background-color: #40a9ff;
-}
-
-@media (max-width: 768px) {
-  .container {
-    width: 70%;
-    padding: 10px;
-  }
+.addBtn:hover {
+  background-color: var(--btn-background1);
 }

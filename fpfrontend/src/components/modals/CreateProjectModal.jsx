@@ -3,14 +3,17 @@ import styles from "./CreateProjectModal.module.css";
 import useLabStore from "../../stores/useLabStore.jsx";
 import { FormattedMessage } from "react-intl";
 import AttributeEditor from "../reactSelect/AttributeEditor.jsx";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import projectService from "../../services/projectService.jsx";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
+import useDialogMultipleMessagesModalStore from "../../stores/useDialogMultipleMessagesModalStore.jsx";
+import { FaPlus } from "react-icons/fa";
 
 const CreateProjectModal = ({ isOpen, onClose }) => {
-  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
-    useDialogModalStore();
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
+  const { setDialogMultipleMessagesTitle, setIsDialogMultipleMessagesOpen, setDialogMultipleMessages, clearDialog } = useDialogMultipleMessagesModalStore();
+
   const { laboratories, fetchLaboratories } = useLabStore();
   const [projectData, setProjectData] = useState({
     name: "",
@@ -83,13 +86,25 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
       })),
     };
     console.log(dataToSend);
-    const response = await projectService.createProject(dataToSend);
+    try {
+      const response = await projectService.createProject(dataToSend);
     if (response.status === 204) {
+      setProjectData({
+        name: "",
+        conclusionDate: null,
+        description: "",
+        motivation: "",
+        laboratoryId: "",
+        skills: [],
+        keywords: [],
+        users: [],
+        assets: [],
+      });
       setDialogMessage(
         <FormattedMessage
           id="projectCreatedSuccess"
           defaultMessage="Project created successfully!"
-        />
+        /> 
       );
       setAlertType(true);
       setIsDialogOpen(true);
@@ -99,11 +114,23 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
       });
     } else {
       const data = await response.json();
-      setDialogMessage(data.message);
-      setAlertType(true);
+      console.log(data);
+      // Using the DialogMultipleMessagesModalStore to display multiple messages and divide messages by "," carachter
+      setDialogMultipleMessagesTitle("Error");
+      setDialogMultipleMessages(data.message.split(","));
+      setIsDialogMultipleMessagesOpen(true);
+      setOnConfirm(() => {
+        clearDialog();
+      });
+    }
+    } catch (error) {
+      setDialogMessage(error.message);
+      setAlertType(false);
       setIsDialogOpen(true);
       setOnConfirm(() => {});
     }
+    
+    
   };
 
   if (!isOpen) return null;
@@ -127,6 +154,8 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
               name="name"
               value={projectData.name}
               onChange={handleChange}
+              minLength={2}
+              maxLength={255}
             />
             <label className={styles.label}>
               <FormattedMessage id="description" defaultMessage="Description" />
@@ -136,7 +165,8 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
               name="description"
               value={projectData.description}
               onChange={handleDescriptionChange}
-            />
+              minLength={2}
+              maxLength={2048}/>
             <label className={styles.label}>
               <FormattedMessage id="motivation" defaultMessage="Motivation" />
             </label>
@@ -145,6 +175,8 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
               name="motivation"
               value={projectData.motivation}
               onChange={handleMotivationChange}
+              minLength={2}
+              maxLength={2048}
             />
             <label className={styles.label}>
               <FormattedMessage id="laboratoryId" defaultMessage="Laboratory" />

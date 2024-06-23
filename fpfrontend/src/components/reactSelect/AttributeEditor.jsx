@@ -13,6 +13,10 @@ import projectService from "../../services/projectService.jsx";
 import useConfigurationStore from "../../stores/useConfigurationStore";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import membershipService from "../../services/membershipService";
+import useDialogMultipleMessagesModalStore from "../../stores/useDialogMultipleMessagesModalStore.jsx";
+import { FaPlus } from "react-icons/fa";
+import  useDeviceStore  from "../../stores/useDeviceStore";
+
 
 const AttributeEditor = ({
   title,
@@ -36,9 +40,8 @@ const AttributeEditor = ({
   const { configurations } = useConfigurationStore();
   const selectTypeModal = useSelectTypeModal();
   const usedQuantity = useSelectQuantityModalStore();
-  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
-    useDialogModalStore();
-
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
+  const { dimensions} = useDeviceStore();
   // Initialize attributes based on creation mode and initial values
   useEffect(() => {
     if (!creationMode) {
@@ -255,6 +258,7 @@ const AttributeEditor = ({
         return;
       }
       // Ensure no duplicate attributes/users
+      console.log("attributes", attributes);
       if (title !== "users") {
         if (
           attributes.some(
@@ -278,7 +282,7 @@ const AttributeEditor = ({
         if (
           attributes.some(
             (attribute) =>
-              attribute.username?.toLowerCase() === input.toLowerCase()
+              attribute.user.username?.toLowerCase() === input.toLowerCase()
           )
         ) {
           setDialogMessage(
@@ -295,6 +299,51 @@ const AttributeEditor = ({
           return;
         }
       }
+      //Ensure not adding more users than the maximum allowed
+      if (title === "users" && mainEntity === "project") {
+        let maxProjectMembersConfig = configurations.get("maxProjectMembers");
+        console.log("maxProjectMembersConfig", maxProjectMembersConfig);
+        if(creationMode)maxProjectMembersConfig = maxProjectMembersConfig - 1;
+        if (attributes.length >= maxProjectMembersConfig) {
+          setDialogMessage(
+            <FormattedMessage
+
+              id="maxProjectMembers"
+              defaultMessage="Maximum number of project members reached. Not adding."
+            />
+          );
+          setAlertType(true);
+          setIsDialogOpen(true);
+          setOnConfirm(() => {
+            setIsDialogOpen(false);
+          });
+          return;
+        }
+      }
+
+
+
+      //Ensure in case of a new project the user can't add himself to the project
+      if (
+        title === "users" &&
+        mainEntity === "project" &&
+        localStorage.getItem("username") === input
+      ) {
+        setDialogMessage(
+          <FormattedMessage
+
+            id="cantAddYourself"
+            defaultMessage="Choose another user to add to the project. You will be automatically added."
+          />
+        );
+        setAlertType(true);
+        setIsDialogOpen(true);
+        setOnConfirm(() => {
+          setIsDialogOpen(false);
+        });
+        return;
+      }
+
 
       let selectedOption = null;
       // Prompt user to select type for skills or interests
@@ -648,7 +697,7 @@ const AttributeEditor = ({
             <div className={styles.addAttribute}>
               <div className={styles.selectAddContainer}>
                 <Select
-                  className="react-select-container"
+                  className={styles.select}
                   classNamePrefix="react-select"
                   value={selectedValue}
                   onInputChange={handleInputChange}
@@ -672,7 +721,10 @@ const AttributeEditor = ({
                   styles={{
                     control: (base) => ({
                       ...base,
-                      width: "300px",
+                      width: "100%",
+                      border: "none",
+                      background: "var(--input-select-textarea-background)",
+                      
                     }),
                     input: (base) => ({
                       ...base,
@@ -680,8 +732,10 @@ const AttributeEditor = ({
                     }),
                   }}
                 />
-                <div onClick={addItem}>
-                  <FormattedMessage id="add" defaultMessage="Add" />
+                <div onClick={addItem} className={styles.addBtn}>
+                  <FaPlus />
+                  {dimensions.width >600 && <FormattedMessage id="add" defaultMessage="Add" />}
+
                 </div>
               </div>
             </div>

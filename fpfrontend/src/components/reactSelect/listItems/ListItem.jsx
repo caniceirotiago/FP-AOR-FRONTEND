@@ -2,6 +2,7 @@ import React from 'react';
 import { FormattedMessage } from "react-intl";
 import styles from './ListItem.module.css';
 import useProjectRolesStore from '../../../stores/useProjectRolesStore';
+import { FaTimes } from 'react-icons/fa';
 
 const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole, editMode, createdBy, removeItem }) => {
     const { roles } = useProjectRolesStore();
@@ -69,12 +70,12 @@ const ListItem = ({ title, attribute, creationMode, handleChangeUserProjectRole,
             </>
         )}
 
-         {(editMode && !isTheCreator) && (<button
+         {(editMode && !isTheCreator) && (<div
                     className={styles.removeButton}
                     onClick={() => removeItem(attribute)}
                   >
-                    <FormattedMessage id="remove" defaultMessage="Remove" />
-                  </button>)}
+                    <FaTimes/>
+                  </div>)}
             
         </>
     );
