@@ -248,8 +248,7 @@ const HomePage = () => {
                 <FormattedMessage id="skills" defaultMessage="Skills" />
               </option>
             </select>
-            <input
-              name={filterType}
+            <input name={filterType}
               placeholder={intl.formatMessage(
                 { id: "filterPlaceholder" },
                 {

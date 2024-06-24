@@ -4,9 +4,11 @@ import GanttChart from './GanttChart/GanttChart';
 import styles from './TaskManager.module.css';
 import taskService from '../../../services/taskService';
 import  useDeviceStore  from '../../../stores/useDeviceStore';
+import projectService from '../../../services/projectService';
 
 const TaskManager = ({projectId, tasksUpdated, handleEditTaskClick }) => {
   const [tasks, setTasks] = useState( []);
+  const [projectGeneralInfo, setProjectGeneralInfo] = useState({});
   const {dimensions, setDimensions} = useDeviceStore();
 
   const fetchProjectTasks = async () => {
@@ -31,8 +33,20 @@ const TaskManager = ({projectId, tasksUpdated, handleEditTaskClick }) => {
       console.error("Error fetching tasks:", error);
     }
   }
+  const fetchProjectGeneralInfo = async () => {
+    try {
+      const response = await projectService.getProjectById(projectId);
+      const data = await response.json();
+      setProjectGeneralInfo(data);
+      
+    } catch (error) {
+      console.error("Error fetching project General Info:", error);
+    }
+  }
+
   useEffect(() => {
     fetchProjectTasks();
+    fetchProjectGeneralInfo();
   }
   , [projectId, tasksUpdated])
 
@@ -96,16 +110,44 @@ const TaskManager = ({projectId, tasksUpdated, handleEditTaskClick }) => {
   console.log(tasks);
   return (
     <div className={styles.container}>
-      {dimensions.width > 1250 && <TaskTable tasks={tasks} handleEditTaskClick={handleEditTaskClick}/>}
-      <GanttChart 
-         tasks={tasks} 
-         setTasks={setTasks}
-          updateTaskById={updateTaskById} 
-          addPreresquisiteTaskById={addPreresquisiteTaskById} 
-          removeDependency={removeDependency}
-          handleEditTaskClick={handleEditTaskClick}/>
+      <div className={styles.projectPlanningHeader}>
+        <h3 className={styles.title}>{projectGeneralInfo.name}</h3>
+        <p>{projectGeneralInfo.state}</p>
+        <span
+            className={styles.statusIndicator}
+            style={{ backgroundColor: getStatusColor(projectGeneralInfo.state) }}
+          ></span>
+        
+      </div>
+        <div className={styles.projectPlanningBody}>
+        {dimensions.width > 1250 && <TaskTable tasks={tasks} handleEditTaskClick={handleEditTaskClick}/>}
+        <GanttChart 
+          tasks={tasks} 
+          setTasks={setTasks}
+            updateTaskById={updateTaskById} 
+            addPreresquisiteTaskById={addPreresquisiteTaskById} 
+            removeDependency={removeDependency}
+            handleEditTaskClick={handleEditTaskClick}/>
+      </div>
     </div>
   );
 };
 
 export default TaskManager;
+
+const getStatusColor = (status) => {
+  switch (status) {
+    case "PLANNING":
+      return "var(--color-planning)";
+    case "READY":
+      return "var(--color-ready)";
+    case "IN_PROGRESS":
+      return "var(--color-in-progress)";
+    case "FINISHED":
+      return "var(--color-finished)";
+    case "CANCELLED":
+      return "var(--color-cancelled)";
+    default:
+      return "var(--color-default)";
+  }
+};

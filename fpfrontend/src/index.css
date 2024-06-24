@@ -45,6 +45,9 @@ body.theme-light {
   --briefcase-base-color:  rgb(80, 246, 255);
   --active-aside-item-color: #b9cbdd;
   --hover-aside-item-color: #dbe1e8;
+  --atribute-editor-background: #ffffff;
+  --input-select-textarea-background: rgba(255, 255, 255, 1); 
+  --listItem-background: rgba(245, 232, 220, 0.271);
 
 }
 
@@ -52,8 +55,8 @@ body.theme-dark {
   --header-color: #343a40;
   --btn-color1: #e0e0e0;
   --btn-color2: #121212; 
-  --btn-background1: #7b9879; 
-  --btn-background2: #4ab296; 
+  --btn-background1: #1e5b89; 
+  --btn-background2: #07557c; 
   --background-color1: black; 
   --card-background: rgba(60, 60, 60, 1); 
   --card-border: rgba(255, 255, 255, 0.1); 
@@ -73,9 +76,17 @@ body.theme-dark {
   --briefcase-base-color:  rgb(39, 59, 237);
   --active-aside-item-color: #2b435d;
   --hover-aside-item-color: #424e5c;
+  --atribute-editor-background: #d5d7de30;
+  --input-select-textarea-background: rgba(60, 60, 60, 1); 
+  --listItem-background: rgba(255, 255, 255, 0.163);
 
 }
 
 .react-select__input {
   opacity: 1 !important;
+  color: var(--text-color4) !important;
+  
+}
+.css-lx0s3w-control  {
+ width: 100%;
 }
