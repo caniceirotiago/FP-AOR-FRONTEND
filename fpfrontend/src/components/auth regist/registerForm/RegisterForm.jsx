@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './RegisterForm.module.css';
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import userService from '../../../services/userService';
 import  DialogModalStore  from '../../../stores/useDialogModalStore';
 import  DialogMultipleMessagesModalStore  from '../../../stores/useDialogMultipleMessagesModalStore';
@@ -13,8 +13,13 @@ import  useLabStore  from '../../../stores/useLabStore.jsx';
 const RegisterForm = ( ) => {
    const { setDialogMultipleMessages, setDialogMultipleMessagesTitle, setIsDialogMultipleMessagesOpen } = DialogMultipleMessagesModalStore();
    const {setIsDialogOpen, setDialogMessage, setAlertType, setOnConfirm} = DialogModalStore();
-   const [loading, setLoading] = useState(false);
+   const { laboratories, fetchLaboratories } = useLabStore();
    const navigate = useNavigate();
+   const intl = useIntl();
+   const [loading, setLoading] = useState(false);
+   const [passwordStrength, setPasswordStrength] = useState(0);
+   const [passwordError, setPasswordError] = useState('');
+   const [passwordStrongEnough, setpasswordStrongEnough] = useState(true);
    const [user, setUser] = useState({
       email: '',
       password: '',
@@ -24,11 +29,6 @@ const RegisterForm = ( ) => {
       lastName: '',
       laboratoryId: '',
    });
-   const [passwordStrength, setPasswordStrength] = useState(0);
-   const [passwordError, setPasswordError] = useState('');
-   const [passwordStrongEnough, setpasswordStrongEnough] = useState(true);
-   const { laboratories, fetchLaboratories } = useLabStore();
-
 
    useEffect(() => {
       fetchLaboratories();
@@ -39,7 +39,6 @@ const RegisterForm = ( ) => {
       setPasswordStrength(score);
       setPasswordError(errors.join(' '));
       setpasswordStrongEnough(isValid);
-
   };
 
    const handleChange = (e) => {
@@ -47,8 +46,8 @@ const RegisterForm = ( ) => {
       if (name === 'password') {
          checkPasswordStrength(value);
         if (!validatePassword(value)) {
-          setPasswordError('Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.');
-        } else {
+         setPasswordError(intl.formatMessage({ id: 'passwordValidationError', defaultMessage: 'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.' }));
+      } else {
           setPasswordError('');
         }
       }
@@ -75,16 +74,16 @@ const RegisterForm = ( ) => {
 
     const { confirmPassword, ...userData } = user;
     const newErrors = {
-         Email: !user.email ? 'Email is required' : '',
-         Password: !user.password ? ' is required' : '',
-         Confirmation: user.password !== user.confirmPassword ? ' passwords do not match' : '',
-         Passwords: passwordError !=='' ? passwordError : '',
-         Username: !user.username ? ' is required' : '',
-         Name: !user.firstName || !user.lastName ? 'First name and last name are required' : '',
-         Laboratory: !user.laboratoryId ? ' is required' : '',
-         Weak: passwordStrongEnough ? '' : 'Password is not strong enough'
+      1: !user.email ? intl.formatMessage({ id: 'emailRequired', defaultMessage: 'Email is required' }) : '',
+      2: !user.password ? intl.formatMessage({ id: 'passwordRequired', defaultMessage: 'Password is required' }) : '',
+      3: user.password !== user.confirmPassword ? intl.formatMessage({ id: 'passwordsDoNotMatch', defaultMessage: 'Passwords do not match' }) : '',
+      4: passwordError !== '' ? passwordError : '',
+      5: !user.username ? intl.formatMessage({ id: 'usernameRequired', defaultMessage: 'Username is required' }) : '',
+      6: !user.firstName || !user.lastName ? intl.formatMessage({ id: 'nameRequired', defaultMessage: 'First name and last name are required' }) : '',
+      7: !user.laboratoryId ? intl.formatMessage({ id: 'laboratoryRequired', defaultMessage: 'Laboratory is required' }) : '',
+      8: passwordStrongEnough ? '' : intl.formatMessage({ id: 'passwordNotStrongEnough', defaultMessage: 'Password is not strong enough' })
+  };
 
-    };
     const isValid = Object.keys(newErrors).every((key) => !newErrors[key]);
     if (isValid) {
        try {
@@ -106,8 +105,8 @@ const RegisterForm = ( ) => {
              });
          }
          else{
-             setDialogMessage('Confirmation Email Sent');
-             setIsDialogOpen(true);
+            setDialogMessage(intl.formatMessage({ id: 'confirmationEmailSent', defaultMessage: 'Confirmation Email Sent' }));
+            setIsDialogOpen(true);
              setAlertType(true);
              setOnConfirm(async () => {
                 setLoading(false);
@@ -117,8 +116,8 @@ const RegisterForm = ( ) => {
         } catch (error) {
           console.error('Error:', error.message);
           setLoading(false);
-          setDialogMessage('Error: Please try again later., or contact support.');
-            setIsDialogOpen(true);
+          setDialogMessage(intl.formatMessage({ id: 'registrationError', defaultMessage: 'Please try again later, or contact support.' }));
+          setIsDialogOpen(true);
             setAlertType(true);
             setOnConfirm(async () => {
             });
@@ -128,7 +127,7 @@ const RegisterForm = ( ) => {
           .filter(([key, value]) => value !== '') 
           .map(([key, value]) => `${key}: ${value}`); 
        setDialogMultipleMessages(errorMessages);
-       setDialogMultipleMessagesTitle('Validation Errors');
+       setDialogMultipleMessagesTitle(intl.formatMessage({ id: 'validationErrors', defaultMessage: 'Validation Errors' }));
        setIsDialogMultipleMessagesOpen(true);
     }
   };

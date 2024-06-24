@@ -46,7 +46,7 @@ const ResendEmailForm = () => {
             <form  className={styles.form}>
                 <div className={styles.banner}>
                     <FaEnvelope className={styles.loginIcon}/>
-                    <p className={styles.memberLoginBanner}><FormattedMessage id="resendConfirmationEmail">Resend Confirmation Email</FormattedMessage></p>
+                    <p className={styles.memberLoginBanner}><FormattedMessage id="resendEmail">Resend Confirmation Email</FormattedMessage></p>
                 </div>
                 <label htmlFor="email">Email</label>
                 <input className={styles.input} type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
