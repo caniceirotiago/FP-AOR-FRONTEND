@@ -3,12 +3,11 @@ import styles from "./CreateProjectModal.module.css";
 import useLabStore from "../../stores/useLabStore.jsx";
 import { FormattedMessage } from "react-intl";
 import AttributeEditor from "../reactSelect/AttributeEditor.jsx";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import projectService from "../../services/projectService.jsx";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import useDialogMultipleMessagesModalStore from "../../stores/useDialogMultipleMessagesModalStore.jsx";
-import { FaPlus } from "react-icons/fa";
 
 const CreateProjectModal = ({ isOpen, onClose }) => {
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
