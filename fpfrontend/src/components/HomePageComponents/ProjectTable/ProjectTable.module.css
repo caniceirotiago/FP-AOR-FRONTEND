@@ -1,12 +1,12 @@
 .tableContainer {
   margin: 10px;
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--table-background);
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .tblHeader {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: var(--table-background);
 }
 
 .tblContent {
@@ -28,7 +28,7 @@
   font-size: 12px;
   color: var(--text-color);
   text-transform: uppercase;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: var(--table-header-background);
 }
 
 .cell {
@@ -82,9 +82,17 @@
   gap: 5px;
   margin-top: 20px;
 }
+@media (max-width: 1500px) {
+  .header:nth-child(5), .cell:nth-child(5),
+  .header:nth-child(1), .cell:nth-child(1){
+    display: none;
+  }
+}
 
 @media (max-width: 1250px) {
-  .header:nth-child(5), .cell:nth-child(5) {
+  .header:nth-child(3), .cell:nth-child(3),
+  .header:nth-child(6), .cell:nth-child(6),
+  .header:nth-child(9), .cell:nth-child(9) {
     display: none;
   }
 }
@@ -100,8 +108,7 @@
 
   .header:nth-child(4), .cell:nth-child(4), 
   .header:nth-child(6), .cell:nth-child(6),
-  .header:nth-child(8), .cell:nth-child(8),
-  .header:nth-child(9), .cell:nth-child(9) {
+  .header:nth-child(8), .cell:nth-child(8) {
     display: none;
   }
 }

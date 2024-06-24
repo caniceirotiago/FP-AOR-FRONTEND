@@ -48,6 +48,8 @@ body.theme-light {
   --atribute-editor-background: #ffffff;
   --input-select-textarea-background: rgba(255, 255, 255, 1); 
   --listItem-background: rgba(245, 232, 220, 0.271);
+  --table-background: rgba(255, 255, 255, 0.2);
+  --table-header-background: rgba(232, 240, 238, 0.27);
 
 }
 
@@ -79,6 +81,9 @@ body.theme-dark {
   --atribute-editor-background: #d5d7de30;
   --input-select-textarea-background: rgba(60, 60, 60, 1); 
   --listItem-background: rgba(255, 255, 255, 0.163);
+  --table-background: rgba(107, 149, 156, 0.128);
+  --table-header-background: rgba(218, 228, 231, 0.866);
+
 
 }
 
