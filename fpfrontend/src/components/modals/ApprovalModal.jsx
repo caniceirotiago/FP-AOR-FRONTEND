@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { useIntl, FormattedMessage } from 'react-intl';
 import Button from '../buttons/landingPageBtn/Button.jsx';
 import styles from './ApprovalModal.module.css';
 import projectService from '../../services/projectService.jsx';
 
-const ApprovalModal = ({ isOpen, onClose, title, projectId }) => {
+const ApprovalModal = ({ isOpen, onClose, title, approveOrReject, projectId }) => {
   const [justification, setJustification] = useState('');
-
+  const intl = useIntl();
 
   const onRequestClose = () => {
     setJustification('');
@@ -13,12 +14,13 @@ const ApprovalModal = ({ isOpen, onClose, title, projectId }) => {
   }
   const handleSubmit = async () => {
     try {
-        let isToApprove = title === "Approve Project";
+        let isToApprove = approveOrReject;
       await projectService.approveOrRejectProject(projectId, justification, isToApprove);
-      console.log("Project approved or rejected successfully");
+      console.log("Project handled successfully");
+      setJustification('');
       onClose();
     } catch (error) {
-      console.error("Failed to approve or reject project:", error);
+      console.error("Failed to process request:", error);
     }
   }
 
@@ -35,12 +37,12 @@ const ApprovalModal = ({ isOpen, onClose, title, projectId }) => {
         className={styles.textarea}
         value={justification}
         onChange={(e) => setJustification(e.target.value)}
-        placeholder="Enter justification..."
-      />
-      <div className={styles.buttons}>
-        <Button  tradId="submit" className={styles.button} onClick={handleSubmit} defaultText="Submit" btnColor={"var(--btn-color2)"} />
-        <Button tradId="cancel" className={styles.button} onClick={onRequestClose} defaultText="Cancel" btnColor={"var(--btn-color2)"} />
-      </div>
+        placeholder={intl.formatMessage({ id: 'enterJustification', defaultMessage: 'Enter justification' })}
+        />
+        <div className={styles.buttons}>
+          <Button tradId="submit" className={styles.button} onClick={handleSubmit} defaultText={<FormattedMessage id="submit" defaultMessage="Submit" />} btnColor={"var(--btn-color2)"} />
+          <Button tradId="cancel" className={styles.button} onClick={onRequestClose} defaultText={<FormattedMessage id="cancel" defaultMessage="Cancel" />} btnColor={"var(--btn-color2)"} />
+        </div>
     </div>
   );
 };

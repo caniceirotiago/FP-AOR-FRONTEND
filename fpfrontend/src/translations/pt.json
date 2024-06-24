@@ -207,5 +207,6 @@
   "errorConfirmingAccountDetailed": "Erro ao confirmar a conta! {error}",
   "requestProcessed": "Pedido processado!",
   "errorAssociatingUser": "Erro ao associar o utilizador ao projeto ou pedido já processado!",
-  "errorAssociatingUserDetailed": "Erro ao associar o utilizador ao projeto! {error}"
+  "errorAssociatingUserDetailed": "Erro ao associar o utilizador ao projeto! {error}",
+  "enterJustification" : "Insira a justificação"
 }

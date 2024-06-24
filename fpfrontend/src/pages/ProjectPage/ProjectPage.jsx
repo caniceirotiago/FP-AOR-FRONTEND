@@ -103,18 +103,8 @@ const ProjectPage = () => {
     }
   };
 
-  const handleApproveProject = async (wantToApprove) => {
-    setApproveOrReject(
-      wantToApprove
-        ? intl.formatMessage({
-            id: "approveProject",
-            defaultMessage: "Approve Project",
-          })
-        : intl.formatMessage({
-            id: "rejectProject",
-            defaultMessage: "Reject Project",
-          })
-    );
+  const handleApproveProject = async (approve) => {
+    setApproveOrReject(approve);
     setIsApprovalModalOpen(true);
   };
 
@@ -164,6 +154,7 @@ const ProjectPage = () => {
             isOpen={isApprovalModalOpen}
             onClose={() => setIsApprovalModalOpen(false)}
             title={approveOrReject}
+            approveOrReject = {approveOrReject}
             projectId={projectInfo.id}
           />
           <div className={styles.controlPanel}>
