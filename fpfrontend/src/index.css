@@ -50,6 +50,13 @@ body.theme-light {
   --listItem-background: rgba(245, 232, 220, 0.271);
   --table-background: rgba(255, 255, 255, 0.2);
   --table-header-background: rgba(232, 240, 238, 0.27);
+  --planned-task-color: #fae20e;
+  --in-progress-task-color: #307fbf;
+  --finished-task-color: #cc86d9;
+  --task-base-color: #0a404e62;
+  --task-hover-accesory-color: #055063;
+  --dependency-line-color: #1d908a;
+  --dependency-line-hover-color: #280c8b;
 
 }
 
@@ -83,6 +90,13 @@ body.theme-dark {
   --listItem-background: rgba(255, 255, 255, 0.163);
   --table-background: rgba(107, 149, 156, 0.128);
   --table-header-background: rgba(218, 228, 231, 0.866);
+  --planned-task-color: #f2bb16;
+  --in-progress-task-color: #3eadbe;
+  --finished-task-color: #6f42c1;
+  --task-base-color: #01163abf;
+  --task-hover-accesory-color: #01163a;
+  --dependency-line-color: #eff1ee;
+  --dependency-line-hover-color: #eff1ee;
 
 
 }

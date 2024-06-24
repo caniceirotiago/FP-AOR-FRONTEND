@@ -1,23 +1,24 @@
 .mainGanttContainer {
   display: flex;
-  height: 100%;
+  height: 99%;
   width: 100%;
-  margin-right: 30px;
+  overflow-x: auto; 
+  border: 1px solid #ccc;
 }
 
 .ganttContainer {
   position: relative;
   flex: 1;
-  width: 100vh;
-  height: 99%;
-  border: 1px solid #ccc;
-  overflow-x: auto; 
+  height: 100%;
+ 
   white-space: nowrap;
   display: flex;
   flex-direction: column;
 }
 
+
 .timeline {
+  
   display: flex;
   position: sticky;
   top: 0;
@@ -44,6 +45,42 @@
   width: 1px;
   background: #ccc; /* Cor da linha que indica o início do dia */
 }
+.isWeekend {
+  background: #949090; /* Cor de fundo para fins de semana */
+}
+
+.month {
+  text-align: center;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+}
+.month:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: #6b6a6a; 
+}
+.year{
+  text-align: center;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+}
+.year:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: #6b6a6a; 
+}
 
 .taskBars {
   position: relative;
@@ -64,7 +101,7 @@
 .taskHandleEnd {
   width: 10px;
   height: 100%;
-  background-color: darkblue;
+  background-color: transparent;
   cursor: ew-resize;
 }
 
@@ -85,6 +122,7 @@
   cursor: move;
   border-radius: 5px;
   overflow: hidden;
+  height: 19px;
 }
 
 .taskHandleEnd {
@@ -97,6 +135,7 @@
 
 .taskCircleStart,
 .taskCircleEnd {
+
   width: 10px;
   height: 10px;
   background-color: transparent;
@@ -106,13 +145,55 @@
   transform: translateY(-50%);
   cursor: pointer;
   z-index: 2;
+  overflow: hidden;
 }
+.taskInfo {
+ 
+  position: absolute;
+  height: 30px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  margin: 2px 0;
+  transition: all 0.05s ease;
+  z-index: 2;
+  overflow: hidden;
+
+}
+.taskTitle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 30px;
+  z-index: 3;
+  overflow: hidden;
+}
+.responsiblePhotoDiv {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 5px;
+  z-index: 3;
+}
+.responsiblePhoto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
 
 .taskBar:hover .taskCircleStart,
 .taskBar:hover .taskCircleEnd,
+.taskBar:hover .taskHandleStart,
+.taskBar:hover .taskHandleEnd,
 .taskCircleEnd:hover,
 .taskCircleStart:hover {
-  background-color: blue;
+  background-color: var(--task-hover-accesory-color);
 }
 
 .taskCircleStart {
@@ -123,13 +204,13 @@
   right: -10px; /* Ajuste a posição conforme necessário */
 }
 .circleDragHoovered {
-  background-color: blue;
+  background-color: var(--task-hover-accesory-color);
 }
 
 .temporaryDependencyLine {
   position: absolute;
   background-color: transparent;
-  border-top: 1px dashed darkblue;
+  border-top: 1px dashed var(--dependency-line-color);
   transform-origin: top left;
   z-index: 1;
 }
@@ -154,8 +235,8 @@
 }
 
 .fixedLine:hover {
-  stroke-width: 10px;
-  stroke: blue;
+  stroke-width: 8px;
+  stroke: var(--dependency-line-hover-color);
   cursor: pointer;
 }
 

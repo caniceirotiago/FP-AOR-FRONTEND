@@ -27,6 +27,7 @@ const TaskManager = ({projectId, tasksUpdated, handleEditTaskClick }) => {
         description: task.description,
         registeredExecuters: task.registeredExecuters,
         nonRegisteredUsers: task.nonRegisteredUsers,
+        responsible: task.responsibleId,
       }));
       setTasks(formattedTasks);
     } catch (error) {
@@ -120,8 +121,9 @@ const TaskManager = ({projectId, tasksUpdated, handleEditTaskClick }) => {
         
       </div>
         <div className={styles.projectPlanningBody}>
-        {dimensions.width > 1250 && <TaskTable tasks={tasks} handleEditTaskClick={handleEditTaskClick}/>}
+        {dimensions.width > 1250 && <TaskTable className={styles.taskTable}tasks={tasks} handleEditTaskClick={handleEditTaskClick}/>}
         <GanttChart 
+          className={styles.ganttChart}
           tasks={tasks} 
           setTasks={setTasks}
             updateTaskById={updateTaskById} 

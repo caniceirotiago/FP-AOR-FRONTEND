@@ -342,7 +342,7 @@ const HomePage = () => {
                 />
               </option>
             </select>
-            <button onClick={handleClearFilters}>
+            <button onClick={handleClearFilters} className={styles.clearFiltersBtn}>
               {" "}
               <FormattedMessage
                 id="clearFilters"

@@ -1,40 +1,73 @@
 /* src/components/SelectTypeModal.module.css */
+
 .modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .modal {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
-    width: 100%;
-  }
-  
-  .modal h2 {
-    margin-top: 0;
-  }
-  
-  .modal ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .modal li {
-    margin: 10px 0;
-    cursor: pointer;
-  }
-  
-  .modal button {
-    margin-top: 20px;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.099);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: var(--card-background);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+.title {
+  font-size: 28px;
+  margin-bottom: 25px;
+  color: var(--text-color4);
+  font-weight: 600;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.option {
+  margin: 5px 0;
+  padding: 10px 15px;
+  cursor: pointer;
+  background-color: var(--listItem-background);
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-size: 16px;
+  color: var(--text-color4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.option:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.cancelBtn {
+  margin-top: 30px;
+  padding: 12px 20px;
+  background-color: var(--negative-color);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.cancelBtn:hover {
+  background-color: #e84118;
+}

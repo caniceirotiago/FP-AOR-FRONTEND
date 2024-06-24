@@ -24,14 +24,15 @@ const SelectQuantityModal = () => {
     showModal && (
       <div className={styles.modalOverlay}>
         <div className={styles.modal}>
-        <input
+          <input
+            className={styles.input}
             type="number"
             value={usedQuantity}
             onChange={handleChange}
             min="1"
           />
-          <button onClick={handleConfirm}><FormattedMessage id="confirm" defaultMessage="Confirm" /></button>
-          <button onClick={reset}><FormattedMessage id="cancel" defaultMessage="Cancel" /></button>
+          <button className={styles.confirmBtn} onClick={handleConfirm}><FormattedMessage id="confirm" defaultMessage="Confirm" /></button>
+          <button className={styles.cancelBtn} onClick={reset}><FormattedMessage id="cancel" defaultMessage="Cancel" /></button>
         </div>
       </div>
     )
