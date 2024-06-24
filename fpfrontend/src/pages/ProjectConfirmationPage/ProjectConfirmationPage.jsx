@@ -1,6 +1,6 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useIntl } from "react-intl";
 import userService from "../../services/userService";
 import DialogModalStore from "../../stores/useDialogModalStore";
 
@@ -9,6 +9,7 @@ const ProjectConfirmationPage = () => {
   const location = useLocation();
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
     DialogModalStore();
+  const intl = useIntl();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -17,8 +18,12 @@ const ProjectConfirmationPage = () => {
     const approver = searchParams.get("approver");
 
     if (!token) {
-      console.error("Token not received");
-      setDialogMessage("Error Confirming Account! Token not received!");
+      setDialogMessage(
+        intl.formatMessage({
+          id: "errorTokenNotReceived",
+          defaultMessage: "Error Confirming Account! Token not received!",
+        })
+      );
       setIsDialogOpen(true);
       setAlertType(true);
       setOnConfirm(async () => {
@@ -27,6 +32,7 @@ const ProjectConfirmationPage = () => {
       navigate("/");
       return;
     }
+
     const performConfirmation = async () => {
       try {
         const response = await userService.confirmProjectAssociation(
@@ -35,7 +41,12 @@ const ProjectConfirmationPage = () => {
           approver
         );
         if (response.status === 204) {
-          setDialogMessage("Request processed!");
+          setDialogMessage(
+            intl.formatMessage({
+              id: "requestProcessed",
+              defaultMessage: "Request processed!",
+            })
+          );
           setIsDialogOpen(true);
           setAlertType(true);
           setOnConfirm(async () => {
@@ -43,7 +54,11 @@ const ProjectConfirmationPage = () => {
           });
         } else {
           setDialogMessage(
-            "Error associating user to project or request already processed!"
+            intl.formatMessage({
+              id: "errorAssociatingUser",
+              defaultMessage:
+                "Error associating user to project or request already processed!",
+            })
           );
           setIsDialogOpen(true);
           setAlertType(true);
@@ -52,8 +67,13 @@ const ProjectConfirmationPage = () => {
           });
         }
       } catch (error) {
-        console.error("Error:", error);
-        setDialogMessage("Error associating user to project! " + { error });
+        setDialogMessage(
+          intl.formatMessage({
+            id: "errorAssociatingUserDetailed",
+            defaultMessage: "Error associating user to project! {error}",
+            values: { error: error.message },
+          })
+        );
         setIsDialogOpen(true);
         setAlertType(true);
         setOnConfirm(async () => {
@@ -63,7 +83,7 @@ const ProjectConfirmationPage = () => {
     };
 
     performConfirmation();
-  }, [navigate, location.search]);
+  }, [navigate, location.search, intl]);
 
   return (
     <div className="confirmationPage">
