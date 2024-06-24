@@ -208,5 +208,7 @@
   "errorConfirmingAccountDetailed": "Error Confirming Account! {error}",
   "requestProcessed" : "Request processed!",
   "errorAssociatingUser": "Error associating user to project or request already processed!",
-  "errorAssociatingUserDetailed" : "Error associating user to project! {error}"
+  "errorAssociatingUserDetailed" : "Error associating user to project! {error}",
+  "enterJustification" : "Enter justification"
+
 }
