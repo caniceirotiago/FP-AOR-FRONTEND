@@ -115,6 +115,7 @@
   "type": "Tipo",
   "description": "Descrição",
   "stockQuantity": "Quantidade em Stock",
+  "name": "Nome",
   "partNumber": "Número de Série",
   "manufacturer": "Fabricante",
   "manufacturerPhone": "Contacto do Fabricante",
