@@ -18,15 +18,15 @@ const SelectTypeModal = () => {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
-        <h2><FormattedMessage id="selectType" defaultMessage="Select Type" /></h2>
-        <ul>
+        <h2 className={styles.title}><FormattedMessage id="selectType" defaultMessage="Select Type" /></h2>
+        <ul className={styles.list}>
           {options.map((option) => (
-            <li key={option} onClick={() => handleSelect(option)}>
+            <li className={styles.option} key={option} onClick={() => handleSelect(option)}>
               {option}
             </li>
           ))}
         </ul>
-        <button onClick={reset}><FormattedMessage id="cancel" defaultMessage="Cancel" /></button>
+        <button className={styles.cancelBtn} onClick={reset}><FormattedMessage id="cancel" defaultMessage="Cancel" /></button>
       </div>
     </div>
   );

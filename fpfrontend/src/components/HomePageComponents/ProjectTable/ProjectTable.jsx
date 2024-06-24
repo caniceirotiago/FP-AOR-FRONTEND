@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import useProjectStatesStore from "../../../stores/useProjectStatesStore";
 import { FaEye, FaProjectDiagram } from "react-icons/fa";
 import useProjectStore from "../../../stores/useProjectStore";
+import { format } from 'date-fns';
 
 function ProjectTable({ projects, pageCount, setPageNumber }) {
   const navigate = useNavigate();
@@ -33,6 +34,12 @@ function ProjectTable({ projects, pageCount, setPageNumber }) {
         user.accepted
     );
   };
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return format(date, "yyyy/MM/dd");
+  };
+  
 
   const columns = useMemo(
     () => [
@@ -54,11 +61,13 @@ function ProjectTable({ projects, pageCount, setPageNumber }) {
           },
           {
             Header: <FormattedMessage id="tableHeaderCreationDate" defaultMessage="Creation Date" />,
-            accessor: "creationDate",
+            accessor: (row) => formatDate(row.creationDate),
+            id: "creationDate",
           },
           {
             Header: <FormattedMessage id="tableHeaderFinalDate" defaultMessage="Final Date" />,
-            accessor: "conclusionDate",
+            accessor: (row) => formatDate(row.conclusionDate),
+            id: "conclusionDate",
           },
           {
             Header: <FormattedMessage id="tableHeaderLaboratory" defaultMessage="Laboratory" />,
