@@ -194,5 +194,6 @@
   "initialPlannedDate": "Data de início planeada",
   "finalPlannedDate": "Data de fim planeada",
   "nonRegisteredExecutors": "Executantes não registrados",
-  "taskCreatedSuccess": "Tarefa criada com sucesso!"
+  "taskCreatedSuccess": "Tarefa criada com sucesso!",
+  "invalidCredentials" : "Credenciais inválidas. Tente novamente."
 }

@@ -195,5 +195,6 @@
   "initialPlannedDate": "Initial Planned Date",
   "finalPlannedDate": "Final Planned Date",
   "nonRegisteredExecutors": "Non Registered Executors",
-  "taskCreatedSuccess": "Task created successfully!"
+  "taskCreatedSuccess": "Task created successfully!",
+  "invalidCredentials" : "Invalid Credentials. Please try again."
 }

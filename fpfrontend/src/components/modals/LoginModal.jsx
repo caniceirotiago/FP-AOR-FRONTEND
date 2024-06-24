@@ -25,7 +25,7 @@ const LoginModal = () => {
                 handleSussefulLogin();
             } else {
                 console.error('Login failed:', response);
-                setDialogMessage('Invalid Credentials. Please try again.');
+                setDialogMessage(<FormattedMessage id="invalidCredentials" defaultMessage="Invalid Credentials. Please try again." />);
                 setAlertType(true);
                 setIsDialogOpen(true);
                 setOnConfirm(() => setIsDialogOpen(false));
