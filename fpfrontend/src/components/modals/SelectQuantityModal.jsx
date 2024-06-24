@@ -5,14 +5,7 @@ import useSelectQuantityModalStore from "../../stores/useSelectQuantityModalStor
 import styles from "./SelectQuantityModal.module.css";
 
 const SelectQuantityModal = () => {
-  const {
-    showModal,
-    setShowModal,
-    resolveSelection,
-    usedQuantity,
-    setUsedQuantity,
-    reset,
-  } = useSelectQuantityModalStore();
+  const { showModal, setShowModal, resolveSelection, usedQuantity, setUsedQuantity, reset } = useSelectQuantityModalStore();
 
   const handleConfirm = () => {
     resolveSelection(usedQuantity);
@@ -22,25 +15,23 @@ const SelectQuantityModal = () => {
 
   const handleChange = (e) => {
     const value = parseInt(e.target.value, 10);
-    setUsedQuantity(value);
+    if (!isNaN(value)) {
+      setUsedQuantity(value);
+    }
   };
 
   return (
     showModal && (
       <div className={styles.modalOverlay}>
         <div className={styles.modal}>
-          <input
+        <input
             type="number"
             value={usedQuantity}
             onChange={handleChange}
             min="1"
           />
-          <button onClick={handleConfirm}>
-            <FormattedMessage id="confirm" defaultMessage="Confirm" />
-          </button>
-          <button onClick={reset}>
-            <FormattedMessage id="cancel" defaultMessage="Cancel" />
-          </button>
+          <button onClick={handleConfirm}><FormattedMessage id="confirm" defaultMessage="Confirm" /></button>
+          <button onClick={reset}><FormattedMessage id="cancel" defaultMessage="Cancel" /></button>
         </div>
       </div>
     )
