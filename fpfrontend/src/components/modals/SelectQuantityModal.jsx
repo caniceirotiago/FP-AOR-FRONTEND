@@ -5,12 +5,24 @@ import useSelectQuantityModalStore from "../../stores/useSelectQuantityModalStor
 import styles from "./SelectQuantityModal.module.css";
 
 const SelectQuantityModal = () => {
-  const { showModal, setShowModal, resolveSelection, usedQuantity, reset } = useSelectQuantityModalStore();
+  const {
+    showModal,
+    setShowModal,
+    resolveSelection,
+    usedQuantity,
+    setUsedQuantity,
+    reset,
+  } = useSelectQuantityModalStore();
 
   const handleConfirm = () => {
     resolveSelection(usedQuantity);
     setShowModal(false);
     reset();
+  };
+
+  const handleChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    setUsedQuantity(value);
   };
 
   return (
@@ -20,11 +32,15 @@ const SelectQuantityModal = () => {
           <input
             type="number"
             value={usedQuantity}
-            onChange={(e) => resolveSelection(parseInt(e.target.value))}
+            onChange={handleChange}
             min="1"
           />
-          <button onClick={handleConfirm}><FormattedMessage id="confirm" defaultMessage="Confirm" /></button>
-          <button onClick={reset}><FormattedMessage id="cancel" defaultMessage="Cancel" /></button>
+          <button onClick={handleConfirm}>
+            <FormattedMessage id="confirm" defaultMessage="Confirm" />
+          </button>
+          <button onClick={reset}>
+            <FormattedMessage id="cancel" defaultMessage="Cancel" />
+          </button>
         </div>
       </div>
     )
