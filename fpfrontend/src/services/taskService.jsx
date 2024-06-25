@@ -5,7 +5,7 @@ const API_BASE_URL =
 
 const getAuthHeaders = () => {
   return {
-    "Accept": "application/json",
+    Accept: "application/json",
     "Content-Type": "application/json",
   };
 };
@@ -62,19 +62,25 @@ const projectService = {
       throw error;
     }
   },
-  addPrerequisiteTask: async (independentTaskId, dependentTaskId, projectId) => {
+  addPrerequisiteTask: async (
+    independentTaskId,
+    dependentTaskId,
+    projectId
+  ) => {
     const body = {
       mainTaskId: independentTaskId,
-      dependentTaskId: dependentTaskId
-    }
-    console.log("sending body ", body)
+      dependentTaskId: dependentTaskId,
+    };
     try {
-      const response = await fetch(`${API_BASE_URL}/add/dependency/${projectId}`, {
-        method: "PUT",
-        headers: getAuthHeaders(),
-        credentials: "include",
-        body: JSON.stringify(body),
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/add/dependency/${projectId}`,
+        {
+          method: "PUT",
+          headers: getAuthHeaders(),
+          credentials: "include",
+          body: JSON.stringify(body),
+        }
+      );
       checkStatus(response);
       return response;
     } catch (error) {
@@ -88,7 +94,10 @@ const projectService = {
         method: "DELETE",
         headers: getAuthHeaders(),
         credentials: "include",
-        body: JSON.stringify({ mainTaskId: independentTaskId, dependentTaskId: dependentTaskId }),
+        body: JSON.stringify({
+          mainTaskId: independentTaskId,
+          dependentTaskId: dependentTaskId,
+        }),
       });
       checkStatus(response);
       return response;
@@ -125,7 +134,7 @@ const projectService = {
       throw error;
     }
   },
-  detailedUpdateTask: async ( task, projectId) => {
+  detailedUpdateTask: async (task, projectId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/detailed/${projectId}`, {
         method: "PUT",
@@ -139,11 +148,7 @@ const projectService = {
       console.error("Error updating task:", error.message);
       throw error;
     }
-  }
-
-    
-  
-  
+  },
 };
 
 export default projectService;
