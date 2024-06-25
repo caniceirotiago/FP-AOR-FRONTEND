@@ -60,7 +60,13 @@ const individualMessageService = {
     });
     console.log(params.toString());
 
-    const response = await fetch(`${API_BASE_URL}/filter?${params.toString()}`);
+    const response = await fetch(`${API_BASE_URL}/filter?${params.toString()}`,
+        {
+            method: "GET",
+            headers: getAuthHeaders(),
+            credentials: "include",
+        }
+    );
 
     return response.json();
   },

@@ -1,28 +1,47 @@
 .mainGanttContainer {
   display: flex;
-  height: 100%;
   width: 100%;
-  margin-right: 30px;
+  overflow-x: auto; 
+  border: 1px solid #ccc;
+  white-space: nowrap;
+  margin-right: 10px;
+  margin-left: 10px;
+
+  
+}
+.mainGanttContainer::-webkit-scrollbar {
+  height: 8px; /* Altura da barra de rolagem horizontal */
 }
 
+.mainGanttContainer::-webkit-scrollbar-thumb {
+  background: #888; /* Cor da barra de rolagem */
+  border-radius: 5px; /* Bordas arredondadas da barra de rolagem */
+}
+
+
 .ganttContainer {
+  
   position: relative;
   flex: 1;
-  width: 100vh;
-  height: 99%;
-  border: 1px solid #ccc;
-  overflow-x: auto; 
+ 
   white-space: nowrap;
   display: flex;
   flex-direction: column;
+
+
+  overflow-y: auto;
+
+
 }
 
+
 .timeline {
+  
   display: flex;
   position: sticky;
   top: 0;
   background: #f9f9f9;
-  z-index: 1;
+  z-index: 4;
 }
 
 .timelineDate {
@@ -31,6 +50,7 @@
   text-align: center;
   font-size: 12px;
   white-space: nowrap;
+  border-radius: 3px;
   overflow: hidden;
   position: relative;
 }
@@ -44,10 +64,50 @@
   width: 1px;
   background: #ccc; /* Cor da linha que indica o início do dia */
 }
+.isWeekend {
+  background: var(--weekend-color); /* Cor de fundo para fins de semana */
+}
+
+/* .month {
+  text-align: center;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+}
+.month:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: #6b6a6a; 
+}
+.year{
+  text-align: center;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+}
+.year:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: #6b6a6a; 
+} */
 
 .taskBars {
   position: relative;
+  background-image: linear-gradient(to top, var(--gantt-graphic-line-color) 1px, transparent 1px);
+  background-size: 1000% 40px; 
+  height: calc(1000% - 30px); 
 }
+
 
 .taskBar {
   position: absolute;
@@ -58,13 +118,14 @@
   margin: 2px 0;
   transition: all 0.05s ease;
   z-index: 2;
+
 }
 
 .taskHandleStart,
 .taskHandleEnd {
   width: 10px;
   height: 100%;
-  background-color: darkblue;
+  background-color: transparent;
   cursor: ew-resize;
 }
 
@@ -85,6 +146,7 @@
   cursor: move;
   border-radius: 5px;
   overflow: hidden;
+  height: 19px;
 }
 
 .taskHandleEnd {
@@ -97,6 +159,7 @@
 
 .taskCircleStart,
 .taskCircleEnd {
+
   width: 10px;
   height: 10px;
   background-color: transparent;
@@ -106,13 +169,70 @@
   transform: translateY(-50%);
   cursor: pointer;
   z-index: 2;
+  overflow: hidden;
 }
+.taskInfo {
+  position: absolute;
+  height: 30px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  margin: 2px 0;
+  transition: opacity 0.5s ease; /* Certifique-se de que a transição está configurada para a opacidade */
+  z-index: 2;
+  opacity: 0;
+}
+.isTouch {
+  position: absolute;
+  height: 30px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  margin: 2px 0;
+  transition: opacity 0.5s ease; /* Certifique-se de que a transição está configurada para a opacidade */
+  z-index: 2;
+  opacity: 1;
+}
+
+.taskBar:hover ~ .taskInfo{
+  opacity: 1;
+  z-index: 2;
+}
+
+
+.taskTitle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 37px;
+  z-index: 3;
+}
+.responsiblePhotoDiv {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 5px;
+  z-index: 3;
+}
+.responsiblePhoto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
 
 .taskBar:hover .taskCircleStart,
 .taskBar:hover .taskCircleEnd,
+.taskBar:hover .taskHandleStart,
+.taskBar:hover .taskHandleEnd,
 .taskCircleEnd:hover,
 .taskCircleStart:hover {
-  background-color: blue;
+  background-color: var(--task-hover-accesory-color);
 }
 
 .taskCircleStart {
@@ -123,13 +243,13 @@
   right: -10px; /* Ajuste a posição conforme necessário */
 }
 .circleDragHoovered {
-  background-color: blue;
+  background-color: var(--task-hover-accesory-color);
 }
 
 .temporaryDependencyLine {
   position: absolute;
   background-color: transparent;
-  border-top: 1px dashed darkblue;
+  border-top: 1px dashed var(--dependency-line-color);
   transform-origin: top left;
   z-index: 1;
 }
@@ -154,12 +274,18 @@
 }
 
 .fixedLine:hover {
-  stroke-width: 10px;
-  stroke: blue;
+  stroke-width: 8px;
+  stroke: var(--dependency-line-hover-color);
   cursor: pointer;
 }
 
 .dependencyLineWrapper {
   position: relative;
   z-index: 1;
+}
+
+@media (max-width: 1250px) {
+  .taskInfo {
+    opacity: 1;
+  }
 }

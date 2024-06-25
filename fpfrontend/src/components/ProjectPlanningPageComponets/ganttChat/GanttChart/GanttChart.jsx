@@ -1,5 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styles from './GanttChart.module.css';
+import  useDeviceStore  from '../../../../stores/useDeviceStore.jsx';
+import  useSyncScrollStore  from '../../../../stores/useSyncScrollStore.jsx';
+
+const barTaskColors = {
+
+    PLANNED: "linear-gradient(45deg, var(--planned-task-color) 0%, var(--task-base-color) 100%)",
+    IN_PROGRESS:"linear-gradient(45deg, var(--in-progress-task-color) 0%, var(--task-base-color) 100%)",
+    FINISHED:"linear-gradient(45deg, var(--finished-task-color) 0%, var(--task-base-color) 100%)"
+}
 
 const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById, removeDependency, handleEditTaskClick }) => {
   const ganttRef = useRef(null);
@@ -8,21 +17,39 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
   const [linePosition, setLinePosition] = useState(null);
   const [circleDragHoovered, setCircleDragHoovered] = useState(null);
   const [shiftPressed, setShiftPressed] = useState(false);
-  const [scrollPosition, setScrollPosition] = useState({ scrollX: 0, scrollY: 0 });
+  const { dimensions, isTouch } = useDeviceStore();
+  const { syncScrollPosition, setSyncScrollPosition } = useSyncScrollStore();
+
+
 
   useEffect(() => {
+    const ganttElement = ganttRef.current;
+    console.log('Gantt Element:', ganttElement);
     const handleScroll = () => {
       const { scrollLeft, scrollTop } = ganttRef.current;
-      setScrollPosition({ scrollX: scrollLeft, scrollY: scrollTop });
+      console.log('Scroll Left:', scrollLeft, 'Scroll Top:', scrollTop); // Log scroll values
+      setSyncScrollPosition({ scrollX: scrollLeft, scrollY: scrollTop });
     };
-
-    const ganttElement = ganttRef.current;
-    ganttElement.addEventListener('scroll', handleScroll);
-
+  
+    if (ganttElement) {
+      ganttElement.addEventListener('scroll', handleScroll);
+    }
+  
     return () => {
-      ganttElement.removeEventListener('scroll', handleScroll);
+      if (ganttElement) {
+        ganttElement.removeEventListener('scroll', handleScroll);
+      }
     };
   }, []);
+  
+
+  useEffect(() => {
+    const ganttElement = ganttRef.current;
+    if (ganttElement) {
+      ganttElement.scrollTop = syncScrollPosition.scrollY;
+      ganttElement.scrollLeft = syncScrollPosition.scrollX;
+    }
+  }, [syncScrollPosition]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -82,10 +109,10 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
 
     if (handleType === 'dependency') {
       setLinePosition({ 
-        startX: initialX + scrollPosition.scrollX, 
-        startY: initialY -27 + scrollPosition.scrollY, 
-        endX: e.clientX - ganttRect.left + scrollPosition.scrollX, 
-        endY: e.clientY - ganttRect.top-27 + scrollPosition.scrollY
+        startX: initialX + syncScrollPosition.scrollX, 
+        startY: initialY -27 + syncScrollPosition.scrollY, 
+        endX: e.clientX - ganttRect.left + syncScrollPosition.scrollX, 
+        endY: e.clientY - ganttRect.top-27 + syncScrollPosition.scrollY
       });
       return;
     }
@@ -231,17 +258,9 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
     handleEditTaskClick(taskId);
   };
 
-  const generateTimeline = () => {
-    const timeline = [];
-    let currentDate = new Date(startDate);
 
-    while (currentDate <= endDate) {
-      timeline.push(new Date(currentDate));
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
 
-    return timeline;
-  };
+  
 
   const circleDragEnter = () => {
     setCircleDragHoovered(true);
@@ -273,79 +292,192 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
     return Array.from(relatedTasks).map(id => allTasks.find(t => t.id === id));
   };
 
-  const timeline = generateTimeline();
+  const generateTimeline = () => {
+    const timeline = [];
+    const startDateT = new Date(startDate);
+    startDateT.setDate(startDateT.getDate() - 1);
+    let currentDate = new Date(startDateT);
+    let endDateT = new Date(endDate);
+    endDateT.setDate(endDateT.getDate() + 30);
+    console.log("endDateT", endDateT);
+    while (currentDate <= endDateT) {
+      timeline.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
 
+    return timeline;
+  };
+
+  const generateMonths = (timeline) => {
+    const months = [];
+    let currentMonth = null;
+    let daysInMonth = 0;
+  
+    timeline.forEach((date, index) => {
+      const month = date.getMonth();
+      if (currentMonth === null || currentMonth !== month) {
+        if (currentMonth !== null) {
+          months.push({ month: currentMonth + 1, days: daysInMonth });
+        }
+        currentMonth = month;
+        daysInMonth = 1;
+      } else {
+        daysInMonth += 1;
+      }
+    });
+  
+    if (currentMonth !== null) {
+      months.push({ month: currentMonth + 1, days: daysInMonth });
+    }
+  
+    return months;
+  };
+  
+
+  const generateYears = (timeline) => {
+    const years = [];
+    let currentYear = null;
+    let daysInYear = 0;
+  
+    timeline.forEach((date) => {
+      const year = date.getFullYear();
+      if (currentYear === null || currentYear !== year) {
+        if (currentYear !== null) {
+          years.push({ year: currentYear, days: daysInYear });
+        }
+        currentYear = year;
+        daysInYear = 1;
+      } else {
+        daysInYear += 1;
+      }
+    });
+  
+    if (currentYear !== null) {
+      years.push({ year: currentYear, days: daysInYear });
+    }
+  
+    return years;
+  };
+  
+
+  const isWeekend = (date) => {
+    const day = date.getDay();
+    return day === 0 || day === 6;
+  };
+
+  const timeline = generateTimeline();
+  const months = generateMonths(timeline);
+  const years = generateYears(timeline);
+  console.log(syncScrollPosition);
   return (
-    <div className={styles.mainGanttContainer}>
-      <div className={styles.ganttContainer} ref={ganttRef} onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
-        <div className={styles.timeline}>
+    <div className={styles.mainGanttContainer}  >
+      <div className={styles.ganttContainer} ref={ganttRef}  onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
+  
+         {/* <div className={styles.timeline}>
+            {years.map(({ year, days }) => (
+              <div key={year} className={styles.year} style={{ width: `${days * 50}px`, overflow:`hidden` }}>
+                {year}
+              </div>
+            ))}
+          </div>
+          <div className={styles.timeline}>
+            {months.map(({ month, days }) => (
+                <div key={month} className={styles.month} style={{ width: `${days * 50}px`, overflow:`hidden` }}>
+                  {month}
+                </div>
+              ))}
+          </div> */}
+          <div className={styles.timeline}>
           {timeline.map((date, index) => (
-            <div key={index} className={styles.timelineDate}>
+            <div key={index} className={`${styles.timelineDate} ${isWeekend(date) ? styles.isWeekend : ''}`}>
               {date.toISOString().split('T')[0].slice(5)} {/* Remove o ano */}
             </div>
           ))}
         </div>
+  
         <div className={styles.taskBars}>
           {tasks.map((task, index) => {
             const taskStartDate = new Date(task.plannedStartDate);
             const taskEndDate = new Date(task.plannedEndDate);
-            const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 40px de largura
+            const taskStartOffset = ((taskStartDate - new Date(timeline[0])) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 50px de largura
             const taskDuration = ((taskEndDate - taskStartDate) / (1000 * 60 * 60 * 24)) * 50; // Cada dia tem 40px de largura
 
             return (
-              <div
-                onDoubleClick={() => handleTaskDoubleClick(task.id)}
-                key={task.id}
-                className={styles.taskBar}
-                data-task-id={task.id}
-                style={{
-                  left: `${taskStartOffset}px`,
-                  width: `${taskDuration}px`,
-                  top: `${index * 40}px`
-                }}
-              >
+              <div>
                 <div
-                  className={styles.taskHandleStart}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, task.id, 'start', 'handle')}
-                  onDrag={(e) => handleDrag(e, task.id, 'start')}
-                  onDragEnd={handleDrop}
-                ></div>
-                <div className={styles.taskContent}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, task.id, 'bar', 'handle')}
-                  onDrag={(e) => handleDrag(e, task.id, 'bar')}
-                  onDragEnd={handleDrop}
+                  onClick={() => handleTaskDoubleClick(task.id)}
+                  key={task.id}
+                  className={styles.taskBar}
+                  data-task-id={task.id}
+                  style={{
+                    left: `${taskStartOffset}px`,
+                    width: `${taskDuration}px`,
+                    top: `${index * 40}px`
+                  }}
                 >
-                  {task.title}
+                  <div
+                    className={styles.taskHandleStart}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, task.id, 'start', 'handle')}
+                    onDrag={(e) => handleDrag(e, task.id, 'start')}
+                    onDragEnd={handleDrop}
+                  ></div>
+                  <div className={styles.taskContent}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, task.id, 'bar', 'handle')}
+                    onDrag={(e) => handleDrag(e, task.id, 'bar')}
+                    onDragEnd={handleDrop}
+                    style={{ backgroundImage: barTaskColors[task.state] }}
+                  >
+                 
+                  </div>
+                  <div className={styles.taskHandleEnd}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, task.id, 'end', 'handle')}
+                    onDrag={(e) => handleDrag(e, task.id, 'end')}
+                    onDragEnd={handleDrop}
+                  ></div>
+                  <div
+                    className={`${styles.taskCircleStart} ${circleDragHoovered && styles.circleDragHoovered}`}
+                    draggable
+                    data-task-id={task.id}
+                    onDragStart={(e) => handleDragStart(e, task.id, 'start', 'dependency')}
+                    onDrag={(e) => handleDrag(e, task.id, 'start')}
+                    onDragEnd={handleDrop}
+                    onDragEnter={() => circleDragEnter()}
+                    onDragLeave={() => circleDragLeave()}
+                  ></div>
+                  <div
+                    className={`${styles.taskCircleEnd} ${circleDragHoovered && styles.circleDragHoovered}`}
+                    draggable
+                    data-task-id={task.id}
+                    onDragStart={(e) => handleDragStart(e, task.id, 'end', 'dependency')}
+                    onDrag={(e) => handleDrag(e, task.id, 'end')}
+                    onDragEnd={handleDrop}
+                    onDragEnter={() => circleDragEnter()}
+                    onDragLeave={() => circleDragLeave()}
+                  ></div>
                 </div>
-                <div className={styles.taskHandleEnd}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, task.id, 'end', 'handle')}
-                  onDrag={(e) => handleDrag(e, task.id, 'end')}
-                  onDragEnd={handleDrop}
-                ></div>
-                <div
-                  className={`${styles.taskCircleStart} ${circleDragHoovered && styles.circleDragHoovered}`}
-                  draggable
-                  data-task-id={task.id}
-                  onDragStart={(e) => handleDragStart(e, task.id, 'start', 'dependency')}
-                  onDrag={(e) => handleDrag(e, task.id, 'start')}
-                  onDragEnd={handleDrop}
-                  onDragEnter={() => circleDragEnter()}
-                  onDragLeave={() => circleDragLeave()}
-                ></div>
-                <div
-                  className={`${styles.taskCircleEnd} ${circleDragHoovered && styles.circleDragHoovered}`}
-                  draggable
-                  data-task-id={task.id}
-                  onDragStart={(e) => handleDragStart(e, task.id, 'end', 'dependency')}
-                  onDrag={(e) => handleDrag(e, task.id, 'end')}
-                  onDragEnd={handleDrop}
-                  onDragEnter={() => circleDragEnter()}
-                  onDragLeave={() => circleDragLeave()}
-                ></div>
+                
+                  <div 
+                    key={task.id}
+                    className={`${isTouch ? styles.isTouch : styles.taskInfo}`}
+                    data-task-id={task.id}
+                    style={{
+                      left: `${taskStartOffset + taskDuration + 15}px`,
+                      width: `${taskDuration}px`,
+                      top: `${index * 40}px`
+                    }}
+                    >
+                    <div className={styles.taskTitle}>{task.title}</div>
+                    <div className={styles.responsiblePhotoDiv}>
+                      <img src={task.responsible.photo} alt="" className={styles.responsiblePhoto}/>
+                    </div>
+                    
+                  </div>               
+                          
               </div>
+              
             );
           })}
           {linePosition && (
@@ -371,8 +503,9 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
               const depEndDate = new Date(depTask.plannedEndDate);
               const taskStartDate = new Date(task.plannedStartDate);
 
-              const depEndOffset = ((depEndDate - startDate) / (1000 * 60 * 60 * 24)) * 50;
-              const taskStartOffset = ((taskStartDate - startDate) / (1000 * 60 * 60 * 24)) * 50;
+              const depEndOffset = ((depEndDate - new Date(timeline[0])) / (1000 * 60 * 60 * 24)) * 50;
+              const taskStartOffset = ((taskStartDate - new Date(timeline[0])) / (1000 * 60 * 60 * 24)) * 50;
+
               const depIndex = tasks.findIndex((t) => t.id === depId);
               const taskIndex = tasks.findIndex((t) => t.id === task.id);
 
@@ -394,7 +527,7 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
                       y1="0"
                       x2="0"
                       y2={`${Math.abs((taskIndex - depIndex) * 40)}`}
-                      stroke="red"
+                      stroke="var(--dependency-line-color)"
                       strokeWidth="6"
                       onDoubleClick={() => handleDependencyDoubleClick(task.id, depId)}
                     />
@@ -415,7 +548,7 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
                       y1="0"
                       x2={`${Math.abs(taskStartOffset - depEndOffset) + 20}`}
                       y2="0"
-                      stroke="red"
+                      stroke="var(--dependency-line-color)"
                       strokeWidth="6"
                       onDoubleClick={() => handleDependencyDoubleClick(task.id, depId)}
                     />
