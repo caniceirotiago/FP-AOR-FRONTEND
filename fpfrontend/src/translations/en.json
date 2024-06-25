@@ -214,5 +214,6 @@
   "changeProject": "Change Project",
   "startDate": "Start Date",
   "endDate": "End Date",
-  "responsible": "Responsible"
+  "responsible": "Responsible",
+  "markAllNotificationsAsRead" : "Mark all notifications as read"
 }
