@@ -214,5 +214,11 @@
    "startDate": "Data início",
   "endDate": "Data fim",
   "responsible": "Responsável",
-  "markAllNotificationsAsRead" : "Marcar todas as notificações lidas"
+  "markAllNotificationsAsRead" : "Marcar todas as notificações lidas",
+  "configurationSuccess": "Configuração atualizada",
+  "configurationFailure": "Falha na atualização",
+  "configurationPanel": "Painel de Controlo",
+  "sessionTimeoutLabel": "Tempo sessão inactiva [min]: ",
+  "maxProjectMembersLabel" : "Máximo membros por projecto: ",
+  "saveButton": "Gravar"
 }
