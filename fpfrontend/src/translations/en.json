@@ -138,7 +138,7 @@
   "projectStatus": "Project Status",
   "askToJoin": "Ask To Join",
   "noSuggestionsFound": "No suggestions found",
-  "addNewPlaceholder" : "Add new",
+  "addNewPlaceholder": "Add new",
   "add": "Add",
   "remove": "Remove",
   "cancel": "Cancel",
@@ -215,5 +215,11 @@
   "startDate": "Start Date",
   "endDate": "End Date",
   "responsible": "Responsible",
-  "markAllNotificationsAsRead" : "Mark all notifications as read"
+  "markAllNotificationsAsRead": "Mark all notifications as read",
+  "configurationSuccess": "Configuration Updated Successfully",
+  "configurationFailure": "Failed to update Configuration",
+  "configurationPanel": "Configuration Panel",
+  "sessionTimeoutLabel": "Session Timeout [m]: ",
+  "maxProjectMembersLabel" : "Max Project Members: ",
+  "saveButton": "Save"
 }

@@ -8,7 +8,46 @@
   justify-content: center;
 }
 
+.viewMode {
+  background-color: var(--disabled-background);
+  cursor: not-allowed;
+}
+
+.editMode {
+  background-color: var(--text-color2);
+}
 
 @media (max-width: 768px) {
+}
 
+.configTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.configTable td {
+  padding: 0.5rem;
+  border: none;
+}
+
+.configTable input[type="number"] {
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.configTable button {
+  margin-left: 1rem;
+  padding: 10px;
+  background-color: var(--btn-background1);
+  color: var(--btn-color1);
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.configTable button:hover {
+  background-color: var(--btn-background2);
 }
