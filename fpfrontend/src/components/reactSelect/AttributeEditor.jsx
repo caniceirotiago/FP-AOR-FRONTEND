@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import Select from "react-select";
 import styles from "./AttributeEditor.module.css";
 import generalService from "../../services/generalService";
@@ -13,7 +13,6 @@ import projectService from "../../services/projectService.jsx";
 import useConfigurationStore from "../../stores/useConfigurationStore";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import membershipService from "../../services/membershipService";
-import useDialogMultipleMessagesModalStore from "../../stores/useDialogMultipleMessagesModalStore.jsx";
 import { FaPlus } from "react-icons/fa";
 import  useDeviceStore  from "../../stores/useDeviceStore";
 
@@ -42,6 +41,8 @@ const AttributeEditor = ({
   const usedQuantity = useSelectQuantityModalStore();
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
   const { dimensions} = useDeviceStore();
+  const intl = useIntl();
+
   // Initialize attributes based on creation mode and initial values
   useEffect(() => {
     if (!creationMode) {
@@ -659,11 +660,10 @@ const AttributeEditor = ({
   return (
     <div className={styles.container}>
       {creationMode && title === "users" && mainEntity === "task" ? (
-        <h2>Responsible</h2>
+        <h2><FormattedMessage id="responsible" defaultMessage="Responsible"/></h2>
       ) : (
         <h2>{elementTitle}</h2>
       )}
-
       {title === "users" && !creationMode && (
         <>
           {isPossibleToJoin ? (
@@ -710,13 +710,9 @@ const AttributeEditor = ({
                       defaultMessage="No suggestions found"
                     />
                   )}
-                  placeholder={
-                    <FormattedMessage
-                      id="addNew"
-                      defaultMessage={`Add new {title}`}
-                      values={{ title }}
-                    />
-                  }
+                  placeholder={intl.formatMessage(
+                    { id: "addNewPlaceholder" }
+                  )}
                   isClearable
                   styles={{
                     control: (base) => ({

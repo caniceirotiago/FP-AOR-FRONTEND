@@ -138,7 +138,7 @@
   "projectStatus": "Project Status",
   "askToJoin": "Ask To Join",
   "noSuggestionsFound": "No suggestions found",
-  "addNew": "Add new {title}",
+  "addNewPlaceholder" : "Add new",
   "add": "Add",
   "remove": "Remove",
   "cancel": "Cancel",
@@ -206,9 +206,13 @@
   "errorTokenNotReceived": "Error Confirming Account! Token not received!",
   "errorConfirmingAccount": "Error Confirming Account!",
   "errorConfirmingAccountDetailed": "Error Confirming Account! {error}",
-  "requestProcessed" : "Request processed!",
+  "requestProcessed": "Request processed!",
   "errorAssociatingUser": "Error associating user to project or request already processed!",
-  "errorAssociatingUserDetailed" : "Error associating user to project! {error}",
-  "enterJustification" : "Enter justification"
-
+  "errorAssociatingUserDetailed": "Error associating user to project! {error}",
+  "enterJustification": "Enter justification",
+  "task": "Task",
+  "changeProject": "Change Project",
+  "startDate": "Start Date",
+  "endDate": "End Date",
+  "responsible": "Responsible"
 }

@@ -121,9 +121,8 @@ const EditTaskModal = ({
     }
   };
 
-  console.log(taskData);
-
   if (!isOpen) return null;
+
   return (
     <div className={styles.modal}>
       <div className={styles.modalContent}>
@@ -207,7 +206,6 @@ const EditTaskModal = ({
                 handleDateChange(new Date(e.target.value), "plannedEndDate")
               }
             />
-
             <div className={styles.attributeEditor}>
               <AttributeEditor
                 taskData={taskData}

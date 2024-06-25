@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
+import { FaPlus } from "react-icons/fa";
 import styles from "./ProjectPlanningPage.module.css";
 import TaskManager from "../../components/ProjectPlanningPageComponets/ganttChat/TaskManager";
-import projectService from "../../services/projectService";
 import membershipService from "../../services/membershipService";
-import { FaPlus, FaArrowCircleRight } from "react-icons/fa";
-import CreateTaskModal from "../../components/modals/CreateTaskModal";
 import useProjectStore from "../../stores/useProjectStore";
+import CreateTaskModal from "../../components/modals/CreateTaskModal";
 import EditTaskModal from "../../components/modals/EditTaskModal";
 
 const ProjectPlanningPage = () => {
   const [accessibleProjectsIds, setAccessibleProjectsIds] = useState([]);
-  const [filtersVisible, setFiltersVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [tasksUpdated, setTasksUpdated] = useState(false);
   const { selectedProjectId, setSelectedProjectId } = useProjectStore();
+  const intl = useIntl();
 
   const fetchProjetsIdByloggedUser = async () => {
     try {
@@ -76,13 +76,15 @@ const ProjectPlanningPage = () => {
           <button
             onClick={handleClick}
             className={`${styles.iconButton} ${styles.createButton}`}
-            data-text="Task"
+            data-text={intl.formatMessage({ id: "task" })}
           >
             <FaPlus className={styles.svgIcon} />
           </button>
         </div>
         <div className={styles.selectProjectDiv}>
-          <h4>Change Project</h4>
+        <h4>
+            <FormattedMessage id="changeProject" defaultMessage="Change Project" />
+          </h4>
           <select
             className={styles.selectProject}
             onChange={handleSelectProject}
@@ -96,7 +98,7 @@ const ProjectPlanningPage = () => {
           </select>
         </div>
       </div>
-      <TaskManager  className={styles.taskManager}handleEditTaskClick={handleEditTaskClick} projectId={selectedProjectId} tasksUpdated={tasksUpdated}/>
+      <TaskManager className={styles.taskManager}handleEditTaskClick={handleEditTaskClick} projectId={selectedProjectId} tasksUpdated={tasksUpdated}/>
     </div>
   );
 };

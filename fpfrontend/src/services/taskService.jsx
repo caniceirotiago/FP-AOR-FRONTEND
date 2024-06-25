@@ -5,7 +5,7 @@ const API_BASE_URL =
 
 const getAuthHeaders = () => {
   return {
-    Accept: "application/json",
+    "Accept": "application/json",
     "Content-Type": "application/json",
   };
 };
@@ -47,7 +47,8 @@ const projectService = {
       throw error;
     }
   },
-  updateTask: async (taskId, task, projectId) => {
+
+  updateTask: async (task, projectId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/${projectId}`, {
         method: "PUT",
@@ -62,6 +63,7 @@ const projectService = {
       throw error;
     }
   },
+
   addPrerequisiteTask: async (
     independentTaskId,
     dependentTaskId,
@@ -88,6 +90,7 @@ const projectService = {
       throw error;
     }
   },
+
   removeDependency: async (independentTaskId, dependentTaskId, projectId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/dependency/${projectId}`, {
@@ -106,6 +109,7 @@ const projectService = {
       throw error;
     }
   },
+  
   getTaskById: async (taskId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/${taskId}`, {
@@ -120,6 +124,7 @@ const projectService = {
       throw error;
     }
   },
+
   fetchAllStates: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/states`, {
@@ -134,6 +139,7 @@ const projectService = {
       throw error;
     }
   },
+
   detailedUpdateTask: async (task, projectId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/detailed/${projectId}`, {
