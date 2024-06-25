@@ -1,19 +1,37 @@
 .mainGanttContainer {
   display: flex;
-  height: 99%;
   width: 100%;
   overflow-x: auto; 
   border: 1px solid #ccc;
+  white-space: nowrap;
+  margin-right: 10px;
+  margin-left: 10px;
+
+  
+}
+.mainGanttContainer::-webkit-scrollbar {
+  height: 8px; /* Altura da barra de rolagem horizontal */
 }
 
+.mainGanttContainer::-webkit-scrollbar-thumb {
+  background: #888; /* Cor da barra de rolagem */
+  border-radius: 5px; /* Bordas arredondadas da barra de rolagem */
+}
+
+
 .ganttContainer {
+  
   position: relative;
   flex: 1;
-  height: 100%;
  
   white-space: nowrap;
   display: flex;
   flex-direction: column;
+
+
+  overflow-y: auto;
+
+
 }
 
 
@@ -23,7 +41,7 @@
   position: sticky;
   top: 0;
   background: #f9f9f9;
-  z-index: 1;
+  z-index: 4;
 }
 
 .timelineDate {
@@ -32,6 +50,7 @@
   text-align: center;
   font-size: 12px;
   white-space: nowrap;
+  border-radius: 3px;
   overflow: hidden;
   position: relative;
 }
@@ -46,10 +65,10 @@
   background: #ccc; /* Cor da linha que indica o início do dia */
 }
 .isWeekend {
-  background: #949090; /* Cor de fundo para fins de semana */
+  background: var(--weekend-color); /* Cor de fundo para fins de semana */
 }
 
-.month {
+/* .month {
   text-align: center;
   font-size: 12px;
   white-space: nowrap;
@@ -80,11 +99,15 @@
   bottom: 0;
   width: 1px;
   background: #6b6a6a; 
-}
+} */
 
 .taskBars {
   position: relative;
+  background-image: linear-gradient(to top, var(--gantt-graphic-line-color) 1px, transparent 1px);
+  background-size: 1000% 40px; 
+  height: calc(1000% - 30px); 
 }
+
 
 .taskBar {
   position: absolute;
@@ -95,6 +118,7 @@
   margin: 2px 0;
   transition: all 0.05s ease;
   z-index: 2;
+
 }
 
 .taskHandleStart,
@@ -148,25 +172,40 @@
   overflow: hidden;
 }
 .taskInfo {
- 
   position: absolute;
   height: 30px;
   background-color: transparent;
   display: flex;
   align-items: center;
   margin: 2px 0;
-  transition: all 0.05s ease;
+  transition: opacity 0.5s ease; /* Certifique-se de que a transição está configurada para a opacidade */
   z-index: 2;
-  overflow: hidden;
-
+  opacity: 0;
 }
+.isTouch {
+  position: absolute;
+  height: 30px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  margin: 2px 0;
+  transition: opacity 0.5s ease; /* Certifique-se de que a transição está configurada para a opacidade */
+  z-index: 2;
+  opacity: 1;
+}
+
+.taskBar:hover ~ .taskInfo{
+  opacity: 1;
+  z-index: 2;
+}
+
+
 .taskTitle {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  left: 30px;
+  left: 37px;
   z-index: 3;
-  overflow: hidden;
 }
 .responsiblePhotoDiv {
   width: 20px;
@@ -243,4 +282,10 @@
 .dependencyLineWrapper {
   position: relative;
   z-index: 1;
+}
+
+@media (max-width: 1250px) {
+  .taskInfo {
+    opacity: 1;
+  }
 }

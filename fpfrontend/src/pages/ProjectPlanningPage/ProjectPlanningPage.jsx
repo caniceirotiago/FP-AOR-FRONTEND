@@ -85,7 +85,7 @@ const ProjectPlanningPage = () => {
           </div>
          
       </div>
-      <TaskManager handleEditTaskClick={handleEditTaskClick} projectId={selectedProjectId} tasksUpdated={tasksUpdated}/>
+      <TaskManager  className={styles.taskManager}handleEditTaskClick={handleEditTaskClick} projectId={selectedProjectId} tasksUpdated={tasksUpdated}/>
     </div>
   );
 };

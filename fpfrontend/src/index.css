@@ -57,6 +57,8 @@ body.theme-light {
   --task-hover-accesory-color: #055063;
   --dependency-line-color: #1d908a;
   --dependency-line-hover-color: #280c8b;
+  --gantt-graphic-line-color: #e0e0e04b;
+  --weekend-color: #cdc6a682;
 
 }
 
@@ -97,6 +99,8 @@ body.theme-dark {
   --task-hover-accesory-color: #01163a;
   --dependency-line-color: #eff1ee;
   --dependency-line-hover-color: #eff1ee;
+  --gantt-graphic-line-color: #eff1ee1b;
+  --weekend-color: #f2f2f2;
 
 
 }

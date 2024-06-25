@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styles from './GanttChart.module.css';
 import  useDeviceStore  from '../../../../stores/useDeviceStore.jsx';
+import  useSyncScrollStore  from '../../../../stores/useSyncScrollStore.jsx';
 
 const barTaskColors = {
 
@@ -16,22 +17,39 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
   const [linePosition, setLinePosition] = useState(null);
   const [circleDragHoovered, setCircleDragHoovered] = useState(null);
   const [shiftPressed, setShiftPressed] = useState(false);
-  const [scrollPosition, setScrollPosition] = useState({ scrollX: 0, scrollY: 0 });
   const { dimensions, isTouch } = useDeviceStore();
+  const { syncScrollPosition, setSyncScrollPosition } = useSyncScrollStore();
+
+
 
   useEffect(() => {
+    const ganttElement = ganttRef.current;
+    console.log('Gantt Element:', ganttElement);
     const handleScroll = () => {
       const { scrollLeft, scrollTop } = ganttRef.current;
-      setScrollPosition({ scrollX: scrollLeft, scrollY: scrollTop });
+      console.log('Scroll Left:', scrollLeft, 'Scroll Top:', scrollTop); // Log scroll values
+      setSyncScrollPosition({ scrollX: scrollLeft, scrollY: scrollTop });
     };
-
-    const ganttElement = ganttRef.current;
-    ganttElement.addEventListener('scroll', handleScroll);
-
+  
+    if (ganttElement) {
+      ganttElement.addEventListener('scroll', handleScroll);
+    }
+  
     return () => {
-      ganttElement.removeEventListener('scroll', handleScroll);
+      if (ganttElement) {
+        ganttElement.removeEventListener('scroll', handleScroll);
+      }
     };
   }, []);
+  
+
+  useEffect(() => {
+    const ganttElement = ganttRef.current;
+    if (ganttElement) {
+      ganttElement.scrollTop = syncScrollPosition.scrollY;
+      ganttElement.scrollLeft = syncScrollPosition.scrollX;
+    }
+  }, [syncScrollPosition]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -91,10 +109,10 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
 
     if (handleType === 'dependency') {
       setLinePosition({ 
-        startX: initialX + scrollPosition.scrollX, 
-        startY: initialY -27 + scrollPosition.scrollY, 
-        endX: e.clientX - ganttRect.left + scrollPosition.scrollX, 
-        endY: e.clientY - ganttRect.top-27 + scrollPosition.scrollY
+        startX: initialX + syncScrollPosition.scrollX, 
+        startY: initialY -27 + syncScrollPosition.scrollY, 
+        endX: e.clientX - ganttRect.left + syncScrollPosition.scrollX, 
+        endY: e.clientY - ganttRect.top-27 + syncScrollPosition.scrollY
       });
       return;
     }
@@ -276,9 +294,13 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
 
   const generateTimeline = () => {
     const timeline = [];
-    let currentDate = new Date(startDate);
-
-    while (currentDate <= endDate) {
+    const startDateT = new Date(startDate);
+    startDateT.setDate(startDateT.getDate() - 1);
+    let currentDate = new Date(startDateT);
+    let endDateT = new Date(endDate);
+    endDateT.setDate(endDateT.getDate() + 30);
+    console.log("endDateT", endDateT);
+    while (currentDate <= endDateT) {
       timeline.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
     }
@@ -346,10 +368,10 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
   const timeline = generateTimeline();
   const months = generateMonths(timeline);
   const years = generateYears(timeline);
-
+  console.log(syncScrollPosition);
   return (
-    <div className={styles.mainGanttContainer}>
-      <div className={styles.ganttContainer} ref={ganttRef} onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
+    <div className={styles.mainGanttContainer}  >
+      <div className={styles.ganttContainer} ref={ganttRef}  onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
   
          {/* <div className={styles.timeline}>
             {years.map(({ year, days }) => (
@@ -383,7 +405,7 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
             return (
               <div>
                 <div
-                  onDoubleClick={() => handleTaskDoubleClick(task.id)}
+                  onClick={() => handleTaskDoubleClick(task.id)}
                   key={task.id}
                   className={styles.taskBar}
                   data-task-id={task.id}
@@ -439,7 +461,7 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
                 
                   <div 
                     key={task.id}
-                    className={styles.taskInfo}
+                    className={`${isTouch ? styles.isTouch : styles.taskInfo}`}
                     data-task-id={task.id}
                     style={{
                       left: `${taskStartOffset + taskDuration + 15}px`,
@@ -447,9 +469,7 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
                       top: `${index * 40}px`
                     }}
                     >
-                  {(dimensions.width < 1250 || isTouch) && (
                     <div className={styles.taskTitle}>{task.title}</div>
-                  )}
                     <div className={styles.responsiblePhotoDiv}>
                       <img src={task.responsible.photo} alt="" className={styles.responsiblePhoto}/>
                     </div>
