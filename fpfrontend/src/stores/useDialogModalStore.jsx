@@ -19,7 +19,7 @@ import {create} from 'zustand';
  */
 
 
-const DialogBoxStore = create((set) => ({
+const DialogBoxStore = create((set, get) => ({
   isDialogOpen: false,
   dialogMessage: '',
   userConfirmed: false,

@@ -28,6 +28,7 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
         registeredExecuters: task.registeredExecuters,
         nonRegisteredUsers: task.nonRegisteredUsers,
         responsible: task.responsibleId,
+        isDeleted: task.isDeleted,
       }));
       setTasks(formattedTasks);
     } catch (error) {
@@ -112,11 +113,13 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
     fetchProjectTasks();
   }, [projectId]);
 
+  console.log(tasks);
+
   return (
     <div className={styles.container}>
       <div className={styles.projectPlanningHeader}>
         <h3 className={styles.title}>{projectGeneralInfo.name}</h3>
-        <p>{projectGeneralInfo.state}</p>
+        <p className={styles.state}>{projectGeneralInfo.state}</p>
         <span
           className={styles.statusIndicator}
           style={{ backgroundColor: getStatusColor(projectGeneralInfo.state) }}

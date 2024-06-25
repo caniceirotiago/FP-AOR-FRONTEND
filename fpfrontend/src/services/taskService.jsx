@@ -155,6 +155,20 @@ const projectService = {
       throw error;
     }
   },
+  deleteTask: async (taskId, projectId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${taskId}/${projectId}`, {
+        method: "DELETE",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error deleting task:", error.message);
+      throw error;
+    }
+  }
 };
 
 export default projectService;
