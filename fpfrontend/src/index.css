@@ -58,7 +58,9 @@ body.theme-light {
   --dependency-line-color: #1d908a;
   --dependency-line-hover-color: #280c8b;
   --gantt-graphic-line-color: #e0e0e04b;
-  --weekend-color: #cdc6a682;
+  --weekend-color: #a6cdab4c;
+  --timeline-background-color: #d2ded557;
+  --task-title-gantt-color: #f3f3e9dd;
 
 }
 
@@ -101,6 +103,8 @@ body.theme-dark {
   --dependency-line-hover-color: #eff1ee;
   --gantt-graphic-line-color: #eff1ee1b;
   --weekend-color: #f2f2f2;
+  --timeline-background-color: #f2f2f2;
+  --task-title-gantt-color: #9fd5bb;
 
 
 }

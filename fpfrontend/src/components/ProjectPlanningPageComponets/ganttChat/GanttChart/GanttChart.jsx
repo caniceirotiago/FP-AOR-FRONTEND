@@ -3,6 +3,7 @@ import styles from "./GanttChart.module.css";
 import useDeviceStore from "../../../../stores/useDeviceStore.jsx";
 import useSyncScrollStore from "../../../../stores/useSyncScrollStore.jsx";
 import GanttLines from "./GanttLines.jsx";
+import Legend from "./Legend/Legend.jsx";
 
 const barTaskColors = {
   PLANNED:
@@ -27,15 +28,49 @@ const GanttChart = ({
   const [linePosition, setLinePosition] = useState(null);
   const [circleDragHoovered, setCircleDragHoovered] = useState(null);
   const [shiftPressed, setShiftPressed] = useState(false);
+  const [isDraggingMap, setIsDraggingMap] = useState(false);
   const { isTouch } = useDeviceStore();
   const { syncScrollPosition, setSyncScrollPosition } = useSyncScrollStore();
+  // Dentro do componente GanttChart
+
+useEffect(() => {
+  const ganttElement = ganttRef.current;
+
+  const handleMouseDown = (e) => {
+    if (e.target === ganttElement) {
+      ganttElement.classList.add(styles.dragging);
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (ganttElement.classList.contains(styles.dragging)) {
+      ganttElement.style.cursor = 'grabbing';
+    }
+  };
+
+  const handleMouseUp = (e) => {
+    if (ganttElement.classList.contains(styles.dragging)) {
+      ganttElement.classList.remove(styles.dragging);
+      ganttElement.style.cursor = 'grab';
+    }
+  };
+
+  ganttElement.addEventListener('mousedown', handleMouseDown);
+  ganttElement.addEventListener('mousemove', handleMouseMove);
+  ganttElement.addEventListener('mouseup', handleMouseUp);
+
+  return () => {
+    ganttElement.removeEventListener('mousedown', handleMouseDown);
+    ganttElement.removeEventListener('mousemove', handleMouseMove);
+    ganttElement.removeEventListener('mouseup', handleMouseUp);
+  };
+}, []);
+
 
   useEffect(() => {
     const ganttElement = ganttRef.current;
-    console.log("Gantt Element:", ganttElement);
     const handleScroll = () => {
       const { scrollLeft, scrollTop } = ganttRef.current;
-      console.log("Scroll Left:", scrollLeft, "Scroll Top:", scrollTop); // Log scroll values
       setSyncScrollPosition({ scrollX: scrollLeft, scrollY: scrollTop });
     };
 
@@ -242,7 +277,6 @@ const GanttChart = ({
                 return task;
               })
             );
-            console.log("sourceTaskId", sourceTaskId);
             await addPreresquisiteTaskById(sourceTaskId, targetTaskId);
           } else if (sourceStartDate >= targetEndDate) {
             setTasks(
@@ -254,7 +288,6 @@ const GanttChart = ({
                 return task;
               })
             );
-            console.log("targetTaskId", targetTaskId);
             await addPreresquisiteTaskById(targetTaskId, sourceTaskId);
           }
         }
@@ -273,7 +306,6 @@ const GanttChart = ({
       }
     } else {
       try {
-        console.log("sourceTaskId", sourceTaskId);
         await updateTaskById(sourceTaskId);
       } catch (error) {
         console.error("Error updating tasks:", error);
@@ -345,7 +377,6 @@ const GanttChart = ({
     let currentDate = new Date(startDateT);
     let endDateT = new Date(endDate);
     endDateT.setDate(endDateT.getDate() + 30);
-    console.log("endDateT", endDateT);
     while (currentDate <= endDateT) {
       timeline.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
@@ -406,30 +437,28 @@ const GanttChart = ({
   const timeline = generateTimeline();
   const months = generateMonths(timeline);
   const years = generateYears(timeline);
-  console.log(syncScrollPosition);
+
   return (
     <div className={styles.mainGanttContainer}>
+      <Legend />
       <div
         className={styles.ganttContainer}
         ref={ganttRef}
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
+        onMouseDown={(e) => {
+          if (e.target === ganttRef.current) {
+            setIsDraggingMap(true);
+          }
+        }}
+        onMouseUp={(e) => setIsDraggingMap(false)}
+        onMouseMove={(e) => {
+          if (isDraggingMap) {
+            ganttRef.current.scrollLeft -= e.movementX;
+            ganttRef.current.scrollTop -= e.movementY;
+          }
+        }}
       >
-
-        {/* <div className={styles.timeline}>
-            {years.map(({ year, days }) => (
-              <div key={year} className={styles.year} style={{ width: `${days * 50}px`, overflow:`hidden` }}>
-                {year}
-              </div>
-            ))}
-          </div>
-          <div className={styles.timeline}>
-            {months.map(({ month, days }) => (
-                <div key={month} className={styles.month} style={{ width: `${days * 50}px`, overflow:`hidden` }}>
-                  {month}
-                </div>
-              ))}
-          </div> */}
         <div className={styles.timeline}>
           {timeline.map((date, index) => (
             <div
@@ -453,10 +482,9 @@ const GanttChart = ({
             const taskDuration =
               ((taskEndDate - taskStartDate) / (1000 * 60 * 60 * 24)) * 50; // Day width in px
             return (
-              <div>
+              <div key={task.id}>
                 <div
                   onClick={() => handleTaskDoubleClick(task.id)}
-                  key={task.id}
                   className={styles.taskBar}
                   data-task-id={task.id}
                   style={{
@@ -523,7 +551,6 @@ const GanttChart = ({
                   ></div>
                 </div>
                 <div
-                  key={task.id}
                   className={`${isTouch ? styles.isTouch : styles.taskInfo}`}
                   data-task-id={task.id}
                   style={{
@@ -634,10 +661,8 @@ const GanttChart = ({
               );
             })
           )}
-          
         </div>
         <GanttLines timeline={timeline} tasks={tasks} />
-
       </div>
     </div>
   );

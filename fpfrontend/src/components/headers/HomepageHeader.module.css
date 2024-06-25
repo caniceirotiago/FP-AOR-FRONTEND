@@ -176,7 +176,7 @@
   background-color: var(--header-color);
   border-radius: 5px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
+  z-index: 6;
   display: none; 
   flex-direction: column;
   color: var(--text-color4);
@@ -195,7 +195,7 @@
   background-color: var(--header-color);
   position: relative;
   top: 0;
-  z-index: 2;
+  z-index: 5;
 }
 
 .rightAligned {
@@ -363,6 +363,7 @@ border-bottom: none;
   text-align: left;
   border-bottom: 1px solid #ddd;
   cursor: pointer;
+  z-index: 100; 
 
 }
 
@@ -388,6 +389,7 @@ border-bottom: none;
   gap: 5px;
   border-bottom: 1px solid var(--divider-color);
   align-items: flex-start;
+  z-index: 100; 
   
 }
 
@@ -405,6 +407,7 @@ border-bottom: none;
   justify-content: space-between;
   width: 100%;
   font-size: 0.9rem;
+  z-index: 100; 
 }
 
 .notificationMeta {
