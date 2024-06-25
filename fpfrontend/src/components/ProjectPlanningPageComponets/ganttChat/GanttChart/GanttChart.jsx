@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import styles from "./GanttChart.module.css";
 import useDeviceStore from "../../../../stores/useDeviceStore.jsx";
 import useSyncScrollStore from "../../../../stores/useSyncScrollStore.jsx";
+import GanttLines from "./GanttLines.jsx";
 
 const barTaskColors = {
   PLANNED:
@@ -414,6 +415,7 @@ const GanttChart = ({
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
       >
+
         {/* <div className={styles.timeline}>
             {years.map(({ year, days }) => (
               <div key={year} className={styles.year} style={{ width: `${days * 50}px`, overflow:`hidden` }}>
@@ -632,7 +634,10 @@ const GanttChart = ({
               );
             })
           )}
+          
         </div>
+        <GanttLines timeline={timeline} tasks={tasks} />
+
       </div>
     </div>
   );

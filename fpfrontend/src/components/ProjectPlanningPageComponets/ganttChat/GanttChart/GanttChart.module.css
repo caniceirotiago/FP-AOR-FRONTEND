@@ -5,17 +5,15 @@
   border: 1px solid #ccc;
   white-space: nowrap;
   margin-right: 10px;
-  margin-left: 10px;
-
   
 }
 .mainGanttContainer::-webkit-scrollbar {
-  height: 8px; /* Altura da barra de rolagem horizontal */
+  height: 8px; 
 }
 
 .mainGanttContainer::-webkit-scrollbar-thumb {
-  background: #888; /* Cor da barra de rolagem */
-  border-radius: 5px; /* Bordas arredondadas da barra de rolagem */
+  background: #888; 
+  border-radius: 5px; 
 }
 
 
@@ -103,9 +101,9 @@
 
 .taskBars {
   position: relative;
-  background-image: linear-gradient(to top, var(--gantt-graphic-line-color) 1px, transparent 1px);
+  /* background-image: linear-gradient(to top, var(--gantt-graphic-line-color) 1px, transparent 1px);
   background-size: 1000% 40px; 
-  height: calc(1000% - 30px); 
+  height: calc(1000% - 30px);  */
 }
 
 
@@ -289,3 +287,4 @@
     opacity: 1;
   }
 }
+
