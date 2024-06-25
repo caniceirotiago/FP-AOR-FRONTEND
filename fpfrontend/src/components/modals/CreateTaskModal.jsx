@@ -66,7 +66,7 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
       });
     } else {
       const data = await response.json();
-      setDialogMessage(data.errorMessage);
+      setDialogMessage(data.message);
       setAlertType(true);
       setIsDialogOpen(true);
       setOnConfirm(() => {});
@@ -141,7 +141,6 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
                 handleDateChange(new Date(e.target.value), "plannedEndDate")
               }
             />
-
             <div className={styles.attributeEditor}>
               <AttributeEditor
                 onAttributesChange={onAddingResponsibleChange}
