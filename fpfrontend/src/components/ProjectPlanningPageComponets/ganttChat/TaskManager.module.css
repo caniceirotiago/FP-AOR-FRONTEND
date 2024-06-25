@@ -51,11 +51,17 @@
 .title {
   font-size: 24px;
   margin-bottom: 20px;
+  color: var(--text-color4);
+}
+.state {
+
+  color: var(--text-color4);
 }
 .statusIndicator {
   width: 10px;
   height: 10px;
   border-radius: 50%;
+  
 }
 
 @media (max-width: 768px) {

@@ -30,6 +30,7 @@ const EditTaskModal = ({
     nonRegisteredExecutors: "",
     dependentTasks: [],
     prerequisites: [],
+    isDeleted: "",
   });
 
   const fetchTaskDataById = async () => {
@@ -47,6 +48,7 @@ const EditTaskModal = ({
         nonRegisteredExecutors: data.nonRegisteredExecutors,
         dependentTasks: data.dependentTasks,
         prerequisites: data.prerequisites,
+        isDeleted: data.isDeleted,
       });
     }
   };
@@ -70,6 +72,43 @@ const EditTaskModal = ({
     const formattedDate = format(date, "yyyy-MM-dd'T'00:00:00'Z'");
     setTaskData((prevData) => ({ ...prevData, [dateType]: formattedDate }));
   };
+
+  const handleTaskDelete = async () => {
+    setDialogMessage("Are you sure you want to delete this task?");
+    setAlertType(false);
+    setIsDialogOpen(true);
+    setOnConfirm(async () => {
+      await DeleteTask();
+    });
+  };
+
+  const DeleteTask = async () => {
+    const response = await taskService.deleteTask(taskId, projectId);
+    if (response.status === 204) {
+      setDialogMessage(
+        intl.formatMessage({
+          id: "taskDeletedSuccess",
+          defaultMessage: "Task deleted successfully",
+        })
+      );
+      setAlertType(true);
+      setIsDialogOpen(true);
+      setOnConfirm(() => {});
+      onClose();
+      onTaskUpdate();
+    } else {
+      setDialogMessage(
+        intl.formatMessage({
+          id: "taskDeleteError",
+          defaultMessage: "An error occurred while deleting the task",
+        })
+      );
+      setAlertType("error");
+      setIsDialogOpen(true);
+      setOnConfirm(() => {});
+    }
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -120,7 +159,7 @@ const EditTaskModal = ({
       setOnConfirm(() => {});
     }
   };
-
+  console.log(taskData);
   if (!isOpen) return null;
 
   return (
@@ -242,6 +281,9 @@ const EditTaskModal = ({
               value={taskData.nonRegisteredExecutors}
               onChange={handleChange}
             />
+            <div  className={styles.button} onClick={handleTaskDelete}>
+              <FormattedMessage id="delete" defaultMessage="Detete Task" />
+            </div>
             <button type="submit" className={styles.button}>
               <FormattedMessage id="submit" defaultMessage="Submit" />
             </button>

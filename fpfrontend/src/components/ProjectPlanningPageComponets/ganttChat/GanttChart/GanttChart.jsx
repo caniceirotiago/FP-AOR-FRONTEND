@@ -437,6 +437,7 @@ useEffect(() => {
   const timeline = generateTimeline();
   const months = generateMonths(timeline);
   const years = generateYears(timeline);
+  const filteredTasks = tasks.filter((task) => !task.isDeleted);
 
   return (
     <div className={styles.mainGanttContainer}>
@@ -472,7 +473,7 @@ useEffect(() => {
           ))}
         </div>
         <div className={styles.taskBars}>
-          {tasks.map((task, index) => {
+          {filteredTasks.map((task, index) => {
             const taskStartDate = new Date(task.plannedStartDate);
             const taskEndDate = new Date(task.plannedEndDate);
             const taskStartOffset =
@@ -592,9 +593,9 @@ useEffect(() => {
         </div>
         {/* Rendering fixed dependency lines */}
         <div className={styles.svgContainer}>
-          {tasks.map((task) =>
+          {filteredTasks.map((task) =>
             task.prerequisites.map((depId) => {
-              const depTask = tasks.find((t) => t.id === depId);
+              const depTask = filteredTasks.find((t) => t.id === depId);
               if (!depTask) return null;
               const depEndDate = new Date(depTask.plannedEndDate);
               const taskStartDate = new Date(task.plannedStartDate);
@@ -605,8 +606,8 @@ useEffect(() => {
                 ((taskStartDate - new Date(timeline[0])) /
                   (1000 * 60 * 60 * 24)) *
                 50;
-              const depIndex = tasks.findIndex((t) => t.id === depId);
-              const taskIndex = tasks.findIndex((t) => t.id === task.id);
+              const depIndex = filteredTasks.findIndex((t) => t.id === depId);
+              const taskIndex = filteredTasks.findIndex((t) => t.id === task.id);
               return (
                 <React.Fragment key={`${task.id}-${depId}`}>
                   <svg
@@ -662,7 +663,7 @@ useEffect(() => {
             })
           )}
         </div>
-        <GanttLines timeline={timeline} tasks={tasks} />
+        <GanttLines timeline={timeline} tasks={filteredTasks} />
       </div>
     </div>
   );

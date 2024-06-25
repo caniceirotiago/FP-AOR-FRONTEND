@@ -15,6 +15,7 @@
   border-collapse: collapse;
   text-align: left;
   margin-bottom: 50px;
+
 }
 
 .thead {
@@ -31,6 +32,7 @@
   padding: 0px 2px; 
   position: relative; 
   max-width: 40px;
+  
 }
 
 .th {
@@ -50,6 +52,7 @@
 
 .td {
   height: 40px;
+  color: var(--text-color4);
 
 }
 

@@ -20,6 +20,8 @@ const TaskTable = ({ tasks }) => {
       tableElement.scrollTop = syncScrollPosition.scrollY;
     }
   }, [syncScrollPosition]);
+  const filteredTasks = tasks.filter((task) => !task.isDeleted);
+
   
   return (
     <div className={styles.taskTable} ref={tableRef}>
@@ -38,7 +40,7 @@ const TaskTable = ({ tasks }) => {
           </tr>
         </thead>
         <tbody className={styles.body}>
-          {tasks.map((task) => (
+          {filteredTasks.map((task) => (
             <tr key={task.id} className={styles.tr}>
               <td className={styles.td}>{task.title}</td>
               <td className={styles.td}>{formatDate(task.plannedStartDate)}</td>

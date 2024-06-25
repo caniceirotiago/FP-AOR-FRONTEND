@@ -48,6 +48,7 @@ body.theme-light {
   --atribute-editor-background: #ffffff;
   --input-select-textarea-background: rgba(255, 255, 255, 1); 
   --listItem-background: rgba(245, 232, 220, 0.271);
+
   --table-background: rgba(255, 255, 255, 0.2);
   --table-header-background: rgba(232, 240, 238, 0.27);
   --planned-task-color: #fae20e;
@@ -61,6 +62,7 @@ body.theme-light {
   --weekend-color: #a6cdab4c;
   --timeline-background-color: #d2ded557;
   --task-title-gantt-color: #f3f3e9dd;
+  --gantt-graphic-background: #f3f3e900;
 
 }
 
@@ -92,19 +94,20 @@ body.theme-dark {
   --atribute-editor-background: #d5d7de30;
   --input-select-textarea-background: rgba(60, 60, 60, 1); 
   --listItem-background: rgba(255, 255, 255, 0.163);
-  --table-background: rgba(107, 149, 156, 0.128);
+  --table-background: rgba(84, 90, 113, 0.128);
   --table-header-background: rgba(218, 228, 231, 0.866);
-  --planned-task-color: #f2bb16;
-  --in-progress-task-color: #3eadbe;
-  --finished-task-color: #6f42c1;
-  --task-base-color: #01163abf;
-  --task-hover-accesory-color: #01163a;
-  --dependency-line-color: #eff1ee;
-  --dependency-line-hover-color: #eff1ee;
-  --gantt-graphic-line-color: #eff1ee1b;
-  --weekend-color: #f2f2f2;
-  --timeline-background-color: #f2f2f2;
-  --task-title-gantt-color: #9fd5bb;
+  --planned-task-color: #004cff;
+  --in-progress-task-color: #ffea00;
+  --finished-task-color: #00eaff;
+  --task-base-color: #d19595;
+  --task-hover-accesory-color: #73db6a;
+  --dependency-line-color: #35f6c3;
+  --dependency-line-hover-color: #55ff00;
+  --gantt-graphic-line-color: #000000;
+  --weekend-color: #040404ba;
+  --timeline-background-color: #b6ae55;
+  --task-title-gantt-color: #67ba92;
+  --gantt-graphic-background: #9f91e25e;
 
 
 }
