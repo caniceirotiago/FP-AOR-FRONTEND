@@ -213,5 +213,6 @@
   "changeProject": "Mudar de Projeto",
    "startDate": "Data início",
   "endDate": "Data fim",
-  "responsible": "Responsável"
+  "responsible": "Responsável",
+  "markAllNotificationsAsRead" : "Marcar todas as notificações lidas"
 }
