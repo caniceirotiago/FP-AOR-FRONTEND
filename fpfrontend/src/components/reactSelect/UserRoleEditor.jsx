@@ -4,7 +4,6 @@ import styles from "./UserRoleEditor.module.css";
 import ListUser from "./listItems/ListUser.jsx";
 import userService from "../../services/userService.jsx";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
-import useDeviceStore from "../../stores/useDeviceStore.jsx";
 
 const roleMapping = {
   1: "ADMIN",
@@ -15,11 +14,10 @@ const roleMapping = {
 
 const UserRoleEditor = () => {
   const [users, setUsers] = useState([]);
-
+  const intl = useIntl();
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
     useDialogModalStore();
-  const { dimensions } = useDeviceStore();
-  const intl = useIntl();
+  
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -28,11 +26,10 @@ const UserRoleEditor = () => {
         if (response.status === 200) {
           const data = await response.json();
           // Convert role IDs to role names
-          const usersWithRoles = data.map(user => ({
+          const usersWithRoles = data.map((user) => ({
             ...user,
-            role: roleMapping[user.role]
+            role: roleMapping[user.role],
           }));
-          console.log("Fetched Users usersWithRoles: ", usersWithRoles); // Debugging log
           setUsers(usersWithRoles);
         } else {
           console.log("Error loading users list basic info");
@@ -60,8 +57,8 @@ const UserRoleEditor = () => {
         );
         setDialogMessage(
           intl.formatMessage({
-            id: "configurationSuccess",
-            defaultMessage: "Configuration Updated Successfully",
+            id: "userRoleSuccess",
+            defaultMessage: "User role updated successfully",
           })
         );
         setIsDialogOpen(true);
@@ -70,7 +67,7 @@ const UserRoleEditor = () => {
       } else {
         setDialogMessage(
           intl.formatMessage({
-            id: "configurationFailure",
+            id: "userRoleFailure",
             defaultMessage: "Failed to update user role",
           })
         );
@@ -86,7 +83,12 @@ const UserRoleEditor = () => {
 
   return (
     <div className={styles.container}>
-      <h3>User Management</h3>
+      <h2>
+        <FormattedMessage
+          id="userManagementTitle"
+          defaultMessage="User Management"
+        />
+      </h2>
       <div className={styles.userListContainer}>
         <ul className={styles.userList}>
           {users.map((user) => (

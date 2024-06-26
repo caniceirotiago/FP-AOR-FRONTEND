@@ -12,20 +12,7 @@
   color: var(--text-color4);
 }
 
-.innerContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.existingAttributes {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-}
-
-.userAttributeContainer {
+.userListContainer {
   display: flex;
   flex-direction: column;
   min-height: 30px;
@@ -33,13 +20,13 @@
   overflow-y: auto;
 }
 
-.attributeList {
+.userList {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-.attribute {
+.user {
   padding: 8px;
   border: 0px solid #ddd;
   border-radius: 4px;
@@ -50,24 +37,9 @@
   margin-bottom: 4px;
 }
 
-.addAttribute {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-}
-
-.selectAddContainer {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 10px;
-}
-
 .select {
   width: 100%;
 }
-
 
 .addBtn {
   background-color: var(--btn-background2);

@@ -1,13 +1,14 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
   background-color: var(--background-color1);
 }
+
 #root {
   display: flex;
   flex-direction: column;
@@ -15,7 +16,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
@@ -26,8 +27,8 @@ body.theme-light {
   --btn-background1: #17a2b8;
   --btn-background2: #117a8b;
   --background-color1: rgba(240, 248, 255);
-  --card-background: rgba(255, 255, 255, 1); 
-  --card-border: rgba(0, 0, 0, 0.1); 
+  --card-background: rgba(255, 255, 255, 1);
+  --card-border: rgba(0, 0, 0, 0.1);
   --color-planning: #f3ea9d;
   --color-ready: #8dd28f;
   --color-in-progress: #73b6ec;
@@ -37,18 +38,17 @@ body.theme-light {
   --text-color2: white;
   --text-color3: white;
   --text-color4: black;
-  --positive-color: #50C878;
-  --negative-color: #FF6347;
-  --disabled-background:  #edf0f0;
+  --positive-color: #50c878;
+  --negative-color: #ff6347;
+  --disabled-background: #edf0f0;
   --vacancies-color: #8458f4;
-  --card-shadow: rgba(4, 0, 255, 0.155)  0px 7px 20px 0px;
-  --briefcase-base-color:  rgb(80, 246, 255);
+  --card-shadow: rgba(4, 0, 255, 0.155) 0px 7px 20px 0px;
+  --briefcase-base-color: rgb(80, 246, 255);
   --active-aside-item-color: #b9cbdd;
   --hover-aside-item-color: #dbe1e8;
   --atribute-editor-background: #ffffff;
-  --input-select-textarea-background: rgba(255, 255, 255, 1); 
+  --input-select-textarea-background: rgba(255, 255, 255, 1);
   --listItem-background: rgba(245, 232, 220, 0.271);
-
   --table-background: rgba(255, 255, 255, 0.2);
   --table-header-background: rgba(232, 240, 238, 0.27);
   --planned-task-color: #fae20e;
@@ -63,36 +63,35 @@ body.theme-light {
   --timeline-background-color: #d2ded557;
   --task-title-gantt-color: #f3f3e9dd;
   --gantt-graphic-background: #f3f3e900;
-
 }
 
 body.theme-dark {
   --header-color: #343a40;
   --btn-color1: #e0e0e0;
-  --btn-color2: #121212; 
-  --btn-background1: #1e5b89; 
-  --btn-background2: #07557c; 
-  --background-color1: black; 
-  --card-background: rgba(60, 60, 60, 1); 
-  --card-border: rgba(255, 255, 255, 0.1); 
-  --color-planning: #ffc107; 
-  --color-ready: #28a745; 
-  --color-in-progress: #17a2b8; 
-  --color-finished: #6f42c1; 
-  --color-cancelled: #dc3545; 
+  --btn-color2: #121212;
+  --btn-background1: #1e5b89;
+  --btn-background2: #07557c;
+  --background-color1: black;
+  --card-background: rgba(60, 60, 60, 1);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --color-planning: #ffc107;
+  --color-ready: #28a745;
+  --color-in-progress: #17a2b8;
+  --color-finished: #6f42c1;
+  --color-cancelled: #dc3545;
   --text-color: black;
   --text-color2: white;
   --text-color3: black;
   --text-color4: white;
-  --positive-color: #50C878;
-  --negative-color: #FF6347;
+  --positive-color: #50c878;
+  --negative-color: #ff6347;
   --vacancies-color: #a4c7fc;
-  --card-shadow: rgba(252, 252, 252, 0.209)  2px 2px 7px 2px;
-  --briefcase-base-color:  rgb(39, 59, 237);
+  --card-shadow: rgba(252, 252, 252, 0.209) 2px 2px 7px 2px;
+  --briefcase-base-color: rgb(39, 59, 237);
   --active-aside-item-color: #2b435d;
   --hover-aside-item-color: #424e5c;
   --atribute-editor-background: #d5d7de30;
-  --input-select-textarea-background: rgba(60, 60, 60, 1); 
+  --input-select-textarea-background: rgba(60, 60, 60, 1);
   --listItem-background: rgba(255, 255, 255, 0.163);
   --table-background: rgba(84, 90, 113, 0.128);
   --table-header-background: rgba(218, 228, 231, 0.866);
@@ -108,15 +107,12 @@ body.theme-dark {
   --timeline-background-color: #b6ae55;
   --task-title-gantt-color: #67ba92;
   --gantt-graphic-background: #9f91e25e;
-
-
 }
 
 .react-select__input {
   opacity: 1 !important;
   color: var(--text-color4) !important;
-  
 }
-.css-lx0s3w-control  {
- width: 100%;
+.css-lx0s3w-control {
+  width: 100%;
 }

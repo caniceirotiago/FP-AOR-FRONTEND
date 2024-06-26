@@ -4,6 +4,7 @@
   color: var(--text-color4);
   margin-left: 10px;
 }
+
 .attributeValue {
   font-size: 14px;
   font-weight: 500;
@@ -11,19 +12,20 @@
   margin-right: 10px;
 }
 
-
 .attributePhoto {
   width: 25px;
   height: 25px;
   object-fit: cover;
   border-radius: 50%;
 }
-.photo{
-    width: 25px;
-    height: 25px;
-    object-fit: cover;
-    border-radius: 50%;
+
+.photo {
+  width: 25px;
+  height: 25px;
+  object-fit: cover;
+  border-radius: 50%;
 }
+
 .removeButton {
   color: var(--text-color4);
 }
