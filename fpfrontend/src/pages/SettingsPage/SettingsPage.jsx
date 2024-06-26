@@ -4,6 +4,7 @@ import styles from "./SettingsPage.module.css";
 import configurationService from "../../services/configurationService";
 import useConfigurationStore from "../../stores/useConfigurationStore";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
+import UserRoleEditor from "../../components/reactSelect/UserRoleEditor.jsx";
 
 const MIN_SESSION_TIMEOUT_MINUTES = 10;
 
@@ -142,93 +143,97 @@ const SettingsPage = () => {
 
   return (
     <div className={styles.SettingsPage}>
-      <div className={styles.configPanel}>
-        <div className={styles.configTitle}>
-          <h3>
-            <FormattedMessage
-              id="configurationPanel"
-              defaultMessage="Configuration Panel"
-            />
-          </h3>
+      <div className={styles.container}>
+        <div className={styles.configPanel}>
+          <div className={styles.configTitle}>
+            <h3>
+              <FormattedMessage
+                id="configurationPanel"
+                defaultMessage="Configuration Panel"
+              />
+            </h3>
+          </div>
+          <table className={styles.configTable}>
+            <tbody>
+              <tr>
+                <td>
+                  <label htmlFor="sessionTimeout">
+                    <FormattedMessage
+                      id="sessionTimeoutLabel"
+                      defaultMessage="Session Timeout [m]: "
+                    />
+                  </label>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    id="sessionTimeout"
+                    value={newSessionTimeout}
+                    onChange={handleInputChangeB1}
+                    disabled={!isEditingB1}
+                    className={isEditingB1 ? styles.editMode : styles.viewMode}
+                    min={MIN_SESSION_TIMEOUT_MINUTES}
+                  />
+                </td>
+                <td>
+                  {isEditingB1 ? (
+                    <button onClick={handleSessionTimeoutUpdate}>
+                      <FormattedMessage id="saveButton" defaultMessage="Save" />
+                    </button>
+                  ) : (
+                    <button onClick={() => setIsEditingB1(true)}>
+                      <FormattedMessage
+                        id="editBtnProfForm"
+                        defaultMessage="Edit"
+                      />
+                    </button>
+                  )}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label htmlFor="maxProjectMembers">
+                    <FormattedMessage
+                      id="maxProjectMembersLabel"
+                      defaultMessage="Max Project Members: "
+                    />
+                  </label>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    id="maxProjectMembers"
+                    value={newMaxProjectMembers}
+                    onChange={handleInputChangeB2}
+                    disabled={!isEditingB2}
+                    className={isEditingB2 ? styles.editMode : styles.viewMode}
+                    min={1}
+                  />
+                </td>
+                <td>
+                  {isEditingB2 ? (
+                    <button onClick={handleProjectMembersUpdate}>
+                      <FormattedMessage id="saveButton" defaultMessage="Save" />
+                    </button>
+                  ) : (
+                    <button onClick={() => setIsEditingB2(true)}>
+                      <FormattedMessage
+                        id="editBtnProfForm"
+                        defaultMessage="Edit"
+                      />
+                    </button>
+                  )}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <table className={styles.configTable}>
-          <tbody>
-            <tr>
-              <td>
-                <label htmlFor="sessionTimeout">
-                  <FormattedMessage
-                    id="sessionTimeoutLabel"
-                    defaultMessage="Session Timeout [m]: "
-                  />
-                </label>
-              </td>
-              <td>
-                <input
-                  type="number"
-                  id="sessionTimeout"
-                  value={newSessionTimeout}
-                  onChange={handleInputChangeB1}
-                  disabled={!isEditingB1}
-                  className={isEditingB1 ? styles.editMode : styles.viewMode}
-                  min={MIN_SESSION_TIMEOUT_MINUTES}
-                />
-              </td>
-              <td>
-                {isEditingB1 ? (
-                  <button onClick={handleSessionTimeoutUpdate}>
-                    <FormattedMessage id="saveButton" defaultMessage="Save" />
-                  </button>
-                ) : (
-                  <button onClick={() => setIsEditingB1(true)}>
-                    <FormattedMessage
-                      id="editBtnProfForm"
-                      defaultMessage="Edit"
-                    />
-                  </button>
-                )}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label htmlFor="maxProjectMembers">
-                  <FormattedMessage
-                    id="maxProjectMembersLabel"
-                    defaultMessage="Max Project Members: "
-                  />
-                </label>
-              </td>
-              <td>
-                <input
-                  type="number"
-                  id="maxProjectMembers"
-                  value={newMaxProjectMembers}
-                  onChange={handleInputChangeB2}
-                  disabled={!isEditingB2}
-                  className={isEditingB2 ? styles.editMode : styles.viewMode}
-                  min={1}
-                />
-              </td>
-              <td>
-                {isEditingB2 ? (
-                  <button onClick={handleProjectMembersUpdate}>
-                    <FormattedMessage id="saveButton" defaultMessage="Save" />
-                  </button>
-                ) : (
-                  <button onClick={() => setIsEditingB2(true)}>
-                    <FormattedMessage
-                      id="editBtnProfForm"
-                      defaultMessage="Edit"
-                    />
-                  </button>
-                )}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div className={styles.userRoleEditorContainer}>
+          <UserRoleEditor />
+        </div>
       </div>
     </div>
   );
 };
-
 
 export default SettingsPage;

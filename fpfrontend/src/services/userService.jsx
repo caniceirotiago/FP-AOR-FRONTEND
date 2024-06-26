@@ -33,6 +33,7 @@ const userService = {
       throw error;
     }
   },
+
   confirmAccount: async (token) => {
     try {
       const response = await fetch(`${API_BASE_URL}/confirm?token=${token}`, {
@@ -44,6 +45,7 @@ const userService = {
       throw error;
     }
   },
+
   requestPasswordReset: async (email) => {
     try {
       const response = await fetch(`${API_BASE_URL}/request/password/reset`, {
@@ -57,6 +59,7 @@ const userService = {
       throw error;
     }
   },
+
   resetPassword: async (resetToken, newPassword) => {
     try {
       const response = await fetch(`${API_BASE_URL}/password/reset`, {
@@ -70,6 +73,7 @@ const userService = {
       throw error;
     }
   },
+
   login: async (email, password) => {
     let userLogin = { email, password };
     try {
@@ -84,6 +88,7 @@ const userService = {
       throw error;
     }
   },
+
   fetchUserBasicInfo: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/basic/info`, {
@@ -99,7 +104,6 @@ const userService = {
     }
   },
 
-
   fetchUserInfo: async (usernameProfile) => {
     try {
       const response = await fetch(`${API_BASE_URL}/info/${usernameProfile}`, {
@@ -114,6 +118,7 @@ const userService = {
       throw error;
     }
   },
+
   updateUser: async (updatedUser) => {
     try {
       const response = await fetch(`${API_BASE_URL}/profile`, {
@@ -134,6 +139,7 @@ const userService = {
       throw error;
     }
   },
+
   updateUserPassword: async (oldPassword, newPassword) => {
     try {
       const response = await fetch(`${API_BASE_URL}/password`, {
@@ -152,6 +158,7 @@ const userService = {
       throw error;
     }
   },
+
   requestNewConfirmationEmail: async (email) => {
     try {
       const response = await fetch(
@@ -168,6 +175,7 @@ const userService = {
       throw error;
     }
   },
+
   logout: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/logout`, {
@@ -181,6 +189,7 @@ const userService = {
       throw error;
     }
   },
+
   checkSession: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/session/check`, {
@@ -195,6 +204,7 @@ const userService = {
       return false;
     }
   },
+
   addUserToProject: async (projectId, username) => {
     try {
       const response = await fetch(
@@ -212,6 +222,7 @@ const userService = {
       throw error;
     }
   },
+
   removeUserFromProject: async (projectId, username) => {
     try {
       const response = await fetch(
@@ -229,6 +240,7 @@ const userService = {
       throw error;
     }
   },
+
   confirmProjectAssociation: async (token, approve, approver) => {
     try {
       let url;
@@ -246,6 +258,36 @@ const userService = {
       return response;
     } catch (error) {
       console.error("Error confirming project association:", error.message);
+      throw error;
+    }
+  },
+
+  fetchUsersListBasicInfo: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/all/basic/info`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error fetching users list basic info:", error.message);
+      throw error;
+    }
+  },
+
+  updateUserRole: async (updatedRole) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/role`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        credentials: "include",
+        body: JSON.stringify(updatedRole),
+      });
+      return response;
+    } catch (error) {
+      console.error("Error updating user role:", error.message);
       throw error;
     }
   },

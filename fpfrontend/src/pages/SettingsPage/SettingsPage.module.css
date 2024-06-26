@@ -17,12 +17,31 @@
   background-color: var(--text-color2);
 }
 
-@media (max-width: 768px) {
+.configPanel {
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  background-color: var(--background-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
+
+.configTitle {
+  margin-bottom: 20px;
+}
+
+.configTitle h3 {
+  font-size: 1.5em;
+  text-align: center;
+  margin: 0;
 }
 
 .configTable {
   width: 100%;
   border-collapse: collapse;
+  background-color: var(--text-color2);
+  margin-bottom: 30px;
 }
 
 .configTable td {
@@ -50,4 +69,51 @@
 
 .configTable button:hover {
   background-color: var(--btn-background2);
+}
+
+
+/* Styles for smaller screens */
+@media (max-width: 550px) {
+
+  .configTitle h3 {
+    font-size: 1.2em;
+  }
+
+  .configPanel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .configTable {
+    width: 100%;
+    max-width: auto;
+    overflow-x: auto;
+    border-collapse: collapse;
+    background-color: var(--text-color2);
+    margin-bottom: 30px;
+  }
+  
+  .configTable td {
+    padding: 0.5rem;
+    border: none;
+    width: auto;
+    text-align: center;
+  }
+
+  .configTable td:last-child {
+    margin-bottom: 0;
+  }
+
+  .configTable input[type="number"] {
+    width: 80%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .configTable button {
+    width: 80%;
+    margin-left: 0;
+    margin-top: 10px;
+  }
 }

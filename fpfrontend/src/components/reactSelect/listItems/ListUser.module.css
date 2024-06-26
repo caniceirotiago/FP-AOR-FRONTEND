@@ -1,0 +1,51 @@
+
+@media (max-width: 550px) {
+  .userItem {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color4);
+    margin-right: 10px;
+  }
+  
+}
+
+@media (min-width: 550px) {
+.userItem {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color4);
+  margin-right: 10px;
+  padding: 8px;
+  background-color: var(--listItem-background);
+  border-radius: 4px;
+}
+}
+
+.username {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color4);
+  margin-left: 10px;
+}
+
+.photo {
+  width: 25px;
+  height: 25px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.role {
+  width: 25px;
+  height: 25px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.role select {
+  width: auto;
+  margin-left: 10px;
+}
+
