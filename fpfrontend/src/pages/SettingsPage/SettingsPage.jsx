@@ -4,6 +4,7 @@ import styles from "./SettingsPage.module.css";
 import configurationService from "../../services/configurationService";
 import useConfigurationStore from "../../stores/useConfigurationStore";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
+import UserRoleEditor from "../../components/reactSelect/UserRoleEditor.jsx";
 
 const MIN_SESSION_TIMEOUT_MINUTES = 10;
 
@@ -142,6 +143,7 @@ const SettingsPage = () => {
 
   return (
     <div className={styles.SettingsPage}>
+       <div className={styles.container}>
       <div className={styles.configPanel}>
         <div className={styles.configTitle}>
           <h3>
@@ -225,6 +227,10 @@ const SettingsPage = () => {
             </tr>
           </tbody>
         </table>
+      </div>
+      <div className={styles.userRoleEditorContainer}>
+        <UserRoleEditor />
+      </div>
       </div>
     </div>
   );

@@ -23,6 +23,8 @@
 .configTable {
   width: 100%;
   border-collapse: collapse;
+  background-color: var(--text-color2);
+  margin-bottom: 30px;
 }
 
 .configTable td {
