@@ -32,7 +32,7 @@ const ResendEmailForm = () => {
         });
       } else {
         const responseBody = await response.json();
-        setDialogMessage(responseBody.errorMessage);
+        setDialogMessage(responseBody.message);
         setIsDialogOpen(true);
         setAlertType(true);
         setOnConfirm(async () => {

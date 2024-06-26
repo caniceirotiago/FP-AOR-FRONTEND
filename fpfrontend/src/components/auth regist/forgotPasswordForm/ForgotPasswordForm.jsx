@@ -44,14 +44,8 @@ const ForgotPasswordForm = () => {
         return;
       }
       const responseBody = await response.json();
-      if (
-        responseBody.message ===
-        "You already requested a password reset, please check your email, wait" +
-          " 30 minutes and try again, or contact the administrator"
-      ) {
-        setDialogMessage(intl.formatMessage(messages.emailRequestError));
-      } else {
-        setDialogMessage(intl.formatMessage(messages.emailSendFailure));
+      if (response.status !== 204) {
+        setDialogMessage(responseBody.message);
         setIsDialogOpen(true);
         setAlertType(true);
         setOnConfirm(async () => {});

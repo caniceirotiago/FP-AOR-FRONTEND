@@ -127,7 +127,7 @@ const RegisterForm = () => {
         if (response.status !== 204) {
           setLoading(false);
           const responseBody = await response.json();
-          setDialogMessage(responseBody.errorMessage);
+          setDialogMessage(responseBody.message);
           setIsDialogOpen(true);
           setAlertType(true);
           setOnConfirm(async () => {});
