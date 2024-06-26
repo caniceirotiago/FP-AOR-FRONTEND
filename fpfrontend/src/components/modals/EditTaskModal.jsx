@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "./CreateProjectModal.module.css";
+import styles from "./EditTaskModal.module.css";
 import { FormattedMessage, useIntl } from "react-intl";
 import AttributeEditor from "../reactSelect/AttributeEditor.jsx";
 import { format } from "date-fns";
@@ -282,7 +282,7 @@ const EditTaskModal = ({
               onChange={handleChange}
             />
             <div  className={styles.button} onClick={handleTaskDelete}>
-              <FormattedMessage id="delete" defaultMessage="Detete Task" />
+              <FormattedMessage id="delete" defaultMessage="Delete Task" />
             </div>
             <button type="submit" className={styles.button}>
               <FormattedMessage id="submit" defaultMessage="Submit" />

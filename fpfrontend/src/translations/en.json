@@ -220,6 +220,8 @@
   "configurationFailure": "Failed to update Configuration",
   "configurationPanel": "Configuration Panel",
   "sessionTimeoutLabel": "Session Timeout [m]: ",
-  "maxProjectMembersLabel" : "Max Project Members: ",
-  "saveButton": "Save"
+  "maxProjectMembersLabel": "Max Project Members: ",
+  "saveButton": "Save",
+  "delete": "Delete Task",
+  "duration": "Duration (days)"
 }
