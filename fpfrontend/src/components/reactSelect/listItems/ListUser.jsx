@@ -10,7 +10,6 @@ const roleMapping = {
 };
 
 const ListUser = ({ user, handleChangeUserRole }) => {
-
   const onChangeRole = (event) => {
     const roleName = event.target.value;
     const roleId = roleMapping[roleName];

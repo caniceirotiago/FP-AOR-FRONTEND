@@ -223,5 +223,8 @@
   "maxProjectMembersLabel": "Max Project Members: ",
   "saveButton": "Save",
   "delete": "Delete Task",
-  "duration": "Duration (days)"
+  "duration": "Duration (days)",
+  "userRoleSuccess": "User role updated successfully",
+  "userRoleFailure": "Failed to update user role",
+  "userManagementTitle": "User Management"
 }
