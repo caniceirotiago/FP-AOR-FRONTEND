@@ -10,14 +10,8 @@ import "react-quill/dist/quill.snow.css";
 import useDialogModalStore from "../../../stores/useDialogModalStore";
 import Button from "../../buttons/landingPageBtn/Button.jsx";
 
-const ProfileForm = ({
-  userProfileInfo,
-  isOwnProfile,
-  fetchUserData,
-  isEditing,
-}) => {
-  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
-    useDialogModalStore();
+const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) => {
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
   const [profileImage, setProfileImage] = useState(null);
   const { laboratories, fetchLaboratories } = useLabStore();
   const [profile, setProfile] = useState({
@@ -70,7 +64,8 @@ const ProfileForm = ({
         const downloadURL = await getDownloadURL(snapshot.ref);
         profile.photo = downloadURL;
       }
-      const { email, ...profileData } = profile;
+      const { email, id, username, ...profileData } = profile;
+      console.log(profileData);
       const result = await userService.updateUser(profileData);
       if (result.status === 204) {
         onUpdateSuccess();

@@ -48,6 +48,7 @@ const HomepageAside = () => {
                 <FaCog className={styles.icon} />
                 <span className={showText ? styles.menuText : styles.menuTextHidden}><FormattedMessage id="settings">Settings</FormattedMessage></span>
             </Link>
+
              
         </aside>
     );
