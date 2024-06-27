@@ -225,5 +225,6 @@
   "duration" : "Duração (dias)",
   "userRoleSuccess": "Nível de acesso alterado com sucesso",
   "userRoleFailure": "Falha ao atualizar nível de acesso",
-  "userManagementTitle": "Gestão de Utilizadores"
+  "userManagementTitle": "Gestão de Utilizadores",
+  "justificationRequired": "É necessário escrever justificação."
 }

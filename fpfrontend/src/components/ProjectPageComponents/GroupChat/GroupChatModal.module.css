@@ -54,7 +54,6 @@
   background-color: var(--btn-background1);
   color: var(--text-color);
   border-top: 1px solid var(--btn-color1);
-  padding: 10px;
 }
 
 .inputArea {
