@@ -38,7 +38,7 @@
 }
 
 .timelineDate {
-  flex: 0 0 40px; /* Largura fixa para cada dia */
+  flex: 0 0 40px; 
   padding: 5px;
   text-align: center;
   font-size: 12px;
@@ -56,10 +56,10 @@
   right: 0;
   bottom: 0;
   width: 1px;
-  background: #ccc; /* Cor da linha que indica o início do dia */
+  background: #ccc; 
 }
 .isWeekend {
-  background: var(--weekend-color); /* Cor de fundo para fins de semana */
+  background: var(--weekend-color); 
 }
 
 /* .month {
@@ -138,7 +138,7 @@
   padding: 5px 10px;
   color: white;
   flex-grow: 1;
-  text-align: center; /* Alinhar o texto centralizado */
+  text-align: center; 
   cursor: move;
   border-radius: 5px;
   overflow: hidden;
@@ -241,11 +241,11 @@
 }
 
 .taskCircleStart {
-  left: -10px; /* Ajuste a posição conforme necessário */
+  left: -10px; 
 }
 
 .taskCircleEnd {
-  right: -10px; /* Ajuste a posição conforme necessário */
+  right: -10px; 
 }
 .circleDragHoovered {
   background-color: var(--task-hover-accesory-color);
@@ -270,7 +270,7 @@
 
 .fixedLine {
   pointer-events: all;
-  stroke-width: 5px; /* Ajuste para um stroke-width menor */
+  stroke-width: 5px; 
   transition: stroke-width 0.3s ease, stroke 0.3s ease;
 }
 .fixedLine > * {

@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./GanttLines.module.css";
 
-// Função utilitária para verificar se um dia é fim de semana
 const isWeekend = (date) => {
   const day = date.getDay();
   return day === 0 || day === 6;
