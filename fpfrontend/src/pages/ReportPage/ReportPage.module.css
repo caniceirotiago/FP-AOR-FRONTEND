@@ -4,15 +4,23 @@
   background-size: cover;
   background-position: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 20px;
 }
 
-.ReportPage {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+}
+
+.reportPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Adds space between the buttons */
+  margin-top: 20px; /* Optional: adds space between the heading and buttons */
 }
 
 .GenerateButton {
@@ -29,7 +37,8 @@
   background-color: #0056b3;
 }
 
-
 @media (max-width: 768px) {
-
+  .ReportPage {
+    padding: 10px;
+  }
 }

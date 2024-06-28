@@ -226,5 +226,9 @@
   "userRoleSuccess": "Nível de acesso alterado com sucesso",
   "userRoleFailure": "Falha ao atualizar nível de acesso",
   "userManagementTitle": "Gestão de Utilizadores",
-  "justificationRequired": "É necessário escrever justificação."
+  "justificationRequired": "É necessário escrever justificação.",
+  "reportGenerator": "Criar Relatório",
+  "generateProjectsReport": "Criar Relatório de Projetos",
+  "generateAssetsReport": "Criar Relatório de Ativos",
+  "failedToGenerateReport": "Falha ao gerar relatório."
 }
