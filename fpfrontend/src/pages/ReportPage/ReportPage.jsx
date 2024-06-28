@@ -52,7 +52,7 @@ const ReportPage = () => {
             <FormattedMessage id="generateProjectsReport" />
           </button>
           <button
-            onClick={() => generateReport("assets")}
+            onClick={() => generateReport("asset")}
             className={styles.GenerateButton}
           >
             <FormattedMessage id="generateAssetsReport" />
