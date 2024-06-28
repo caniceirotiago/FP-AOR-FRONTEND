@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styles from "./PasswordForm.module.css";
 import { FormattedMessage, useIntl } from "react-intl";
-import { validatePassword } from "../../../utils/validators/userValidators";
-import userService from "../../../services/userService";
-import useDialogModalStore from "../../../stores/useDialogModalStore";
-import DialogMultipleMessagesModalStore from "../../../stores/useDialogMultipleMessagesModalStore";
+import { validatePassword } from "../../../utils/validators/userValidators.jsx";
+import userService from "../../../services/userService.jsx";
+import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
+import DialogMultipleMessagesModalStore from "../../../stores/useDialogMultipleMessagesModalStore.jsx";
 import Button from "../../buttons/landingPageBtn/Button.jsx";
 
 /**
