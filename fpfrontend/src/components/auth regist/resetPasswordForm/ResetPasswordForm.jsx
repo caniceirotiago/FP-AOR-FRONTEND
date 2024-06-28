@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import userService from "../../../services/userService";
+import userService from "../../../services/userService.jsx";
 import { FormattedMessage, useIntl } from "react-intl";
-import useDialogModalStore from "../../../stores/useDialogModalStore";
+import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
 import styles from "./ResetPasswordForm.module.css";
-import { validatePassword } from "../../../utils/validators/userValidators";
+import { validatePassword } from "../../../utils/validators/userValidators.jsx";
 import Button from "../../buttons/landingPageBtn/Button.jsx";
-import DialogMultipleMessagesModalStore from "../../../stores/useDialogMultipleMessagesModalStore";
+import DialogMultipleMessagesModalStore from "../../../stores/useDialogMultipleMessagesModalStore.jsx";
 
 const ResetPasswordForm = () => {
   const [passwords, setPasswords] = useState({

@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './HomepageMobileFooter.module.css';
 import { FaBoxes, FaFileContract, FaBriefcase, FaCog, FaTags, FaChartLine, FaEnvelope } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import ProtectedComponentsByRole from '../../../auth regist/ProtectedComponentsByRole.jsx';
 
 /**
  * HomepageFooter Component
@@ -29,15 +30,19 @@ const HomepageFooter = () => {
             <Link to="/messages" className={styles.menuItem}>
                 <FaEnvelope className={styles.icon} />
             </Link>
-            <Link to="/report" className={styles.menuItem}>
-                <FaFileContract className={styles.icon} />
-            </Link>
+            <ProtectedComponentsByRole>
+                <Link to="/report" className={styles.menuItem}>
+                    <FaFileContract className={styles.icon} />
+                </Link>
+            </ProtectedComponentsByRole>
             <Link to="/inventory" className={styles.menuItem}>
                 <FaBoxes className={styles.icon} />
             </Link>
-            <Link to="/settings" className={styles.menuItem}>
-                <FaCog className={styles.icon} />
-            </Link>
+            <ProtectedComponentsByRole>
+                <Link to="/settings" className={styles.menuItem}>
+                    <FaCog className={styles.icon} />
+                </Link>
+            </ProtectedComponentsByRole>
         </footer>
     );
 };

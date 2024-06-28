@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import {  FormattedMessage } from "react-intl";
 import { FaChartGantt } from "react-icons/fa6";
 import { useLocation } from 'react-router-dom';
+import ProtectedComponentsByRole from '../auth regist/ProtectedComponentsByRole';
+
 
 const HomepageAside = () => {
     const { isAsideExpanded, toggleAside } = useLayoutStore();
@@ -36,18 +38,22 @@ const HomepageAside = () => {
                 <FaEnvelope className={styles.icon} />
                 <span className={showText ? styles.menuText : styles.menuTextHidden}><FormattedMessage id="messages">Messages</FormattedMessage></span>
             </Link>
-            <Link to="/report" className={`${styles.menuItem} ${location.pathname === '/report' ? styles.active : ''}`}>
-                <FaFileContract className={styles.icon} />
-                <span className={showText ? styles.menuText : styles.menuTextHidden}><FormattedMessage id="report">Report</FormattedMessage></span>
-            </Link>
+            <ProtectedComponentsByRole>
+                <Link to="/report" className={`${styles.menuItem} ${location.pathname === '/report' ? styles.active : ''}`}>
+                    <FaFileContract className={styles.icon} />
+                    <span className={showText ? styles.menuText : styles.menuTextHidden}><FormattedMessage id="report">Report</FormattedMessage></span>
+                </Link>
+            </ProtectedComponentsByRole>
             <Link to="/inventory" className={`${styles.menuItem} ${location.pathname === '/inventory' ? styles.active : ''}`}>
                 <FaBoxes className={styles.icon} />
                 <span className={showText ? styles.menuText : styles.menuTextHidden}><FormattedMessage id="inventory">Inventory</FormattedMessage></span>
             </Link>
-            <Link to="/settings" className={`${styles.menuItem} ${location.pathname === '/settings' ? styles.active : ''}`}>
-                <FaCog className={styles.icon} />
-                <span className={showText ? styles.menuText : styles.menuTextHidden}><FormattedMessage id="settings">Settings</FormattedMessage></span>
-            </Link>
+            <ProtectedComponentsByRole>
+                <Link to="/settings" className={`${styles.menuItem} ${location.pathname === '/settings' ? styles.active : ''}`}>
+                    <FaCog className={styles.icon} />
+                    <span className={showText ? styles.menuText : styles.menuTextHidden}><FormattedMessage id="settings">Settings</FormattedMessage></span>
+                </Link>
+            </ProtectedComponentsByRole>
 
              
         </aside>
