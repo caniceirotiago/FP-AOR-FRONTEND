@@ -126,6 +126,8 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
               value={taskData.title}
               onChange={handleChange}
               required
+              maxLength={25}
+              minLength={1}
             />
             <label className={styles.label}>
               <FormattedMessage id="description" defaultMessage="Description" />
@@ -136,6 +138,7 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
               value={taskData.description}
               onChange={handleDescriptionChange}
               required
+              maxLength={2048}
             />
             <label className={styles.label}>
               <FormattedMessage id="initialPlannedDate" defaultMessage="Initial Planned Date" />

@@ -177,8 +177,11 @@ const EditTaskModal = ({
               className={styles.input}
               type="text"
               name="title"
+              maxLength={25}
+              minLength={1}
               value={taskData.title}
               onChange={handleChange}
+              required={true}
             />
             <label className={styles.label}>
               <FormattedMessage id="tableHeaderState" defaultMessage="State" />
@@ -189,6 +192,7 @@ const EditTaskModal = ({
               name="state"
               value={taskData.state}
               onChange={handleChange}
+              required={true}
             >
               {states.map((state) => (
                 <option key={state.id} value={state}>
@@ -204,6 +208,7 @@ const EditTaskModal = ({
               name="description"
               value={taskData.description}
               onChange={handleDescriptionChange}
+              maxLength={2048}
             />
             <label className={styles.label}>
               <FormattedMessage
@@ -280,6 +285,7 @@ const EditTaskModal = ({
               name="nonRegisteredExecutors"
               value={taskData.nonRegisteredExecutors}
               onChange={handleChange}
+              maxLength={2048}
             />
             <div  className={styles.button} onClick={handleTaskDelete}>
               <FormattedMessage id="delete" defaultMessage="Delete Task" />
