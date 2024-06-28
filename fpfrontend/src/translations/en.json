@@ -227,5 +227,9 @@
   "userRoleSuccess": "User role updated successfully",
   "userRoleFailure": "Failed to update user role",
   "userManagementTitle": "User Management",
-  "justificationRequired": "Justification is required."
+  "justificationRequired": "Justification is required.",
+  "reportGenerator": "Report Generator",
+  "generateProjectsReport": "Generate Projects Report",
+  "generateAssetsReport": "Generate Assets Report",
+  "failedToGenerateReport": "Failed to generate report."
 }
