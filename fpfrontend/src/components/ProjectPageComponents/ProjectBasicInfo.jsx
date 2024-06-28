@@ -9,9 +9,6 @@ const ProjectBasicInfo = ({
   setProjectInfo,
   isEditing,
   updateProjectInfo,
-  onApprove,
-  onReject,
-  onCancel,
 }) => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -44,6 +41,15 @@ const ProjectBasicInfo = ({
         return (
           <>
             <button
+              className={`${styles.smallButton} ${styles.cancelBtn}`}
+              onClick={() => handleStateChange("CANCELLED")}
+            >
+              <FormattedMessage
+                id="cancelProject"
+                defaultMessage="Cancel Project"
+              />
+            </button>
+            <button
               className={styles.smallButton}
               onClick={() => handleStateChange("READY")}
             >
@@ -52,6 +58,11 @@ const ProjectBasicInfo = ({
                 defaultMessage="Mark as Ready"
               />
             </button>
+          </>
+        );
+      case "READY":
+        return (
+          <>
             <button
               className={`${styles.smallButton} ${styles.cancelBtn}`}
               onClick={() => handleStateChange("CANCELLED")}
@@ -61,11 +72,6 @@ const ProjectBasicInfo = ({
                 defaultMessage="Cancel Project"
               />
             </button>
-          </>
-        );
-      case "READY":
-        return (
-          <>
             <button
               className={styles.smallButton}
               onClick={() => handleStateChange("PLANNING")}
@@ -75,6 +81,11 @@ const ProjectBasicInfo = ({
                 defaultMessage="Mark as Planning"
               />
             </button>
+          </>
+        );
+      case "IN_PROGRESS":
+        return (
+          <>
             <button
               className={`${styles.smallButton} ${styles.cancelBtn}`}
               onClick={() => handleStateChange("CANCELLED")}
@@ -84,11 +95,6 @@ const ProjectBasicInfo = ({
                 defaultMessage="Cancel Project"
               />
             </button>
-          </>
-        );
-      case "IN_PROGRESS":
-        return (
-          <>
             <button
               className={styles.smallButton}
               onClick={() => handleStateChange("FINISHED")}
@@ -96,15 +102,6 @@ const ProjectBasicInfo = ({
               <FormattedMessage
                 id="markAsFinished"
                 defaultMessage="Mark as Finished"
-              />
-            </button>
-            <button
-              className={`${styles.smallButton} ${styles.cancelBtn}`}
-              onClick={() => handleStateChange("CANCELLED")}
-            >
-              <FormattedMessage
-                id="cancelProject"
-                defaultMessage="Cancel Project"
               />
             </button>
           </>

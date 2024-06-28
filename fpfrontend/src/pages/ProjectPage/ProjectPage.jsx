@@ -201,21 +201,21 @@ const ProjectPage = () => {
                       />
                     </p>
                     <button
-                      className={styles.approvalBtn}
-                      onClick={() => handleApproveProject(true)}
-                    >
-                      <FormattedMessage
-                        id="approveProject"
-                        defaultMessage="Approve Project"
-                      />
-                    </button>
-                    <button
                       className={styles.rejectBtn}
                       onClick={() => handleApproveProject(false)}
                     >
                       <FormattedMessage
                         id="rejectProject"
                         defaultMessage="Reject Project"
+                      />
+                    </button>
+                    <button
+                      className={styles.approvalBtn}
+                      onClick={() => handleApproveProject(true)}
+                    >
+                      <FormattedMessage
+                        id="approveProject"
+                        defaultMessage="Approve Project"
                       />
                     </button>
                   </div>
@@ -233,7 +233,6 @@ const ProjectPage = () => {
               <div className={styles.formContainer}>
                 <ProjectBasicInfo
                   projectInfo={projectInfo}
-                  states={states}
                   laboratories={laboratories}
                   setProjectInfo={setProjectInfo}
                   isEditing={isEditing}
