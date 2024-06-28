@@ -8,6 +8,27 @@
   justify-content: center;
 }
 
+.ReportPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.GenerateButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.GenerateButton:hover {
+  background-color: #0056b3;
+}
+
 
 @media (max-width: 768px) {
 

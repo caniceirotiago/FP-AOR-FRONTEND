@@ -26,6 +26,7 @@ const generalService = {
       throw error;
     }
   },
+  
   fetchProjectAttributes: async (apiUrl, projectId) => {
     try {
       const response = await fetch(
