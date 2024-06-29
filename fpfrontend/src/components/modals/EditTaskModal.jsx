@@ -7,14 +7,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import taskService from "../../services/taskService.jsx";
 import useTaskStatesStore from "../../stores/useTaskStatesStore.jsx";
+import usePlanningPageStore from "../../stores/usePlanningPageStore.jsx";
 
-const EditTaskModal = ({
-  isOpen,
-  onClose,
-  projectId,
-  onTaskUpdate,
-  taskId,
-}) => {
+const EditTaskModal = ({isOpen,onClose,projectId,onTaskUpdate,taskId,}) => {
+  const {isThePlanEditable} = usePlanningPageStore();
+
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
     useDialogModalStore();
   const { states, fetchTaskStates } = useTaskStatesStore();
@@ -182,6 +179,7 @@ const EditTaskModal = ({
               value={taskData.title}
               onChange={handleChange}
               required={true}
+              disabled={!isThePlanEditable}
             />
             <label className={styles.label}>
               <FormattedMessage id="tableHeaderState" defaultMessage="State" />
@@ -193,6 +191,7 @@ const EditTaskModal = ({
               value={taskData.state}
               onChange={handleChange}
               required={true}
+              disabled={!isThePlanEditable}
             >
               {states.map((state) => (
                 <option key={state.id} value={state}>
@@ -209,6 +208,8 @@ const EditTaskModal = ({
               value={taskData.description}
               onChange={handleDescriptionChange}
               maxLength={2048}
+              disabled={!isThePlanEditable}
+
             />
             <label className={styles.label}>
               <FormattedMessage
@@ -218,6 +219,7 @@ const EditTaskModal = ({
             </label>
             <input
               type="date"
+              disabled={!isThePlanEditable}
               className={styles.datePicker}
               value={
                 taskData.plannedStartDate
@@ -238,6 +240,7 @@ const EditTaskModal = ({
             </label>
             <input
               type="date"
+              disabled={!isThePlanEditable}
               className={styles.datePicker}
               value={
                 taskData.plannedEndDate
@@ -257,9 +260,10 @@ const EditTaskModal = ({
                 projectId={projectId}
                 creationMode={false}
                 title="Responsible user"
-                editMode={true}
+                editMode={isThePlanEditable}
                 mainEntity={"task"}
                 taskResponsibleId={taskData.responsibleId}
+
               />
             </div>
             <div className={styles.attributeEditor}>
@@ -269,7 +273,7 @@ const EditTaskModal = ({
                 projectId={projectId}
                 creationMode={false}
                 title="Registered executers"
-                editMode={true}
+                editMode={isThePlanEditable}
                 mainEntity={"task"}
                 registeredExecutors={taskData.registeredExecutors}
               />
@@ -286,13 +290,15 @@ const EditTaskModal = ({
               value={taskData.nonRegisteredExecutors}
               onChange={handleChange}
               maxLength={2048}
-            />
-            <div  className={styles.button} onClick={handleTaskDelete}>
-              <FormattedMessage id="delete" defaultMessage="Delete Task" />
-            </div>
-            <button type="submit" className={styles.button}>
-              <FormattedMessage id="submit" defaultMessage="Submit" />
-            </button>
+              disabled={!isThePlanEditable}
+            />{isThePlanEditable && (<>
+              <div  className={styles.button} onClick={handleTaskDelete}>
+                <FormattedMessage id="delete" defaultMessage="Delete Task" />
+              </div>
+              <button type="submit" className={styles.button}>
+                <FormattedMessage id="submit" defaultMessage="Submit" />
+              </button>
+            </>)}
           </form>
         </div>
       </div>

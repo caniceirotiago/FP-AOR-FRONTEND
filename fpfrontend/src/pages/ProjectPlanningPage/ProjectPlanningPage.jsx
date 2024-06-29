@@ -7,8 +7,10 @@ import membershipService from "../../services/membershipService";
 import useProjectStore from "../../stores/useProjectStore";
 import CreateTaskModal from "../../components/modals/CreateTaskModal";
 import EditTaskModal from "../../components/modals/EditTaskModal";
+import usePlanningPageStore from "../../stores/usePlanningPageStore";
 
 const ProjectPlanningPage = () => {
+  const {isThePlanEditable} = usePlanningPageStore();
   const [accessibleProjectsIds, setAccessibleProjectsIds] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
@@ -73,13 +75,13 @@ const ProjectPlanningPage = () => {
       />
       <div className={styles.controlPanel}>
         <div className={styles.btns}>
-          <button
+          {isThePlanEditable && <button
             onClick={handleClick}
             className={`${styles.iconButton} ${styles.createButton}`}
             data-text={intl.formatMessage({ id: "task" })}
           >
             <FaPlus className={styles.svgIcon} />
-          </button>
+          </button>}
         </div>
         <div className={styles.selectProjectDiv}>
         <h4>
