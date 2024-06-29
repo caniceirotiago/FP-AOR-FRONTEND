@@ -597,7 +597,8 @@ const AttributeEditor = ({
             title,
             attributeToRemove.id,
             mainEntity,
-            projectId
+            projectId,
+            
           );
         }
         if (response.status === 204) {

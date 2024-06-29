@@ -20,7 +20,6 @@ const ProjectPage = () => {
   const navigate = useNavigate();
   const { setSelectedProjectId } = useProjectStore();
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
-  const [projectLogs, setProjectLogs] = useState([]);
   const [approveOrReject, setApproveOrReject] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const { id } = useParams();
@@ -58,21 +57,12 @@ const ProjectPage = () => {
     }
   }, [id]);
 
-  const fetchProjectLogs = useCallback(async () => {
-    try {
-      const response = await projectService.getProjectLogsByProjectId(id);
-      const logs = await response.json();
-      setProjectLogs(logs);
-    } catch (error) {
-      console.error("Error fetching project logs:", error.message);
-    }
-  }, [id]);
+
 
   useEffect(() => {
     fetchProjectData();
     fetchLaboratories();
     fetchProjectRoles();
-    if (canSeeAndEditProjectPlanning) fetchProjectLogs();
     fetchProjectStates();
   }, [isApprovalModalOpen]);
 
@@ -288,7 +278,7 @@ const ProjectPage = () => {
               />
             </div>
             <div className={styles.attributesContainer}>
-              {canSeeAndEditProjectPlanning && <LogsList logs={projectLogs} />}
+              {canSeeAndEditProjectPlanning && <LogsList id={id} />}
             </div>
             <div className={styles.chatButtonContainer}>
               {canSeeAndEditProjectPlanning && (

@@ -90,14 +90,32 @@ const generalService = {
     }
   },
 
-  removeItem: async (apiUrl, id, mainEntity, mainEntityId) => {
-    try {
-      let requestBody = { id: id };
-      if (mainEntity === "project") {
-        requestBody = { id: id, projectId: mainEntityId };
+  removeItem: async (apiUrl, id, mainEntity, projectId) => {
+    console.log("removeItem", apiUrl, id, mainEntity, projectId);
+    if(mainEntity === "project"  && apiUrl !== "user"){
+      try {
+        let requestBody = { id: id, projectId: projectId};
+        const response = await fetch(
+          `${API_BASE_URL}${apiUrl}/remove/${mainEntity}/${projectId}`,
+          {
+            method: "PUT",
+            headers: getAuthHeaders(),
+            credentials: "include",
+            body: JSON.stringify(requestBody),
+          }
+        );
+        console.log(response);
+        return response;
+      } catch (error) {
+        console.error("Error fetching suggestions:", error.message);
+        throw error;
       }
+    } 
+    else{
+      try {
+      let requestBody = { id: id };
       const response = await fetch(
-        `${API_BASE_URL}${apiUrl}/remove/${mainEntity}/${mainEntityId}`,
+        `${API_BASE_URL}${apiUrl}/remove/${mainEntity}`,
         {
           method: "PUT",
           headers: getAuthHeaders(),
@@ -105,11 +123,14 @@ const generalService = {
           body: JSON.stringify(requestBody),
         }
       );
+      console.log(response);
       return response;
     } catch (error) {
       console.error("Error fetching suggestions:", error.message);
       throw error;
     }
+    }
+    
   },
 };
 
