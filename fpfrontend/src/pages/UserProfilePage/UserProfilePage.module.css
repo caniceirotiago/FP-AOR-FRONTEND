@@ -7,12 +7,27 @@
   justify-content: center;
   flex-direction: column;
   overflow-y: auto;
+  text-align: center;
+  padding: 20px;
 }
 .otherAtributes {
   display: flex;
   flex-direction: column;
   gap: 10px;
 
+}
+.backButton {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: var(--btn-background1);
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.backButton:hover {
+  background-color: var(--btn-background2);
 }
 
 

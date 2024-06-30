@@ -15,6 +15,8 @@ import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import membershipService from "../../services/membershipService";
 import { FaPlus } from "react-icons/fa";
 import  useDeviceStore  from "../../stores/useDeviceStore";
+import Spinner from "../spinner/Spinner.jsx";
+import { set } from "date-fns";
 
 
 const AttributeEditor = ({
@@ -42,6 +44,7 @@ const AttributeEditor = ({
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
   const { dimensions} = useDeviceStore();
   const intl = useIntl();
+  const [isLoading, setIsLoading] = useState(false);
 
   // Initialize attributes based on creation mode and initial values
   useEffect(() => {
@@ -382,6 +385,7 @@ const AttributeEditor = ({
         let response;
         let suggestion;
         if (title === "users" && mainEntity === "project") {
+          setIsLoading(true);
           response = await userService.addUserToProject(projectId, input);
         } else if (title === "Responsible user") {
           suggestion = fetchedSuggestions.find(
@@ -469,7 +473,9 @@ const AttributeEditor = ({
         }
         if (response.status === 204) {
           fetchAttributes();
+          setIsLoading(false);
         } else {
+          setIsLoading(false);
           throw new Error("Failed to add item");
         }
       } else {
@@ -660,6 +666,7 @@ const AttributeEditor = ({
 
   return (
     <div className={styles.container}>
+      {isLoading && <Spinner/>}
       {creationMode && title === "users" && mainEntity === "task" ? (
         <h2><FormattedMessage id="responsible" defaultMessage="Responsible"/></h2>
       ) : (

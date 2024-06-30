@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./EditTaskModal.module.css";
 import { FormattedMessage, useIntl } from "react-intl";
 import AttributeEditor from "../reactSelect/AttributeEditor.jsx";
@@ -9,9 +9,11 @@ import taskService from "../../services/taskService.jsx";
 import useTaskStatesStore from "../../stores/useTaskStatesStore.jsx";
 import usePlanningPageStore from "../../stores/usePlanningPageStore.jsx";
 
+
+
 const EditTaskModal = ({isOpen,onClose,projectId,onTaskUpdate,taskId,}) => {
   const {isThePlanEditable} = usePlanningPageStore();
-
+  const quillRef = useRef(null);
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
     useDialogModalStore();
   const { states, fetchTaskStates } = useTaskStatesStore();
@@ -61,9 +63,30 @@ const EditTaskModal = ({isOpen,onClose,projectId,onTaskUpdate,taskId,}) => {
     setTaskData({ ...taskData, [e.target.name]: e.target.value });
   };
 
-  const handleDescriptionChange = (e) => {
-    setTaskData((prevData) => ({ ...prevData, description: e.target.value }));
+  const handleDescriptionChange = (value) => {
+    const cleanValue = value.replace(/[^a-zA-Z0-9 .,;!?'"@#$%^&*()_+=\-\[\]\{\}:<>/\\|`~]/g, "");
+    if (cleanValue.length <= 200) {
+      setTaskData((prevData) => ({ ...prevData, description: cleanValue }));
+    }
   };
+
+  useEffect(() => {
+    if (quillRef.current) {
+      const quill = quillRef.current.getEditor();
+      quill.on('text-change', () => {
+        const content = quill.getText();
+        if (content.length > 200) {
+          quill.deleteText(200, quill.getLength());
+        }
+        const cleanContent = content.replace(/[^a-zA-Z0-9 .,;!?'"@#$%^&*()_+=\-\[\]\{\}:<>/\\|`~]/g, "");
+        if (cleanContent.length !== content.length) {
+          quill.deleteText(0, quill.getLength());
+          quill.clipboard.dangerouslyPasteHTML(0, cleanContent);
+        }
+        setTaskData((prevData) => ({ ...prevData, description: quill.root.innerHTML }));
+      });
+    }
+  }, []);
 
   const handleDateChange = (date, dateType) => {
     const formattedDate = format(date, "yyyy-MM-dd'T'00:00:00'Z'");
@@ -202,15 +225,15 @@ const EditTaskModal = ({isOpen,onClose,projectId,onTaskUpdate,taskId,}) => {
             <label className={styles.label}>
               <FormattedMessage id="description" defaultMessage="Description" />
             </label>
-            <textarea
-              className={styles.textarea}
-              name="description"
-              value={taskData.description}
-              onChange={handleDescriptionChange}
-              maxLength={2048}
-              disabled={!isThePlanEditable}
+            < div className={styles.descriptionText}>
+            {isThePlanEditable ? (
+             //textorico
+             <></>
+            ) : (
+                <div dangerouslySetInnerHTML={{ __html: taskData.description }} />
+          )}
 
-            />
+              </div>
             <label className={styles.label}>
               <FormattedMessage
                 id="initialPlannedDate"

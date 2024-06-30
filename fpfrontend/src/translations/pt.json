@@ -230,5 +230,14 @@
   "reportGenerator": "Criar Relatório",
   "generateProjectsReport": "Criar Relatório de Projetos",
   "generateAssetsReport": "Criar Relatório de Ativos",
-  "failedToGenerateReport": "Falha ao gerar relatório."
+  "failedToGenerateReport": "Falha ao gerar relatório.",
+  "privateProfile": "Perfil Privado",
+  "thisProfileIsPrivateAndCannotBeViewed": "Este perfil é privado e não pode ser visualizado.",
+  "goToHomePage": "Ir para a página inicial",
+  "profileNotFound": "Perfil não encontrado",
+  "theProfileYouAreLookingForDoesNotExist.": "O perfil que procura não existe.",
+  "passwordRules": "A palavra-passe deve ter no mínimo 8 caracteres, incluir uma letra maiúscula, uma minúscula, um número e um caracter especial.",
+  "contactUs": "Contacte-nos",
+  "followUs": "Siga-nos"
+
 }

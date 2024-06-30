@@ -63,6 +63,7 @@ const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) =>
         const snapshot = await uploadBytes(storageRef, profileImage);
         const downloadURL = await getDownloadURL(snapshot.ref);
         profile.photo = downloadURL;
+        localStorage.setItem("photo", downloadURL);
       }
       const { email, id, username, ...profileData } = profile;
       console.log(profileData);

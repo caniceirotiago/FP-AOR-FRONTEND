@@ -118,6 +118,35 @@
     margin-bottom: 10px;
 
 }
+.descriptionText
+{
+    height:200px;
+}
+:global(.quillEditor) {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    flex-grow: 1;
+  }
+  
+  :global(.ql-container) {
+    max-height: 120px;
+    overflow-y: auto;
+    font-size: 16px;
+    background-color: #fff;
+  }
+  
+  :global(.ql-toolbar) {
+    border-radius: 5px 5px 0 0;
+    background-color: #ccc;
+  }
+  
+  :global(.ql-editor) {
+    max-height: 150px;
+    overflow-y: auto;
+    font-size: 16px;
+  }
 
 @keyframes fadeIn {
     from {

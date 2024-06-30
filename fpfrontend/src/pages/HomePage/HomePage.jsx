@@ -115,6 +115,8 @@ const HomePage = () => {
   }, [location.search]);
 
   useEffect(() => {
+    if (isAuthenticated) navigate("/authenticatedhomepage");
+    else navigate("/homepage");
     const fetchProjects = async () => {
       const response = await projectService.getFilteredProjects(
         pageNumber,
@@ -169,11 +171,10 @@ const HomePage = () => {
 
   const handleClearFilters = () => {
     setFilters(defaultFilters);
-    setFilterType("name"); // Reset filter type to default
+    setFilterType("name"); 
     setPageSize(getInitialPageSize());
     setPageNumber(1);
-    if (isAuthenticated) navigate("/authenticatedhomepage");
-    else navigate("/homepage");
+
   };
 
   const toggleView = () => {
@@ -194,6 +195,7 @@ const HomePage = () => {
   const toggleFiltersVisibility = () => {
     setFiltersVisible(!filtersVisible);
   };
+
 
   return (
     <div className={styles.homePage}>
