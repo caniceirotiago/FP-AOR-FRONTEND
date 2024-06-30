@@ -8,7 +8,7 @@ import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import taskService from "../../services/taskService.jsx";
 import useTaskStatesStore from "../../stores/useTaskStatesStore.jsx";
 import usePlanningPageStore from "../../stores/usePlanningPageStore.jsx";
-
+import ReactQuill from "react-quill";
 
 
 const EditTaskModal = ({isOpen,onClose,projectId,onTaskUpdate,taskId,}) => {
@@ -64,7 +64,7 @@ const EditTaskModal = ({isOpen,onClose,projectId,onTaskUpdate,taskId,}) => {
   };
 
   const handleDescriptionChange = (value) => {
-    const cleanValue = value.replace(/[^a-zA-Z0-9 .,;!?'"@#$%^&*()_+=\-\[\]\{\}:<>/\\|`~]/g, "");
+    const cleanValue = value.replace(/[^a-zA-Z0-9 .,;!?'"@#$%^&*()_+=\-\[\]\{\}:<>\/\\|`~]/g, "");
     if (cleanValue.length <= 200) {
       setTaskData((prevData) => ({ ...prevData, description: cleanValue }));
     }
@@ -227,8 +227,22 @@ const EditTaskModal = ({isOpen,onClose,projectId,onTaskUpdate,taskId,}) => {
             </label>
             < div className={styles.descriptionText}>
             {isThePlanEditable ? (
-             //textorico
-             <></>
+                <ReactQuill
+                theme="snow"
+                value={taskData.description}
+                onChange={handleDescriptionChange}
+                className={styles.quillEditor}
+                
+                modules={{
+                  toolbar: [
+                    [{ font: [] }],
+                    [{ color: [] }, { background: [] }],
+                    [{ size: [] }],
+                    ["bold", "italic", "underline", "strike"],
+                  ],
+                }}
+              />
+        
             ) : (
                 <div dangerouslySetInnerHTML={{ __html: taskData.description }} />
           )}
