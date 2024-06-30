@@ -120,7 +120,17 @@
 }
 .descriptionText
 {
-    height:200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    flex-grow: 1;
+    max-height: 200px;
+    overflow-y: auto ;
+    height: 100px; 
+    resize: none; 
+    word-wrap: break-word; 
+    overflow-wrap: break-word; 
+    margin-bottom: 20px;
 }
 :global(.quillEditor) {
     background-color: #fff;
@@ -131,10 +141,11 @@
   }
   
   :global(.ql-container) {
-    max-height: 120px;
+    height: 120px;
     overflow-y: auto;
     font-size: 16px;
     background-color: #fff;
+    margin-bottom: 20px;
   }
   
   :global(.ql-toolbar) {
@@ -143,8 +154,7 @@
   }
   
   :global(.ql-editor) {
-    max-height: 150px;
-    overflow-y: auto;
+
     font-size: 16px;
   }
 

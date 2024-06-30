@@ -61,14 +61,14 @@ const UserProfilePage = () => {
   return (
     <>
     {isAPrivateProfile ? (
-      <div className={styles.userProfilePage}>
+      <div className={styles.userProfilePageAlt}>
       <FaLock size={50} style={{ color: 'var(--negative-color)', marginBottom: '20px' }} />
       <h1><FormattedMessage id="privateProfile" >Private Profile </FormattedMessage></h1>
       <p><FormattedMessage id="thisProfileIsPrivateAndCannotBeViewed" >This profile is private and cannot be viewed.</FormattedMessage></p>
       <Link to="/authenticatedhomepage" className={styles.backButton}><FormattedMessage id="goToHomePage" >Go to Home</FormattedMessage></Link>
     </div>
     ) : isTheProfileNotExistant ? (
-      <div className={styles.userProfilePage}>
+      <div className={styles.userProfilePageAlt}>
       <FaExclamationTriangle size={50} style={{ color: 'orange', marginBottom: '20px' }} />
       <h1><FormattedMessage id="profileNotFound" >Profile Not Found</FormattedMessage></h1>
       <p><FormattedMessage id="theProfileYouAreLookingForDoesNotExist." >The profile you are looking for does not exist.</FormattedMessage></p>

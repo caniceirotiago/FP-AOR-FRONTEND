@@ -225,7 +225,6 @@ const EditTaskModal = ({isOpen,onClose,projectId,onTaskUpdate,taskId,}) => {
             <label className={styles.label}>
               <FormattedMessage id="description" defaultMessage="Description" />
             </label>
-            < div className={styles.descriptionText}>
             {isThePlanEditable ? (
                 <ReactQuill
                 theme="snow"
@@ -239,15 +238,18 @@ const EditTaskModal = ({isOpen,onClose,projectId,onTaskUpdate,taskId,}) => {
                     [{ color: [] }, { background: [] }],
                     [{ size: [] }],
                     ["bold", "italic", "underline", "strike"],
+                    ["clean"]
                   ],
                 }}
               />
         
             ) : (
+              <div className={styles.descriptionText}>
                 <div dangerouslySetInnerHTML={{ __html: taskData.description }} />
-          )}
+              </div>         
+             )}
 
-              </div>
+            
             <label className={styles.label}>
               <FormattedMessage
                 id="initialPlannedDate"

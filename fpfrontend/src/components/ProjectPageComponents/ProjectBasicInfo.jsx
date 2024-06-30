@@ -2,14 +2,11 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import styles from "./ProjectBasicInfo.module.css";
 import Button from "../buttons/landingPageBtn/Button.jsx";
+import { set } from "date-fns";
+import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 
-const ProjectBasicInfo = ({
-  projectInfo,
-  laboratories,
-  setProjectInfo,
-  isEditing,
-  updateProjectInfo,
-}) => {
+const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,updateProjectInfo,}) => {
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setProjectInfo((prevInfo) => ({
@@ -23,10 +20,30 @@ const ProjectBasicInfo = ({
   };
 
   const handleStateChange = async (newState) => {
-    setProjectInfo((prevInfo) => ({
-      ...prevInfo,
-      state: newState,
-    }));
+    if (newState === "CANCELLED" || newState === "FINISHED") {
+      let message = ""
+      if(newState === "CANCELLED"){
+        message = <FormattedMessage id="cancelProjectConfirmation" defaultMessage="Are you sure you want to cancel this project?" />;
+      }
+      if(newState === "FINISHED"){
+        message = <FormattedMessage id="finishProjectConfirmation" defaultMessage="Are you sure you want to finish this project?" />;
+
+      }
+      setDialogMessage(message);
+      setAlertType(false);
+      setIsDialogOpen(true);
+      setOnConfirm(async () => {
+        setProjectInfo((prevInfo) => ({
+          ...prevInfo,
+          state: newState,
+        }));
+      });
+    } else {
+      setProjectInfo((prevInfo) => ({
+        ...prevInfo,
+        state: newState,
+      }));
+    }
   };
 
   useEffect(() => {
