@@ -75,6 +75,8 @@ const SettingsPage = () => {
         updateSessionTimeoutDto
       );
       if (response.status === 204) {
+        // Update the local store with the new configuration value
+        configurations.set("sessionTimeout", newSessionTimeout);
         setDialogMessage(
           intl.formatMessage({
             id: "configurationSuccess",
@@ -114,6 +116,8 @@ const SettingsPage = () => {
         updateMaxProjectMembersDto
       );
       if (response.status === 204) {
+        // Update the local store with the new configuration value
+        configurations.set("maxProjectMembers", newMaxProjectMembers);
         setDialogMessage(
           intl.formatMessage({
             id: "configurationSuccess",
