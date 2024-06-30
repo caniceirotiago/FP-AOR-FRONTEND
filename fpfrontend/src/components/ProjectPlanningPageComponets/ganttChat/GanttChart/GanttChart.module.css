@@ -2,17 +2,18 @@
   display: flex;
   width: 100%;
   overflow-x: auto; 
-  border: 1px solid #ccc;
   white-space: nowrap;
   margin-right: 10px;
   
 }
 .mainGanttContainer::-webkit-scrollbar {
-  height: 8px; 
+  height: 5px; 
+  width: 5px;
+  background-color:var(--background-color1);
 }
 
 .mainGanttContainer::-webkit-scrollbar-thumb {
-  background: #888; 
+  background-color: rgb(94, 91, 87);
   border-radius: 5px; 
 }
 
@@ -25,6 +26,17 @@
   flex-direction: column;
   overflow-y: auto;
   background-color: var(--gantt-graphic-background);
+}
+
+.ganttContainer::-webkit-scrollbar {
+  height: 5px; 
+  width: 5px;
+  background-color:var(--background-color1);
+}
+
+.ganttContainer::-webkit-scrollbar-thumb {
+  background-color: rgb(94, 91, 87);
+  border-radius: 5px; 
 }
 
 
@@ -60,6 +72,9 @@
 }
 .isWeekend {
   background: var(--weekend-color); 
+}
+.isToday {
+  background: var(--today-color); 
 }
 
 /* .month {

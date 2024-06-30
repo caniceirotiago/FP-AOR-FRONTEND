@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./EditTaskModal.module.css";
 import { FormattedMessage, useIntl } from "react-intl";
 import AttributeEditor from "../reactSelect/AttributeEditor.jsx";
@@ -7,14 +7,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import taskService from "../../services/taskService.jsx";
 import useTaskStatesStore from "../../stores/useTaskStatesStore.jsx";
+import usePlanningPageStore from "../../stores/usePlanningPageStore.jsx";
+import ReactQuill from "react-quill";
 
-const EditTaskModal = ({
-  isOpen,
-  onClose,
-  projectId,
-  onTaskUpdate,
-  taskId,
-}) => {
+
+const EditTaskModal = ({isOpen,onClose,projectId,onTaskUpdate,taskId,}) => {
+  const {isThePlanEditable} = usePlanningPageStore();
+  const quillRef = useRef(null);
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
     useDialogModalStore();
   const { states, fetchTaskStates } = useTaskStatesStore();
@@ -64,9 +63,30 @@ const EditTaskModal = ({
     setTaskData({ ...taskData, [e.target.name]: e.target.value });
   };
 
-  const handleDescriptionChange = (e) => {
-    setTaskData((prevData) => ({ ...prevData, description: e.target.value }));
+  const handleDescriptionChange = (value) => {
+    const cleanValue = value.replace(/[^a-zA-Z0-9 .,;!?'"@#$%^&*()_+=\-\[\]\{\}:<>\/\\|`~]/g, "");
+    if (cleanValue.length <= 200) {
+      setTaskData((prevData) => ({ ...prevData, description: cleanValue }));
+    }
   };
+
+  useEffect(() => {
+    if (quillRef.current) {
+      const quill = quillRef.current.getEditor();
+      quill.on('text-change', () => {
+        const content = quill.getText();
+        if (content.length > 200) {
+          quill.deleteText(200, quill.getLength());
+        }
+        const cleanContent = content.replace(/[^a-zA-Z0-9 .,;!?'"@#$%^&*()_+=\-\[\]\{\}:<>/\\|`~]/g, "");
+        if (cleanContent.length !== content.length) {
+          quill.deleteText(0, quill.getLength());
+          quill.clipboard.dangerouslyPasteHTML(0, cleanContent);
+        }
+        setTaskData((prevData) => ({ ...prevData, description: quill.root.innerHTML }));
+      });
+    }
+  }, []);
 
   const handleDateChange = (date, dateType) => {
     const formattedDate = format(date, "yyyy-MM-dd'T'00:00:00'Z'");
@@ -182,6 +202,7 @@ const EditTaskModal = ({
               value={taskData.title}
               onChange={handleChange}
               required={true}
+              disabled={!isThePlanEditable}
             />
             <label className={styles.label}>
               <FormattedMessage id="tableHeaderState" defaultMessage="State" />
@@ -193,6 +214,7 @@ const EditTaskModal = ({
               value={taskData.state}
               onChange={handleChange}
               required={true}
+              disabled={!isThePlanEditable}
             >
               {states.map((state) => (
                 <option key={state.id} value={state}>
@@ -203,13 +225,31 @@ const EditTaskModal = ({
             <label className={styles.label}>
               <FormattedMessage id="description" defaultMessage="Description" />
             </label>
-            <textarea
-              className={styles.textarea}
-              name="description"
-              value={taskData.description}
-              onChange={handleDescriptionChange}
-              maxLength={2048}
-            />
+            {isThePlanEditable ? (
+                <ReactQuill
+                theme="snow"
+                value={taskData.description}
+                onChange={handleDescriptionChange}
+                className={styles.quillEditor}
+                
+                modules={{
+                  toolbar: [
+                    [{ font: [] }],
+                    [{ color: [] }, { background: [] }],
+                    [{ size: [] }],
+                    ["bold", "italic", "underline", "strike"],
+                    ["clean"]
+                  ],
+                }}
+              />
+        
+            ) : (
+              <div className={styles.descriptionText}>
+                <div dangerouslySetInnerHTML={{ __html: taskData.description }} />
+              </div>         
+             )}
+
+            
             <label className={styles.label}>
               <FormattedMessage
                 id="initialPlannedDate"
@@ -218,6 +258,7 @@ const EditTaskModal = ({
             </label>
             <input
               type="date"
+              disabled={!isThePlanEditable}
               className={styles.datePicker}
               value={
                 taskData.plannedStartDate
@@ -238,6 +279,7 @@ const EditTaskModal = ({
             </label>
             <input
               type="date"
+              disabled={!isThePlanEditable}
               className={styles.datePicker}
               value={
                 taskData.plannedEndDate
@@ -257,9 +299,10 @@ const EditTaskModal = ({
                 projectId={projectId}
                 creationMode={false}
                 title="Responsible user"
-                editMode={true}
+                editMode={isThePlanEditable}
                 mainEntity={"task"}
                 taskResponsibleId={taskData.responsibleId}
+
               />
             </div>
             <div className={styles.attributeEditor}>
@@ -269,7 +312,7 @@ const EditTaskModal = ({
                 projectId={projectId}
                 creationMode={false}
                 title="Registered executers"
-                editMode={true}
+                editMode={isThePlanEditable}
                 mainEntity={"task"}
                 registeredExecutors={taskData.registeredExecutors}
               />
@@ -286,13 +329,15 @@ const EditTaskModal = ({
               value={taskData.nonRegisteredExecutors}
               onChange={handleChange}
               maxLength={2048}
-            />
-            <div  className={styles.button} onClick={handleTaskDelete}>
-              <FormattedMessage id="delete" defaultMessage="Delete Task" />
-            </div>
-            <button type="submit" className={styles.button}>
-              <FormattedMessage id="submit" defaultMessage="Submit" />
-            </button>
+              disabled={!isThePlanEditable}
+            />{isThePlanEditable && (<>
+              <div  className={styles.button} onClick={handleTaskDelete}>
+                <FormattedMessage id="delete" defaultMessage="Delete Task" />
+              </div>
+              <button type="submit" className={styles.button}>
+                <FormattedMessage id="submit" defaultMessage="Submit" />
+              </button>
+            </>)}
           </form>
         </div>
       </div>

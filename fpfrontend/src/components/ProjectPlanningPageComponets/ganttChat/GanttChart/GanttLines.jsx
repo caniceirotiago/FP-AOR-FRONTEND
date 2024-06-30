@@ -5,6 +5,14 @@ const isWeekend = (date) => {
   const day = date.getDay();
   return day === 0 || day === 6;
 };
+const isToday = (date) => {
+  const today = new Date();
+  return (
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
+};
 
 const GanttLines = ({ timeline, tasks }) => {
   const totalWidth = timeline.length * 50; 
@@ -18,13 +26,13 @@ const GanttLines = ({ timeline, tasks }) => {
     >
       {timeline.map((date, index) => (
         <React.Fragment key={`v-${index}`}>
-          {isWeekend(date) && (
+          {(isWeekend(date) || isToday(date)) && (
             <rect
               x={index * 50}
               y={0}
               width={50}
               height={totalHeight}
-              fill="var(--weekend-color)"
+              fill={isToday(date) ? "var(--today-color)" : "var(--weekend-color)"}
             />
           )}
           <line

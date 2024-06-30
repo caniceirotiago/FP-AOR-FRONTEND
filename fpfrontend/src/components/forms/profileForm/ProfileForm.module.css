@@ -85,15 +85,16 @@
 }
 
 /* Global styles for ReactQuill */
-.biographyText {
+.textarea {
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
   flex-grow: 1;
   max-height: 200px;
   overflow-y: auto ;
+  resize: none;
 }
-:global(.quillEditor) {
+/* :global(.quillEditor) {
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -117,7 +118,7 @@
   max-height: 150px;
   overflow-y: auto;
   font-size: 16px;
-}
+} */
 
 
 /* .inputFile{

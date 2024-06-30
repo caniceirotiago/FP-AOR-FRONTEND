@@ -6,6 +6,7 @@ import userService from "../../../services/userService.jsx";
 import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
 import DialogMultipleMessagesModalStore from "../../../stores/useDialogMultipleMessagesModalStore.jsx";
 import Button from "../../buttons/landingPageBtn/Button.jsx";
+import PasswordRulesLegend from "../../legend/PasswordRulesLegend.jsx";
 
 /**
  * PasswordForm provides a form for users to update their password. It includes fields for the old password,
@@ -167,6 +168,7 @@ const PasswordForm = () => {
             onChange={handleChange}
           />
         </div>
+        <PasswordRulesLegend /> 
         <div className={styles.passwordStrength}>
           <div
             style={{

@@ -7,6 +7,8 @@ import styles from "./ResetPasswordForm.module.css";
 import { validatePassword } from "../../../utils/validators/userValidators.jsx";
 import Button from "../../buttons/landingPageBtn/Button.jsx";
 import DialogMultipleMessagesModalStore from "../../../stores/useDialogMultipleMessagesModalStore.jsx";
+import PasswordRulesLegend from "../../legend/PasswordRulesLegend.jsx";
+
 
 const ResetPasswordForm = () => {
   const [passwords, setPasswords] = useState({
@@ -156,6 +158,7 @@ const ResetPasswordForm = () => {
             minLength={4}
           />
         </label>
+        <PasswordRulesLegend /> 
         <div className={styles.passwordStrength}>
           <div
             style={{

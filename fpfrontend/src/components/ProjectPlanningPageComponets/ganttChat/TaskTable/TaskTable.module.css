@@ -5,6 +5,7 @@
   scrollbar-width: none; 
   -ms-overflow-style: none; 
   margin-left: 10px;
+  padding: 0px 0px 0px 20px;
 }
 .taskTable::-webkit-scrollbar {
   display: none; 
@@ -52,7 +53,7 @@
 
 .td {
   height: 40px;
-  color: var(--text-color4);
+  color:var(--text-color5);
 
 }
 
@@ -67,5 +68,5 @@
   right: 0;
   bottom: 0;
   height: 1px;
-  background: #842f2f; 
+  background: #ffffff; 
 }

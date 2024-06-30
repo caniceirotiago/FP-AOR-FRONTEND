@@ -38,6 +38,7 @@ body.theme-light {
   --text-color2: white;
   --text-color3: white;
   --text-color4: black;
+  --text-color5: black;
   --positive-color: #50c878;
   --negative-color: #ff6347;
   --disabled-background: #edf0f0;
@@ -60,7 +61,8 @@ body.theme-light {
   --dependency-line-hover-color: #280c8b;
   --gantt-graphic-line-color: #e0e0e04b;
   --weekend-color: #a6cdab4c;
-  --timeline-background-color: #d2ded557;
+  --today-color: #ddfa8cad;
+  --timeline-background-color: #d2ded5;
   --task-title-gantt-color: #f3f3e9dd;
   --gantt-graphic-background: #f3f3e900;
 }
@@ -83,6 +85,7 @@ body.theme-dark {
   --text-color2: white;
   --text-color3: black;
   --text-color4: white;
+  --text-color5: #c0a9a9;
   --positive-color: #50c878;
   --negative-color: #ff6347;
   --vacancies-color: #a4c7fc;
@@ -95,18 +98,20 @@ body.theme-dark {
   --listItem-background: rgba(255, 255, 255, 0.163);
   --table-background: rgba(84, 90, 113, 0.128);
   --table-header-background: rgba(218, 228, 231, 0.866);
-  --planned-task-color: #004cff;
-  --in-progress-task-color: #ffea00;
-  --finished-task-color: #00eaff;
-  --task-base-color: #d19595;
-  --task-hover-accesory-color: #73db6a;
-  --dependency-line-color: #35f6c3;
+  --planned-task-color: #757bea;
+  --in-progress-task-color: #eadd54;
+  --finished-task-color: #5cc75e;
+  --task-base-color: #595656;
+  --task-hover-accesory-color: #e8e6b5;
+  --dependency-line-color: #e5e6c1;
   --dependency-line-hover-color: #55ff00;
-  --gantt-graphic-line-color: #000000;
-  --weekend-color: #040404ba;
-  --timeline-background-color: #b6ae55;
-  --task-title-gantt-color: #67ba92;
-  --gantt-graphic-background: #9f91e25e;
+  --gantt-graphic-line-color: #0f0e0e;
+  --weekend-color: #100f0f67;
+  --today-color: #6f6f6964;
+  --timeline-background-color: #4b624d;
+  --task-title-gantt-color: #fefefe;
+  --gantt-graphic-background: #232324;
+  
 }
 
 .react-select__input {

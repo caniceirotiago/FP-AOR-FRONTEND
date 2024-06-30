@@ -8,6 +8,8 @@ import DialogMultipleMessagesModalStore from "../../../stores/useDialogMultipleM
 import { validatePassword } from "../../../utils/validators/userValidators.jsx";
 import Button from "../../buttons/landingPageBtn/Button.jsx";
 import useLabStore from "../../../stores/useLabStore.jsx";
+import Spinner from "../../spinner/Spinner.jsx";
+import PasswordRulesLegend from "../../legend/PasswordRulesLegend.jsx";
 
 const RegisterForm = () => {
   const {
@@ -132,6 +134,7 @@ const RegisterForm = () => {
           setAlertType(true);
           setOnConfirm(async () => {});
         } else {
+          setLoading(false);
           setDialogMessage(
             intl.formatMessage({
               id: "confirmationEmailSent",
@@ -141,7 +144,7 @@ const RegisterForm = () => {
           setIsDialogOpen(true);
           setAlertType(true);
           setOnConfirm(async () => {
-            setLoading(false);
+            
             navigate("/");
           });
         }
@@ -175,7 +178,7 @@ const RegisterForm = () => {
 
   return (
     <div className={styles.mainContent}>
-      {loading && <div className="spinner"></div>}
+      {loading && <Spinner/>}
       <form className={styles.registrationForm}>
         <div className={styles.formContent}>
           <div className={styles.formSection1}>
@@ -221,6 +224,7 @@ const RegisterForm = () => {
                 />
               )}
             </FormattedMessage>
+            <PasswordRulesLegend /> 
             <div className={styles.passwordStrength}>
               <div
                 style={{

@@ -4,8 +4,10 @@ import useDeviceStore from "../../../../stores/useDeviceStore.jsx";
 import useSyncScrollStore from "../../../../stores/useSyncScrollStore.jsx";
 import GanttLines from "./GanttLines.jsx";
 import Legend from "./Legend/Legend.jsx";
+import useThemeStore from "../../../../stores/useThemeStore.jsx";
+import { isToday } from "date-fns";
 
-const barTaskColors = {
+const barTaskColorsLightTheme = {
   PLANNED:
     "linear-gradient(45deg, var(--planned-task-color) 0%, var(--task-base-color) 100%)",
   IN_PROGRESS:
@@ -13,15 +15,17 @@ const barTaskColors = {
   FINISHED:
     "linear-gradient(45deg, var(--finished-task-color) 0%, var(--task-base-color) 100%)",
 };
+const barTaskColorsDarkTheme = {
+  PLANNED:
+    "linear-gradient(45deg, var(--planned-task-color) 50%, var(--task-base-color) 150%)",
+  IN_PROGRESS:
+    "linear-gradient(45deg, var(--in-progress-task-color) 50%, var(--task-base-color) 150%)",
+  FINISHED:
+    "linear-gradient(45deg, var(--finished-task-color) 50%, var(--task-base-color) 150%)",
+};
 
-const GanttChart = ({
-  tasks,
-  setTasks,
-  updateTaskById,
-  addPreresquisiteTaskById,
-  removeDependency,
-  handleEditTaskClick,
-}) => {
+const GanttChart = ({tasks, setTasks, updateTaskById, addPreresquisiteTaskById, removeDependency, handleEditTaskClick, isThePlanEditable}) => {
+  const {theme} = useThemeStore();
   const ganttRef = useRef(null);
   const [draggingTask, setDraggingTask] = useState(null);
   const [activeDependency, setActiveDependency] = useState(null);
@@ -31,40 +35,40 @@ const GanttChart = ({
   const [isDraggingMap, setIsDraggingMap] = useState(false);
   const { isTouch } = useDeviceStore();
   const { syncScrollPosition, setSyncScrollPosition } = useSyncScrollStore();
-  // Dentro do componente GanttChart
 
-useEffect(() => {
-  const ganttElement = ganttRef.current;
 
-  const handleMouseDown = (e) => {
-    if (e.target === ganttElement) {
-      ganttElement.classList.add(styles.dragging);
-    }
-  };
+  useEffect(() => {
+    const ganttElement = ganttRef.current;
 
-  const handleMouseMove = (e) => {
-    if (ganttElement.classList.contains(styles.dragging)) {
-      ganttElement.style.cursor = 'grabbing';
-    }
-  };
+    const handleMouseDown = (e) => {
+      if (e.target === ganttElement) {
+        ganttElement.classList.add(styles.dragging);
+      }
+    };
 
-  const handleMouseUp = (e) => {
-    if (ganttElement.classList.contains(styles.dragging)) {
-      ganttElement.classList.remove(styles.dragging);
-      ganttElement.style.cursor = 'grab';
-    }
-  };
+    const handleMouseMove = (e) => {
+      if (ganttElement.classList.contains(styles.dragging)) {
+        ganttElement.style.cursor = 'grabbing';
+      }
+    };
 
-  ganttElement.addEventListener('mousedown', handleMouseDown);
-  ganttElement.addEventListener('mousemove', handleMouseMove);
-  ganttElement.addEventListener('mouseup', handleMouseUp);
+    const handleMouseUp = (e) => {
+      if (ganttElement.classList.contains(styles.dragging)) {
+        ganttElement.classList.remove(styles.dragging);
+        ganttElement.style.cursor = 'grab';
+      }
+    };
 
-  return () => {
-    ganttElement.removeEventListener('mousedown', handleMouseDown);
-    ganttElement.removeEventListener('mousemove', handleMouseMove);
-    ganttElement.removeEventListener('mouseup', handleMouseUp);
-  };
-}, []);
+    ganttElement.addEventListener('mousedown', handleMouseDown);
+    ganttElement.addEventListener('mousemove', handleMouseMove);
+    ganttElement.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      ganttElement.removeEventListener('mousedown', handleMouseDown);
+      ganttElement.removeEventListener('mousemove', handleMouseMove);
+      ganttElement.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
 
 
   useEffect(() => {
@@ -124,6 +128,7 @@ useEffect(() => {
   const totalDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
 
   const handleDragStart = (e, taskId, type, handleType) => {
+    if(!isThePlanEditable && taskId) return;
     const ganttRect = ganttRef.current.getBoundingClientRect();
     e.dataTransfer.setData("sourceTaskId", taskId);
     e.dataTransfer.setData("type", type);
@@ -318,6 +323,7 @@ useEffect(() => {
   };
 
   const handleDependencyDoubleClick = (taskId, depId) => {
+    if(!isThePlanEditable) return;
     setTasks(
       tasks.map((task) => {
         if (task.id === taskId) {
@@ -466,7 +472,7 @@ useEffect(() => {
               key={index}
               className={`${styles.timelineDate} ${
                 isWeekend(date) ? styles.isWeekend : ""
-              }`}
+              } ${isToday(date) ? styles.isToday : ""}`}
             >
               {date.toISOString().split("T")[0].slice(5)} {/* Remove o ano */}
             </div>
@@ -502,6 +508,7 @@ useEffect(() => {
                     }
                     onDrag={(e) => handleDrag(e, task.id, "start")}
                     onDragEnd={handleDrop}
+                    hidden={!isThePlanEditable}
                   ></div>
                   <div
                     className={styles.taskContent}
@@ -511,8 +518,8 @@ useEffect(() => {
                     }
                     onDrag={(e) => handleDrag(e, task.id, "bar")}
                     onDragEnd={handleDrop}
-                    style={{ backgroundImage: barTaskColors[task.state] }}
-                  ></div>
+                    style={{ backgroundImage: theme === "light" ? barTaskColorsLightTheme[task.state] : barTaskColorsDarkTheme[task.state] }}
+                    ></div>
                   <div
                     className={styles.taskHandleEnd}
                     draggable
@@ -521,6 +528,7 @@ useEffect(() => {
                     }
                     onDrag={(e) => handleDrag(e, task.id, "end")}
                     onDragEnd={handleDrop}
+                    hidden={!isThePlanEditable}
                   ></div>
                   <div
                     className={`${styles.taskCircleStart} ${
@@ -535,6 +543,7 @@ useEffect(() => {
                     onDragEnd={handleDrop}
                     onDragEnter={() => circleDragEnter()}
                     onDragLeave={() => circleDragLeave()}
+                    hidden={!isThePlanEditable}
                   ></div>
                   <div
                     className={`${styles.taskCircleEnd} ${
@@ -549,6 +558,7 @@ useEffect(() => {
                     onDragEnd={handleDrop}
                     onDragEnter={() => circleDragEnter()}
                     onDragLeave={() => circleDragLeave()}
+                    hidden={!isThePlanEditable}
                   ></div>
                 </div>
                 <div

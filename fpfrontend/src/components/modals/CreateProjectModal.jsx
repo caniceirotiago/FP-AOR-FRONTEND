@@ -215,6 +215,7 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
                   : ""
               }
               onChange={(e) => handleDateChange(new Date(e.target.value))}
+              min={format(new Date(), "yyyy-MM-dd")}
             />
             <div className={styles.attributeEditor}>
               <AttributeEditor

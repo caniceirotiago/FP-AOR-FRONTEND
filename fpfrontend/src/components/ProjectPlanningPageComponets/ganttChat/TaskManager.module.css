@@ -52,6 +52,7 @@
   font-size: 24px;
   margin-bottom: 20px;
   color: var(--text-color4);
+  cursor: pointer;
 }
 .state {
 

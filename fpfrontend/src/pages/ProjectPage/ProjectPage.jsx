@@ -14,6 +14,7 @@ import LogsList from "../../components/ProjectPageComponents/LogsList/LogsList.j
 import useProjectStore from "../../stores/useProjectStore.jsx";
 import GroupChatModal from "../../components/ProjectPageComponents/GroupChat/GroupChatModal";
 import useGroupChatModalStore from "../../stores/useGroupChatModalStore"; 
+import usePlanningPageStore from "../../stores/usePlanningPageStore";
 
 
 const ProjectPage = () => {
@@ -27,6 +28,8 @@ const ProjectPage = () => {
   const { states, fetchProjectStates } = useProjectStatesStore();
   const { fetchProjectRoles } = useProjectRolesStore();
   const { laboratories, fetchLaboratories } = useLabStore();
+  const {isThePlanEditable} = usePlanningPageStore();
+
   const [projectInfo, setProjectInfo] = useState({
     name: "",
     description: "",

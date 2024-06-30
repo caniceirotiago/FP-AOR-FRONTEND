@@ -9,8 +9,10 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import useDialogModalStore from "../../../stores/useDialogModalStore";
 import Button from "../../buttons/landingPageBtn/Button.jsx";
+import { set } from "date-fns";
 
 const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) => {
+  
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
   const [profileImage, setProfileImage] = useState(null);
   const { laboratories, fetchLaboratories } = useLabStore();
@@ -31,6 +33,26 @@ const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) =>
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       const file = e.target.files[0];
+      // Verificar o tipo de arquivo
+      const fileType = file.type;
+      const allowedTypes = ["image/jpeg", "image/png"];
+      if (!allowedTypes.includes(fileType)) {
+        setDialogMessage( <FormattedMessage id="invalidFileType" defaultMessage="Invalid file type. Please upload a JPEG or PNG file." />);
+        setIsDialogOpen(true);
+        setOnConfirm(async () => {});
+        setAlertType(true);
+        return;
+      }
+      // Verificar o tamanho do arquivo (5MB = 5 * 1024 * 1024 bytes)
+      const fileSize = file.size;
+      const maxSize = 5 * 1024 * 1024;
+      if (fileSize > maxSize) {
+        setDialogMessage( <FormattedMessage id="fileTooLarge" defaultMessage="File too large. Please upload a file smaller than 5MB." />);
+        setAlertType(true);
+        setIsDialogOpen(true);
+        setOnConfirm(async () => {});
+        return;
+      }
       setProfileImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -63,6 +85,7 @@ const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) =>
         const snapshot = await uploadBytes(storageRef, profileImage);
         const downloadURL = await getDownloadURL(snapshot.ref);
         profile.photo = downloadURL;
+        localStorage.setItem("photo", downloadURL);
       }
       const { email, id, username, ...profileData } = profile;
       console.log(profileData);
@@ -159,20 +182,15 @@ const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) =>
             <FormattedMessage id="biography">Biography</FormattedMessage>
           </label>
           {isEditing ? (
-            <ReactQuill
-              theme="snow"
-              value={profile.biography}
-              onChange={handleBiographyChange}
-              className={styles.quillEditor}
-              modules={{
-                toolbar: [
-                  [{ font: [] }],
-                  [{ color: [] }, { background: [] }],
-                  [{ size: [] }],
-                  ["bold", "italic", "underline", "strike"],
-                ],
-              }}
-            />
+           <textarea
+            className={styles.textarea}
+            id="biography"
+            name="biography"
+            value={profile.biography}
+            onChange={handleInputChange}
+            placeholder="Enter your biography"
+            disabled={!isEditing}
+          />
           ) : (
             <div className={styles.biographyText}>
               <div dangerouslySetInnerHTML={{ __html: profile.biography }} />

@@ -5,11 +5,16 @@ import styles from "./TaskManager.module.css";
 import taskService from "../../../services/taskService";
 import useDeviceStore from "../../../stores/useDeviceStore";
 import projectService from "../../../services/projectService";
+import { useNavigate } from "react-router-dom";
+import { FaLock } from "react-icons/fa";
+import usePlanningPageStore from "../../../stores/usePlanningPageStore";
 
 const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
   const [tasks, setTasks] = useState([]);
   const [projectGeneralInfo, setProjectGeneralInfo] = useState({});
+  const {isThePlanEditable, setIsThePlanEditable} = usePlanningPageStore();
   const { dimensions } = useDeviceStore();
+  const navigate = useNavigate();
 
   const fetchProjectTasks = async () => {
     if (!projectId) return;
@@ -41,6 +46,13 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
       const response = await projectService.getProjectById(projectId);
       const data = await response.json();
       setProjectGeneralInfo(data);
+      if(data.state === "FINISHED" || data.state === "CANCELLED" || data.state === "READY") {
+        setIsThePlanEditable(false);
+        console.log("Project is finished or cancelled or ready");
+      } else {
+        setIsThePlanEditable(true);
+        console.log("Project is not finished or cancelled or ready");
+      }
     } catch (error) {
       console.error("Error fetching project General Info:", error);
     }
@@ -85,6 +97,10 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
       console.error("Error removing dependency:", error);
     }
   };
+  const handleTitleClick = () => {
+    console.log("Title clicked");
+    navigate(`/projectpage/${projectId}`);
+  };
 
   const updateTaskById = async (taskId) => {
     try {
@@ -113,18 +129,18 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
     fetchProjectTasks();
   }, [projectId]);
 
-  console.log(tasks);
 
   return (
     <div className={styles.container}>
       <div className={styles.projectPlanningHeader}>
-        <h3 className={styles.title}>{projectGeneralInfo.name}</h3>
+        <h3 onClick={handleTitleClick} className={styles.title}>{projectGeneralInfo.name}</h3>
         <p className={styles.state}>{projectGeneralInfo.state}</p>
         <span
           className={styles.statusIndicator}
           style={{ backgroundColor: getStatusColor(projectGeneralInfo.state) }}
         >
         </span>
+        {!isThePlanEditable && <FaLock className={styles.lockIcon} />}
       </div>
       <div className={styles.projectPlanningBody}>
         {dimensions.width > 1250 && (
@@ -142,6 +158,7 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
           addPreresquisiteTaskById={addPreresquisiteTaskById}
           removeDependency={removeDependency}
           handleEditTaskClick={handleEditTaskClick}
+          isThePlanEditable={isThePlanEditable}
         />
       </div>
     </div>
