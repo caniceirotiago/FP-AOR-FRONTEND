@@ -24,11 +24,10 @@ const barTaskColorsDarkTheme = {
     "linear-gradient(45deg, var(--finished-task-color) 50%, var(--task-base-color) 150%)",
 };
 
-const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById, removeDependency, handleEditTaskClick, isThePlanEditable }) => {
-  const { theme } = useThemeStore();
+const GanttChart = ({tasks, setTasks, updateTaskById, addPreresquisiteTaskById, removeDependency, handleEditTaskClick, isThePlanEditable}) => {
+  const {theme} = useThemeStore();
   const ganttRef = useRef(null);
   const [draggingTask, setDraggingTask] = useState(null);
-  const [dragData, setDragData] = useState(null);
   const [activeDependency, setActiveDependency] = useState(null);
   const [linePosition, setLinePosition] = useState(null);
   const [circleDragHoovered, setCircleDragHoovered] = useState(null);
@@ -36,6 +35,7 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
   const [isDraggingMap, setIsDraggingMap] = useState(false);
   const { isTouch } = useDeviceStore();
   const { syncScrollPosition, setSyncScrollPosition } = useSyncScrollStore();
+
 
   useEffect(() => {
     const ganttElement = ganttRef.current;
@@ -69,6 +69,7 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
       ganttElement.removeEventListener('mouseup', handleMouseUp);
     };
   }, []);
+
 
   useEffect(() => {
     const ganttElement = ganttRef.current;
@@ -127,21 +128,15 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
   const totalDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
 
   const handleDragStart = (e, taskId, type, handleType) => {
-    if (!isThePlanEditable && taskId) return;
+    if(!isThePlanEditable && taskId) return;
     const ganttRect = ganttRef.current.getBoundingClientRect();
+    e.dataTransfer.setData("sourceTaskId", taskId);
+    e.dataTransfer.setData("type", type);
+    e.dataTransfer.setData("handleType", handleType);
     let relatedTasks = [];
     if (shiftPressed && type === "bar") {
       relatedTasks = findRelatedTasks(taskId, tasks);
     }
-    setDragData({
-      taskId,
-      type,
-      handleType,
-      initialX: e.clientX - ganttRect.left,
-      initialY: e.clientY - ganttRect.top,
-      relatedTasks,
-      lastX: e.clientX,
-    });
     setDraggingTask({
       taskId,
       type,
@@ -154,6 +149,7 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
     if (handleType === "dependency") {
       setActiveDependency({ taskId, type });
     }
+    e.dataTransfer.setDragImage(new Image(), 0, 0); // Evita o ícone de arrasto padrão
   };
 
   const handleDrag = (e) => {
@@ -257,11 +253,13 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
 
   const handleDrop = async (e) => {
     e.preventDefault();
-    const { taskId, type, handleType } = dragData;
+    const type = e.dataTransfer.getData("type");
+    const handleType = e.dataTransfer.getData("handleType");
+    const sourceTaskId = Number(e.dataTransfer.getData("sourceTaskId"));
     const targetTaskId = Number(e.target.dataset.taskId);
 
     if (activeDependency && handleType === "dependency") {
-      const sourceTaskId = taskId;
+      const sourceTaskId = Number(e.dataTransfer.getData("sourceTaskId"));
       setCircleDragHoovered(false);
       if (sourceTaskId !== targetTaskId) {
         const sourceTask = tasks.find((task) => task.id === sourceTaskId);
@@ -313,20 +311,19 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
       }
     } else {
       try {
-        await updateTaskById(taskId);
+        await updateTaskById(sourceTaskId);
       } catch (error) {
         console.error("Error updating tasks:", error);
       }
     }
 
     setDraggingTask(null);
-    setDragData(null);
     setActiveDependency(null);
     setLinePosition(null);
   };
 
   const handleDependencyDoubleClick = (taskId, depId) => {
-    if (!isThePlanEditable) return;
+    if(!isThePlanEditable) return;
     setTasks(
       tasks.map((task) => {
         if (task.id === taskId) {
@@ -521,13 +518,8 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
                     }
                     onDrag={(e) => handleDrag(e, task.id, "bar")}
                     onDragEnd={handleDrop}
-                    style={{
-                      backgroundImage:
-                        theme === "light"
-                          ? barTaskColorsLightTheme[task.state]
-                          : barTaskColorsDarkTheme[task.state],
-                    }}
-                  ></div>
+                    style={{ backgroundImage: theme === "light" ? barTaskColorsLightTheme[task.state] : barTaskColorsDarkTheme[task.state] }}
+                    ></div>
                   <div
                     className={styles.taskHandleEnd}
                     draggable
@@ -549,8 +541,8 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
                     }
                     onDrag={(e) => handleDrag(e, task.id, "start")}
                     onDragEnd={handleDrop}
-                    onDragEnter={circleDragEnter}
-                    onDragLeave={circleDragLeave}
+                    onDragEnter={() => circleDragEnter()}
+                    onDragLeave={() => circleDragLeave()}
                     hidden={!isThePlanEditable}
                   ></div>
                   <div
@@ -564,8 +556,8 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
                     }
                     onDrag={(e) => handleDrag(e, task.id, "end")}
                     onDragEnd={handleDrop}
-                    onDragEnter={circleDragEnter}
-                    onDragLeave={circleDragLeave}
+                    onDragEnter={() => circleDragEnter()}
+                    onDragLeave={() => circleDragLeave()}
                     hidden={!isThePlanEditable}
                   ></div>
                 </div>
@@ -609,6 +601,7 @@ const GanttChart = ({ tasks, setTasks, updateTaskById, addPreresquisiteTaskById,
             ></div>
           )}
         </div>
+        {/* Rendering fixed dependency lines */}
         <div className={styles.svgContainer}>
           {filteredTasks.map((task) =>
             task.prerequisites.map((depId) => {

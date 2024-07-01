@@ -20,8 +20,9 @@ const ProjectPlanningPage = () => {
   const intl = useIntl();
 
   const fetchProjetsIdByloggedUser = async () => {
+    let userId = localStorage.getItem("userId");
     try {
-      const response = await membershipService.getProjectIdsByuserId();
+      const response = await membershipService.getProjectsByuserId(userId);
       const data = await response.json();
       setAccessibleProjectsIds(data);
       if (!selectedProjectId && data.length > 0) {
@@ -37,7 +38,7 @@ const ProjectPlanningPage = () => {
   }, [selectedProjectId]);
 
   const handleClick = () => {
-    console.log("clicked");
+
     setIsModalOpen(true);
   };
 
