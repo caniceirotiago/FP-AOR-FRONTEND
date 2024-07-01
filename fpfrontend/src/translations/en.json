@@ -142,6 +142,7 @@
   "add": "Add",
   "remove": "Remove",
   "cancel": "Cancel",
+  "yes": "Yes",
   "confirm": "Confirm",
   "tableHeaderState": "State",
   "tableHeaderCreationDate": "Creation Date",
