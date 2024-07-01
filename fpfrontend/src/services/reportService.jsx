@@ -32,6 +32,34 @@ const reportService = {
       throw error;
     }
   },
+  getProjectSummary: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/project/summary`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response.json();
+    } catch (error) {
+      console.error("Error fetching project summary:", error.message);
+      throw error;
+    }
+  },
+  getAssetSummary: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/asset/summary`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response.json();
+    } catch (error) {
+      console.error("Error fetching asset summary:", error.message);
+      throw error;
+    }
+  },
 
 };
 

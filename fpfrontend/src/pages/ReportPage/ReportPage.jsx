@@ -3,6 +3,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./ReportPage.module.css";
 import reportService from "../../services/reportService";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
+import Dashboard from "../../components/dashboard/Dashboard";
 
 const ReportPage = () => {
   const intl = useIntl();
@@ -44,6 +45,7 @@ const ReportPage = () => {
         <h3>
           <FormattedMessage id="reportGenerator" />
         </h3>
+        {/* <div className={styles.dashboard}><Dashboard/></div> */}
         <div className={styles.reportPanel}>
           <button
             onClick={() => generateReport("project")}
