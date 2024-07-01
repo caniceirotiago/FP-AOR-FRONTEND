@@ -24,7 +24,7 @@
   "signUp": "Registar",
   "lightMode": "Tema Claro",
   "darkMode": "Tema Escuro",
-  "changePassword": "Alterar palavra-passe",
+  "changePassword": "Segurança",
   "newPassword": "Nova palavra-passe:",
   "confirmPassword": "Confirmar palavra-passe:",
   "passwordsDoNotMatch": "As palavras-passe não coincidem",
@@ -62,7 +62,7 @@
   "oldPassword": "Palavra-passe antiga:",
   "confirmNewPassword": "Confirmar nova palavra-passe:",
   "updatePasswordbtn": "Atualizar Palavra-passe",
-  "editProfileInformation": "Editar Informações de Perfil",
+  "editProfileInformation": " Editar Perfil",
   "saveChangesUserProfForm": "Gravar Alterações",
   "welcomeToCriticalLab": "Critical Lab",
   "exploreInnovateMoveForward": "Explora, Inova, Avança...",
@@ -75,7 +75,7 @@
   "login": "Iniciar Sessão",
   "resendEmail": "Reenviar Email de Confirmação",
   "add-attribute": "Adicionar novo atributo",
-  "editBtnProfFormFalse": "Sair do Modo de Edição",
+  "editBtnProfFormFalse": "Cancelar",
   "updateUserBasicInformations": "Atualizar Informações Básicas",
   "register": "Registar",
   "saveFields": "Gravar Dados",
@@ -240,6 +240,7 @@
   "contactUs": "Contacte-nos",
   "followUs": "Siga-nos",
   "invalidFileType": "Tipo de ficheiro inválido (apenas são permitidos ficheiros de imagem com extensão  .jpeg, .png)",
-  "fileTooLarge": "Ficheiro demasiado grande (máximo 5MB)"
+  "fileTooLarge": "Ficheiro demasiado grande (máximo 5MB)",
+    "sendMessage": "Enviar Mensagem"
 
 }

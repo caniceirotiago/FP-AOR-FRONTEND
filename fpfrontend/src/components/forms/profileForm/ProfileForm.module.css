@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 40px;  
+
   color: var(--text-color4);
 
 }
@@ -10,9 +10,8 @@
   
     display: flex;
     flex-direction: row;
-    padding: 1px;
     width: 100%;
-    margin-bottom: 40px;
+    background-color: var(--profile-thirth-background-color);
     color: var(--text-color4);
     gap: 25px;
     justify-content: center;
@@ -23,7 +22,6 @@
   
     padding: 20px;
     width: 100%;
-    margin-bottom: 40px;
     color: var(--text-color4);
     max-width: 500px;
   }
@@ -33,7 +31,6 @@
 
     padding: 20px;
     width: 100%;
-    margin-bottom: 40px;
     color: var(--text-color4);
     max-width: 500px;
   }
@@ -111,7 +108,7 @@
   border-radius: 5px;
   padding: 0px;
   flex-grow: 1;
-  height: 172px;
+  height: 135px;
   overflow-y: auto ;
   resize: none;
 }
@@ -119,7 +116,7 @@
 .biographyText {
   padding: 10px;
   flex-grow: 1;
-  height: 150px;
+  height: 113px;
  
   overflow-y: auto;
   resize: none;
@@ -164,7 +161,62 @@
 }
    */
 
+   .saveButtonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding: 20px;
 
+  }
+
+   .saveButton {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--btn-background2);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  
+  .saveButton:hover {
+    width: 80px;
+    border-radius: 25px;
+    background-color: var(--btn-background1);
+  }
+  
+  .svgIcon {
+    width: 20px;
+    height: 20px;
+    fill: white;
+    transition: transform 0.3s;
+  }
+  
+  .saveButton:hover .svgIcon {
+    transform: translateY(400%);
+  }
+  
+  .btnText {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -20px;
+    opacity: 0;
+    transition: all 0.3s;
+    color: white;
+    font-size: 14px;
+  }
+  
+  .saveButton:hover .btnText {
+    bottom: 10px;
+    opacity: 1;
+  }
 @media(max-width: 768px) {
   .formProfile {
     flex-direction: column;

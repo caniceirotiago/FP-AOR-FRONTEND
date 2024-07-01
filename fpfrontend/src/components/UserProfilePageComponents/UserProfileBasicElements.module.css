@@ -4,19 +4,29 @@
     width: 100%;
     color: var(--text-color4);
     flex-direction: column;
+    margin-bottom: 30px;
   }
   
-  
-  .userHeader {
+  .innerHead{
     display: flex;
     flex-grow: 1;
     flex-direction: row;
-    align-items: left;
-    justify-items: center;
     width: 100%;
     margin-top: 0px;
     color: var(--text-color4);
-    background-color: aqua;
+    background-color: var(--profile-second-background-color);
+    justify-content:center;
+    align-items: center;
+  }
+  
+  .userHeader {
+    display: flex;
+    flex-direction: row;
+    width: 1160px;
+    align-items: left;
+    justify-items: center;
+    margin-top: 0px;
+    color: var(--text-color4);
     gap: 20px;
   }
   
@@ -40,11 +50,61 @@
 
   .profileBtns {
     display: flex;
-    flex-direction: column;
     gap: 10px;
-    align-self: center;
+    margin-top: 10px;
+    margin-left: 30px;
     align-items: center;
-    justify-self: center;
+    justify-content: center;
+    align-self: center;
+  }
+  
+  .iconButton {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--btn-background2);
+    font-weight: 600;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  
+  .iconButton:hover {
+    width: 80px;
+    border-radius: 25px;
+    background-color: var(--btn-background1);
+  }
+  
+  .svgIcon {
+    width: 20px;
+    height: 20px;
+    fill: white;
+    transition: transform 0.3s;
+  }
+  
+  .iconButton:hover .svgIcon {
+    transform: translateY(400%);
+  }
+  
+  .btnText {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -20px;
+    opacity: 0;
+    transition: all 0.3s;
+    color: white;
+    font-size: 14px;
+  }
+  
+  .iconButton:hover .btnText {
+    bottom: 10px;
+    opacity: 1;
   }
   
   .formsContainer {
@@ -58,12 +118,16 @@
   
   
   .toggleFormButton {
-    margin-top: 50px;
+    margin-top: 0px;
     padding: 50px;
   }
 
   
   @media (max-width: 768px) {
+    .innerHead {
+      width: 100%;
+      padding: 0px;
+    }
     .profileContainer {
       flex-direction: column;
       align-items: center;
@@ -71,17 +135,26 @@
     }
   
     .userHeader {
+      width: 100%;
       align-items: center;
-      margin-right: 0;
+      margin: 0px;
+      gap: 0px;
+      padding: 0px;
     }
-  
+    .userPhoto {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      margin-bottom: 10px;
+      border-radius: 50%;
+      padding: 20px;
+    }
     .formsContainer {
    
       align-items: center;
       width: 100%; 
     }
-    .sec1 {
-    }
+  
   
   }
   

@@ -62,7 +62,7 @@
   "oldPassword": "Old Password:",
   "confirmNewPassword": "Confirm New Password:",
   "updatePasswordbtn": "Update Password",
-  "editProfileInformation": "Edit Profile Information",
+  "editProfileInformation": "Edit Profile",
   "saveChangesUserProfForm": "Save Changes",
   "welcomeToCriticalLab": "Critical Lab",
   "exploreInnovateMoveForward": "Explore, Innovate, Move Forward...",
@@ -75,7 +75,7 @@
   "login": "Login",
   "resendEmail": "Resend Confirmation Email",
   "add-attribute": "Add new attribute",
-  "editBtnProfFormFalse": "Exit Edit Mode",
+  "editBtnProfFormFalse": "Exit Edit",
   "updateUserBasicInformations": "Update User Basic Informations",
   "register": "Register",
   "saveFields": "Save Fields",
@@ -241,5 +241,6 @@
   "contactUs": "Contact Us",
   "followUs": "Follow Us",
   "invalidFileType": "Invalid file type selected. Please select a valid image file. (jpeg, png)",
-  "fileTooLarge": "File too large. Please select a file with a maximum size of 5MB."
+  "fileTooLarge": "File too large. Please select a file with a maximum size of 5MB.",
+  "sendMessage": "Send Message"
 }

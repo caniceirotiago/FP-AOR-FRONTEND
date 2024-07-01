@@ -10,6 +10,7 @@ import "react-quill/dist/quill.snow.css";
 import useDialogModalStore from "../../../stores/useDialogModalStore";
 import Button from "../../buttons/landingPageBtn/Button.jsx";
 import { set } from "date-fns";
+import { FaSave } from "react-icons/fa";
 
 const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) => {
   
@@ -226,24 +227,24 @@ const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) =>
               </div>
             )}
           </div>
-
-         
-          <div className={styles.inputGroup}>
-            <label className={styles.label} htmlFor="private">
-              <FormattedMessage id="private">Private</FormattedMessage>
-            </label>
-            <select
-              className={styles.select}
-              id="private"
-              name="private"
-              value={profile.private}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            >
-              <option value="true">Private</option>
-              <option value="false">Public</option>
-            </select>
-          </div>
+          {isOwnProfile && 
+            <div className={styles.inputGroup}>
+              <label className={styles.label} htmlFor="private">
+                <FormattedMessage id="private">Private</FormattedMessage>
+              </label>
+              <select
+                className={styles.select}
+                id="private"
+                name="private"
+                value={profile.private}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              >
+                <option value="true">Private</option>
+                <option value="false">Public</option>
+              </select>
+            </div>
+          }
           <div className={styles.inputGroup} hidden={!isEditing}>
             <label
               htmlFor="profileImage"
@@ -269,13 +270,14 @@ const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) =>
         </div>
       </form>
       {isEditing ? (
-        <Button
-          className={styles.button}
-          onClick={handleUpdateUserProfile}
-          tradId="updateUserBasicInformations"
-          defaultText="Update User Basic Information"
-          btnColor={"var(--btn-color2)"}
-        />
+        <div className={styles.saveButtonContainer}>
+        <button className={styles.saveButton} onClick={handleUpdateUserProfile}>
+        <FaSave className={styles.svgIcon} />
+        <span className={styles.btnText}>
+          <FormattedMessage id="save" defaultMessage="Save" />
+        </span>
+      </button>
+      </div>
       ) : (
         isOwnProfile && null
       )}
