@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { FaLock } from 'react-icons/fa';
 import { FaExclamationTriangle } from 'react-icons/fa';
 import { FormattedDate, FormattedMessage } from 'react-intl';
+import ProjectList from '../../components/UserProfilePageComponents/userProjectList/ProjectList.jsx';
 
 const UserProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false); 
@@ -77,9 +78,12 @@ const UserProfilePage = () => {
     ) : (
       <div className={styles.userProfilePage} >
         <UserProfileBasicElements fetchUserData={fetchUserData} isOwnProfile={isOwnProfile} userProfileInfo={userProfileInfo} isEditing={isEditing} setIsEditing={setIsEditing}/>
-        <div className={styles.otherAtributes}>
-          <AttributeEditor title="skills" mainEntity= "user" editMode={isOwnProfile && isEditing} creationMode={false} username={usernameProfile}/>
-          <AttributeEditor title="interests" mainEntity= "user" editMode={isOwnProfile && isEditing} creationMode={false} username={usernameProfile}/>
+        <div className={styles.sec2}>
+          <div className={styles.otherAtributes}>
+            <AttributeEditor title="skills" mainEntity= "user" editMode={isOwnProfile && isEditing} creationMode={false} username={usernameProfile}/>
+            <AttributeEditor title="interests" mainEntity= "user" editMode={isOwnProfile && isEditing} creationMode={false} username={usernameProfile}/>
+            <ProjectList id={userProfileInfo.id} />
+          </div>
         </div>
       </div>
       

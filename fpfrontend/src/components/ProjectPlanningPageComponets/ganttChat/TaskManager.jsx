@@ -21,7 +21,6 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
     try {
       const response = await taskService.getTasksByProjectId(projectId);
       const data = await response.json();
-      console.log(data);
       const formattedTasks = data.map((task) => ({
         id: task.id,
         title: task.title,
@@ -48,10 +47,8 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
       setProjectGeneralInfo(data);
       if(data.state === "FINISHED" || data.state === "CANCELLED" || data.state === "READY") {
         setIsThePlanEditable(false);
-        console.log("Project is finished or cancelled or ready");
       } else {
         setIsThePlanEditable(true);
-        console.log("Project is not finished or cancelled or ready");
       }
     } catch (error) {
       console.error("Error fetching project General Info:", error);
@@ -82,14 +79,12 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
     }
   };
   const removeDependency = async (independentTaskId, dependentTaskId) => {
-    console.log(independentTaskId, dependentTaskId);
     try {
       const response = await taskService.removeDependency(
         independentTaskId,
         dependentTaskId,
         projectId
       );
-      console.log(response);
       if (response.status !== 204) {
         console.error("Error removing dependency:", response);
       }
@@ -98,14 +93,12 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
     }
   };
   const handleTitleClick = () => {
-    console.log("Title clicked");
     navigate(`/projectpage/${projectId}`);
   };
 
   const updateTaskById = async (taskId) => {
     try {
       const updatedTask = tasks.find((task) => task.id === taskId);
-      console.log(updatedTask);
       const formatToISOString = (date) => {
         const isoString = date.toISOString();
         return isoString.split(".")[0] + "Z";
