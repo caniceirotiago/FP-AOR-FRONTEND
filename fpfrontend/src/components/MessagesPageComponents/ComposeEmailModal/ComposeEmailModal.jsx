@@ -97,6 +97,22 @@ const ComposeEmailModal = ({
     }
   };
 
+  const handleInputChange = (newValue) => {
+    setInputValue(newValue);
+  
+    if (newValue.length === 1) {
+      fetchSuggestedUsers(newValue);
+    } else if (newValue.length > 1) {
+      const filteredUsers = suggestedUsers.filter((user) =>
+          user.username.toLowerCase().startsWith(newValue.toLowerCase()) ||
+          user.firstName?.toLowerCase().startsWith(newValue.toLowerCase())
+        );
+      setSuggestedUsers(filteredUsers);
+    } else {
+      setSuggestedUsers([]);
+    }
+  };
+  
   const fetchMessagesModal = async (otherUserId) => {
     const userId = localStorage.getItem("userId");
     try {
@@ -121,46 +137,6 @@ const ComposeEmailModal = ({
       console.error("Error fetching messages:", error.message);
     }
   };
-
-  
-
-  const handleInputChange = (newValue) => {
-    setInputValue(newValue);
-  
-    if (newValue.length === 1) {
-      fetchSuggestedUsers(newValue);
-    } else {
-      const lowerNewValue = newValue.toLowerCase();
-  
-      const filteredUsers = suggestedUsers.filter((user) => {
-        const lowerFirstName = user.firstName.toLowerCase();
-  
-        // Log user attributes for debugging
-        console.log(`User ID: ${user.id}, Username: ${user.username}, FirstName: ${user.firstName}`);
-        console.log("Filtering for:", lowerNewValue);
-  
-        // Check if firstName starts with the new value
-        const firstNameMatches = lowerFirstName.startsWith(lowerNewValue);
-  
-        // Log the matching result
-        console.log("Matches First Name:", firstNameMatches);
-  
-        return firstNameMatches;
-      });
-  
-      // Log the filtered results
-      console.log('Filtered Users:', filteredUsers);
-  
-      setSuggestedUsers(filteredUsers);
-    }
-  };
-  
-  
-
-
-
-
-
 
   useEffect(() => {
     if (data.currentUser) {
@@ -193,7 +169,6 @@ const ComposeEmailModal = ({
       type: "NEW_INDIVIDUAL_MESSAGE",
       data: message,
     };
-
     sendWsMessage(dataToSend);
   };
 
@@ -245,7 +220,10 @@ const ComposeEmailModal = ({
           onInputChange={handleInputChange}
           onChange={handleSelectChange}
           options={suggestedUsers.map((user) => ({
-            label: user.username,
+            label: intl.formatMessage(
+              { id: "userLabel" },
+              { username: user.username, firstName: user.firstName }
+            ),
             value: user.id,
           }))}
           inputValue={inputValue}
