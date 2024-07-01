@@ -7,6 +7,8 @@ import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
 import DialogMultipleMessagesModalStore from "../../../stores/useDialogMultipleMessagesModalStore.jsx";
 import Button from "../../buttons/landingPageBtn/Button.jsx";
 import PasswordRulesLegend from "../../legend/PasswordRulesLegend.jsx";
+import { FaSave } from "react-icons/fa";
+
 
 /**
  * PasswordForm provides a form for users to update their password. It includes fields for the old password,
@@ -140,6 +142,7 @@ const PasswordForm = () => {
   };
 
   return (
+    <div className={styles.password}>
     <div className={styles.passwordForm}>
       <form className={styles.form}>
         <div className={styles.inputGroup}>
@@ -198,14 +201,18 @@ const PasswordForm = () => {
             onChange={handleChange}
           />
         </div>
-        <Button
-          className={styles.input}
-          onClick={handleSubmit}
-          tradId={"updatePasswordbtn"}
-          defaultText={"Update Password"}
-          btnColor={"var(--btn-color2)"}
-        />
+        
       </form>
+  
+    </div>
+        <div className={styles.saveButtonContainer}>
+          <button className={styles.saveButton} onClick={handleSubmit}>
+            <FaSave className={styles.svgIcon} />
+            <span className={styles.btnText}>
+              <FormattedMessage id="save" defaultMessage="Save" />
+            </span>
+        </button>
+      </div>
     </div>
   );
 };

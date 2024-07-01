@@ -36,6 +36,25 @@ const UserProfilePage = () => {
     checkIfOwnProfile();
   }, [userProfileInfo, usernameProfile]);
 
+  const fetchPrivateProfileDataByUsername = async () => {
+    if(usernameProfile === undefined){
+      return;
+    }
+    try {
+      const response = await userService.fetchUserBasicInfoByUsenameInfo(usernameProfile);
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      setUserProfileInfo(prevState => ({
+        ...prevState,
+        ...data,
+        photo: data.photo,
+      }));
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+    }
+  };
+
   const fetchUserData = async () => {
         try {
           const response = await userService.fetchUserInfo(usernameProfile);
@@ -62,7 +81,10 @@ const UserProfilePage = () => {
   return (
     <>
     {isAPrivateProfile ? (
+      
       <div className={styles.userProfilePageAlt}>
+      <UserProfileBasicElements isPrivate={true} isOwnProfile={isOwnProfile} userProfileInfo={userProfileInfo} usernameProfile={usernameProfile} fetchPrivateProfileDataByUsername={fetchPrivateProfileDataByUsername}/>
+
       <FaLock size={50} style={{ color: 'var(--negative-color)', marginBottom: '20px' }} />
       <h1><FormattedMessage id="privateProfile" >Private Profile </FormattedMessage></h1>
       <p><FormattedMessage id="thisProfileIsPrivateAndCannotBeViewed" >This profile is private and cannot be viewed.</FormattedMessage></p>

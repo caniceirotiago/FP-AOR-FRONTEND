@@ -27,6 +27,8 @@ body.theme-light {
   --btn-background1: #17a2b8;
   --btn-background2: #117a8b;
   --background-color1: rgba(240, 248, 255);
+  --profile-second-background-color: rgba(91, 151, 203, 0.5);
+  --profile-thirth-background-color: rgba(240, 248, 255);
   --card-background: rgba(255, 255, 255, 1);
   --card-border: rgba(0, 0, 0, 0.1);
   --color-planning: #f3ea9d;
@@ -74,6 +76,8 @@ body.theme-dark {
   --btn-background1: #1e5b89;
   --btn-background2: #07557c;
   --background-color1: black;
+  --profile-second-background-color: rgba(60, 60, 60, 0.5);
+  --profile-thirth-background-color: rgb(50, 52, 54);
   --card-background: rgba(60, 60, 60, 1);
   --card-border: rgba(255, 255, 255, 0.1);
   --color-planning: #ffc107;
