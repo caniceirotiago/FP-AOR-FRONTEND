@@ -179,7 +179,6 @@ const EditTaskModal = ({isOpen,onClose,projectId,onTaskUpdate,taskId,}) => {
       setOnConfirm(() => {});
     }
   };
-  console.log(taskData);
   if (!isOpen) return null;
 
   return (

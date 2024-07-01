@@ -179,7 +179,8 @@ const HomepageHeader = () => {
       case 'PROJECT_APPROVAL':
       case 'TASK_RESPONSIBLE':
       case 'TASK_EXECUTER':
-        navigate(`/projectpage/${notif.projectId}`);
+        console.log(notif);
+        navigate(`/projectplanning/${notif.projectId}`);
         break;
       default:
         break;
