@@ -14,7 +14,6 @@ import styles from "./ComposeEmailModal.module.css";
 import generalService from "../../../services/generalService";
 import individualMessageService from "../../../services/individualMessageService";
 import useDomainStore from "../../../stores/useDomainStore";
-
 import { useIndividualMessageWebSocket } from "../../../websockets/useIndividualMessageWebSocket";
 
 const ComposeEmailModal = ({
@@ -87,7 +86,7 @@ const ComposeEmailModal = ({
 
   const fetchSuggestedUsers = async (firstLetter) => {
     try {
-      const response = await generalService.fetchSuggestions(
+      const response = await generalService.fetchComposeEmailSuggestions(
         "users",
         firstLetter
       );
@@ -123,18 +122,45 @@ const ComposeEmailModal = ({
     }
   };
 
+  
+
   const handleInputChange = (newValue) => {
     setInputValue(newValue);
-
+  
     if (newValue.length === 1) {
       fetchSuggestedUsers(newValue);
     } else {
-      const filteredUsers = suggestedUsers.filter((user) =>
-        user.username.toLowerCase().startsWith(newValue.toLowerCase())
-      );
+      const lowerNewValue = newValue.toLowerCase();
+  
+      const filteredUsers = suggestedUsers.filter((user) => {
+        const lowerFirstName = user.firstName.toLowerCase();
+  
+        // Log user attributes for debugging
+        console.log(`User ID: ${user.id}, Username: ${user.username}, FirstName: ${user.firstName}`);
+        console.log("Filtering for:", lowerNewValue);
+  
+        // Check if firstName starts with the new value
+        const firstNameMatches = lowerFirstName.startsWith(lowerNewValue);
+  
+        // Log the matching result
+        console.log("Matches First Name:", firstNameMatches);
+  
+        return firstNameMatches;
+      });
+  
+      // Log the filtered results
+      console.log('Filtered Users:', filteredUsers);
+  
       setSuggestedUsers(filteredUsers);
     }
   };
+  
+  
+
+
+
+
+
 
   useEffect(() => {
     if (data.currentUser) {
@@ -222,14 +248,10 @@ const ComposeEmailModal = ({
             label: user.username,
             value: user.id,
           }))}
-          
-
           inputValue={inputValue}
           noOptionsMessage={() => intl.formatMessage({ id: "noSuggestionsFound", defaultMessage: "No suggestions found" })}
           placeholder={intl.formatMessage({ id: "typeToSearch", defaultMessage: "Type to search users" })}
-          isClearable
-
-
+          isClearable={true}
         />
         <div className={styles.messagesContainer}>
           {data.currentUser && (
