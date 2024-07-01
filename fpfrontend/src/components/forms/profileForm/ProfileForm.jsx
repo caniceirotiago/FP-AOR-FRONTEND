@@ -129,137 +129,142 @@ const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) =>
   return (
     <div className={styles.Profile}>
       <form className={styles.formProfile}>
-        <div className={styles.inputGroup}>
-          <label className={styles.label} htmlFor="email">
-            <FormattedMessage id="email">Email</FormattedMessage>
-          </label>
-          <input
-            className={styles.input}
-            type="email"
-            id="email"
-            name="email"
-            value={profile.email}
-            onChange={handleInputChange}
-            placeholder="Enter your email"
-            disabled={true}
-          />
-        </div>
-
-        <div className={styles.inputGroup}>
-          <label className={styles.label} htmlFor="firstName">
-            <FormattedMessage id="firstName">First Name</FormattedMessage>
-          </label>
-          <input
-            className={styles.input}
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={profile.firstName}
-            onChange={handleInputChange}
-            placeholder="Enter your first name"
-            disabled={!isEditing}
-          />
-        </div>
-
-        <div className={styles.inputGroup}>
-          <label className={styles.label} htmlFor="lastName">
-            <FormattedMessage id="lastName">Last Name</FormattedMessage>
-          </label>
-          <input
-            className={styles.input}
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={profile.lastName}
-            onChange={handleInputChange}
-            placeholder="Enter your last name"
-            disabled={!isEditing}
-          />
-        </div>
-
-        <div className={styles.inputGroupBigBox}>
-          <label className={styles.label} htmlFor="biography">
-            <FormattedMessage id="biography">Biography</FormattedMessage>
-          </label>
-          {isEditing ? (
-           <textarea
-            className={styles.textarea}
-            id="biography"
-            name="biography"
-            value={profile.biography}
-            onChange={handleInputChange}
-            placeholder="Enter your biography"
-            disabled={!isEditing}
-          />
-          ) : (
-            <div className={styles.biographyText}>
-              <div dangerouslySetInnerHTML={{ __html: profile.biography }} />
-            </div>
-          )}
-        </div>
-
-        <div className={styles.inputGroup}>
-          <label className={styles.label} htmlFor="laboratoryId">
-            <FormattedMessage id="laboratoryId">Laboratory ID</FormattedMessage>
-          </label>
-          <FormattedMessage
-            id="laboratoryPlaceholder"
-            defaultMessage="Select your laboratory"
-          >
-            {(placeholder) => (
-              <select
-                className={styles.select}
-                name="laboratoryId"
-                onChange={handleInputChange}
-                id="laboratoryId-field"
-                disabled={!isEditing}
-                value={profile.laboratoryId}
-              >
-                {laboratories.map((lab) => (
-                  <option key={lab.id} value={lab.id}>
-                    {lab.location}
-                  </option>
-                ))}
-              </select>
-            )}
-          </FormattedMessage>
-        </div>
-        <div className={styles.inputGroup}>
-          <label className={styles.label} htmlFor="private">
-            <FormattedMessage id="private">Private</FormattedMessage>
-          </label>
-          <select
-            className={styles.select}
-            id="private"
-            name="private"
-            value={profile.private}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-          >
-            <option value="true">Private</option>
-            <option value="false">Public</option>
-          </select>
-        </div>
-        <div className={styles.inputGroup} hidden={!isEditing}>
-          <label
-            htmlFor="profileImage"
-            className={styles.label}
-            hidden={!isEditing}
-          >
-            <FormattedMessage
-              id="uploadNewImage"
-              defaultMessage="Upload New Image"
-            />
-          </label>
-          <div className={styles.updateFilebtn}>
+        <div className={styles.sec1}>
+          <div className={styles.inputGroup}>
+            <label className={styles.label} htmlFor="email">
+              <FormattedMessage id="email">Email</FormattedMessage>
+            </label>
             <input
-              type="file"
-              id="profileImage"
-              className={styles.inputFile}
-              onChange={handleImageChange}
-              disabled={!isEditing}
-              hidden={!isEditing}
+              className={styles.input}
+              type="email"
+              id="email"
+              name="email"
+              value={profile.email}
+              onChange={handleInputChange}
+              placeholder="Enter your email"
+              disabled={true}
             />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label className={styles.label} htmlFor="firstName">
+              <FormattedMessage id="firstName">First Name</FormattedMessage>
+            </label>
+            <input
+              className={styles.input}
+              type="text"
+              id="firstName"
+              name="firstName"
+              value={profile.firstName}
+              onChange={handleInputChange}
+              placeholder="Enter your first name"
+              disabled={!isEditing}
+            />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label className={styles.label} htmlFor="lastName">
+              <FormattedMessage id="lastName">Last Name</FormattedMessage>
+            </label>
+            <input
+              className={styles.input}
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={profile.lastName}
+              onChange={handleInputChange}
+              placeholder="Enter your last name"
+              disabled={!isEditing}
+            />
+          </div>
+          <div className={styles.inputGroup}>
+            <label className={styles.label} htmlFor="laboratoryId">
+              <FormattedMessage id="laboratoryId">Laboratory ID</FormattedMessage>
+            </label>
+            <FormattedMessage
+              id="laboratoryPlaceholder"
+              defaultMessage="Select your laboratory"
+            >
+              {(placeholder) => (
+                <select
+                  className={styles.select}
+                  name="laboratoryId"
+                  onChange={handleInputChange}
+                  id="laboratoryId-field"
+                  disabled={!isEditing}
+                  value={profile.laboratoryId}
+                >
+                  {laboratories.map((lab) => (
+                    <option key={lab.id} value={lab.id}>
+                      {lab.location}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </FormattedMessage>
+          </div>
+        </div>
+        <div className={styles.sec2}>
+          <div className={styles.inputGroupBigBox}>
+            <label className={styles.label} htmlFor="biography">
+              <FormattedMessage id="biography">Biography</FormattedMessage>
+            </label>
+            {isEditing ? (
+            <textarea
+              className={styles.textarea}
+              id="biography"
+              name="biography"
+              value={profile.biography}
+              onChange={handleInputChange}
+              placeholder="Enter your biography"
+              disabled={!isEditing}
+              maxLength={2048}
+            />
+            ) : (
+              <div className={styles.biographyText}>
+                <div dangerouslySetInnerHTML={{ __html: profile.biography }} />
+              </div>
+            )}
+          </div>
+
+         
+          <div className={styles.inputGroup}>
+            <label className={styles.label} htmlFor="private">
+              <FormattedMessage id="private">Private</FormattedMessage>
+            </label>
+            <select
+              className={styles.select}
+              id="private"
+              name="private"
+              value={profile.private}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+            >
+              <option value="true">Private</option>
+              <option value="false">Public</option>
+            </select>
+          </div>
+          <div className={styles.inputGroup} hidden={!isEditing}>
+            <label
+              htmlFor="profileImage"
+              className={styles.label}
+              hidden={!isEditing}
+            >
+              <FormattedMessage
+                id="uploadNewImage"
+                defaultMessage="Upload New Image"
+              />
+            </label>
+            <div className={styles.updateFilebtn}>
+              <input
+                type="file"
+                id="profileImage"
+                className={styles.inputFile}
+                onChange={handleImageChange}
+                disabled={!isEditing}
+                hidden={!isEditing}
+              />
+            </div>
           </div>
         </div>
       </form>

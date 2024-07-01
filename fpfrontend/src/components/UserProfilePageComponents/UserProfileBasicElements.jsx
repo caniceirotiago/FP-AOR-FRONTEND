@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import ProfileForm from "../forms/profileForm/ProfileForm.jsx";
 import styles from "./UserProfileBasicElements.module.css";
 import PasswordForm from "../auth regist/changePasswordForm/PasswordForm.jsx";
 import { FormattedMessage } from "react-intl";
 import Button from '../buttons/landingPageBtn/Button.jsx'
+import userService from "../../services/userService";
+import { useNavigate } from "react-router-dom";
+import  useComposeEmailModal  from "../../stores/useComposeEmailModal.jsx";
 
 
-const UserProfileBasicElements = ({isOwnProfile, userProfileInfo, fetchUserData, isEditing, setIsEditing}) => {
+const UserProfileBasicElements = ({ fetchPrivateProfileDataByUsername, usernameProfile, isOwnProfile, userProfileInfo, fetchUserData, isEditing, setIsEditing, isPrivate}) => {
+  const navigate = useNavigate();
+  const { setSelectedUser, setComposeModalOpen } = useComposeEmailModal();
 
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const handleEditModeTrue = (e) => {
@@ -17,17 +22,32 @@ const UserProfileBasicElements = ({isOwnProfile, userProfileInfo, fetchUserData,
     setShowPasswordForm(false);
     setIsEditing(false);
   }
+  const handleChatRedirect = () => {
+    navigate(`/messages`);
+    setSelectedUser({id: userProfileInfo.id, username: userProfileInfo.username});
+    setComposeModalOpen(true);
+  };
+
+  useEffect(() => {
+    if (isPrivate && !isOwnProfile) {
+      fetchPrivateProfileDataByUsername();
+    }
+  }, [isPrivate]);
 
     return(
         <div className={styles.profileContainer}>
         <section className={styles.userHeader}>
-          <img src={userProfileInfo.photo} alt="User" className={styles.userPhoto} />
-          <h2 className={styles.username}>{userProfileInfo.username}</h2>
-          {(!isEditing && isOwnProfile) && <Button className={styles.button} type="button" onClick={(event) => handleEditModeTrue(event)} tradId="editBtnProfForm" defaultText="Edit" btnColor={"var(--btn-color2)"}/> }
-          {(isEditing && isOwnProfile) && <Button className={styles.button} type="button" onClick={(event) => handleEditModeFalse(event)} tradId="editBtnProfFormFalse" defaultText="Exit Edit Mode" btnColor={"var(--btn-color2)"}/> }
-          {(isEditing && isOwnProfile) && <Button className={styles.toggleFormButton} onClick={() => setShowPasswordForm(!showPasswordForm)} tradId={showPasswordForm ? "editProfileInformation" :  "changePassword"} defaultText={showPasswordForm ? "Edit Profile Information" :  "Change Password"} btnColor={"var(--btn-color2)"}/>} 
-
+          <img src={userProfileInfo?.photo} alt="User" className={styles.userPhoto} />
+          <h2 className={styles.username}>{userProfileInfo?.username}</h2>
+          <div className={styles.profileBtns}>
+            {(!isEditing && isOwnProfile) && <Button className={styles.button} type="button" onClick={(event) => handleEditModeTrue(event)} tradId="editBtnProfForm" defaultText="Edit" btnColor={"var(--btn-color2)"}/> }
+            {(isEditing && isOwnProfile) && <Button className={styles.button} type="button" onClick={(event) => handleEditModeFalse(event)} tradId="editBtnProfFormFalse" defaultText="Exit Edit Mode" btnColor={"var(--btn-color2)"}/> }
+            {(isEditing && isOwnProfile) && <Button className={styles.toggleFormButton} onClick={() => setShowPasswordForm(!showPasswordForm)} tradId={showPasswordForm ? "editProfileInformation" :  "changePassword"} defaultText={showPasswordForm ? "Edit Profile Information" :  "Change Password"} btnColor={"var(--btn-color2)"}/>} 
+            {!isOwnProfile && <Button className={styles.button} type="button" onClick={() => {handleChatRedirect()}} tradId="sendMessage" defaultText="Send Message" btnColor={"var(--btn-color2)"}/> }
+            
+         </div>
         </section>
+        {((isOwnProfile) || (!isPrivate && !isOwnProfile)) && 
         <div className={styles.formsContainer}>
           {isOwnProfile ? (
           <>
@@ -42,6 +62,7 @@ const UserProfileBasicElements = ({isOwnProfile, userProfileInfo, fetchUserData,
             </>
           )}
         </div>
+        }
       </div>
     )
     };

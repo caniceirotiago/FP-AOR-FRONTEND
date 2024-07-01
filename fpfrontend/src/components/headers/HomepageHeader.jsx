@@ -170,17 +170,13 @@ const HomepageHeader = () => {
         break;
       case 'GROUP_MESSAGE':
         navigate(`/projectpage/${notif.projectId}`);
-        setTimeout(() => {
-          setSelectedChatProject(notif.projectId);
-          setGroupChatModalOpen(true);
-        }, 10);
         break;
       case 'PROJECT_JOIN_REQUEST':
       case 'PROJECT_APPROVAL':
       case 'TASK_RESPONSIBLE':
       case 'TASK_EXECUTER':
         console.log(notif);
-        navigate(`/projectplanning/${notif.projectId}`);
+        navigate(`/projectpage/${notif.projectId}`);
         break;
       default:
         break;

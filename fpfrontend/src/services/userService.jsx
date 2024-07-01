@@ -118,6 +118,23 @@ const userService = {
       throw error;
     }
   },
+  fetchUserBasicInfoByUsenameInfo: async (usernameProfile) => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/basic/info/${usernameProfile}`,
+        {
+          method: "GET",
+          headers: getAuthHeaders(),
+          credentials: "include",
+        }
+      );
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error fetching user basic info:", error.message);
+      throw error;
+    }
+  },
 
   updateUser: async (updatedUser) => {
     try {

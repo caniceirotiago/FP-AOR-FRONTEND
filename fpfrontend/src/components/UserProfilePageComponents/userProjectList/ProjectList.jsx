@@ -11,6 +11,7 @@ const ProjectList = ({ id }) => {
     const navigate = useNavigate();
 
     const fetchProjects = useCallback(async () => {
+        if(!id) return;
         try {
             const response = await membershipService.getProjectsByuserId(id);
             const data = await response.json();

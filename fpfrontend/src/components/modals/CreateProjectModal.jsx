@@ -154,7 +154,7 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
               value={projectData.name}
               onChange={handleChange}
               minLength={2}
-              maxLength={255}
+              maxLength={25}
             />
             <label className={styles.label}>
               <FormattedMessage id="description" defaultMessage="Description" />
