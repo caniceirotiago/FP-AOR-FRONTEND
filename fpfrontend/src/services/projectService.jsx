@@ -148,11 +148,29 @@ const projectService = {
           credentials: "include",
         }
       );
-      console.log(response);
       checkStatus(response);
       return response;
     } catch (error) {
       console.error("Error asking to join project:", error.message);
+      throw error;
+    }
+  },
+
+  removeFromProject: async (username, projectId) => {
+    try {
+      const response = await fetch(
+        `${MEMBER_BASE_URL}/remove/${username}/${projectId}`,
+        {
+          method: "DELETE",
+          headers: getAuthHeaders(),
+          credentials: "include",
+        }
+      );
+      console.log(response);
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error removing from project:", error.message);
       throw error;
     }
   },

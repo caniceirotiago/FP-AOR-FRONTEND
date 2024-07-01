@@ -243,5 +243,6 @@
   "invalidFileType": "Tipo de ficheiro inválido (apenas são permitidos ficheiros de imagem com extensão  .jpeg, .png)",
   "fileTooLarge": "Ficheiro demasiado grande (máximo 5MB)",
   "userLabel": "Alcunha: {username}; Primeiro Nome: {firstName}",
-  "emptyFieldsError": "Por favor preencha todos os campos (assunto e mensagem) antes de enviar."
+  "emptyFieldsError": "Por favor preencha todos os campos (assunto e mensagem) antes de enviar.",
+  "removeFromProject": "Remover do projeto"
 }

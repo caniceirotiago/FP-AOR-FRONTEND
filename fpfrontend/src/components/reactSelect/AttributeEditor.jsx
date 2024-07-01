@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
+import { useNavigate } from 'react-router-dom';
 import Select from "react-select";
 import styles from "./AttributeEditor.module.css";
 import generalService from "../../services/generalService";
@@ -14,10 +15,9 @@ import useConfigurationStore from "../../stores/useConfigurationStore";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import membershipService from "../../services/membershipService";
 import { FaPlus } from "react-icons/fa";
-import  useDeviceStore  from "../../stores/useDeviceStore";
+import useDeviceStore from "../../stores/useDeviceStore";
 import Spinner from "../spinner/Spinner.jsx";
 import { set } from "date-fns";
-
 
 const AttributeEditor = ({
   title,
@@ -41,8 +41,10 @@ const AttributeEditor = ({
   const { configurations } = useConfigurationStore();
   const selectTypeModal = useSelectTypeModal();
   const usedQuantity = useSelectQuantityModalStore();
-  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
-  const { dimensions} = useDeviceStore();
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
+    useDialogModalStore();
+  const navigate = useNavigate();
+  const { dimensions } = useDeviceStore();
   const intl = useIntl();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,6 +68,26 @@ const AttributeEditor = ({
       onAttributesChange(attributes);
     }
   }, [attributes]);
+
+  const [isProjectMemberNotCreator, setIsProjectMemberNotCreator] = useState(false);
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+
+    if (createdBy) {
+    // Check if the user is a member of the project
+    const isMember = attributes.some(attribute => attribute.user?.id === userId);
+    // Check if the user is not the creator
+    const isNotCreator = userId !== createdBy;
+    console.log("userId", userId);
+    console.log("createdBy", createdBy)
+    
+    setIsProjectMemberNotCreator(isMember && isNotCreator);
+    console.log("isMember", isMember);
+    console.log("isNotCreator", isNotCreator); 
+    console.log("isProjectMemberNotCreator", isProjectMemberNotCreator);
+  }
+}, [attributes, createdBy]);
 
   // Determine fetch function based on the main entity
   const getFetchFunction = (title) => {
@@ -307,11 +329,10 @@ const AttributeEditor = ({
       if (title === "users" && mainEntity === "project") {
         let maxProjectMembersConfig = configurations.get("maxProjectMembers");
         console.log("maxProjectMembersConfig", maxProjectMembersConfig);
-        if(creationMode)maxProjectMembersConfig = maxProjectMembersConfig - 1;
+        if (creationMode) maxProjectMembersConfig = maxProjectMembersConfig - 1;
         if (attributes.length >= maxProjectMembersConfig) {
           setDialogMessage(
             <FormattedMessage
-
               id="maxProjectMembers"
               defaultMessage="Maximum number of project members reached. Not adding."
             />
@@ -325,8 +346,6 @@ const AttributeEditor = ({
         }
       }
 
-
-
       //Ensure in case of a new project the user can't add himself to the project
       if (
         title === "users" &&
@@ -335,7 +354,6 @@ const AttributeEditor = ({
       ) {
         setDialogMessage(
           <FormattedMessage
-
             id="cantAddYourself"
             defaultMessage="Choose another user to add to the project. You will be automatically added."
           />
@@ -347,7 +365,6 @@ const AttributeEditor = ({
         });
         return;
       }
-
 
       let selectedOption = null;
       // Prompt user to select type for skills or interests
@@ -476,7 +493,7 @@ const AttributeEditor = ({
           setIsLoading(false);
         } else {
           setIsLoading(false);
-          throw new Error("Failed to add item");
+          throw new Error( "Failed to add item");
         }
       } else {
         let suggestion;
@@ -567,6 +584,29 @@ const AttributeEditor = ({
     }
   };
 
+  // Request to remove from project
+  const removeFromProject = async () => {
+    try {
+      // Retrieve username and projectId from localStorage
+      const username = localStorage.getItem("username");
+      const response = await projectService.removeFromProject(
+        username,
+        projectId
+      );
+      if (response.status === 204) {
+        // Update the attributes by filtering out the removed user
+        setAttributes(
+          attributes.filter((attribute) => attribute.user.username !== username)
+        );
+        navigate(`/authenticatedHomepage`);
+      } else {
+        throw new Error("Failed to remove from project");
+      }
+    } catch (error) {
+      console.error("Error removing from project:", error.message);
+    }
+  };
+
   // Clear input field and reset suggestions
   const clearInput = () => {
     setInput("");
@@ -603,8 +643,7 @@ const AttributeEditor = ({
             title,
             attributeToRemove.id,
             mainEntity,
-            projectId,
-            
+            projectId
           );
         }
         if (response.status === 204) {
@@ -666,22 +705,33 @@ const AttributeEditor = ({
 
   return (
     <div className={styles.container}>
-      {isLoading && <Spinner/>}
+      {isLoading && <Spinner />}
       {creationMode && title === "users" && mainEntity === "task" ? (
-        <h2><FormattedMessage id="responsible" defaultMessage="Responsible"/></h2>
+        <h2>
+          <FormattedMessage id="responsible" defaultMessage="Responsible" />
+        </h2>
       ) : (
         <h2>{elementTitle}</h2>
       )}
       {title === "users" && !creationMode && (
         <>
-          {isPossibleToJoin ? (
+              {isPossibleToJoin ? (
             <button onClick={askToJoinProject}>
               {" "}
               <FormattedMessage id="askToJoin" defaultMessage="Ask To Join" />
             </button>
           ) : null}
+          {isProjectMemberNotCreator && (
+            <button onClick={removeFromProject}>
+              <FormattedMessage
+                id="removeFromProject"
+                defaultMessage="Remove From Project"
+              />
+            </button>
+          )}
         </>
       )}
+
       <div className={styles.innerContainer}>
         <div className={styles.existingAttributes}>
           <div className={styles.userAttributeContainer}>
@@ -718,9 +768,7 @@ const AttributeEditor = ({
                       defaultMessage="No suggestions found"
                     />
                   )}
-                  placeholder={intl.formatMessage(
-                    { id: "addNewPlaceholder" }
-                  )}
+                  placeholder={intl.formatMessage({ id: "addNewPlaceholder" })}
                   isClearable
                   styles={{
                     control: (base) => ({
@@ -728,7 +776,6 @@ const AttributeEditor = ({
                       width: "100%",
                       border: "none",
                       background: "var(--input-select-textarea-background)",
-                      
                     }),
                     input: (base) => ({
                       ...base,
@@ -738,8 +785,9 @@ const AttributeEditor = ({
                 />
                 <div onClick={addItem} className={styles.addBtn}>
                   <FaPlus />
-                  {dimensions.width >600 && <FormattedMessage id="add" defaultMessage="Add" />}
-
+                  {dimensions.width > 600 && (
+                    <FormattedMessage id="add" defaultMessage="Add" />
+                  )}
                 </div>
               </div>
             </div>
