@@ -71,7 +71,7 @@ function ProjectTable({ projects, pageCount, setPageNumber }) {
           },
           {
             Header: <FormattedMessage id="tableHeaderLaboratory" defaultMessage="Laboratory" />,
-            accessor: "laboratory.location",
+            accessor: "laboratory.locationName",
           },
           {
             Header: <FormattedMessage id="tableHeaderMembers" defaultMessage="Number of Members" />,

@@ -205,7 +205,7 @@ const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,upd
                   <option value="">{placeholder}</option>
                   {laboratories.map((lab) => (
                     <option key={lab.id} value={lab.id}>
-                      {lab.location}
+                      {lab.locationName}
                     </option>
                   ))}
                 </>
