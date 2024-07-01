@@ -6,6 +6,7 @@
   max-width: 600px;
   width: 100%;
   margin-bottom: 40px;  
+  color: var(--text-color4);
 
 }
 .formProfile {
@@ -17,22 +18,25 @@
     max-width: 600px;
     width: 100%;
     margin-bottom: 40px;
+    color: var(--text-color4);
   }
 
 .inputGroup {
   display: flex;
   flex-direction: column;
+  color: var(--text-color4);
 }
 .inputGroupBigBox{
   display: flex;
   height: 200px;
   flex-direction: column;
   margin-bottom: 10px;
+  color: var(--text-color4);
 
 }
 
 .label {
-  color: var(--text-color);
+  color: var(--text-color4);
   font-weight: 600;
   margin-bottom: 8px;
 }
@@ -45,7 +49,7 @@
   padding: 5px;
   border: 1px solid #ccc;
   font-size: 16px;
-  color: var(--text-color);
+  color: var(--text-color4);
   width: 100%; 
   background-color: transparent; 
   border: none; 
@@ -53,7 +57,7 @@
 }
 
 .select:disabled {
-  color: #666; 
+  color: var(--text-color4);
   background-color: transparent;
   cursor: not-allowed;
 }

@@ -2,6 +2,7 @@
   
     display: flex;
     width: 100%;
+    color: var(--text-color4);
   }
   
   
@@ -12,6 +13,7 @@
     justify-items: center;
     width: 50%;
     margin-top: 20px;
+    color: var(--text-color4);
   }
   .userStats {
     align-items: center;
@@ -28,7 +30,7 @@
   
   .username {
     font-size: 24px;
-    color: var(--text-color);
+    color: var(--text-color4);
   }
   
   .formsContainer {
@@ -38,11 +40,12 @@
     flex-direction: column;
     width: 100%;
     margin-bottom: 60px;
+    color: var(--text-color4);
   }
   .chatbtn {
     padding: 8px 16px;
     font-size: 16px;
-    background-color: var(--todo-color2);  
+    background-color: var(--todo-color4);  
     color: white;
     border: none;
     border-radius: 20px;
