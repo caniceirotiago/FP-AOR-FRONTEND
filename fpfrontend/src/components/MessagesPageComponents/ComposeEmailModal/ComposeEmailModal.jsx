@@ -14,14 +14,11 @@ import styles from "./ComposeEmailModal.module.css";
 import generalService from "../../../services/generalService";
 import individualMessageService from "../../../services/individualMessageService";
 import useDomainStore from "../../../stores/useDomainStore";
+import useDialogModalStore from "../../../stores/useDialogModalStore.jsx";
 import { useIndividualMessageWebSocket } from "../../../websockets/useIndividualMessageWebSocket";
 
-const ComposeEmailModal = ({
-  onClose,
-  initialSelectedUser,
-  isChatModalOpen,
-  setInitialSelectedUser,
-}) => {
+const ComposeEmailModal = ({  onClose,  initialSelectedUser,  isChatModalOpen,  setInitialSelectedUser}) => {
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
   const [messagesModal, setMessagesModal] = useState([]);
   const [data, setData] = useState({
     inputText: "",
@@ -99,20 +96,21 @@ const ComposeEmailModal = ({
 
   const handleInputChange = (newValue) => {
     setInputValue(newValue);
-  
+
     if (newValue.length === 1) {
       fetchSuggestedUsers(newValue);
     } else if (newValue.length > 1) {
-      const filteredUsers = suggestedUsers.filter((user) =>
+      const filteredUsers = suggestedUsers.filter(
+        (user) =>
           user.username.toLowerCase().startsWith(newValue.toLowerCase()) ||
           user.firstName?.toLowerCase().startsWith(newValue.toLowerCase())
-        );
+      );
       setSuggestedUsers(filteredUsers);
     } else {
       setSuggestedUsers([]);
     }
   };
-  
+
   const fetchMessagesModal = async (otherUserId) => {
     const userId = localStorage.getItem("userId");
     try {
@@ -164,7 +162,6 @@ const ComposeEmailModal = ({
   };
 
   const sendMessage = async (message) => {
-    
     const dataToSend = {
       type: "NEW_INDIVIDUAL_MESSAGE",
       data: message,
@@ -174,20 +171,34 @@ const ComposeEmailModal = ({
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (data.inputText.trim() && data.subject.trim() && data.currentUser) {
-      const newMessage = {
-        senderId: localStorage.getItem("userId"),
-        recipientId: data.currentUser.id,
-        content: data.inputText,
-        subject: data.subject,
-      };
-      sendMessage(newMessage);
-      setData({ ...data, inputText: "", subject: "" });
+    if (!(data.inputText.trim() && data.subject.trim() && data.currentUser)) {
+      setDialogMessage(
+        <FormattedMessage
+          id="emptyFieldsError"
+          defaultMessage="Please fill in all fields (subject and message) before sending."
+        />
+      );
+      setAlertType(true);
+      setIsDialogOpen(true);
+      setOnConfirm(() => {
+        setIsDialogOpen(false);
+      });
+      return;
     }
+    const newMessage = {
+      senderId: localStorage.getItem("userId"),
+      recipientId: data.currentUser.id,
+      content: data.inputText,
+      subject: data.subject,
+    };
+    sendMessage(newMessage);
+    setData({ ...data, inputText: "", subject: "" });
   };
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView();
   };
+
   useEffect(() => {
     scrollToBottom();
   }, [messagesModal]);
@@ -227,8 +238,16 @@ const ComposeEmailModal = ({
             value: user.id,
           }))}
           inputValue={inputValue}
-          noOptionsMessage={() => intl.formatMessage({ id: "noSuggestionsFound", defaultMessage: "No suggestions found" })}
-          placeholder={intl.formatMessage({ id: "typeToSearch", defaultMessage: "Type to search users" })}
+          noOptionsMessage={() =>
+            intl.formatMessage({
+              id: "noSuggestionsFound",
+              defaultMessage: "No suggestions found",
+            })
+          }
+          placeholder={intl.formatMessage({
+            id: "typeToSearch",
+            defaultMessage: "Type to search users",
+          })}
           isClearable={true}
         />
         <div className={styles.messagesContainer}>
@@ -239,7 +258,7 @@ const ComposeEmailModal = ({
                 const isSentByCurrentUser =
                   msg.sender && String(msg.sender.id) === String(userId);
                 const displayName = isSentByCurrentUser
-                  ? "You"
+                  ? " "
                   : msg.sender
                   ? msg.sender.username
                   : "Unknown";
@@ -269,19 +288,25 @@ const ComposeEmailModal = ({
           <form onSubmit={handleSendMessage} className={styles.inputArea}>
             <input
               type="text"
-              placeholder={intl.formatMessage({ id: "typeSubject", defaultMessage: "Type a subject" })}
+              placeholder={intl.formatMessage({
+                id: "typeSubject",
+                defaultMessage: "Type a subject",
+              })}
               value={data.subject}
               onChange={(e) => setData({ ...data, subject: e.target.value })}
               className={styles.input}
             />
             <textarea
-               placeholder={intl.formatMessage({ id: "typeMessage", defaultMessage: "Type a message" })}
-               value={data.inputText}
+              placeholder={intl.formatMessage({
+                id: "typeMessage",
+                defaultMessage: "Type a message",
+              })}
+              value={data.inputText}
               onChange={(e) => setData({ ...data, inputText: e.target.value })}
               className={styles.input}
             />
             <button type="submit" className={styles.button}>
-            <FormattedMessage id="sendMsgBtn" defaultMessage="Send" />
+              <FormattedMessage id="sendMsgBtn" defaultMessage="Send" />
             </button>
           </form>
         )}

@@ -243,5 +243,7 @@
   "followUs": "Follow Us",
   "invalidFileType": "Invalid file type selected. Please select a valid image file. (jpeg, png)",
   "fileTooLarge": "File too large. Please select a file with a maximum size of 5MB.",
-  "userLabel": "Username: {username}; First Name: {firstName}"
+  "userLabel": "Username: {username}; First Name: {firstName}",
+  "emptyFieldsError": "Please fill in all fields (subject and message) before sending.",
+  "removeFromProject": "Remove From"
 }
