@@ -69,6 +69,26 @@ const generalService = {
     }
   },
 
+  fetchComposeEmailSuggestions: async (apiUrl, firstLetter) => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}${apiUrl}/first/letter/email?value=${firstLetter}`,
+        {
+          method: "GET",
+          headers: getAuthHeaders(),
+          credentials: "include",
+        }
+      );
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch suggestions");
+      }
+      return response;
+    } catch (error) {
+      console.error("Error fetching suggestions:", error.message);
+      throw error;
+    }
+  },
+
   addItem: async (apiUrl, data, mainEntity, mainEntityId) => {
     if (mainEntity === "project") {
       data = { ...data, projectId: mainEntityId };

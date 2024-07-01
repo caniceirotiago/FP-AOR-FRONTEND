@@ -14,7 +14,6 @@ import styles from "./ComposeEmailModal.module.css";
 import generalService from "../../../services/generalService";
 import individualMessageService from "../../../services/individualMessageService";
 import useDomainStore from "../../../stores/useDomainStore";
-
 import { useIndividualMessageWebSocket } from "../../../websockets/useIndividualMessageWebSocket";
 
 const ComposeEmailModal = ({
@@ -87,7 +86,7 @@ const ComposeEmailModal = ({
 
   const fetchSuggestedUsers = async (firstLetter) => {
     try {
-      const response = await generalService.fetchSuggestions(
+      const response = await generalService.fetchComposeEmailSuggestions(
         "users",
         firstLetter
       );
@@ -98,6 +97,22 @@ const ComposeEmailModal = ({
     }
   };
 
+  const handleInputChange = (newValue) => {
+    setInputValue(newValue);
+  
+    if (newValue.length === 1) {
+      fetchSuggestedUsers(newValue);
+    } else if (newValue.length > 1) {
+      const filteredUsers = suggestedUsers.filter((user) =>
+          user.username.toLowerCase().startsWith(newValue.toLowerCase()) ||
+          user.firstName?.toLowerCase().startsWith(newValue.toLowerCase())
+        );
+      setSuggestedUsers(filteredUsers);
+    } else {
+      setSuggestedUsers([]);
+    }
+  };
+  
   const fetchMessagesModal = async (otherUserId) => {
     const userId = localStorage.getItem("userId");
     try {
@@ -120,19 +135,6 @@ const ComposeEmailModal = ({
       setMessagesModal(data);
     } catch (error) {
       console.error("Error fetching messages:", error.message);
-    }
-  };
-
-  const handleInputChange = (newValue) => {
-    setInputValue(newValue);
-
-    if (newValue.length === 1) {
-      fetchSuggestedUsers(newValue);
-    } else {
-      const filteredUsers = suggestedUsers.filter((user) =>
-        user.username.toLowerCase().startsWith(newValue.toLowerCase())
-      );
-      setSuggestedUsers(filteredUsers);
     }
   };
 
@@ -167,7 +169,6 @@ const ComposeEmailModal = ({
       type: "NEW_INDIVIDUAL_MESSAGE",
       data: message,
     };
-
     sendWsMessage(dataToSend);
   };
 
@@ -219,17 +220,16 @@ const ComposeEmailModal = ({
           onInputChange={handleInputChange}
           onChange={handleSelectChange}
           options={suggestedUsers.map((user) => ({
-            label: user.username,
+            label: intl.formatMessage(
+              { id: "userLabel" },
+              { username: user.username, firstName: user.firstName }
+            ),
             value: user.id,
           }))}
-          
-
           inputValue={inputValue}
           noOptionsMessage={() => intl.formatMessage({ id: "noSuggestionsFound", defaultMessage: "No suggestions found" })}
           placeholder={intl.formatMessage({ id: "typeToSearch", defaultMessage: "Type to search users" })}
-          isClearable
-
-
+          isClearable={true}
         />
         <div className={styles.messagesContainer}>
           {data.currentUser && (
