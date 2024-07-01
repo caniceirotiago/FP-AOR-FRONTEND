@@ -24,6 +24,7 @@ const ProjectPlanningPage = () => {
     try {
       const response = await membershipService.getProjectsByuserId(userId);
       const data = await response.json();
+      console.log(data);
       setAccessibleProjectsIds(data);
       if (!selectedProjectId && data.length > 0) {
         setSelectedProjectId(data[0].id);

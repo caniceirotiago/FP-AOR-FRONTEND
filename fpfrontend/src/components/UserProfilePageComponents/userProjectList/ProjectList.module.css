@@ -1,0 +1,103 @@
+.container {
+    padding: 5px;
+    background-color: var(--atribute-editor-background);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    color: var(--text-color4);
+}
+
+.container h2 {
+    font-size: 17px;
+    margin: 0;
+    padding: 5px;
+    color: var(--text-color4);
+}
+
+.innerContainer {
+    display: flex;
+    height: 300px;
+    overflow-y: auto;
+    flex-direction: column;
+}
+
+.sortOptions {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.sortOptions label {
+    margin-right: 10px;
+}
+
+.projectAttributes,
+.addAttribute {
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.attributeList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.projectElement {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    padding: 4px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    background-color: var(--listItem-background);
+    border-radius: 5px;
+    margin: 3px 0;
+}
+
+.projectElement:hover {
+    background-color: var(--secondary-bg-color);
+}
+
+.projectName,
+.projectDate,
+.projectStatus {
+    flex: 1;
+    text-align: center;
+    padding: 5px;
+    word-break: break-word;
+}
+
+.addBtn {
+    background-color: var(--btn-background2);
+    color: #fff;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.addBtn:hover {
+    background-color: var(--btn-background1);
+}
+
+.select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    background: var(--input-select-textarea-background);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.select:focus {
+    border-color: var(--btn-background1);
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
