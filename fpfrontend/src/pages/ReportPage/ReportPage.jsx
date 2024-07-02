@@ -4,7 +4,7 @@ import styles from "./ReportPage.module.css";
 import reportService from "../../services/reportService";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import Dashboard from "../../components/dashboard/Dashboard";
-
+import { FaFilePdf, FaDownload } from "react-icons/fa";
 const ReportPage = () => {
   const intl = useIntl();
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
@@ -42,22 +42,23 @@ const ReportPage = () => {
   return (
     <div className={styles.ReportPage}>
       <div className={styles.container}>
-        <h3>
+
+        <div className={styles.dashboard}><Dashboard/></div>
+        {/* <h3>
           <FormattedMessage id="reportGenerator" />
-        </h3>
-        {/* <div className={styles.dashboard}><Dashboard/></div> */}
+        </h3> */}
         <div className={styles.reportPanel}>
           <button
             onClick={() => generateReport("project")}
             className={styles.GenerateButton}
           >
-            <FormattedMessage id="generateProjectsReport" />
+            <FaFilePdf /> <FaDownload /> <FormattedMessage id="generateProjectsReport" />
           </button>
           <button
             onClick={() => generateReport("asset")}
             className={styles.GenerateButton}
           >
-            <FormattedMessage id="generateAssetsReport" />
+            <FaFilePdf /> <FaDownload /> <FormattedMessage id="generateAssetsReport" />
           </button>
         </div>
       </div>

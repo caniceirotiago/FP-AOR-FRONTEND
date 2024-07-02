@@ -1,17 +1,48 @@
-/* src/components/Dashboard.module.css */
 .dashboard {
     display: flex;
     flex-direction: column;
     gap: 20px;
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: var(--background-color1);
     border-radius: 8px;
-  }
-  
-  .chartContainer {
-    background-color: #fff;
+    box-sizing: border-box;
+    max-width: 1200px;
+    margin: 0 auto; 
+}
+
+.chartContainer, .statisticContainer {
+    background-color: var(--card-background);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
+    box-shadow: 0 4px 8px var(--card-shadow);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.chartTitle {
+    text-align: center;
+    margin-bottom: 10px;
+    color: var(--text-color4);
+}
+
+.statisticValue {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    color: var(--text-color4);
+}
+
+@media (min-width: 768px) {
+    .dashboard {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .chartContainer, .statisticContainer {
+        width: calc(50% - 10px); 
+        margin-bottom: 20px;
+    }
+}
+
+
