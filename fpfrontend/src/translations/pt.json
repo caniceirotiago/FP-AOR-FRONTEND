@@ -244,7 +244,7 @@
   "fileTooLarge": "Ficheiro demasiado grande (máximo 5MB)",
   "userLabel": "Alcunha: {username}; Primeiro Nome: {firstName}",
   "emptyFieldsError": "Por favor preencha todos os campos (assunto e mensagem) antes de enviar.",
-  "removeFromProject": "Remover do projeto",
+  "removeFromProject": "Sair do projeto",
   "sendMessage": "Enviar Mensagem"
 
 }
