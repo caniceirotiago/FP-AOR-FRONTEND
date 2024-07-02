@@ -11,10 +11,11 @@ import useLabStore from "../../stores/useLabStore.jsx";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router";
 import useProjectStatesStore from "../../stores/useProjectStatesStore.jsx";
-import { FaTable, FaTh, FaPlus, FaFilter } from "react-icons/fa";
+import { FaTable, FaTh, FaPlus, FaFilter, FaCheckSquare, FaSquare } from "react-icons/fa";
 import useAuthStore from "../../stores/useAuthStore.jsx";
 import useDeviceStore from "../../stores/useDeviceStore.jsx";
 import useLayoutStore from "../../stores/useLayoutStore.jsx";
+
 
 const HomePage = () => {
   const { dimensions, deviceType } = useDeviceStore();
@@ -38,6 +39,7 @@ const HomePage = () => {
     sortBy: "",
     orderBy: "",
     laboratory: "",
+    showMyProjectsOnly: "", 
   };
   const [filters, setFilters] = useState({
     defaultFilters,
@@ -164,6 +166,15 @@ const HomePage = () => {
   const handleFilterTypeChange = (e) => {
     setFilterType(e.target.value);
   };
+
+  const handleToggleMyProjects = () => {
+    setFilters({
+      ...filters,
+      showMyProjectsOnly: filters.showMyProjectsOnly ? "" : localStorage.getItem("userId"), 
+    });
+  };
+  
+  
 
   const handleClick = () => {
     setIsModalOpen(true);
@@ -344,6 +355,17 @@ const HomePage = () => {
                 />
               </option>
             </select>
+            {isAuthenticated && (
+              <div className={styles.myProjects}>
+                <h5 className={styles.myProjectH5}>My Projects</h5>
+                <label className={styles.switch}>
+                  <input
+                    type="checkbox"
+                    checked={!!filters.showMyProjectsOnly}
+                    onChange={handleToggleMyProjects}
+                  />
+                  <span className={styles.slider}></span>
+                </label></div>)}
             <button onClick={handleClearFilters} className={styles.clearFiltersBtn}>
               {" "}
               <FormattedMessage
