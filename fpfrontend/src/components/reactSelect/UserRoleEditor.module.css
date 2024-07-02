@@ -59,3 +59,17 @@
 .addBtn:hover {
   background-color: var(--btn-background1);
 }
+
+.searchInput {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.searchInput:focus {
+  border-color: var(--btn-background1);
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}

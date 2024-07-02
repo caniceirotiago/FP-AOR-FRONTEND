@@ -65,7 +65,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
       } else {
         console.error("Error creating asset:", response.statusText);
         const data = await response.json();
-        setDialogMessage(data.errorMessage);
+        setDialogMessage(data.message);
         setAlertType(true);
         setIsDialogOpen(true);
         setOnConfirm(() => {});

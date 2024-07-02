@@ -53,9 +53,9 @@ const ReportPage = () => {
       <div className={styles.container}>
 
         <div className={styles.dashboard}><Dashboard/></div>
-        {/* <h3>
+        <h3>
           <FormattedMessage id="reportGenerator" />
-        </h3> */}
+        </h3>
         <div className={styles.reportPanel}>
           <button
             onClick={() => generateReport("project")}
