@@ -22,7 +22,7 @@ const reportService = {
     try {
       const response = await fetch(`${API_BASE_URL}/${element}/summary/pdf`, {
         method: "GET",
-        headers: getAuthHeaders(),
+        headers:  getAuthHeaders(),
         credentials: "include",
       });
       checkStatus(response);
@@ -36,11 +36,12 @@ const reportService = {
     try {
       const response = await fetch(`${API_BASE_URL}/project/summary`, {
         method: "GET",
-        headers: getAuthHeaders(),
+         headers:  {Accept: "application/json",
+        "Content-Type": "application/json"},
         credentials: "include",
       });
       checkStatus(response);
-      return response.json();
+      return response;
     } catch (error) {
       console.error("Error fetching project summary:", error.message);
       throw error;
@@ -50,11 +51,12 @@ const reportService = {
     try {
       const response = await fetch(`${API_BASE_URL}/asset/summary`, {
         method: "GET",
-        headers: getAuthHeaders(),
+        headers:  {Accept: "application/json",
+        "Content-Type": "application/json"},
         credentials: "include",
       });
       checkStatus(response);
-      return response.json();
+      return response;
     } catch (error) {
       console.error("Error fetching asset summary:", error.message);
       throw error;

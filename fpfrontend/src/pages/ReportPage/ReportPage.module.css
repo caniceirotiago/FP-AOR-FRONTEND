@@ -3,11 +3,10 @@
   width: 100%;
   background-size: cover;
   background-position: center;
-  display: flex;
-  flex-direction: column;
+
   align-items: center;
   justify-content: center;
-  padding: 20px;
+
 }
 
 .container {
@@ -21,20 +20,24 @@
   flex-direction: column;
   gap: 10px; /* Adds space between the buttons */
   margin-top: 20px; /* Optional: adds space between the heading and buttons */
+  margin-bottom: 100px;
 }
 
 .GenerateButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   padding: 10px 20px;
-  font-size: 16px;
-  background-color: #007bff;
-  color: white;
   border: none;
+  background-color: var(--btn-background1);
+  color: var(--btn-color1);
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .GenerateButton:hover {
-  background-color: #0056b3;
+  background-color: var(--btn-background2);
 }
 
 @media (max-width: 768px) {

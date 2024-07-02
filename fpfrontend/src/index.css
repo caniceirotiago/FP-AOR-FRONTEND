@@ -62,11 +62,18 @@ body.theme-light {
   --dependency-line-color: #1d908a;
   --dependency-line-hover-color: #280c8b;
   --gantt-graphic-line-color: #e0e0e04b;
-  --weekend-color: #a6cdab4c;
-  --today-color: #ddfa8cad;
-  --timeline-background-color: #d2ded5;
+  --weekend-color: #a6c7cd4c;
+  --today-color: #c8e281ad;
+  --timeline-background-color: #b4c6dd;
   --task-title-gantt-color: #f3f3e9dd;
   --gantt-graphic-background: #f3f3e900;
+  --report-graphic-color1: #f3ea9d;
+  --report-graphic-color2: #8dd28f;
+  --report-graphic-color3: #73b6ec;
+  --report-graphic-color4: #cc86d9;
+  --report-graphic-color5: #f0766d;
+  --report-graphic-color6: #f3ea9d;
+  --report-graphic-background: #f3f3e9;
 }
 
 body.theme-dark {
@@ -115,6 +122,14 @@ body.theme-dark {
   --timeline-background-color: #4b624d;
   --task-title-gantt-color: #fefefe;
   --gantt-graphic-background: #232324;
+  --report-graphic-color1: #ffc107;
+  --report-graphic-color2: #28a745;
+  --report-graphic-color3: #17a2b8;
+  --report-graphic-color4: #6f42c1;
+  --report-graphic-color5: #dc3545;
+  --report-graphic-color6: #ffc107;
+  --report-graphic-background: #232324;
+
   
 }
 
