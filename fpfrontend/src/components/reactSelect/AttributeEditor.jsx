@@ -73,19 +73,12 @@ const AttributeEditor = ({
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
-
     if (createdBy) {
     // Check if the user is a member of the project
-    const isMember = attributes.some(attribute => attribute.user?.id === userId);
+    const isMember = attributes.some(attribute => attribute.user?.id == userId);
     // Check if the user is not the creator
-    const isNotCreator = userId !== createdBy;
-    console.log("userId", userId);
-    console.log("createdBy", createdBy)
-    
+    const isNotCreator = userId != createdBy.id;    
     setIsProjectMemberNotCreator(isMember && isNotCreator);
-    console.log("isMember", isMember);
-    console.log("isNotCreator", isNotCreator); 
-    console.log("isProjectMemberNotCreator", isProjectMemberNotCreator);
   }
 }, [attributes, createdBy]);
 
