@@ -12,11 +12,11 @@ const SettingsPage = () => {
   const { configurations, fetchConfigurations } = useConfigurationStore();
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
     useDialogModalStore();
+    const intl = useIntl();
   const [newSessionTimeout, setNewSessionTimeout] = useState("");
   const [newMaxProjectMembers, setNewMaxProjectMembers] = useState("");
   const [isEditingB1, setIsEditingB1] = useState(false);
-  const [isEditingB2, setIsEditingB2] = useState(false);
-  const intl = useIntl();
+  const [isEditingB2, setIsEditingB2] = useState(false);  
 
   // Fetch configurations when the component mounts
   useEffect(() => {

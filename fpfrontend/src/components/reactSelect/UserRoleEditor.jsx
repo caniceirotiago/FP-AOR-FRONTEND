@@ -13,11 +13,11 @@ const roleMapping = {
 };
 
 const UserRoleEditor = () => {
-  const [users, setUsers] = useState([]);
   const intl = useIntl();
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
     useDialogModalStore();
-  
+  const [users, setUsers] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -38,7 +38,6 @@ const UserRoleEditor = () => {
         console.error("Error fetching users:", error.message);
       }
     };
-
     fetchUsers();
   }, []);
 
@@ -81,17 +80,36 @@ const UserRoleEditor = () => {
     }
   };
 
+  const handleFilterChange = (e) => {
+    const { value } = e.target;
+    setSearchText(value.trim()); // Update search text state
+  };
+  // Filter users based on search text
+  const filteredUsers = users.filter((user) =>
+    user.username.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   return (
     <div className={styles.container}>
-      <h2>
-        <FormattedMessage
-          id="userManagementTitle"
-          defaultMessage="User Management"
+      <div className={styles.controlPanel}>
+        <h2>
+          <FormattedMessage
+            id="userManagementTitle"
+            defaultMessage="User Management"
+          />
+        </h2>
+        <input
+          type="text"
+          placeholder={intl.formatMessage({ id: "searchPlaceholder" })}
+          value={searchText}
+          onChange={handleFilterChange}
+          className={styles.searchInput}
         />
-      </h2>
+      </div>
+
       <div className={styles.userListContainer}>
         <ul className={styles.userList}>
-          {users.map((user) => (
+          {filteredUsers.map((user) => (
             <li className={styles.user} key={user.id}>
               <ListUser
                 user={user}

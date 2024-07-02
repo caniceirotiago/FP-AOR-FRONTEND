@@ -228,7 +228,7 @@
   "userRoleFailure": "Falha ao atualizar nível de acesso",
   "userManagementTitle": "Gestão de Utilizadores",
   "justificationRequired": "É necessário escrever justificação.",
-  "reportGenerator": "Criar Relatório",
+  "reportGenerator": "Criar Relatórios",
   "generateProjectsReport": "Criar Relatório de Projetos",
   "generateAssetsReport": "Criar Relatório de Ativos",
   "failedToGenerateReport": "Falha ao gerar relatório.",
@@ -245,6 +245,15 @@
   "userLabel": "Alcunha: {username}; Primeiro Nome: {firstName}",
   "emptyFieldsError": "Por favor preencha todos os campos (assunto e mensagem) antes de enviar.",
   "removeFromProject": "Sair do projeto",
-  "sendMessage": "Enviar Mensagem"
-
+  "sendMessage": "Enviar Mensagem",
+  "averageMembersTitle": "Média de Membros por Projeto",
+  "averageMembersValue": "{averageMembers} membros",
+  "averageDurationTitle": "Duração Média dos Projeto",
+  "averageDurationValue": "{averageDuration} dias",
+  "projectsByLocationTitle": "Projetos por Localização",
+  "topAssetsTitle": "Principais Ativos por Quantidade Utilizada",
+  "approvedProjectsTitle": "Projetos Aprovados por Localização",
+  "completedProjectsTitle": "Projetos Concluídos por Localização",
+  "canceledProjectsTitle": "Projetos Cancelados por Localização",
+  "projectDistributionTitle": "Distribuição de Projetos por Localização"
 }

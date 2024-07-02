@@ -229,7 +229,7 @@
   "userRoleFailure": "Failed to update user role",
   "userManagementTitle": "User Management",
   "justificationRequired": "Justification is required.",
-  "reportGenerator": "Report Generator",
+  "reportGenerator": "Generate Reports",
   "generateProjectsReport": "Download Projects Report",
   "generateAssetsReport": "Download Assets Report",
   "failedToGenerateReport": "Failed to generate report.",
@@ -246,5 +246,15 @@
   "userLabel": "Username: {username}; First Name: {firstName}",
   "emptyFieldsError": "Please fill in all fields (subject and message) before sending.",
   "removeFromProject": "Quit project",
-  "sendMessage": "Send Message"
+  "sendMessage": "Send Message",
+  "averageMembersTitle": "Average Members per Project",
+  "averageMembersValue": "{averageMembers} members",
+  "averageDurationTitle": "Average Project Duration",
+  "averageDurationValue": "{averageDuration} days",
+  "projectsByLocationTitle": "Projects by Location",
+  "topAssetsTitle": "Top Assets by Quantity Used",
+  "approvedProjectsTitle": "Approved Projects by Location",
+  "completedProjectsTitle": "Completed Projects by Location",
+  "canceledProjectsTitle": "Canceled Projects by Location",
+  "projectDistributionTitle": "Project Distribution by Location"
 }
