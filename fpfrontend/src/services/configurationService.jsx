@@ -33,7 +33,7 @@ const configurationService = {
 
   updateConfig: async (updateDto) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/session/timeout`, {
+      const response = await fetch(`${API_BASE_URL}/config/key`, {
         method: "PUT",
         headers: getAuthHeaders(),
         credentials: "include",
@@ -42,7 +42,7 @@ const configurationService = {
       checkStatus(response);
       return response;
     } catch (error) {
-      console.error("Error updating session timeout:", error.message);
+      console.error("Error updating config key:", error.message);
       throw error;
     }
   },
