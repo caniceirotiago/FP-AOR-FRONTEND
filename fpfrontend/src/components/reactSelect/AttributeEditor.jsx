@@ -17,7 +17,6 @@ import membershipService from "../../services/membershipService";
 import { FaPlus } from "react-icons/fa";
 import useDeviceStore from "../../stores/useDeviceStore";
 import Spinner from "../spinner/Spinner.jsx";
-import { set } from "date-fns";
 
 const AttributeEditor = ({
   title,
