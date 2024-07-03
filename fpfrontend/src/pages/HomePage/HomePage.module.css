@@ -84,9 +84,9 @@
 }
 
 .filters select, .filters input {
-  padding: 0px;
+  padding: 8px;
   border-radius: 5px;
-  border: 0px solid #ddd;
+  border: 1px solid #ddd;
   font-size: 14px;
   outline: none;
   transition: all 0.3s ease;
@@ -98,7 +98,7 @@
 }
 
 .clearFiltersBtn {
-  padding: 0px 12px;
+  padding: 5px 12px;
   background-color: var(--btn-background2);
   color: #fff;
   border: none;
