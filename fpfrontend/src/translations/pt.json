@@ -240,6 +240,7 @@
   "passwordRules": "A palavra-passe deve ter no mínimo 8 caracteres, incluir uma letra maiúscula, uma minúscula, um número e um caracter especial.",
   "contactUs": "Contacte-nos",
   "followUs": "Siga-nos",
+  "uploadNewImage": "Carregue a nova imagem",
   "invalidFileType": "Tipo de ficheiro inválido (apenas são permitidos ficheiros de imagem com extensão  .jpeg, .png)",
   "fileTooLarge": "Ficheiro demasiado grande (máximo 5MB)",
   "userLabel": "Alcunha: {username}; Primeiro Nome: {firstName}",

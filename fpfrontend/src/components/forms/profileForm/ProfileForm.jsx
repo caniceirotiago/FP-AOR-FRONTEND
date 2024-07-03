@@ -5,11 +5,8 @@ import userService from "../../../services/userService";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebase";
 import useLabStore from "../../../stores/useLabStore";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import useDialogModalStore from "../../../stores/useDialogModalStore";
-import Button from "../../buttons/landingPageBtn/Button.jsx";
-import { set } from "date-fns";
 import { FaSave } from "react-icons/fa";
 
 const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) => {
@@ -69,10 +66,6 @@ const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) =>
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setProfile((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleBiographyChange = (value) => {
-    setProfile((prev) => ({ ...prev, biography: value }));
   };
 
   const onUpdateSuccess = () => {
@@ -197,7 +190,7 @@ const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) =>
                 >
                   {laboratories.map((lab) => (
                     <option key={lab.id} value={lab.id}>
-                      {lab.location}
+                      {lab.locationName}
                     </option>
                   ))}
                 </select>
