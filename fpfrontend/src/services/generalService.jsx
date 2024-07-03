@@ -124,10 +124,9 @@ const generalService = {
             body: JSON.stringify(requestBody),
           }
         );
-        console.log(response);
         return response;
       } catch (error) {
-        console.error("Error fetching suggestions:", error.message);
+        console.error("Error removing item:", error.message);
         throw error;
       }
     } 
@@ -143,10 +142,9 @@ const generalService = {
           body: JSON.stringify(requestBody),
         }
       );
-      console.log(response);
       return response;
     } catch (error) {
-      console.error("Error fetching suggestions:", error.message);
+      console.error("Error removing item:", error.message);
       throw error;
     }
     }

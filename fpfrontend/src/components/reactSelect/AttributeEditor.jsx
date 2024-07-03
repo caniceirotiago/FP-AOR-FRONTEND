@@ -642,10 +642,16 @@ const AttributeEditor = ({
         if (response.status === 204) {
           fetchAttributes();
         } else {
-          throw new Error("Failed to remove item");
+          const data = await response.json();
+          setDialogMessage(data.message);
+          setAlertType(true);
+          setIsDialogOpen(true);
+          setOnConfirm(() => {
+            setIsDialogOpen(false);
+          });
+          throw new Error("Failed to remove item: " + data.message);
         }
       }
-
       if (title === "users" && mainEntity === "project") {
         setAttributes(
           attributes.filter(
