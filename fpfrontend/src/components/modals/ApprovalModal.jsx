@@ -70,17 +70,17 @@ const ApprovalModal = ({
       />
       <div className={styles.buttons}>
         <Button
-          tradId="submit"
-          className={styles.button}
-          onClick={handleSubmit}
-          defaultText={<FormattedMessage id="submit" defaultMessage="Submit" />}
-          btnColor={"var(--btn-color2)"}
-        />
-        <Button
           tradId="cancel"
           className={styles.button}
           onClick={onRequestClose}
           defaultText={<FormattedMessage id="cancel" defaultMessage="Cancel" />}
+          btnColor={"var(--btn-color2)"}
+        />
+         <Button
+          tradId="submit"
+          className={styles.button}
+          onClick={handleSubmit}
+          defaultText={<FormattedMessage id="submit" defaultMessage="Submit" />}
           btnColor={"var(--btn-color2)"}
         />
       </div>
