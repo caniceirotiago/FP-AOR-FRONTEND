@@ -17,7 +17,6 @@ import membershipService from "../../services/membershipService";
 import { FaPlus } from "react-icons/fa";
 import useDeviceStore from "../../stores/useDeviceStore";
 import Spinner from "../spinner/Spinner.jsx";
-import { set } from "date-fns";
 
 const AttributeEditor = ({
   title,
@@ -642,10 +641,16 @@ const AttributeEditor = ({
         if (response.status === 204) {
           fetchAttributes();
         } else {
-          throw new Error("Failed to remove item");
+          const data = await response.json();
+          setDialogMessage(data.message);
+          setAlertType(true);
+          setIsDialogOpen(true);
+          setOnConfirm(() => {
+            setIsDialogOpen(false);
+          });
+          throw new Error("Failed to remove item: " + data.message);
         }
       }
-
       if (title === "users" && mainEntity === "project") {
         setAttributes(
           attributes.filter(
