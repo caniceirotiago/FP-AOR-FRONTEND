@@ -8,7 +8,7 @@ import AttributeEditor from '../../components/reactSelect/AttributeEditor.jsx';
 import { Link } from 'react-router-dom';
 import { FaLock } from 'react-icons/fa';
 import { FaExclamationTriangle } from 'react-icons/fa';
-import { FormattedDate, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ProjectList from '../../components/UserProfilePageComponents/userProjectList/ProjectList.jsx';
 
 const UserProfilePage = () => {

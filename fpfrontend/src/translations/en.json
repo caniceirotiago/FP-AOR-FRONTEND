@@ -241,6 +241,7 @@
   "passwordRules": "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, a special character, and should not contain spaces.",
   "contactUs": "Contact Us",
   "followUs": "Follow Us",
+  "uploadNewImage": "Upload New Image",
   "invalidFileType": "Invalid file type selected. Please select a valid image file. (jpeg, png)",
   "fileTooLarge": "File too large. Please select a file with a maximum size of 5MB.",
   "userLabel": "Username: {username}; First Name: {firstName}",
