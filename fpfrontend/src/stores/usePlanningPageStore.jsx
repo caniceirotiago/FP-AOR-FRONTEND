@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 
-const usePlanningPageStore = create((set, get) => ({
+const usePlanningPageStore = create((set) => ({
     isThePlanEditable: true,
     setIsThePlanEditable: (value) => set({ isThePlanEditable: value }),
 }));
