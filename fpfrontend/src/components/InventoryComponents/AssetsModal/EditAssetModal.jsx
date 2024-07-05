@@ -163,7 +163,7 @@ const EditAssetModal = ({ isOpen, onClose, selectedAssetId, isViewOnly }) => {
             </label>
             <input
               className={styles.input}
-              type="text"
+              type="tel"
               name="manufacturerPhone"
               value={assetData.manufacturerPhone}
               onChange={handleChange}

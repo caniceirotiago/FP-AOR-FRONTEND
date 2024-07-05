@@ -156,7 +156,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
               /></label>
             <input
               className={styles.input}
-              type="text"
+              type="tel"
               name="manufacturerPhone"
               value={assetData.manufacturerPhone}
               onChange={handleChange}
