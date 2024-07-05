@@ -2,21 +2,21 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-width: 800px;
+  justify-items: center;
   width: 100%;
   color: var(--text-color4);
 }
 
-.projectHeader {
-  text-align: center;
-  color: var(--text-color4);
-}
+
 
 .statusContainer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-self: center;
+  justify-content: center;
   color: var(--text-color4);
+  padding: 20px;
+  gap: 30px;
 }
 
 .statusDisplay {
@@ -64,16 +64,34 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  max-width: 800px;
+ justify-content: center;
+ justify-self: center;
+ align-items: center;
+
   width: 100%;
 }
 .form{
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 800px;
+  flex-direction: row;
+  max-width: 1200px;
+
+
   width: 100%;
 
+}
+.FormSec1{
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  gap: 10px;
+  width: 100%;
+}
+.FormSec2{
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+ 
+  width: 100%;
 }
 
 .label {
@@ -127,18 +145,71 @@
   overflow-y: auto;
 }
 
-.buttonContainer {
-  width: 30%;
+.saveButtonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  padding: 20px 0px;
+
 }
 
-.button:hover,
-.button:focus {
-  background-color: var(--btn-hover-color);
-  transform: scale(1.05);
-  outline: none;
+ .saveButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--btn-background2);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.saveButton:hover {
+  width: 80px;
+  border-radius: 25px;
+  background-color: var(--btn-background1);
 }
 
-.button:active {
-  background-color: var(--btn-active-color);
-  transform: scale(0.98);
+.svgIcon {
+  width: 20px;
+  height: 20px;
+  fill: white;
+  transition: transform 0.3s;
+}
+
+.saveButton:hover .svgIcon {
+  transform: translateY(400%);
+}
+
+.btnText {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -20px;
+  opacity: 0;
+  transition: all 0.3s;
+  color: white;
+  font-size: 14px;
+}
+
+.saveButton:hover .btnText {
+  bottom: 10px;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .form {
+    flex-direction: column;
+  }
+  .FormSec1{
+    padding: 10px;
+  }
+  .FormSec2{
+    padding: 10px;
+  }
 }

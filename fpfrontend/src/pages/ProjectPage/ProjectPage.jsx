@@ -8,13 +8,17 @@ import useProjectStatesStore from "../../stores/useProjectStatesStore.jsx";
 import useLabStore from "../../stores/useLabStore.jsx";
 import useProjectRolesStore from "../../stores/useProjectRolesStore.jsx";
 import styles from "./ProjectPage.module.css";
-import { FaEdit, FaCheck } from "react-icons/fa";
+import { FaEdit, FaCheck} from "react-icons/fa";
 import ApprovalModal from "../../components/modals/ApprovalModal.jsx";
 import LogsList from "../../components/ProjectPageComponents/LogsList/LogsList.jsx";
 import useProjectStore from "../../stores/useProjectStore.jsx";
 import GroupChatModal from "../../components/ProjectPageComponents/GroupChat/GroupChatModal";
 import useGroupChatModalStore from "../../stores/useGroupChatModalStore"; 
 import usePlanningPageStore from "../../stores/usePlanningPageStore";
+import { FaChartGantt } from "react-icons/fa6";
+import {stateColors, stateColorsBriefcaseBackground} from "../../utils/colors/projectColors";
+import { FaComments } from "react-icons/fa";
+
 
 
 const ProjectPage = () => {
@@ -150,78 +154,100 @@ const ProjectPage = () => {
             approveOrReject = {approveOrReject}
             projectId={projectInfo.id}
           />
-          <div className={styles.controlPanel}>
-            <div className={styles.btns}>
-              {canEdit &&
-                projectInfo.state !== "FINISHED" &&
-                projectInfo.state !== "CANCELLED" && (
-                  <>
-                    {!isEditing && (
-                      <button
-                        onClick={handleEditModeTrue}
-                        className={`${styles.iconButton} ${styles.createButton}`}
-                        data-text={intl.formatMessage({
-                          id: "editBtnProfForm",
-                          defaultMessage: "Edit",
-                        })}
-                      >
-                        <FaEdit className={styles.svgIcon} />
-                      </button>
-                    )}
-                    {isEditing && (
-                      <button
-                        onClick={handleEditModeFalse}
-                        className={`${styles.iconButton} ${styles.createButton}`}
-                        data-text={intl.formatMessage({
-                          id: "back",
-                          defaultMessage: "Back",
-                        })}
-                      >
-                        <FaCheck className={styles.svgIcon} />
-                      </button>
-                    )}
-                  </>
-                )}
-            </div>
-            <div className={styles.otherControls}>
-              {isInApprovalMode && (
-                <>
-                  <div className={styles.approvalDiv}>
-                    <p className={styles.approvalText}>
-                      <FormattedMessage
-                        id="waitingForApproval"
-                        defaultMessage="This project is waiting for approval!"
-                      />
-                    </p>
+          <div className={styles.outerControlPanel}
+          style={{
+            backgroundImage: stateColorsBriefcaseBackground[projectInfo.state],
+          }}>
+            <div className={styles.controlPanel}
+            >
+            <section className={styles.projectHeader}>
+                <h1>{projectInfo.name}</h1>
+              </section>
+              <div className={styles.btns}>
+                {canEdit &&
+                  projectInfo.state !== "FINISHED" &&
+                  projectInfo.state !== "CANCELLED" && (
+                    <>
+                      {!isEditing && (
+                        <button
+                          onClick={handleEditModeTrue}
+                          className={`${styles.iconButton} ${styles.createButton}`}
+                          data-text={intl.formatMessage({
+                            id: "editBtnProfForm",
+                            defaultMessage: "Edit",
+                          })}
+                        >
+                          <FaEdit className={styles.svgIcon} />
+                        </button>
+                      )}
+                      {isEditing && (
+                        <button
+                          onClick={handleEditModeFalse}
+                          className={`${styles.iconButton} ${styles.createButton}`}
+                          data-text={intl.formatMessage({
+                            id: "back",
+                            defaultMessage: "Back",
+                          })}
+                        >
+                          <FaCheck className={styles.svgIcon} />
+                        </button>
+                      )}
+                    </>
+                  )}
+                    {canSeeAndEditProjectPlanning && (
+                  <div>
                     <button
-                      className={styles.rejectBtn}
-                      onClick={() => handleApproveProject(false)}
+                      onClick={() => handleClickToOpenProjectPlanningPage()}
+                      className={`${styles.iconButton} ${styles.createButton}`}
+                          data-text={intl.formatMessage({
+                            id: "projectPlanning",
+                            defaultMessage: "Planning",
+                          })}
                     >
-                      <FormattedMessage
-                        id="rejectProject"
-                        defaultMessage="Reject Project"
-                      />
-                    </button>
-                    <button
-                      className={styles.approvalBtn}
-                      onClick={() => handleApproveProject(true)}
-                    >
-                      <FormattedMessage
-                        id="approveProject"
-                        defaultMessage="Approve Project"
-                      />
+                      <FaChartGantt className={styles.svgIcon} />
                     </button>
                   </div>
-                </>
-              )}
+                )}
+              </div>
+            
+              <div className={styles.otherControls}>
+                {isInApprovalMode && (
+                  <>
+                    <div className={styles.approvalDiv}>
+                      <p className={styles.approvalText}>
+                        <FormattedMessage
+                          id="waitingForApproval"
+                          defaultMessage="This project is waiting for approval!"
+                        />
+                      </p>
+                      <button
+                        className={styles.rejectBtn}
+                        onClick={() => handleApproveProject(false)}
+                      >
+                        <FormattedMessage
+                          id="rejectProject"
+                          defaultMessage="Reject Project"
+                        />
+                      </button>
+                      <button
+                        className={styles.approvalBtn}
+                        onClick={() => handleApproveProject(true)}
+                      >
+                        <FormattedMessage
+                          id="approveProject"
+                          defaultMessage="Approve Project"
+                        />
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+              <div className={styles.btns}></div>{" "}
+              {/*  //This div is empty just to make a ghost effect */}
             </div>
-            <div className={styles.btns}></div>{" "}
-            {/*  //This div is empty just to make a ghost effect */}
           </div>
           <div className={styles.basicInfo}>
-            <section className={styles.projectHeader}>
-              <h1>{projectInfo.name}</h1>
-            </section>
+
             <div className={styles.firstSeccion}>
               <div className={styles.formContainer}>
                 <ProjectBasicInfo
@@ -232,20 +258,12 @@ const ProjectPage = () => {
                   updateProjectInfo={handleUpdateProjectInfo}
                 />
               </div>
-              {canSeeAndEditProjectPlanning && (
-                <div>
-                  <button
-                    onClick={() => handleClickToOpenProjectPlanningPage()}
-                  >
-                    <FormattedMessage
-                      id="projectPlanning"
-                      defaultMessage="Project Planning"
-                    />
-                  </button>
-                </div>
-              )}
-              <div className={styles.usersContainer}>
-                <AttributeEditor
+            </div>
+          </div>
+          <div className={styles.secondSeccion}>
+            <div className={styles.attributesContainer}>
+            <AttributeEditor
+                   className={styles.attribute}
                   title="users"
                   editMode={isEditing}
                   mainEntity={"project"}
@@ -253,12 +271,8 @@ const ProjectPage = () => {
                   projectId={id}
                   createdBy={projectInfo.createdBy}
                 />
-              </div>
-            </div>
-          </div>
-          <div className={styles.secondSeccion}>
-            <div className={styles.attributesContainer}>
               <AttributeEditor
+                className={styles.attribute}
                 title="skills"
                 editMode={isEditing}
                 mainEntity={"project"}
@@ -266,6 +280,7 @@ const ProjectPage = () => {
                 projectId={id}
               />
               <AttributeEditor
+                className={styles.attribute}
                 title="keywords"
                 editMode={isEditing}
                 mainEntity={"project"}
@@ -273,6 +288,7 @@ const ProjectPage = () => {
                 projectId={id}
               />
               <AttributeEditor
+                className={styles.attribute}
                 title="assets"
                 editMode={isEditing}
                 mainEntity={"project"}
@@ -289,7 +305,8 @@ const ProjectPage = () => {
                   onClick={handleOpenGroupChat}
                   className={styles.chatButton}
                 >
-                  Open Group Chat
+                  <FaComments className={styles.chatButtonIcon} />
+                  Project Chat
                 </button>
               )}
             </div>

@@ -4,6 +4,7 @@ import styles from "./ProjectBasicInfo.module.css";
 import Button from "../buttons/landingPageBtn/Button.jsx";
 import { set } from "date-fns";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
+import { FaSave } from "react-icons/fa";
 
 const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,updateProjectInfo,}) => {
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
@@ -154,6 +155,7 @@ const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,upd
       </div>
       <div className={styles.formContainer}>
         <form className={styles.form}>
+          <div className={styles.FormSec1}>
           <label className={styles.label}>
             <FormattedMessage id="projectName" defaultMessage="Project Name" />
           </label>
@@ -165,27 +167,8 @@ const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,upd
             onChange={handleInputChange}
             disabled={!isEditing}
           />
-          <label className={styles.label}>
-            <FormattedMessage id="description" defaultMessage="Description" />
-          </label>
-          <textarea
-            className={styles.textarea}
-            name="description"
-            value={projectInfo.description}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-          />
-          <label className={styles.label}>
-            <FormattedMessage id="motivation" defaultMessage="Motivation" />
-          </label>
-          <textarea
-            className={styles.textarea}
-            name="motivation"
-            value={projectInfo.motivation}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-          />
-          <label className={styles.label}>
+
+                    <label className={styles.label}>
             <FormattedMessage id="laboratoryId" defaultMessage="Laboratory" />
           </label>
           <select
@@ -232,18 +215,43 @@ const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,upd
             onChange={handleInputChange}
             disabled={!isEditing}
           />
-          {isEditing && (
-            <div className={styles.buttonContainer}>
-              <Button
-                className={styles.button}
-                onClick={handleUpdateProject}
-                tradId="saveFields"
-                defaultText="Save Fields"
-                btnColor={"var(--btn-color2)"}
-              />
-            </div>
-          )}
+          </div>
+          <div className={styles.FormSec2}>
+
+
+                    <label className={styles.label}>
+            <FormattedMessage id="description" defaultMessage="Description" />
+          </label>
+          <textarea
+            className={styles.textarea}
+            name="description"
+            value={projectInfo.description}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+          />
+                    <label className={styles.label}>
+            <FormattedMessage id="motivation" defaultMessage="Motivation" />
+          </label>
+          <textarea
+            className={styles.textarea}
+            name="motivation"
+            value={projectInfo.motivation}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+          />
+          
+          </div>
         </form>
+        {isEditing && (
+            <div className={styles.saveButtonContainer}>
+            <button className={styles.saveButton} onClick={handleUpdateProject}>
+            <FaSave className={styles.svgIcon} />
+            <span className={styles.btnText}>
+              <FormattedMessage id="save" defaultMessage="Save" />
+            </span>
+          </button>
+          </div>
+          )}
       </div>
     </div>
   );
