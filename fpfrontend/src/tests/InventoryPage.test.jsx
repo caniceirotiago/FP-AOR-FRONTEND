@@ -2,26 +2,35 @@ import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { IntlProvider } from 'react-intl';
-import en from '../translations/en.json';
 import InventoryPage from '../pages/InventoryPage/InventoryPage';
-import CreateAssetModal from '../components/CreateAssetModal'; // Assuming it's imported from here
+import CreateAssetModal from '../components/InventoryComponents/AssetsModal/CreateAssetModal';
 import assetService from '../services/assetService';
 import useAssetsStore from '../stores/useAssetsStore';
-import useLayoutStore from '../stores/useLayoutStore';
-import useTranslationsStore from '../stores/useTranslationsStore';
-import useDeviceStore from '../stores/useDeviceStore';
 import '@testing-library/jest-dom';
 
-jest.mock('../stores/useLayoutStore');
-jest.mock('../stores/useTranslationsStore');
 jest.mock('react-intl', () => ({
   ...jest.requireActual('react-intl'),
   useIntl: () => ({
-    formatMessage: jest.fn((msg) => en[msg.id] || msg.id),
+    formatMessage: jest.fn((msg) => {
+      const en = {
+        createButtonText: 'Create Asset',
+        filterButtonText: 'Filter',
+        selectType: 'Select a type',
+        assetName: 'Asset Name',
+        description: 'Description',
+        stockQuantity: 'Stock Quantity',
+        partNumber: 'Part Number',
+        manufacturer: 'Manufacturer',
+        manufacturerPhone: 'Manufacturer Phone',
+        observations: 'Observations',
+        submitButton: 'Submit',
+      };
+      return en[msg.id] || msg.id;
+    }),
   }),
 }));
-jest.mock('../services/assetService');
-jest.mock('../stores/useAssetsStore');
+jest.mock('../services/assetService.jsx');
+jest.mock('../stores/useAssetsStore.jsx');
 
 // Mock asset data
 const mockAssets = [
@@ -54,7 +63,7 @@ describe('CreateAssetModal Component', () => {
 
   const renderWithIntl = (component) => {
     return render(
-      <IntlProvider locale="en" messages={en}>
+      <IntlProvider locale="en" messages={{}}>
         <Router>
           {component}
         </Router>
@@ -66,8 +75,8 @@ describe('CreateAssetModal Component', () => {
     renderWithIntl(<InventoryPage />);
 
     await waitFor(() => {
-      expect(screen.getByText(en.createButtonText)).toBeInTheDocument();
-      expect(screen.getByText(en.filterButtonText)).toBeInTheDocument();
+      expect(screen.getByText('Create Asset')).toBeInTheDocument();
+      expect(screen.getByText('Filter')).toBeInTheDocument();
       expect(screen.getByText('Asset 1')).toBeInTheDocument();
       expect(screen.getByText('Asset 2')).toBeInTheDocument();
     });
@@ -76,38 +85,42 @@ describe('CreateAssetModal Component', () => {
   test('opens create asset modal on button click', async () => {
     renderWithIntl(<InventoryPage />);
 
-    fireEvent.click(screen.getByText(en.createButtonText));
+    fireEvent.click(screen.getByText('Create Asset'));
     await waitFor(() => {
       // Check for elements in the create asset modal
-      expect(screen.getByText(en.selectType)).toBeInTheDocument();
+      expect(screen.getByText('Select a type')).toBeInTheDocument();
     });
   });
 
   test('renders CreateAssetModal correctly and submits form', async () => {
-    renderWithIntl(<CreateAssetModal />);
+    renderWithIntl(<CreateAssetModal isOpen={true} onClose={jest.fn()} />);
+
+    // Log the rendered output to debug
+    console.log(screen.debug());
 
     await waitFor(() => {
       // Ensure types are populated in the dropdown
-      expect(screen.getByText(en.selectType)).toBeInTheDocument();
+      expect(screen.getByText('Select a type')).toBeInTheDocument();
       expect(screen.getByText('RESOURCE')).toBeInTheDocument();
       expect(screen.getByText('COMPONENT')).toBeInTheDocument();
     });
 
-    // Fill out the form and submit
-    fireEvent.change(screen.getByPlaceholderText(en.assetName), { target: { value: 'New Asset' } });
-    fireEvent.change(screen.getByPlaceholderText(en.description), { target: { value: 'New Asset Description' } });
-    fireEvent.change(screen.getByPlaceholderText(en.stockQuantity), { target: { value: '10' } });
-    fireEvent.change(screen.getByPlaceholderText(en.partNumber), { target: { value: 'NewPartNumber' } });
-    fireEvent.change(screen.getByPlaceholderText(en.manufacturer), { target: { value: 'New Manufacturer' } });
-    fireEvent.change(screen.getByPlaceholderText(en.manufacturerPhone), { target: { value: '1234567890' } });
-    fireEvent.change(screen.getByPlaceholderText(en.observations), { target: { value: 'New observations' } });
-    fireEvent.change(screen.getByText(en.selectType), { target: { value: 'RESOURCE' } });
+   // Fill out the form and submit
+fireEvent.change(screen.getByLabelText(/assetName/i), { target: { value: 'New Asset' } });
+fireEvent.change(screen.getByLabelText(/description/i), { target: { value: 'New Asset Description' } });
+fireEvent.change(screen.getByLabelText(/stockQuantity/i), { target: { value: '10' } });
+fireEvent.change(screen.getByLabelText(/partNumber/i), { target: { value: 'NewPartNumber' } });
+fireEvent.change(screen.getByLabelText(/manufacturer/i), { target: { value: 'New Manufacturer' } });
+fireEvent.change(screen.getByLabelText(/manufacturerPhone/i), { target: { value: '1234567890' } });
+fireEvent.change(screen.getByLabelText(/observations/i), { target: { value: 'New observations' } });
+fireEvent.change(screen.getByLabelText(/type/i), { target: { value: 'RESOURCE' } });
 
-    fireEvent.click(screen.getByText(en.submitButton));
+fireEvent.click(screen.getByText(/submitButton/i));
+
 
     await waitFor(() => {
       // Check that the form was submitted and the modal closed
-      expect(screen.queryByText(en.submitButton)).not.toBeInTheDocument();
+      expect(screen.queryByText('Submit')).not.toBeInTheDocument();
       expect(assetService.createAsset).toHaveBeenCalled();
     });
   });
