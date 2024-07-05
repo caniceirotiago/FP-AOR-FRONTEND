@@ -12,9 +12,11 @@ import 'slick-carousel/slick/slick-theme.css';
 import useLabStore from '../../stores/useLabStore';
 import { useNavigate } from 'react-router';
 import bigLogo from '../../assets/verticalLogo2.png';
+import useAuthStore from '../../stores/useAuthStore';
 
 
 const InitialPage = () => {
+  const {isAuthenticated} = useAuthStore();
   const navigate = useNavigate();
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -46,7 +48,12 @@ const InitialPage = () => {
   }, [fetchLaboratories]);
 
   const navigateWithFilter = (lab) => {
-    navigate(`/homepage?laboratory=${lab.id}`);
+    if(isAuthenticated) {
+      navigate(`/authenticatedhomepage?laboratory=${lab.id}`);
+    }else{
+      navigate(`/homepage?laboratory=${lab.id}`); 
+    }
+    
   };
 
   
