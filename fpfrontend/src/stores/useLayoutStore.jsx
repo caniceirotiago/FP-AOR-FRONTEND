@@ -21,8 +21,12 @@ const useLayoutStore = create(
       setSelectedView: (view) => set(() => ({ selectedView: view })),
     }),
     {
-      name: 'layout-storage', 
-      getStorage: () => localStorage, 
+      name: 'layout-storage',
+      storage: {
+        getItem: (name) => localStorage.getItem(name),
+        setItem: (name, value) => localStorage.setItem(name, value),
+        removeItem: (name) => localStorage.removeItem(name),
+      },
     }
   )
 );

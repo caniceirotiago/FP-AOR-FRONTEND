@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import InitialPage from './pages/InitialPage/InitialPage';
 import RegisterPage from './pages/RegisterPage/RegisterPage';
 import languages from './translations';
-import  useTranslationsStore  from './stores/useTranslationsStore';
+import useTranslationsStore  from './stores/useTranslationsStore';
 import DialogModal from './components/dialogAlertError/dialogModal/DialogModal.jsx';
 import DialogMultipleMessagesModal from './components/dialogAlertError/dialogModal/DialogMultipleMessagesModal.jsx';
 import EmailConfirmationPage from './pages/EmailConfirmationPage/EmailConfirmationPage';
