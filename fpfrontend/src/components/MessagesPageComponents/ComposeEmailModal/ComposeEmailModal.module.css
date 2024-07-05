@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,66 +12,135 @@
 }
 
 .modalContent {
-  background: white;
-  width: 80%;
+  background: var(--card-background);
+  width: 90%;
   max-width: 600px;
-  height: 80%;
+  height: 85%;
   overflow-y: auto;
-  border-radius: 10px;
+  border-radius: 15px;
   padding: 20px;
   position: relative;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .closeButton {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 15px;
+  right: 15px;
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 28px;
+  color: var(--text-color4);
 }
 
 .selectUser {
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  margin-bottom: 30px;
+  padding: 12px;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  background: var(--input-select-textarea-background);
+  color: var(--text-color4);
 }
 
 .messagesContainer {
   flex-grow: 1;
   overflow-y: auto;
+  margin-top: 20px;
   margin-bottom: 20px;
+  padding: 15px;
+  background: var(--profile-thirth-background-color);
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+}
+.messagesContainer::-webkit-scrollbar {
+  width: 12px;
+}
+.messagesContainer::-webkit-scrollbar-track {
+  background: var(--profile-thirth-background-color);
+  border-radius: 15px;
+  overflow: hidden;
+}
+.messagesContainer::-webkit-scrollbar-thumb {
+  background: var(--card-border);
+  border-radius: 15px;
+}
+.messagesContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--card-border);
+}
+
+.react-chat-element__container {
+  margin-bottom: 15px;
 }
 
 .inputArea {
   display: flex;
   flex-direction: column;
-  border-top: 1px solid #ddd;
-  padding: 10px;
+  border-top: 1px solid var(--card-border);
+  padding: 15px;
+  background: var(--input-select-textarea-background);
+  border-radius: 0 0 15px 15px;
 }
 
 .input {
   flex-grow: 1;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
   resize: none;
+  background: var(--input-select-textarea-background);
+  color: var(--text-color4);
 }
 
 .button {
-  padding: 10px;
+  padding: 12px;
   border: none;
-  border-radius: 4px;
-  background: #007bff;
-  color: white;
+  border-radius: 6px;
+  background: var(--btn-background1);
+  color: var(--btn-color2);
   cursor: pointer;
+  transition: background 0.3s ease;
+  font-weight: bold;
 }
 
 .button:hover {
-  background: #0056b3;
+  background: var(--btn-background2);
+}
+
+/* Estilos para o Select */
+.react-select-container {
+  width: 100%;
+}
+
+.react-select__control {
+  background: var(--input-select-textarea-background);
+  border: 1px solid var(--card-border);
+  color: var(--text-color4);
+  border-radius: 6px;
+}
+
+.react-select__input,
+.react-select__single-value {
+  color: var(--text-color4) !important;
+}
+
+.react-select__menu {
+  background: var(--input-select-textarea-background);
+  color: var(--text-color4);
+}
+
+.react-select__option {
+  background: var(--input-select-textarea-background);
+  color: var(--text-color4);
+}
+
+.react-select__option--is-focused {
+  background: var(--hover-aside-item-color);
+}
+
+.react-select__option--is-selected {
+  background: var(--active-aside-item-color);
 }

@@ -5,6 +5,7 @@
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+
   }
 
   .approvalDiv {
@@ -61,6 +62,7 @@
     height: 100%;
     justify-content: center;
     align-items: center; 
+  
 }
 .btnContainer  {
     max-height: 30px !important;
@@ -76,22 +78,18 @@
     display: flex;
     flex-direction: row;
     justify-content:space-around;
-
+    flex-grow: 1;
     width: 100%;
-    max-width: 1200px;
+
 
 }
 .formContainer{
-    width: 40%;
+    width: 100%;
     align-self: center;
     height: 100%;
 
 }
-.usersContainer {
-    width: 40%;
-    align-self: center;
-    justify-self: center;
-}
+
 .secondSeccion{
     display: flex;
     flex-direction: column;
@@ -105,19 +103,30 @@
 }
 
 .attributesContainer {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-self: center;
+  gap: 20px;
+  width: 80%;
+  max-width: 800px; 
+}
+
+.outerControlPanel {
     display: flex;
     flex-direction: column;
-    justify-self: center;
-    align-items: center; 
-    text-align: center; 
-    gap: 20px;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    max-width: 800px;   
+    gap: 20px;
+
 }
 .controlPanel {
+   height: 200px;
     display: flex;
     flex-direction: row;
-    width: 100%;
+    width: 80%;
+    max-width: 1130px;
     justify-content:space-between;
     align-items: center;
   }
@@ -192,6 +201,52 @@
 
 }
 
+.chatButtonContainer {
+  position: fixed;
+  bottom: 20px; 
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; 
+}
+
+.chatButton {
+  background:  var(--chat-button-background) ;
+  color: white;
+  border: none;
+  border-radius: 50px; 
+  padding: 12px 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.chatButton:hover {
+  background: var(--chat-button-background); 
+  transform: translateY(-5px); 
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3); 
+}
+
+.chatButton:active {
+  transform: translateY(-2px); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+.chatButtonIcon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px; 
+}
+
+  
+
+
 @media (max-width: 768px) {
 .projectPage {
     padding: 10px;
@@ -202,5 +257,8 @@
 
 .attributesContainer {
     width: 100%;
+}
+.chatButtonContainer {
+  bottom: 60px; 
 }
 }

@@ -1,7 +1,7 @@
 .modalOverlay {
   position: fixed;
-  bottom: 0%;
-  right: 0%;
+  bottom: 30px;
+  right: 20px;
   width: 30%;
   height: 80%;
   display: flex;
@@ -11,75 +11,105 @@
 }
 
 .modalContent {
-  background-color: var(--btn-background2);
-  width: 80%;
-  height: 60%;
+  background: var(--card-background);
+  width: 100%;
+  height: 100%;
   overflow-y: auto;
-  border-radius: 10px;
+  border-radius: 15px;
   padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 80%;
-  max-height: 600px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .closeButton {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 15px;
+  right: 15px;
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 24px;
-  color: var(--text-color2);
+  font-size: 28px;
+  color: var(--text-color4);
 }
 
 .messagesContainer {
   flex-grow: 1;
-  max-height: 80%;
   overflow-y: auto;
   margin-bottom: 20px;
-  color: var(--text-color);
+  padding: 15px;
+  background: var(--profile-thirth-background-color);
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+}
+.messagesContainer::-webkit-scrollbar {
+  width: 12px;
+}
+.messagesContainer::-webkit-scrollbar-track {
+  background: var(--profile-thirth-background-color);
+  border-radius: 15px;
+  
+  overflow: hidden;
+}
+.messagesContainer::-webkit-scrollbar-thumb {
+  background: var(--card-border);
+  border-radius: 15px;
+}
+.messagesContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--card-border);
 }
 
-.input,
-.button {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  border: 1px solid var(--btn-color1);
-  background-color: var(--btn-background1);
-  color: var(--text-color);
-  border-top: 1px solid var(--btn-color1);
+.react-chat-element__container {
+  margin-bottom: 15px;
 }
 
 .inputArea {
-  border-top: 1px solid var(--text-color2);
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--card-border);
+  padding: 15px;
+  background: var(--input-select-textarea-background);
+  border-radius: 0 0 15px 15px;
 }
 
-.input:focus,
-.button:hover {
-  border-color: var(--text-color2);
-  background-color: var(--color-in-progress);
+.input {
+  flex-grow: 1;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  resize: none;
+  background: var(--input-select-textarea-background);
+  color: var(--text-color4);
 }
 
 .button {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background: var(--btn-background1);
+  color: var(--btn-color2);
   cursor: pointer;
-  background-color: var(--color-in-progress);
+  transition: background 0.3s ease;
+  font-weight: bold;
 }
 
+.button:hover {
+  background: var(--btn-background2);
+}
+
+/* Estilos para as mensagens */
 :global .rce-mbox-right-notch,
 :global .rce-mbox-left-notch {
   display: none !important;
 }
+
 :global .rce-mbox {
   border-radius: 15px;
   background-color: var(--card-background);
 }
+
 :global .rce-mbox.rce-mbox-right {
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
@@ -91,12 +121,14 @@
     width: 40%;
   }
 }
+
 @media (max-width: 990px) {
   .modalOverlay {
     width: 60%;
   }
 }
-@media (max-width: 790px) {
+
+@media (max-width: 768px) {
   .modalOverlay {
     position: fixed;
     top: 0;
@@ -109,10 +141,11 @@
     align-items: center;
     z-index: 1050;
   }
+
   .modalContent {
-    width: 70%;
+    width: 90%;
     max-width: 600px;
-    height: 60%;
+    height: 80%;
     overflow-y: auto;
     border-radius: 10px;
     padding: 20px;
