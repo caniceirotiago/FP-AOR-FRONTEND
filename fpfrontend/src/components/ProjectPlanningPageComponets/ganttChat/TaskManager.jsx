@@ -8,11 +8,13 @@ import projectService from "../../../services/projectService";
 import { useNavigate } from "react-router-dom";
 import { FaLock } from "react-icons/fa";
 import usePlanningPageStore from "../../../stores/usePlanningPageStore";
+import { PROJECT_STATES } from "../../../utils/constants/constants";
+
 
 const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
   const [tasks, setTasks] = useState([]);
   const [projectGeneralInfo, setProjectGeneralInfo] = useState({});
-  const {isThePlanEditable, setIsThePlanEditable} = usePlanningPageStore();
+  const { isThePlanEditable, setIsThePlanEditable } = usePlanningPageStore();
   const { dimensions } = useDeviceStore();
   const navigate = useNavigate();
 
@@ -45,7 +47,11 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
       const response = await projectService.getProjectById(projectId);
       const data = await response.json();
       setProjectGeneralInfo(data);
-      if(data.state === "FINISHED" || data.state === "CANCELLED" || data.state === "READY") {
+      if (
+        data.state === PROJECT_STATES.FINISHED ||
+        data.state === PROJECT_STATES.CANCELLED ||
+        data.state === PROJECT_STATES.READY
+      ) {
         setIsThePlanEditable(false);
       } else {
         setIsThePlanEditable(true);
@@ -122,17 +128,17 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
     fetchProjectTasks();
   }, [projectId]);
 
-
   return (
     <div className={styles.container}>
       <div className={styles.projectPlanningHeader}>
-        <h3 onClick={handleTitleClick} className={styles.title}>{projectGeneralInfo.name}</h3>
+        <h3 onClick={handleTitleClick} className={styles.title}>
+          {projectGeneralInfo.name}
+        </h3>
         <p className={styles.state}>{projectGeneralInfo.state}</p>
         <span
           className={styles.statusIndicator}
           style={{ backgroundColor: getStatusColor(projectGeneralInfo.state) }}
-        >
-        </span>
+        ></span>
         {!isThePlanEditable && <FaLock className={styles.lockIcon} />}
       </div>
       <div className={styles.projectPlanningBody}>
@@ -162,15 +168,15 @@ export default TaskManager;
 
 const getStatusColor = (status) => {
   switch (status) {
-    case "PLANNING":
+    case PROJECT_STATES.PLANNING:
       return "var(--color-planning)";
-    case "READY":
+    case PROJECT_STATES.READY:
       return "var(--color-ready)";
-    case "IN_PROGRESS":
+    case PROJECT_STATES.IN_PROGRESS:
       return "var(--color-in-progress)";
-    case "FINISHED":
+    case PROJECT_STATES.FINISHED:
       return "var(--color-finished)";
-    case "CANCELLED":
+    case PROJECT_STATES.CANCELLED:
       return "var(--color-cancelled)";
     default:
       return "var(--color-default)";

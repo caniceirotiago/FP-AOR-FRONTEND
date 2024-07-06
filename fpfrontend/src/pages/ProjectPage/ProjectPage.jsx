@@ -8,18 +8,16 @@ import useProjectStatesStore from "../../stores/useProjectStatesStore.jsx";
 import useLabStore from "../../stores/useLabStore.jsx";
 import useProjectRolesStore from "../../stores/useProjectRolesStore.jsx";
 import styles from "./ProjectPage.module.css";
-import { FaEdit, FaCheck} from "react-icons/fa";
+import { FaEdit, FaCheck } from "react-icons/fa";
 import ApprovalModal from "../../components/modals/ApprovalModal.jsx";
 import LogsList from "../../components/ProjectPageComponents/LogsList/LogsList.jsx";
 import useProjectStore from "../../stores/useProjectStore.jsx";
 import GroupChatModal from "../../components/ProjectPageComponents/GroupChat/GroupChatModal";
-import useGroupChatModalStore from "../../stores/useGroupChatModalStore"; 
-import usePlanningPageStore from "../../stores/usePlanningPageStore";
+import useGroupChatModalStore from "../../stores/useGroupChatModalStore";
 import { FaChartGantt } from "react-icons/fa6";
-import {stateColors, stateColorsBriefcaseBackground} from "../../utils/colors/projectColors";
+import { stateColorsBriefcaseBackground } from "../../utils/colors/projectColors";
 import { FaComments } from "react-icons/fa";
-
-
+import { PROJECT_STATES, PROJECT_ROLES } from "../../utils/constants/constants";
 
 const ProjectPage = () => {
   const navigate = useNavigate();
@@ -29,10 +27,9 @@ const ProjectPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const { id } = useParams();
   const [isTheProjectNotExistant, setIsTheProjectNotExistant] = useState(false);
-  const { states, fetchProjectStates } = useProjectStatesStore();
+  const { fetchProjectStates } = useProjectStatesStore();
   const { fetchProjectRoles } = useProjectRolesStore();
   const { laboratories, fetchLaboratories } = useLabStore();
-  const {isThePlanEditable} = usePlanningPageStore();
 
   const [projectInfo, setProjectInfo] = useState({
     name: "",
@@ -46,7 +43,12 @@ const ProjectPage = () => {
     assets: [],
   });
 
-  const {isGroupChatModalOpen, setGroupChatModalOpen, selectedChatProject, setSelectedChatProject} = useGroupChatModalStore();
+  const {
+    isGroupChatModalOpen,
+    setGroupChatModalOpen,
+    selectedChatProject,
+    setSelectedChatProject,
+  } = useGroupChatModalStore();
 
   const intl = useIntl();
 
@@ -63,8 +65,6 @@ const ProjectPage = () => {
       console.error("Error fetching project data:", error.message);
     }
   }, [id]);
-
-
 
   useEffect(() => {
     fetchProjectData();
@@ -120,7 +120,7 @@ const ProjectPage = () => {
     projectInfo.members.some(
       (user) =>
         user.userId === parseInt(localStorage.getItem("userId")) &&
-        user.role === "PROJECT_MANAGER" &&
+        user.role === PROJECT_ROLES.PROJECT_MANAGER &&
         user.accepted
     );
   const canSeeAndEditProjectPlanning =
@@ -131,8 +131,9 @@ const ProjectPage = () => {
         user.accepted
     );
 
+  // Verifies if the user is "admin" level and the project is in the ready state
   const isInApprovalMode =
-    localStorage.getItem("role") === "1" && projectInfo.state === "READY";
+    localStorage.getItem("role") === "1" && projectInfo.state === PROJECT_STATES.READY;
 
   return (
     <>
@@ -151,22 +152,24 @@ const ProjectPage = () => {
             isOpen={isApprovalModalOpen}
             onClose={() => setIsApprovalModalOpen(false)}
             title={approveOrReject}
-            approveOrReject = {approveOrReject}
+            approveOrReject={approveOrReject}
             projectId={projectInfo.id}
           />
-          <div className={styles.outerControlPanel}
-          style={{
-            backgroundImage: stateColorsBriefcaseBackground[projectInfo.state],
-          }}>
-            <div className={styles.controlPanel}
-            >
-            <section className={styles.projectHeader}>
+          <div
+            className={styles.outerControlPanel}
+            style={{
+              backgroundImage:
+                stateColorsBriefcaseBackground[projectInfo.state],
+            }}
+          >
+            <div className={styles.controlPanel}>
+              <section className={styles.projectHeader}>
                 <h1>{projectInfo.name}</h1>
               </section>
               <div className={styles.btns}>
                 {canEdit &&
-                  projectInfo.state !== "FINISHED" &&
-                  projectInfo.state !== "CANCELLED" && (
+                  projectInfo.state !== PROJECT_STATES.FINISHED &&
+                  projectInfo.state !== PROJECT_STATES.CANCELLED && (
                     <>
                       {!isEditing && (
                         <button
@@ -194,22 +197,21 @@ const ProjectPage = () => {
                       )}
                     </>
                   )}
-                    {canSeeAndEditProjectPlanning && (
+                {canSeeAndEditProjectPlanning && (
                   <div>
                     <button
                       onClick={() => handleClickToOpenProjectPlanningPage()}
                       className={`${styles.iconButton} ${styles.createButton}`}
-                          data-text={intl.formatMessage({
-                            id: "projectPlanning",
-                            defaultMessage: "Planning",
-                          })}
+                      data-text={intl.formatMessage({
+                        id: "projectPlanning",
+                        defaultMessage: "Planning",
+                      })}
                     >
                       <FaChartGantt className={styles.svgIcon} />
                     </button>
                   </div>
                 )}
               </div>
-            
               <div className={styles.otherControls}>
                 {isInApprovalMode && (
                   <>
@@ -247,7 +249,6 @@ const ProjectPage = () => {
             </div>
           </div>
           <div className={styles.basicInfo}>
-
             <div className={styles.firstSeccion}>
               <div className={styles.formContainer}>
                 <ProjectBasicInfo
@@ -262,15 +263,15 @@ const ProjectPage = () => {
           </div>
           <div className={styles.secondSeccion}>
             <div className={styles.attributesContainer}>
-            <AttributeEditor
-                   className={styles.attribute}
-                  title="users"
-                  editMode={isEditing}
-                  mainEntity={"project"}
-                  creationMode={false}
-                  projectId={id}
-                  createdBy={projectInfo.createdBy}
-                />
+              <AttributeEditor
+                className={styles.attribute}
+                title="users"
+                editMode={isEditing}
+                mainEntity={"project"}
+                creationMode={false}
+                projectId={id}
+                createdBy={projectInfo.createdBy}
+              />
               <AttributeEditor
                 className={styles.attribute}
                 title="skills"

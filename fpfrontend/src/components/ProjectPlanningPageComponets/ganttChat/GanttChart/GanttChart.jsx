@@ -149,7 +149,7 @@ const GanttChart = ({tasks, setTasks, updateTaskById, addPreresquisiteTaskById, 
     if (handleType === "dependency") {
       setActiveDependency({ taskId, type });
     }
-    e.dataTransfer.setDragImage(new Image(), 0, 0); // Evita o ícone de arrasto padrão
+    e.dataTransfer.setDragImage(new Image(), 0, 0); // Avoid default drag icon
   };
 
   const handleDrag = (e) => {
