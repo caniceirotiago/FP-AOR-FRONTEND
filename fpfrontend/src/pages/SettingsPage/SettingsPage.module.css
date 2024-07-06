@@ -21,7 +21,7 @@
   width: 100%;
   max-width: 500px;
   padding: 20px;
-  background-color: var(--background-color);
+  background-color: var(--atribute-editor-background);
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 15px;
@@ -32,21 +32,23 @@
 }
 
 .configTitle h3 {
-  font-size: 1.5em;
-  text-align: center;
-  margin: 0;
+  font-size: 18px;
+  text-align: left;
+  margin: 10px;
 }
 
 .configTable {
   width: 100%;
-  border-collapse: collapse;
-  background-color: var(--text-color2);
+  border-collapse: separate;
+  border-spacing: 0 5px;
+  background-color: var(--atribute-editor-background);
   margin-bottom: 30px;
 }
 
 .configTable td {
   padding: 0.5rem;
   border: none;
+  background-color: var(--listItem-background);
 }
 
 .configTable input[type="number"] {
@@ -76,7 +78,8 @@
 @media (max-width: 550px) {
 
   .configTitle h3 {
-    font-size: 1.2em;
+    font-size: 14px;
+    text-align: left;
   }
 
   .configPanel {
@@ -90,7 +93,7 @@
     max-width: auto;
     overflow-x: auto;
     border-collapse: collapse;
-    background-color: var(--text-color2);
+    background-color: var(--atribute-editor-background);
     margin-bottom: 30px;
   }
   
@@ -99,6 +102,7 @@
     border: none;
     width: auto;
     text-align: center;
+    font-size: 12px;
   }
 
   .configTable td:last-child {

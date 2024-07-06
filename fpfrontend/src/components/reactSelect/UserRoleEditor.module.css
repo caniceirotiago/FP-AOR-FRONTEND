@@ -7,9 +7,8 @@
 
 .container h2 {
   font-size: 18px;
-  margin: 0px;
-  padding: 5px;
-  color: var(--text-color4);
+  text-align: left;
+  margin: 10px;
 }
 
 .userListContainer {
@@ -72,4 +71,38 @@
 .searchInput:focus {
   border-color: var(--btn-background1);
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
+
+/* Styles for smaller screens */
+@media (max-width: 550px) {
+
+  .container h2 {
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .userListContainer {
+    min-height: 20px;
+    max-height: 150px;
+  }
+
+  .searchInput {
+    font-size: 12px;
+  }
+
+  .addBtn {
+    padding: 2px 4px;
+  }
+
+  .addBtn span {
+    display: none;
+  }
+
+  .addBtn svg {
+    width: 16px;
+    height: 16px;
+  }
+  
 }
