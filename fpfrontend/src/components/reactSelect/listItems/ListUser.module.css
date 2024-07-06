@@ -1,15 +1,4 @@
 
-@media (max-width: 550px) {
-  .userItem {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-color4);
-    margin-right: 10px;
-  }
-  
-}
-
-@media (min-width: 550px) {
 .userItem {
   display: flex;
   align-items: center;
@@ -20,7 +9,6 @@
   padding: 8px;
   background-color: var(--listItem-background);
   border-radius: 4px;
-}
 }
 
 .username {
@@ -49,3 +37,12 @@
   margin-left: 10px;
 }
 
+@media (max-width: 550px) {
+  .userItem {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-color4);
+    margin-right: 10px;
+  }
+  
+}

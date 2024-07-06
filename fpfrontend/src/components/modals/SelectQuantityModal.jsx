@@ -31,8 +31,8 @@ const SelectQuantityModal = () => {
             onChange={handleChange}
             min="1"
           />
-          <button className={styles.confirmBtn} onClick={handleConfirm}><FormattedMessage id="confirm" defaultMessage="Confirm" /></button>
           <button className={styles.cancelBtn} onClick={reset}><FormattedMessage id="cancel" defaultMessage="Cancel" /></button>
+          <button className={styles.confirmBtn} onClick={handleConfirm}><FormattedMessage id="confirm" defaultMessage="Confirm" /></button>
         </div>
       </div>
     )
