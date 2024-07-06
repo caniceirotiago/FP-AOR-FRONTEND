@@ -3,9 +3,17 @@ import { FormattedMessage } from "react-intl";
 import styles from "./ProjectBasicInfo.module.css";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import { FaSave } from "react-icons/fa";
+import { PROJECT_STATES } from "../../utils/constants/constants";
 
-const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,updateProjectInfo,}) => {
-  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
+const ProjectBasicInfo = ({
+  projectInfo,
+  laboratories,
+  setProjectInfo,
+  isEditing,
+  updateProjectInfo,
+}) => {
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
+    useDialogModalStore();
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setProjectInfo((prevInfo) => ({
@@ -19,14 +27,26 @@ const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,upd
   };
 
   const handleStateChange = async (newState) => {
-    if (newState === "CANCELLED" || newState === "FINISHED") {
-      let message = ""
-      if(newState === "CANCELLED"){
-        message = <FormattedMessage id="cancelProjectConfirmation" defaultMessage="Are you sure you want to cancel this project?" />;
+    if (
+      newState === PROJECT_STATES.CANCELLED ||
+      newState === PROJECT_STATES.FINISHED
+    ) {
+      let message = "";
+      if (newState === PROJECT_STATES.CANCELLED) {
+        message = (
+          <FormattedMessage
+            id="cancelProjectConfirmation"
+            defaultMessage="Are you sure you want to cancel this project?"
+          />
+        );
       }
-      if(newState === "FINISHED"){
-        message = <FormattedMessage id="finishProjectConfirmation" defaultMessage="Are you sure you want to finish this project?" />;
-
+      if (newState === PROJECT_STATES.FINISHED) {
+        message = (
+          <FormattedMessage
+            id="finishProjectConfirmation"
+            defaultMessage="Are you sure you want to finish this project?"
+          />
+        );
       }
       setDialogMessage(message);
       setAlertType(false);
@@ -53,12 +73,12 @@ const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,upd
 
   const renderStateActions = () => {
     switch (projectInfo.state) {
-      case "PLANNING":
+      case PROJECT_STATES.PLANNING:
         return (
           <>
             <button
               className={`${styles.smallButton} ${styles.cancelBtn}`}
-              onClick={() => handleStateChange("CANCELLED")}
+              onClick={() => handleStateChange(PROJECT_STATES.CANCELLED)}
             >
               <FormattedMessage
                 id="cancelProject"
@@ -67,7 +87,7 @@ const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,upd
             </button>
             <button
               className={styles.smallButton}
-              onClick={() => handleStateChange("READY")}
+              onClick={() => handleStateChange(PROJECT_STATES.READY)}
             >
               <FormattedMessage
                 id="markAsReady"
@@ -76,12 +96,12 @@ const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,upd
             </button>
           </>
         );
-      case "READY":
+      case PROJECT_STATES.READY:
         return (
           <>
             <button
               className={`${styles.smallButton} ${styles.cancelBtn}`}
-              onClick={() => handleStateChange("CANCELLED")}
+              onClick={() => handleStateChange(PROJECT_STATES.CANCELLED)}
             >
               <FormattedMessage
                 id="cancelProject"
@@ -90,7 +110,7 @@ const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,upd
             </button>
             <button
               className={styles.smallButton}
-              onClick={() => handleStateChange("PLANNING")}
+              onClick={() => handleStateChange(PROJECT_STATES.PLANNING)}
             >
               <FormattedMessage
                 id="markAsPlanning"
@@ -99,12 +119,12 @@ const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,upd
             </button>
           </>
         );
-      case "IN_PROGRESS":
+      case PROJECT_STATES.IN_PROGRESS:
         return (
           <>
             <button
               className={`${styles.smallButton} ${styles.cancelBtn}`}
-              onClick={() => handleStateChange("CANCELLED")}
+              onClick={() => handleStateChange(PROJECT_STATES.CANCELLED)}
             >
               <FormattedMessage
                 id="cancelProject"
@@ -113,7 +133,7 @@ const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,upd
             </button>
             <button
               className={styles.smallButton}
-              onClick={() => handleStateChange("FINISHED")}
+              onClick={() => handleStateChange(PROJECT_STATES.FINISHED)}
             >
               <FormattedMessage
                 id="markAsFinished"
@@ -154,102 +174,101 @@ const ProjectBasicInfo = ({projectInfo,laboratories,setProjectInfo,isEditing,upd
       <div className={styles.formContainer}>
         <form className={styles.form}>
           <div className={styles.FormSec1}>
-          <label className={styles.label}>
-            <FormattedMessage id="projectName" defaultMessage="Project Name" />
-          </label>
-          <input
-            className={styles.input}
-            type="text"
-            name="name"
-            value={projectInfo.name}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-          />
-
-                    <label className={styles.label}>
-            <FormattedMessage id="laboratoryId" defaultMessage="Laboratory" />
-          </label>
-          <select
-            className={styles.select}
-            name="laboratoryId"
-            id="laboratoryId-field"
-            value={projectInfo?.laboratory.id || ""}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-          >
-            <FormattedMessage
-              id="laboratoryPlaceholder"
-              defaultMessage="Select your laboratory"
-            >
-              {(placeholder) => (
-                <>
-                  <option value="">{placeholder}</option>
-                  {laboratories.map((lab) => (
-                    <option key={lab.id} value={lab.id}>
-                      {lab.locationName}
-                    </option>
-                  ))}
-                </>
-              )}
-            </FormattedMessage>
-          </select>
-          <label className={styles.label}>
-            <FormattedMessage
-              id="conclusionDate"
-              defaultMessage="Conclusion Date"
+            <label className={styles.label}>
+              <FormattedMessage
+                id="projectName"
+                defaultMessage="Project Name"
+              />
+            </label>
+            <input
+              className={styles.input}
+              type="text"
+              name="name"
+              value={projectInfo.name}
+              onChange={handleInputChange}
+              disabled={!isEditing}
             />
-          </label>
-          <input
-            type="date"
-            className={styles.datePicker}
-            name="conclusionDate"
-            value={
-              projectInfo.conclusionDate
-                ? new Date(projectInfo.conclusionDate)
-                    .toISOString()
-                    .substring(0, 10)
-                : ""
-            }
-            onChange={handleInputChange}
-            disabled={!isEditing}
-          />
+            <label className={styles.label}>
+              <FormattedMessage id="laboratoryId" defaultMessage="Laboratory" />
+            </label>
+            <select
+              className={styles.select}
+              name="laboratoryId"
+              id="laboratoryId-field"
+              value={projectInfo?.laboratory.id || ""}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+            >
+              <FormattedMessage
+                id="laboratoryPlaceholder"
+                defaultMessage="Select your laboratory"
+              >
+                {(placeholder) => (
+                  <>
+                    <option value="">{placeholder}</option>
+                    {laboratories.map((lab) => (
+                      <option key={lab.id} value={lab.id}>
+                        {lab.locationName}
+                      </option>
+                    ))}
+                  </>
+                )}
+              </FormattedMessage>
+            </select>
+            <label className={styles.label}>
+              <FormattedMessage
+                id="conclusionDate"
+                defaultMessage="Conclusion Date"
+              />
+            </label>
+            <input
+              type="date"
+              className={styles.datePicker}
+              name="conclusionDate"
+              value={
+                projectInfo.conclusionDate
+                  ? new Date(projectInfo.conclusionDate)
+                      .toISOString()
+                      .substring(0, 10)
+                  : ""
+              }
+              onChange={handleInputChange}
+              disabled={!isEditing}
+            />
           </div>
           <div className={styles.FormSec2}>
-
-
-                    <label className={styles.label}>
-            <FormattedMessage id="description" defaultMessage="Description" />
-          </label>
-          <textarea
-            className={styles.textarea}
-            name="description"
-            value={projectInfo.description}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-          />
-                    <label className={styles.label}>
-            <FormattedMessage id="motivation" defaultMessage="Motivation" />
-          </label>
-          <textarea
-            className={styles.textarea}
-            name="motivation"
-            value={projectInfo.motivation}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-          />
-          
+            <label className={styles.label}>
+              <FormattedMessage id="description" defaultMessage="Description" />
+            </label>
+            <textarea
+              className={styles.textarea}
+              name="description"
+              value={projectInfo.description}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+            />
+            <label className={styles.label}>
+              <FormattedMessage id="motivation" defaultMessage="Motivation" />
+            </label>
+            <textarea
+              className={styles.textarea}
+              name="motivation"
+              value={projectInfo.motivation}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+            />
           </div>
         </form>
         {isEditing && (
-            <div className={styles.saveButtonContainer}>
+          <div className={styles.saveButtonContainer}>
             <button className={styles.saveButton} onClick={handleUpdateProject}>
-            <FaSave className={styles.svgIcon} />
-            <span className={styles.btnText}>
-              <FormattedMessage id="save" defaultMessage="Save" />
-            </span>
-          </button>
+              <FaSave className={styles.svgIcon} />
+              <span className={styles.btnText}>
+                <FormattedMessage id="save" defaultMessage="Save" />
+              </span>
+            </button>
           </div>
-          )}
+        )}
       </div>
     </div>
   );
@@ -259,15 +278,15 @@ export default ProjectBasicInfo;
 
 const getStatusColor = (status) => {
   switch (status) {
-    case "PLANNING":
+    case PROJECT_STATES.PLANNING:
       return "var(--color-planning)";
-    case "READY":
+    case PROJECT_STATES.READY:
       return "var(--color-ready)";
-    case "IN_PROGRESS":
+    case PROJECT_STATES.IN_PROGRESS:
       return "var(--color-in-progress)";
-    case "FINISHED":
+    case PROJECT_STATES.FINISHED:
       return "var(--color-finished)";
-    case "CANCELLED":
+    case PROJECT_STATES.CANCELLED:
       return "var(--color-cancelled)";
     default:
       return "var(--color-default)";
