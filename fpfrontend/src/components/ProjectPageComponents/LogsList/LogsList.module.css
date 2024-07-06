@@ -1,62 +1,73 @@
 .container {
-    width: 100%;
-    align-self: center;
-    background: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 150px;
-  }
-  
-  .innerContainer {
-    display: flex;
-    flex-direction: column;
-  }
-  .attribute{
-    border-bottom: solid 1px #ddd;
-  }
-  .existingAttributes,
-.addAttribute {
-  margin-bottom: 20px;
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  align-self: center;
+  background-color: var(--atribute-editor-background);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 150px;
+}
+
+.container h3 {
+  margin-left: 10px;
+  margin-bottom: 5px;
+  color: var(--text-color4);
+  font-size: 18px;
+}
+
+.innerContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.existingAttributes {
+  margin-bottom: 10px;
+  padding: 5px;
 }
 
 .userAttributeContainer {
-    margin-top: 10px;
-    overflow-y: auto;
-    height: 200px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-
-.attributeList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  margin-top: 10px;
+  overflow-y: auto;
+  height: 200px;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  background-color: var(--atribute-editor-background);
 }
-.attribute {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
+
+.attributeTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color4);
+}
+
+.attributeTable td {
+  padding: 10px; /* Default padding for all cells */
+  text-align: left;
   border-bottom: 1px solid #eee;
+}
+
+.attributeTable td:nth-child(1) {
+  padding-left: 20px; 
+  padding-right: 40px; 
+}
+
+.attributeTable td:nth-child(2) {
+  padding-left: 30px; 
+  padding-right: 40px;
+}
+
+.attributeTable td:nth-child(3) {
+  padding-left: 20px;
+  padding-right: 10px;
+}
+
+.logElement {
+  background-color: var(--listItem-background);
   transition: background-color 0.3s ease;
 }
 
-.attribute:last-child {
-  border-bottom: none;
-}
-
-.attribute:hover {
+.logElement:hover {
   background-color: #f1f1f1;
-}
-.logElement{
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    transition: background-color 0.3s ease;
 }
