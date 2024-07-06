@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FormattedMessage } from "react-intl";
 import styles from "./ProjectBasicInfo.module.css";
-import Button from "../buttons/landingPageBtn/Button.jsx";
-import { set } from "date-fns";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import { FaSave } from "react-icons/fa";
 
