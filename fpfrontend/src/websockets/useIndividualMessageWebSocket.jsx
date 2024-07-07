@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { MESSAGE_TYPES } from "../utils/constants/constants";
 
 export const useIndividualMessageWebSocket = (
   url,
@@ -27,10 +26,10 @@ export const useIndividualMessageWebSocket = (
     ws.current.onmessage = (e) => {
       try {
         const message = JSON.parse(e.data);
-        if (message.type === MESSAGE_TYPES.NEW_INDIVIDUAL_MESSAGE) {
+        if (message.type === "NEW_INDIVIDUAL_MESSAGE") {
           onMessage(message.data);
         }
-        if (message.type === MESSAGE_TYPES.MARK_AS_READ) {
+        if (message.type === "MARK_AS_READ") {
           updateMessages(message.data);
         }
       } catch (error) {

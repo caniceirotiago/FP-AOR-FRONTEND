@@ -20,16 +20,6 @@ export const TASK_STATES = {
   FINISHED: "FINISHED",
 };
 
-// websocket message types
-export const MESSAGE_TYPES = {
-  FORCED_LOGOUT: "FORCED_LOGOUT",
-  FORCED_LOGOUT_FAILED: "FORCED_LOGOUT_FAILED",
-  RECEIVED_NOTIFICATION: "RECEIVED_NOTIFICATION",
-  NEW_GROUP_MESSAGE: "NEW_GROUP_MESSAGE",
-  NEW_INDIVIDUAL_MESSAGE: "NEW_INDIVIDUAL_MESSAGE",
-  MARK_AS_READ: "MARK_AS_READ",
-};
-
 // app role mapping
 export const roles = ["Administrator", "Standard User"];
 
