@@ -31,7 +31,7 @@ const HomepageHeader = () => {
   const { theme, toggleTheme } = useThemeStore();
   const { isLoginModalOpen, setIsLoginModalOpen } = useLoginModalStore();
   const { logout, isAuthenticated } = useAuthStore();
-  const { setSelectedUser, setComposeModalOpen } = useComposeEmailModal();
+  const { setSelectedUser, setComposeModalOpen, setSelectedMessage } = useComposeEmailModal();
   const { setGroupChatModalOpen, setSelectedChatProject } = useGroupChatModalStore();
   const { notification, setNotification } = notificationStore();
   const totalNotifications = notification.length;
@@ -166,6 +166,7 @@ const HomepageHeader = () => {
       case 'INDIVIDUAL_MESSAGE':
         navigate(`/messages`);
         setSelectedUser({ id: notif.individualMessage.sender.id, username: notif.individualMessage.sender.username });
+        setSelectedMessage(notif.individualMessage);
         setComposeModalOpen(true);
         break;
       case 'GROUP_MESSAGE':

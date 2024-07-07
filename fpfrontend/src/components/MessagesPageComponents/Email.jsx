@@ -14,6 +14,8 @@ const Email = () => {
     setSelectedUser,
     isComposeModalOpen,
     setComposeModalOpen,
+    selectedMessage,
+    setSelectedMessage,
   } = useComposeEmailModal();
 
   const [messages, setMessages] = useState([]);
@@ -51,7 +53,14 @@ const Email = () => {
 
   const handleComposeClick = () => {
     setSelectedUser(null);
+    setSelectedMessage(null);
     setComposeModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setSelectedMessage(null);
+    setSelectedUser(null);
+    setComposeModalOpen(false);
   };
 
   const handleMsgClick = (msg) => {
@@ -59,6 +68,7 @@ const Email = () => {
     const username =
       view === "inbox" ? msg.sender.username : msg.recipient.username;
     setSelectedUser({ id: userId, username: username });
+    setSelectedMessage(msg);
     setComposeModalOpen(true);
   };
 
@@ -139,8 +149,10 @@ const Email = () => {
       )}
       {isComposeModalOpen && (
         <ComposeEmailModal
-          onClose={() => setComposeModalOpen(false)}
+          onClose={handleModalClose}
           initialSelectedUser={selectedUser}
+          initialSelectedMessage={selectedMessage}
+          setInitialSelectedMessage={setSelectedMessage}
           isChatModalOpen={isComposeModalOpen}
           setInitialSelectedUser={setSelectedUser}
         />
