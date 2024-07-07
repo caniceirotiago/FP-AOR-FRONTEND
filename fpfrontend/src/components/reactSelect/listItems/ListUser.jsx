@@ -1,13 +1,6 @@
 import React from "react";
 import styles from "./ListUser.module.css";
-
-const roles = ["ADMIN", "STANDARD_USER"];
-const roleMapping = {
-  1: "ADMIN",
-  2: "STANDARD_USER",
-  ADMIN: 1,
-  STANDARD_USER: 2,
-};
+import { roles, roleMapping } from "../../../utils/constants/constants";
 
 const ListUser = ({ user, handleChangeUserRole }) => {
   const onChangeRole = (event) => {

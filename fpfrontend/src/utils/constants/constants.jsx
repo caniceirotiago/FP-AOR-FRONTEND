@@ -29,3 +29,13 @@ export const MESSAGE_TYPES = {
   MARK_AS_READ: "MARK_AS_READ",
   NEW_INDIVIDUAL_MESSAGE: "NEW_INDIVIDUAL_MESSAGE",
 };
+
+// app role mapping
+export const roles = ["Administrator", "Standard User"];
+
+export const roleMapping = {
+  1: "Administrator",
+  2: "Standard User",
+  "Administrator": 1,
+  "Standard User": 2,
+};

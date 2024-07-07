@@ -4,13 +4,8 @@ import styles from "./UserRoleEditor.module.css";
 import ListUser from "./listItems/ListUser.jsx";
 import userService from "../../services/userService.jsx";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
+import { roleMapping } from "../../utils/constants/constants";
 
-const roleMapping = {
-  1: "ADMIN",
-  2: "STANDARD_USER",
-  ADMIN: 1,
-  STANDARD_USER: 2,
-};
 
 const UserRoleEditor = () => {
   const intl = useIntl();
@@ -84,6 +79,7 @@ const UserRoleEditor = () => {
     const { value } = e.target;
     setSearchText(value.trim()); // Update search text state
   };
+  
   // Filter users based on search text
   const filteredUsers = users.filter((user) =>
     user.username.toLowerCase().includes(searchText.toLowerCase())
