@@ -18,10 +18,7 @@ export const useGlobalWebSocket = (url, shouldConnect) => {
   const forcedLogout = async () => {
     const response = await userService.logout();
     if (!response.status === 204) {
-      const message = {
-        type: "FORCED_LOGOUT_FAILED",
-        content: "Failed to logout user. Please try again.",
-      };
+      const message = {type: 'FORCED_LOGOUT_FAILED', content: 'Failed to logout user. Please try again.'};
       sendMessage(message);
     }
     logout();
@@ -50,9 +47,9 @@ export const useGlobalWebSocket = (url, shouldConnect) => {
         const message = JSON.parse(e.data);
         console.log("WebSocket Global Message:", message);
 
-        if (message.type === "FORCED_LOGOUT") {
+        if (message.type === 'FORCED_LOGOUT') {
           forcedLogout();
-        } else if (message.type === "RECEIVED_NOTIFICATION") {
+        } else if (message.type === 'RECEIVED_NOTIFICATION') {
           addNotification(message.data);
           if (audioRef.current) {
             audioRef.current
