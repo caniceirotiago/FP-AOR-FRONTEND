@@ -21,11 +21,11 @@ export const TASK_STATES = {
 };
 
 // app role mapping
-export const roles = ["Administrator", "Standard User"];
+export const roles = ["ADMIN", "STANDARD_USER"];
 
 export const roleMapping = {
-  1: "Administrator",
-  2: "Standard User",
-  "Administrator": 1,
-  "Standard User": 2,
+  1: "ADMIN",
+  2: "STANDARD_USER",
+  "ADMIN": 1,
+  "STANDARD_USER": 2,
 };
