@@ -20,8 +20,8 @@ const MainLayout = ({ children }) => {
     // useGlobalWebSocket(wsUrl, true, onNotification);
     
     const{configurations, fetchConfigurations} = useConfigurationStore();
-    const {domain} = useDomainStore();
-    useGlobalWebSocket(`ws://${domain}/ws`, true);
+    const {wwsDomain} = useDomainStore();
+    useGlobalWebSocket(`${wwsDomain}/ws`, true);
 
     useEffect(() => {
         fetchConfigurations();

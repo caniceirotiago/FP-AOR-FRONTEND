@@ -67,8 +67,8 @@ const GroupChatModal = ({
 
     const sessionToken = Cookies.get("sessionToken");
     const projectIdUrl = selectedChatProject.projectId;
-    const newWsUrl = `ws://${
-      useDomainStore.getState().domain
+    const newWsUrl = `${
+      useDomainStore.getState().wssDomain
     }/groupChat/${sessionToken}/${projectIdUrl}`;
 
     return `${newWsUrl}`;

@@ -62,8 +62,8 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, initialSelectedMessag
     const sessionToken = Cookies.get("sessionToken");
     const sessionTokenUrl = sessionToken;
     const receiverIdUrl = data.currentUser.id;
-    const newWsUrl = `ws://${
-      useDomainStore.getState().domain
+    const newWsUrl = `${
+      useDomainStore.getState().wssDomain
     }/emailChat/${sessionTokenUrl}/${receiverIdUrl}`;
 
     return `${newWsUrl}`;

@@ -1,8 +1,7 @@
 import useAuthStore from "../stores/useAuthStore";
 import useDomainStore from "../stores/useDomainStore";
 
-const MEMBER_BASE_URL =
-"http://" + useDomainStore.getState().domain + "/rest/memberships";
+const MEMBER_BASE_URL = useDomainStore.getState().httpsDomain + "/rest/memberships";
 
 const getAuthHeaders = () => {
   return {
