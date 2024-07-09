@@ -701,6 +701,7 @@ const AttributeEditor = ({
         attribute.user?.username === localStorage.getItem("username")
     );
 
+    if((attributes.length === 0 || !attributes) && !editMode) return null;
   return (
     <div className={styles.container}>
       {isLoading && <Spinner />}

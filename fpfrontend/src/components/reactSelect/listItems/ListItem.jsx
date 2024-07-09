@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./ListItem.module.css";
 import useProjectRolesStore from "../../../stores/useProjectRolesStore";
 import { FaTimes } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const ListItem = ({
   title,
@@ -13,11 +14,16 @@ const ListItem = ({
   removeItem,
 }) => {
   const { roles } = useProjectRolesStore();
+  const navigate = useNavigate();
 
   const onChangeRole = (event) => {
     const role = event.target.value;
     const userId = attribute.user.id;
     handleChangeUserProjectRole(userId, role);
+  };
+  const onUserClick = (username) => {
+    if(creationMode) return;
+    navigate(`/userProfile/${username}`);
   };
 
   let isTheCreator;
@@ -45,14 +51,14 @@ const ListItem = ({
       )}
       {title === "users" && (
         <>
-          <div className={styles.attributePhoto}>
+          <div className={styles.attributePhoto} onClick={() => onUserClick(attribute.user.username)} style={!creationMode ? { cursor: 'pointer' } : null}>
             <img
               src={attribute.user.photo}
               alt="user"
               className={styles.photo}
             />
           </div>
-          <div className={styles.attributeName}>{attribute.user.username}</div>
+          <div className={styles.attributeName} onClick={() => onUserClick(attribute.user.username)} style={!creationMode ? { cursor: 'pointer' } : null}>{attribute.user.username}</div>
           {!creationMode && (
             <div className={styles.attributeRole}>
               <select
@@ -75,10 +81,10 @@ const ListItem = ({
       )}
       {(title === "Responsible user" || title === "Registered executers") && (
         <>
-          <div className={styles.attributePhoto}>
+          <div className={styles.attributePhoto} onClick={() => onUserClick(attribute.username)} style={!creationMode ? { cursor: 'pointer' } : null}>
             <img src={attribute.photo} alt="user" className={styles.photo} />
           </div>
-          <div className={styles.attributeName}>{attribute.username}</div>
+          <div className={styles.attributeName} onClick={() => onUserClick(attribute.username)} style={!creationMode ? { cursor: 'pointer' } : null}>{attribute.username}</div>
         </>
       )}
 

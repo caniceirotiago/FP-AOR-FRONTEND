@@ -6,9 +6,10 @@ import taskService from "../../../services/taskService";
 import useDeviceStore from "../../../stores/useDeviceStore";
 import projectService from "../../../services/projectService";
 import { useNavigate } from "react-router-dom";
-import { FaLock } from "react-icons/fa";
+import { FaBriefcase, FaLock } from "react-icons/fa";
 import usePlanningPageStore from "../../../stores/usePlanningPageStore";
 import { PROJECT_STATES } from "../../../utils/constants/constants";
+import { stateColorsBriefcaseBackground } from "../../../utils/colors/projectColors";
 
 
 const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
@@ -130,16 +131,20 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.projectPlanningHeader}>
-        <h3 onClick={handleTitleClick} className={styles.title}>
+      <div
+            className={styles.outerControlPanel}
+           
+          >
+      <div className={styles.projectPlanningHeader} onClick={handleTitleClick} >
+        <h3 className={styles.title}>
+          
           {projectGeneralInfo.name}
         </h3>
         <p className={styles.state}>{projectGeneralInfo.state}</p>
-        <span
-          className={styles.statusIndicator}
-          style={{ backgroundColor: getStatusColor(projectGeneralInfo.state) }}
-        ></span>
+        <FaBriefcase className={styles.briefcaseIcon} style={{ color: getStatusColor(projectGeneralInfo.state) }}/>
+
         {!isThePlanEditable && <FaLock className={styles.lockIcon} />}
+      </div>
       </div>
       <div className={styles.projectPlanningBody}>
         {dimensions.width > 1250 && (
