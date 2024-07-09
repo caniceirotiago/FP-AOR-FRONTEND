@@ -1,8 +1,11 @@
+import Cookies from "js-cookie";
 import useAuthStore from "../stores/useAuthStore";
 import useDomainStore from "../stores/useDomainStore";
 const API_BASE_URL = useDomainStore.getState().httpsDomain + "/rest/users";
 
 const MEMBER_BASE_URL = useDomainStore.getState().httpsDomain + "/rest/memberships";
+
+
 
 const getAuthHeaders = () => {
   return {
@@ -14,6 +17,13 @@ const getAuthHeaders = () => {
 const checkStatus = (response) => {
   if (response.status === 401) {
     useAuthStore.getState().logout();
+  }
+};
+const removeInsecureCookies = () => {
+  const allCookies = Cookies.get();
+  for (const cookieName in allCookies) {
+      Cookies.remove(cookieName, { path: '/' });
+    
   }
 };
 
@@ -74,13 +84,18 @@ const userService = {
 
   login: async (email, password) => {
     let userLogin = { email, password };
+    
     try {
+      removeInsecureCookies();
       const response = await fetch(`${API_BASE_URL}/login`, {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify(userLogin),
         credentials: "include",
       });
+      if(response.status === 401){
+        Cookies.remove("sessionToken");
+      }
       return response;
     } catch (error) {
       throw error;

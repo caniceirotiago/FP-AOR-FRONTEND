@@ -1,19 +1,18 @@
 .tableContainer {
-  background: rgba(255, 255, 255, 0.2);
+  margin: 10px;
+  background: var(--table-background);
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  width: 100%;
+  margin-top: 0px;
 }
 
 .tblHeader {
-  background-color: rgba(255, 255, 255, 0.9);
-  width: 100%;
+  background-color: var(--table-background);
 }
 
 .tblContent {
   margin-top: 0px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  width: 100%;
 }
 
 .table {
@@ -30,7 +29,7 @@
   font-size: 12px;
   color: var(--text-color);
   text-transform: uppercase;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: var(--table-header-background);
 }
 
 .cell {
@@ -44,29 +43,50 @@
   white-space: nowrap;           /* Força o texto a ficar em uma linha */
   overflow: hidden;              /* Esconde o texto que ultrapassa o espaço disponível */
   text-overflow: ellipsis;       /* Adiciona reticências para texto que ultrapassa o espaço */
-  max-width: 150px;              
-  max-height: 1.2em;             
-  line-height: 1.2em;            
+  max-width: 150px;              /* Define a largura máxima */
+  max-height: 1.2em;             /* Define a altura máxima */
+  line-height: 1.2em;            /* Define a altura da linha */
 }
 
-.notViewed{
+.notViewed {
   background-color: rgba(255, 223, 186, 0.8);
 }
 
 .row:hover {
   background-color: rgba(241, 241, 241, 0.8);
+  cursor: pointer;
 }
 
-.userPhoto{
+.cell:hover {
+  cursor: pointer;
+}
+
+.photo {
   width: 20px;
   height: 20px;
   border-radius: 50%;
   margin-right: 10px;
 }
 
-.photo{
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  margin-right: 10px;
+.actions {
+  display: flex;
+  gap: 10px;
 }
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: none;
+  background-color: var(--btn-background1);
+  color: var(--btn-color1);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.actionButton:hover {
+  background-color: var(--btn-background2);
+}
+

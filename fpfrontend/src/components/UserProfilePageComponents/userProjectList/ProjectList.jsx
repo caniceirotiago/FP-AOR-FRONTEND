@@ -51,7 +51,7 @@ const ProjectList = ({ id }) => {
     const handleProjectClick = (e, id) => {
         navigate("/projectpage/" + id);
     };
-
+    if(projects.length === 0 || !projects) return null;
     return (
         <div className={styles.container}>
             <h2>Project List</h2>

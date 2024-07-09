@@ -6,35 +6,51 @@
   height: calc(100% - 100px);
 }
 
+.outerControlPanel{
+  width: 70%;
+  align-self: center;
+  border-radius: 15px;
+  margin: 15px 0px;
+}
+.briefcaseIcon{
+  font-size: 1.7em;
+}
 .projectPlanningHeader{
+  background-color: var(--card-background);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   width: 100%;
-  height: 50px;
+  height: 35px;
   gap: 20px;
+  padding: 10px 0px;
+  border-radius: 15px;
+  margin: 20px 0px;
+
+}
+.projectPlanningHeader:hover{
+  cursor: pointer;
+  background-color: #f0f0f0; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px; 
 }
 
 .projectPlanningHeader h3{
-  font-size: 2em;
+  font-size: 1.7em;
   margin: 0px;
   padding: 0px;
   align-self: center;
   justify-self: center;
   border: 2px solid transparent;
   transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
-  box-shadow: 0 0 5px var(--profile-second-background-color);
   border-radius: 8px;
-}
 
-.projectPlanningHeader h3:hover {
-  border-color: var(--profile-second-background-color);
-  background-color: var(--card-border); 
-  box-shadow: 0 0 10px var(--btn-background1);
-  border-radius: 8px;
-}
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
+}
 .projectPlanningHeader p{
   font-size: 1.3em;
   margin: 0px;
@@ -78,5 +94,8 @@
 @media (max-width: 768px) {
   .container {
     margin-bottom: 10px;
+  }
+  .outerControlPanel{
+    width: 100%;
   }
 }

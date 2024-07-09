@@ -33,7 +33,7 @@ const LogModal = ({ isOpen, onClose, onCreateLog }) => {
               value={logContent}
               onChange={handleChange}
               minLength={2}
-              maxLength={2048}
+              maxLength={200}
               required
             />
             <button type="submit" className={styles.button}>
