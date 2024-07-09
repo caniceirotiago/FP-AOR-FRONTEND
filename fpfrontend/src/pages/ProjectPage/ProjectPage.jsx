@@ -298,7 +298,8 @@ const ProjectPage = () => {
               />
             </div>
             <div className={styles.attributesContainer}>
-              {canSeeAndEditProjectPlanning && <LogsList id={id} />}
+              {canSeeAndEditProjectPlanning &&
+               <LogsList id={id} />}
             </div>
             <div className={styles.chatButtonContainer}>
               {canSeeAndEditProjectPlanning && (

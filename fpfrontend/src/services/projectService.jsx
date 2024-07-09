@@ -238,8 +238,23 @@ const projectService = {
     }
   },
       
-    
-  
+  createProjectLog: async (id, dataToSend) => {
+    console.log("Project Service content ", dataToSend.content );
+    console.log("Project Service dataToSend ", dataToSend);
+    try {
+      const response = await fetch(`${API_BASE_URL}/logs/create/${id}`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(dataToSend),
+        credentials: "include",
+      });
+      checkStatus(response);
+      return response;
+    } catch (error) {
+      console.error("Error creating project log:", error.message);
+      throw error;
+    }
+  },
   
 };
 

@@ -257,5 +257,11 @@
   "approvedProjectsTitle": "Approved Projects by Location",
   "completedProjectsTitle": "Completed Projects by Location",
   "canceledProjectsTitle": "Canceled Projects by Location",
-  "projectDistributionTitle": "Project Distribution by Location"
+  "projectDistributionTitle": "Project Distribution by Location",
+  "projectLogs": "Project Logs",
+  "creationDate": "Creation Date",
+  "logType": "Log Type",
+  "user": "User",
+  "noNewNotifications": "No new notifications",
+  "addLog": "Add Log"
 }

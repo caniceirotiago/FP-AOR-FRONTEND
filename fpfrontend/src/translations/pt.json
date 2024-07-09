@@ -45,10 +45,10 @@
   "private": "Privado",
   "public": "Público",
   "homePage": "Página Inicial",
-  "users": "Usuários",
+  "users": "Utilizadores",
   "deletedTasks": "Tarefas Excluídas",
   "categories": "Categorias",
-  "dashboard": "Painel de Controle",
+  "dashboard": "Painel de Controlo",
   "settings": "Configurações",
   "projectFolder": "Pasta do Projeto",
   "projectList": "Lista de Projetos",
@@ -256,5 +256,11 @@
   "approvedProjectsTitle": "Projetos Aprovados por Localização",
   "completedProjectsTitle": "Projetos Concluídos por Localização",
   "canceledProjectsTitle": "Projetos Cancelados por Localização",
-  "projectDistributionTitle": "Distribuição de Projetos por Localização"
+  "projectDistributionTitle": "Distribuição de Projetos por Localização",
+  "projectLogs": "Logs do Projeto",
+  "creationDate": "Data de criação",
+  "logType": "Tipo de Log",
+  "user": "Utilizador",
+  "noNewNotifications": "Sem novas notificações",
+  "addLog": "Criar Log"
 }

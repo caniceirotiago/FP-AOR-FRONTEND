@@ -1,12 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import styles from "./LogsList.module.css";
 import { format, parseISO } from "date-fns";
-import { useCallback } from "react";
 import projectService from "../../../services/projectService";
-import { useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
+import { FaPlus } from "react-icons/fa";
+import LogModal from "../../modals/LogModal";
 
 const LogsList = ({ id }) => {
   const [projectLogs, setProjectLogs] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const intl = useIntl();
 
   const formatDate = (dateString) => {
     const date = parseISO(dateString);
@@ -27,13 +30,78 @@ const LogsList = ({ id }) => {
     fetchProjectLogs();
   }, []);
 
+  /*
+  useEffect(() => {
+    fetchProjectLogs();
+  }, [fetchProjectLogs]);
+  */
+
+  const handleOpenLogModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseLogModal = () => {
+    setShowModal(false);
+  };
+
+  const handleCreateProjectLog = async (logContent) => {
+    try {
+      const dataToSend = {
+        content: logContent,
+      };
+      console.log("Data to send:", dataToSend);
+      console.log(dataToSend.content);
+      const response = await projectService.createProjectLog(id, dataToSend);
+      if (response.status === 204) {
+        // Log created successfully, update project logs
+        fetchProjectLogs();
+        handleCloseLogModal();
+      } else {
+        const data = await response.json();
+        console.log("Failed to create project log:", data.message);
+      }
+    } catch (error) {
+      console.error("Error creating project log:", error.message);
+    }
+  };
+
   return (
     <div className={styles.container}>
-      <h3>Project Logs</h3>
+      <div className={styles.containerHeader}>
+        <h3>
+          <FormattedMessage id="projectLogs" defaultMessage="Project Logs" />
+        </h3>
+        <button
+          onClick={handleOpenLogModal}
+          className={`${styles.iconButton} ${styles.createButton}`}
+          data-text={intl.formatMessage({ id: "addLog" })}
+        >
+          <FaPlus className={styles.svgIcon} />
+        </button>
+      </div>
       <div className={styles.innerContainer}>
         <div className={styles.existingAttributes}>
           <div className={styles.userAttributeContainer}>
             <table className={styles.attributeTable}>
+              <thead>
+                <tr>
+                  <th>
+                    <FormattedMessage id="user" defaultMessage="User" />
+                  </th>
+                  <th>
+                    <FormattedMessage
+                      id="creationDate"
+                      defaultMessage="Creation Date"
+                    />
+                  </th>
+                  <th>
+                    <FormattedMessage id="logType" defaultMessage="Log Type" />
+                  </th>
+                  <th>
+                    <FormattedMessage id="content" defaultMessage="Content" />
+                  </th>
+                </tr>
+              </thead>
               <tbody>
                 {projectLogs
                   .slice()
@@ -42,6 +110,7 @@ const LogsList = ({ id }) => {
                     <tr className={styles.logElement} key={index}>
                       <td>{log.username}</td>
                       <td>{formatDate(log.creationDate)}</td>
+                      <td>{log.type}</td>
                       <td>{log.content}</td>
                     </tr>
                   ))}
@@ -50,6 +119,13 @@ const LogsList = ({ id }) => {
           </div>
         </div>
       </div>
+      {showModal && (
+        <LogModal
+          isOpen={showModal}
+          onClose={handleCloseLogModal}
+          onCreateLog={handleCreateProjectLog}
+        />
+      )}
     </div>
   );
 };
