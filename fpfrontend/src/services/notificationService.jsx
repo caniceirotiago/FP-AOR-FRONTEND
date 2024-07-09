@@ -1,7 +1,6 @@
 import useAuthStore from "../stores/useAuthStore";
 import useDomainStore from "../stores/useDomainStore";
-const API_BASE_URL =
-  "http://" + useDomainStore.getState().domain + "/rest/notifications";
+const API_BASE_URL = useDomainStore.getState().httpsDomain + "/rest/notifications";
 
 
 const getAuthHeaders = () => {
