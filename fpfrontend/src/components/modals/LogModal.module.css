@@ -35,8 +35,9 @@
   border: none;
   transition: color 0.3s;
 }
+
 .formContainer {
-  height: 95%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
