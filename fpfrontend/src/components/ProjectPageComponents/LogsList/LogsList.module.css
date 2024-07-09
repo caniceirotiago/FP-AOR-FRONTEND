@@ -7,6 +7,14 @@
   margin-bottom: 150px;
 }
 
+.containerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--atribute-editor-background);
+  padding-right: 5px;
+}
+
 .container h3 {
   margin-left: 10px;
   margin-bottom: 5px;
@@ -24,15 +32,6 @@
   padding: 5px;
 }
 
-.userAttributeContainer {
-  margin-top: 10px;
-  overflow-y: auto;
-  height: 200px;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-  background-color: var(--atribute-editor-background);
-}
-
 .attributeTable {
   width: 100%;
   border-collapse: separate;
@@ -42,6 +41,10 @@
   color: var(--text-color4);
 }
 
+.attributeTable th {
+  text-align: left;
+}
+
 .attributeTable td {
   padding: 10px; /* Default padding for all cells */
   text-align: left;
@@ -49,18 +52,19 @@
 }
 
 .attributeTable td:nth-child(1) {
-  padding-left: 20px; 
-  padding-right: 40px; 
+  padding-right: 30px;
 }
 
 .attributeTable td:nth-child(2) {
-  padding-left: 30px; 
-  padding-right: 40px;
+  padding-right: 20px;
 }
 
 .attributeTable td:nth-child(3) {
-  padding-left: 20px;
-  padding-right: 10px;
+  padding-right: 20px;
+}
+
+.attributeTable td:nth-child(4) {
+  padding-right: 5px;
 }
 
 .logElement {
@@ -70,4 +74,55 @@
 
 .logElement:hover {
   background-color: #f1f1f1;
+}
+
+.iconButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--btn-background2);
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+  cursor: pointer;
+  transition: width 0.3s, border-radius 0.3s, background-color 0.3s;
+  overflow: hidden;
+  position: relative;
+}
+
+.iconButton:hover {
+  width: 80px;
+  border-radius: 50px;
+  background-color: var(--btn-background1);
+}
+
+.iconButton .svgIcon {
+  width: 20px;
+  transition: width 0.3s, transform 0.3s;
+  fill: white;
+}
+
+.iconButton:hover .svgIcon {
+  width: 30px;
+  transform: translateY(+400%);
+}
+
+.iconButton::after {
+  content: attr(data-text);
+  color: white;
+  font-size: 16px;
+  position: absolute;
+  bottom: +90px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease, bottom 0.3s ease;
+}
+
+.iconButton:hover::after {
+  bottom: 15px;
+  opacity: 1;
 }
