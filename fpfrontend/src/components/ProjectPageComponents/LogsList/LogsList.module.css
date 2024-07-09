@@ -102,7 +102,7 @@
 .iconButton .svgIcon {
   width: 20px;
   transition: width 0.3s, transform 0.3s;
-  fill: white;
+  fill: var(--btn-color1);
 }
 
 .iconButton:hover .svgIcon {
@@ -112,7 +112,7 @@
 
 .iconButton::after {
   content: attr(data-text);
-  color: white;
+  color: var(--btn-color1);
   font-size: 16px;
   position: absolute;
   bottom: +90px;
@@ -125,4 +125,24 @@
 .iconButton:hover::after {
   bottom: 15px;
   opacity: 1;
+}
+
+@media (max-width: 950px) {
+  .headerLogType, .cellLogType {
+    display: none;
+  }
+}
+
+@media (max-width: 850px) {
+  .headerUser, .cellUser {
+    display: none;
+  }
+
+  .table {
+    font-size: 0.8rem;
+  }
+
+  .header, .cell {
+    padding: 8px 10px;
+  }
 }

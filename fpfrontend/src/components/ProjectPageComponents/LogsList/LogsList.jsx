@@ -85,19 +85,19 @@ const LogsList = ({ id }) => {
             <table className={styles.attributeTable}>
               <thead>
                 <tr>
-                  <th>
+                  <th className={styles.headerUser}>
                     <FormattedMessage id="user" defaultMessage="User" />
                   </th>
-                  <th>
+                  <th className={styles.headerDate}>
                     <FormattedMessage
                       id="creationDate"
                       defaultMessage="Creation Date"
                     />
                   </th>
-                  <th>
+                  <th className={styles.headerLogType}>
                     <FormattedMessage id="logType" defaultMessage="Log Type" />
                   </th>
-                  <th>
+                  <th className={styles.headerContent}>
                     <FormattedMessage id="content" defaultMessage="Content" />
                   </th>
                 </tr>
@@ -108,10 +108,12 @@ const LogsList = ({ id }) => {
                   .reverse()
                   .map((log, index) => (
                     <tr className={styles.logElement} key={index}>
-                      <td>{log.username}</td>
-                      <td>{formatDate(log.creationDate)}</td>
-                      <td>{log.type}</td>
-                      <td>{log.content}</td>
+                      <td className={styles.cellUser}>{log.username}</td>
+                      <td className={styles.cellDate}>
+                        {formatDate(log.creationDate)}
+                      </td>
+                      <td className={styles.cellLogType}>{log.type}</td>
+                      <td className={styles.cellContent}>{log.content}</td>
                     </tr>
                   ))}
               </tbody>
