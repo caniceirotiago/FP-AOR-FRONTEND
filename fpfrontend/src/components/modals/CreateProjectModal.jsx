@@ -3,7 +3,7 @@ import styles from "./CreateProjectModal.module.css";
 import useLabStore from "../../stores/useLabStore.jsx";
 import { FormattedMessage } from "react-intl";
 import AttributeEditor from "../reactSelect/AttributeEditor.jsx";
-import { format } from "date-fns";
+import { format, isValid } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
 import projectService from "../../services/projectService.jsx";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
@@ -33,12 +33,15 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
   const handleSkillChange = (newSkills) => {
     setProjectData((prevData) => ({ ...prevData, skills: newSkills }));
   };
+
   const handleKeywordChange = (newKeywords) => {
     setProjectData((prevData) => ({ ...prevData, keywords: newKeywords }));
   };
+
   const handleUserChange = (newUsers) => {
     setProjectData((prevData) => ({ ...prevData, users: newUsers }));
   };
+
   const handleAssetChange = (newAssets) => {
     setProjectData((prevData) => ({ ...prevData, assets: newAssets }));
   };
@@ -46,16 +49,22 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
   const handleChange = (e) => {
     setProjectData({ ...projectData, [e.target.name]: e.target.value });
   };
+
   const handleDescriptionChange = (e) => {
     setProjectData((prevData) => ({
       ...prevData,
       description: e.target.value,
     }));
   };
+
   const handleMotivationChange = (e) => {
     setProjectData((prevData) => ({ ...prevData, motivation: e.target.value }));
   };
+  
   const handleDateChange = (date) => {
+    if (!isValid(date)) {
+      date = new Date(); // Set date to today if invalid
+    }
     const formattedDate = format(date, "yyyy-MM-dd'T'00:00:00'Z'");
     setProjectData((prevData) => ({
       ...prevData,

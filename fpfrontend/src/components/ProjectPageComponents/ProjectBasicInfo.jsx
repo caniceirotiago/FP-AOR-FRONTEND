@@ -4,6 +4,7 @@ import styles from "./ProjectBasicInfo.module.css";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import { FaSave } from "react-icons/fa";
 import { PROJECT_STATES } from "../../utils/constants/constants";
+import { format } from 'date-fns';
 
 const ProjectBasicInfo = ({
   projectInfo,
@@ -14,6 +15,7 @@ const ProjectBasicInfo = ({
 }) => {
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
     useDialogModalStore();
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setProjectInfo((prevInfo) => ({
@@ -233,6 +235,7 @@ const ProjectBasicInfo = ({
                   : ""
               }
               onChange={handleInputChange}
+              min={format(new Date(), "yyyy-MM-dd")}
               disabled={!isEditing}
             />
           </div>

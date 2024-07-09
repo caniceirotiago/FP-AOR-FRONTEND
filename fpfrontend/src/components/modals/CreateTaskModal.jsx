@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "./CreateTaskModal.module.css";
 import { FormattedMessage, useIntl } from "react-intl";
 import AttributeEditor from "../reactSelect/AttributeEditor.jsx";
-import { format, isValid, addDays, set } from "date-fns";
+import { format, isValid, addDays } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import useDialogModalStore from "../../stores/useDialogModalStore.jsx";
 import taskService from "../../services/taskService";
@@ -59,9 +59,11 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
     setTaskData({ ...taskData, [e.target.name]: e.target.value });
   };
 
-
   const handleDateChange = (date, dateType) => {
-    const formattedDate = isValid(date) ? format(date, "yyyy-MM-dd'T'00:00:00'Z'") : "";
+    if (!isValid(date)) {
+      date = new Date(); // Set date to today if invalid
+    }
+    const formattedDate = format(date, "yyyy-MM-dd'T'00:00:00'Z'");
     setTaskData((prevData) => ({ ...prevData, [dateType]: formattedDate }));
   };
 

@@ -30,6 +30,8 @@
 .existingAttributes {
   margin-bottom: 10px;
   padding: 5px;
+  overflow-y: auto;
+  max-height: 400px; 
 }
 
 .attributeTable {
@@ -127,13 +129,13 @@
   opacity: 1;
 }
 
-@media (max-width: 950px) {
+@media (max-width: 1000px) {
   .headerLogType, .cellLogType {
     display: none;
   }
 }
 
-@media (max-width: 850px) {
+@media (max-width: 825px) {
   .headerUser, .cellUser {
     display: none;
   }
