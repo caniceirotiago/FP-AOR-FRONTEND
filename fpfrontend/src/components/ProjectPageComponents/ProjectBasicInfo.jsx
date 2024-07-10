@@ -18,6 +18,7 @@ const ProjectBasicInfo = ({
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    console.log(name, value);
     setProjectInfo((prevInfo) => ({
       ...prevInfo,
       [name]: value,
@@ -197,7 +198,7 @@ const ProjectBasicInfo = ({
               className={styles.select}
               name="laboratoryId"
               id="laboratoryId-field"
-              value={projectInfo?.laboratory.id || ""}
+              value={projectInfo?.laboratoryId || ""}
               onChange={handleInputChange}
               disabled={!isEditing}
             >

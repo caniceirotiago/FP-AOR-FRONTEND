@@ -36,7 +36,7 @@ const ProjectPage = () => {
     description: "",
     motivation: "",
     state: "",
-    laboratory: "",
+    laboratoryId: "",
     keywords: [],
     skills: [],
     users: [],
@@ -60,7 +60,20 @@ const ProjectPage = () => {
         return;
       }
       const projectData = await response.json();
-      setProjectInfo(projectData);
+      setProjectInfo({
+        ...projectInfo,
+        name: projectData.name,
+        description: projectData.description,
+        motivation: projectData.motivation,
+        state: projectData.state,
+        laboratoryId: projectData.laboratory.id, 
+        conclusionDate: projectData.conclusionDate,
+        createdBy: projectData.createdBy,
+        members: projectData.members,
+        id: projectData.id,
+
+        
+      });
     } catch (error) {
       console.error("Error fetching project data:", error.message);
     }
@@ -87,12 +100,14 @@ const ProjectPage = () => {
       description: projectInfo.description,
       motivation: projectInfo.motivation,
       state: projectInfo.state,
-      laboratoryId: projectInfo.laboratory.id,
+      laboratoryId: projectInfo.laboratoryId,
       conclusionDate: projectInfo.conclusionDate
         ? new Date(projectInfo.conclusionDate).toISOString()
         : null,
     };
     try {
+      console.log(projectUpdateData);
+      console.log(projectInfo.id);
       await projectService.updateProject(projectInfo.id, projectUpdateData);
       setIsEditing(false);
     } catch (error) {
