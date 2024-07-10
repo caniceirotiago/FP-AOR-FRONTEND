@@ -3,6 +3,7 @@ import styles from './ProjectList.module.css';
 import { format, parseISO } from 'date-fns';
 import membershipService from '../../../services/membershipService';
 import { useNavigate } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl'; 
 
 const ProjectList = ({ id }) => {
     const [projects, setProjects] = useState([]);
@@ -54,20 +55,20 @@ const ProjectList = ({ id }) => {
     if(projects.length === 0 || !projects) return null;
     return (
         <div className={styles.container}>
-            <h2>Project List</h2>
+            <h2><FormattedMessage id="projectListTitle" defaultMessage="Project List" /></h2>
             <div className={styles.sortOptions}>
                 <label>
-                    Sort by:
+                    <FormattedMessage id="listSortBy" defaultMessage="Sort by:" />
                     <select className={styles.select} value={sortCriteria} onChange={handleSortCriteriaChange}>
-                        <option value="createdAt">Date</option>
-                        <option value="status">Status</option>
+                        <option value="createdAt"><FormattedMessage id="date" defaultMessage="Date" /></option>
+                        <option value="status"><FormattedMessage id="sortByStatus" defaultMessage="Status" /></option>
                     </select>
                 </label>
                 <label>
-                    Order:
+                    <FormattedMessage id="listOrder" defaultMessage="Order:" />
                     <select className={styles.select} value={sortOrder} onChange={handleSortOrderChange}>
-                        <option value="asc">Ascending</option>
-                        <option value="desc">Descending</option>
+                        <option value="asc"><FormattedMessage id="orderByAscending" defaultMessage="Ascending" /></option>
+                        <option value="desc"><FormattedMessage id="orderByDescending" defaultMessage="Descending" /></option>
                     </select>
                 </label>
             </div>
