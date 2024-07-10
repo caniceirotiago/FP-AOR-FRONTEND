@@ -102,7 +102,6 @@ const UserRoleEditor = () => {
           className={styles.searchInput}
         />
       </div>
-
       <div className={styles.userListContainer}>
         <ul className={styles.userList}>
           {filteredUsers.map((user) => (

@@ -264,7 +264,7 @@ const InventoryPage = () => {
                 />
               </option>
             </select>
-            <button onClick={handleClearFilters}>
+            <button onClick={handleClearFilters} className={styles.clearFiltersBtn}>
               <FormattedMessage
                 id="clearFilters"
                 defaultMessage="Clear Filters"

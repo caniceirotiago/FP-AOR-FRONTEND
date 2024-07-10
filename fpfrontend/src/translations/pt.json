@@ -266,5 +266,6 @@
   "projectListTitle": "Lista de Projetos",
   "listSortBy": "Agrupar por:",  
   "sortByStatus": "Estado",
-  "listOrder": "Ordenar:"
+  "listOrder": "Ordenar:",
+  "myProjectsTitle": "Meus Projetos"
 }
