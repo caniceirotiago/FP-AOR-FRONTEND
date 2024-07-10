@@ -141,7 +141,7 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
           {projectGeneralInfo.name}
         </h3>
         <p className={styles.state}>{projectGeneralInfo.state}</p>
-        <FaBriefcase className={styles.briefcaseIcon} style={{ color: getStatusColor(projectGeneralInfo.state) }}/>
+        <div className={styles.statusIndicator} style={{ backgroundColor: getStatusColor(projectGeneralInfo.state) }}></div>
 
         {!isThePlanEditable && <FaLock className={styles.lockIcon} />}
       </div>

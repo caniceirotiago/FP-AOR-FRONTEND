@@ -349,12 +349,14 @@ const EditTaskModal = ({
             />
             {isThePlanEditable && (
               <>
-                <div className={styles.button} onClick={handleTaskDelete}>
+              <div className={styles.buttonContainer}>
+                <div className={styles.deleteButton} onClick={handleTaskDelete}>
                   <FormattedMessage id="delete" defaultMessage="Delete Task" />
                 </div>
                 <button type="submit" className={styles.button}>
                   <FormattedMessage id="submit" defaultMessage="Submit" />
                 </button>
+                </div>
               </>
             )}
           </form>

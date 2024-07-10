@@ -14,7 +14,6 @@
 }
 
 .modalContent {
-  height: 80%;
   background-color: var(--background-color1);
   padding: 5px;
   border-radius: 8px;

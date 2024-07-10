@@ -142,3 +142,13 @@ body.theme-dark {
 .css-lx0s3w-control {
   width: 100%;
 }
+
+.slick-prev:before,
+.slick-next:before {
+  color: var(--text-color4) !important; /* Força a cor correta */
+}
+
+.slick-prev:hover:before,
+.slick-next:hover:before {
+  color: gray !important; /* Força a cor no hover */
+}

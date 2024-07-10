@@ -576,8 +576,18 @@ const AttributeEditor = ({
     }
   };
 
-  // Request to remove from project
   const removeFromProject = async () => {
+    setDialogMessage("Are you sure you want to quit this project?");
+    setAlertType(false);
+    setIsDialogOpen(true);
+    setOnConfirm(async () => {
+      await quitProject();
+    });
+  };
+
+  // Request to remove from project
+  const quitProject = async () => {
+
     try {
       // Retrieve username and projectId from localStorage
       const username = localStorage.getItem("username");
@@ -704,6 +714,7 @@ const AttributeEditor = ({
     if((attributes.length === 0 || !attributes) && !editMode) return null;
   return (
     <div className={styles.container}>
+      <div className={styles.header}>
       {isLoading && <Spinner />}
       {creationMode && title === "users" && mainEntity === "task" ? (
         <h2>
@@ -715,13 +726,13 @@ const AttributeEditor = ({
       {title === "users" && !creationMode && (
         <>
               {isPossibleToJoin ? (
-            <button onClick={askToJoinProject}>
+            <button onClick={askToJoinProject} className={styles.upperButton}>
               {" "}
               <FormattedMessage id="askToJoin" defaultMessage="Ask To Join" />
             </button>
           ) : null}
           {isProjectMemberNotCreator && (
-            <button onClick={removeFromProject}>
+            <button onClick={removeFromProject} className={styles.upperButton}>
               <FormattedMessage
                 id="removeFromProject"
                 defaultMessage="Remove From Project"
@@ -730,7 +741,7 @@ const AttributeEditor = ({
           )}
         </>
       )}
-
+      </div>
       <div className={styles.innerContainer}>
         <div className={styles.existingAttributes}>
           <div className={styles.userAttributeContainer}>

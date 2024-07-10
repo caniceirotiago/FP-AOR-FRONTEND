@@ -85,3 +85,33 @@
 .addBtn:hover {
   background-color: var(--btn-background1);
 }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.upperButton {
+  background-color: var(--btn-background2);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0px;
+}
+
+.upperButton:hover {
+  background-color: var(--btn-background1);
+  transform: translateY(-2px);
+}
+
+.upperButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
