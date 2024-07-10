@@ -1,134 +1,65 @@
-import React, { useEffect, useCallback, useState } from "react";
-import styles from "./LogsList.module.css";
-import { format, parseISO } from "date-fns";
-import projectService from "../../../services/projectService";
-import { FormattedMessage, useIntl } from "react-intl";
-import { FaPlus } from "react-icons/fa";
-import LogModal from "../../modals/LogModal";
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { IntlProvider } from "react-intl";
+import { act } from "react";
+import LogsList from "../components/ProjectPageComponents/LogsList/LogsList";
+import projectService from "../services/projectService";
 
-const LogsList = ({ id }) => {
-  const [projectLogs, setProjectLogs] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const intl = useIntl();
+jest.mock("../services/projectService", () => ({
+  getProjectLogsByProjectId: jest.fn(),
+  createProjectLog: jest.fn(),
+}));
 
-  const formatDate = (dateString) => {
-    const date = parseISO(dateString);
-    return format(date, "dd/MM/yyyy HH:mm:ss");
-  };
+const mockProjectLogs = [
+  {
+    username: "John Doe",
+    creationDate: "2024-07-10T08:30:00Z",
+    type: "PROJECT_DATA",
+    content: "Sample log content",
+  },
+  {
+    username: "Jane Smith",
+    creationDate: "2024-07-09T14:45:00Z",
+    type: "PROJECT_MEMBERS",
+    content: "Another log entry",
+  },
+];
 
-  const fetchProjectLogs = useCallback(async () => {
-    try {
-      const response = await projectService.getProjectLogsByProjectId(id);
-      const logs = await response.json();
-      setProjectLogs(logs);
-    } catch (error) {
-      console.error("Error fetching project logs:", error.message);
-    }
-  }, [id]);
+beforeEach(() => {
+  projectService.getProjectLogsByProjectId.mockResolvedValue({
+    json: jest.fn().mockResolvedValue(mockProjectLogs),
+  });
+  projectService.createProjectLog.mockResolvedValue({
+    status: 204,
+  });
+});
 
-  useEffect(() => {
-    fetchProjectLogs();
-  }, []);
+describe("LogsList Component", () => {
+  it("creates a new project log and updates logs list", async () => {
+    await act(async () => {
+      render(
+        <IntlProvider locale="en" messages={{ addLog: "Add Log" }}>
+          <LogsList id="1" />
+        </IntlProvider>
+      );
 
-  /*
-  useEffect(() => {
-    fetchProjectLogs();
-  }, [fetchProjectLogs]);
-  */
+      fireEvent.click(screen.getByText("Add Log"));
 
-  const handleOpenLogModal = () => {
-    setShowModal(true);
-  };
+      fireEvent.change(screen.getByLabelText("Content"), {
+        target: { value: "New log entry" },
+      });
 
-  const handleCloseLogModal = () => {
-    setShowModal(false);
-  };
+      fireEvent.click(screen.getByText("Submit"));
 
-  const handleCreateProjectLog = async (logContent) => {
-    try {
-      const dataToSend = {
-        content: logContent,
-      };
-      console.log("Data to send:", dataToSend);
-      console.log(dataToSend.content);
-      const response = await projectService.createProjectLog(id, dataToSend);
-      if (response.status === 204) {
-        // Log created successfully, update project logs
-        fetchProjectLogs();
-        handleCloseLogModal();
-      } else {
-        const data = await response.json();
-        console.log("Failed to create project log:", data.message);
-      }
-    } catch (error) {
-      console.error("Error creating project log:", error.message);
-    }
-  };
+      await waitFor(() => {
+        expect(projectService.createProjectLog).toHaveBeenCalledWith("1", {
+          content: "New log entry",
+        });
+      });
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.containerHeader}>
-        <h3>
-          <FormattedMessage id="projectLogs" defaultMessage="Project Logs" />
-        </h3>
-        <button
-          onClick={handleOpenLogModal}
-          className={`${styles.iconButton} ${styles.createButton}`}
-          data-text={intl.formatMessage({ id: "addLog" })}
-        >
-          <FaPlus className={styles.svgIcon} />
-        </button>
-      </div>
-      <div className={styles.innerContainer}>
-        <div className={styles.existingAttributes}>
-          <div className={styles.userAttributeContainer}>
-            <table className={styles.attributeTable}>
-              <thead>
-                <tr>
-                  <th className={styles.headerUser}>
-                    <FormattedMessage id="user" defaultMessage="User" />
-                  </th>
-                  <th className={styles.headerDate}>
-                    <FormattedMessage
-                      id="creationDate"
-                      defaultMessage="Creation Date"
-                    />
-                  </th>
-                  <th className={styles.headerLogType}>
-                    <FormattedMessage id="logType" defaultMessage="Log Type" />
-                  </th>
-                  <th className={styles.headerContent}>
-                    <FormattedMessage id="content" defaultMessage="Content" />
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {projectLogs
-                  .slice()
-                  .reverse()
-                  .map((log, index) => (
-                    <tr className={styles.logElement} key={index}>
-                      <td className={styles.cellUser}>{log.username}</td>
-                      <td className={styles.cellDate}>
-                        {formatDate(log.creationDate)}
-                      </td>
-                      <td className={styles.cellLogType}>{log.type}</td>
-                      <td className={styles.cellContent}>{log.content}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      {showModal && (
-        <LogModal
-          isOpen={showModal}
-          onClose={handleCloseLogModal}
-          onCreateLog={handleCreateProjectLog}
-        />
-      )}
-    </div>
-  );
-};
-export default LogsList;
+      await waitFor(() => {
+        expect(screen.getByText("New log entry")).toBeInTheDocument();
+      });
+    });
+  });
+});
