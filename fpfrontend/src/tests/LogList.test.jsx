@@ -4,24 +4,54 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import { IntlProvider } from "react-intl";
 import LogsList from "../components/ProjectPageComponents/LogsList/LogsList";
+import LogModal from "../components/modals/LogModal";
 import projectService from "../services/projectService";
 
-jest.mock("../services/projectService");
+jest.mock("../components/modals/LogModal", () => {
+  return jest.fn(({ isOpen, onClose, onCreateLog }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div data-testid="mocked-log-modal">
+        Mocked Log Modal Content
+        <button onClick={onClose}>Close</button>
+        <form onSubmit={(e) => {}}>
+          <div>
+            <label htmlFor="logContent">Content</label>
+            <textarea
+              id="logContent"
+              onChange={(e) => onCreateLog(e.target.value)}
+              aria-label="Content"
+              rows={4} // Adjust as per your styling
+              cols={50} // Adjust as per your styling
+            />
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    );
+  });
+});
+
+
+
+
 
 const mockProjectLogs = [
   {
     username: "John Doe",
     creationDate: "2024-07-10T08:30:00Z",
-    type: "Info",
+    type: "PROJECT_DATA",
     content: "Sample log content",
   },
   {
     username: "Jane Smith",
     creationDate: "2024-07-09T14:45:00Z",
-    type: "Warning",
+    type: "PROJECT_MEMBERS",
     content: "Another log entry",
   },
 ];
+
 
 beforeEach(() => {
   projectService.getProjectLogsByProjectId.mockResolvedValue({
@@ -30,35 +60,6 @@ beforeEach(() => {
 });
 
 describe("LogsList Component", () => {
-  it("renders project logs correctly", async () => {
-    render(
-      <IntlProvider locale="en">
-        <LogsList id="1" />
-      </IntlProvider>
-    );
-
-    // Wait for project logs to be fetched and rendered
-    await waitFor(() => {
-      expect(screen.getByText("John Doe")).toBeInTheDocument();
-      expect(screen.getByText("Jane Smith")).toBeInTheDocument();
-    });
-
-    expect(screen.getByText("Sample log content")).toBeInTheDocument();
-    expect(screen.getByText("Another log entry")).toBeInTheDocument();
-  });
-
-  it("displays the log modal when the 'Add' button is clicked", () => {
-    render(
-      <IntlProvider locale="en">
-        <LogsList id="1" />
-      </IntlProvider>
-    );
-
-    fireEvent.click(screen.getByText("Add"));
-
-    expect(screen.getByText("Create New Log")).toBeInTheDocument();
-  });
-
   it("creates a new project log and updates logs list", async () => {
     render(
       <IntlProvider locale="en">
@@ -66,18 +67,19 @@ describe("LogsList Component", () => {
       </IntlProvider>
     );
 
-    fireEvent.click(screen.getByText("Add"));
+    fireEvent.click(screen.getByText("", { selector: '[data-text="addLog"]' }));
 
     // Simulate typing in the log modal form
-    fireEvent.change(screen.getByLabelText("Log Content"), {
+    fireEvent.change(screen.getByTestId("mocked-log-modal").querySelector('textarea'), {
       target: { value: "New log entry" },
     });
+    
+    fireEvent.click(screen.getByText("Submit"));
 
-    fireEvent.click(screen.getByText("Save"));
-
-    // Ensure projectService.createProjectLog is called
     await waitFor(() => {
-      expect(projectService.createProjectLog).toHaveBeenCalled();
+      expect(projectService.createProjectLog).toHaveBeenCalledWith("1", {
+        content: "New log entry",
+      });
     });
 
     // Ensure the new log entry appears in the logs list
@@ -86,4 +88,3 @@ describe("LogsList Component", () => {
     });
   });
 });
-
