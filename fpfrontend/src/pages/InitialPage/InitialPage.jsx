@@ -12,6 +12,7 @@ import useLabStore from "../../stores/useLabStore";
 import { useNavigate } from "react-router";
 import bigLogo from "../../assets/verticalLogo2.png";
 import useAuthStore from "../../stores/useAuthStore";
+import { NextArrow, PrevArrow } from "./Arrows";
 
 const InitialPage = () => {
   const { isAuthenticated } = useAuthStore();
@@ -21,32 +22,10 @@ const InitialPage = () => {
   });
   const [videoError, setVideoError] = useState(false);
 
-  const videoID = "eYfTU8E0bgA"; // Your YouTube video ID
+  const videoID = "eYfTU8E0bgA"; 
   const videoSrc = `https://www.youtube.com/embed/${videoID}?autoplay=1&mute=1&loop=1&playlist=${videoID}&controls=0&showinfo=0&rel=0&modestbranding=1`;
   const { laboratories, fetchLaboratories } = useLabStore();
-  const labs = [
-    {
-      id: 1,
-      name: "Lab",
-      city: "Lisboa",
-      imageUrl:
-        "https://cdn.jornaldenegocios.pt/images/2021-05/img_1200x1200$2021_05_17_12_30_27_403373.jpg",
-    },
-    {
-      id: 2,
-      name: "Lab",
-      city: "Coimbra",
-      imageUrl:
-        "https://www.campeaoprovincias.pt/wp-content/uploads/2024/01/Critical-768x614-1.jpg",
-    },
-    {
-      id: 3,
-      name: "Lab",
-      city: "Porto",
-      imageUrl:
-        "https://www.porto.pt/_next/image?url=https%3A%2F%2Fmedia.porto.pt%2Foriginal_images%2Fmno_critical_techworks.jpg&w=730&q=85",
-    },
-  ];
+ 
   const settings = {
     dots: true,
     infinite: true,
@@ -57,6 +36,8 @@ const InitialPage = () => {
     autoplaySpeed: 3000,
     cssEase: "linear",
     arrows: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
   };
 
   useEffect(() => {

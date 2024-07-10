@@ -1,0 +1,26 @@
+.arrow {
+    color: white !important; /* Força a cor correta */
+    z-index: 1;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  
+  .nextArrow {
+    right: 10px;
+  }
+  
+  .prevArrow {
+    left: 10px;
+  }
+  
+  .arrow:hover {
+    color: white !important; /* Força a cor no hover */
+  }
+  
+  .slick-prev:before,
+  .slick-next:before {
+    content: none !important; /* Remova o conteúdo padrão */
+  }
+  

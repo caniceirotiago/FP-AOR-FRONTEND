@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./CreateProjectModal.module.css";
+import styles from "./LogModal.module.css";
 import { FormattedMessage } from "react-intl";
 
 const LogModal = ({ isOpen, onClose, onCreateLog }) => {
