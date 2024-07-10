@@ -357,7 +357,9 @@ const HomePage = () => {
             </select>
             {isAuthenticated && (
               <div className={styles.myProjects}>
-                <h5 className={styles.myProjectH5}>My Projects</h5>
+                 <h5 className={styles.myProjectH5}>
+                        <FormattedMessage id="myProjectsTitle" defaultMessage="My Projects" />
+                    </h5>
                 <label className={styles.switch}>
                   <input
                     type="checkbox"

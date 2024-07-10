@@ -263,5 +263,10 @@
   "logType": "Log Type",
   "user": "User",
   "noNewNotifications": "No new notifications",
-  "addLog": "Add"
+  "addLog": "Add",
+  "projectListTitle": "Project List",
+  "listSortBy": "Sort by:",  
+  "sortByStatus": "Status",
+  "listOrder": "Order:",
+  "myProjectsTitle": "My Projects"
 }

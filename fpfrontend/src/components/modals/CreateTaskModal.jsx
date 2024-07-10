@@ -86,8 +86,11 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
     if(!taskData.responsibleId)
     {
       setDialogMessage(intl.formatMessage({ id: "noResponsible", defaultMessage: "No responsible selected!" }));
-      setAlertType(false);
+      setAlertType(true);
       setIsDialogOpen(true);
+      setOnConfirm(() => {
+        setIsDialogOpen(false);
+      });
       return;
     }
     const dataToSend = {
