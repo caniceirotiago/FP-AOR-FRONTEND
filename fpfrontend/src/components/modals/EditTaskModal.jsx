@@ -148,6 +148,19 @@ const EditTaskModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    
+    if(!taskData.responsibleId)
+      {
+        setDialogMessage(intl.formatMessage({ id: "noResponsible", defaultMessage: "No responsible selected!" }));
+        setAlertType(true);
+        setIsDialogOpen(true);
+        setOnConfirm(() => {
+          setIsDialogOpen(false);
+        });
+        return;
+      }
+
     const registeredExecutorsIds = taskData.registeredExecutors.map(
       (executor) => executor.id
     );
