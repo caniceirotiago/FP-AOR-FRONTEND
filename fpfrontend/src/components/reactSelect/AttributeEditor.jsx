@@ -625,6 +625,7 @@ const AttributeEditor = ({
             projectId,
             attributeToRemove.user.username
           );
+          console.log("response", response);
         } else if (title === "Responsible user" && !creationMode) {
           setAttributes([]);
           setTaskData({ ...taskData, responsibleId: null });

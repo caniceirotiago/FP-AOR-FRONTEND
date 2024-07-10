@@ -258,7 +258,7 @@ const userService = {
       const response = await fetch(
         `${MEMBER_BASE_URL}/remove/${username}/${projectId}`,
         {
-          method: "PUT",
+          method: "DELETE",
           headers: getAuthHeaders(),
           credentials: "include",
         }
