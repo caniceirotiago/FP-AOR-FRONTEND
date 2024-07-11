@@ -118,6 +118,8 @@ const HomePage = () => {
     if (isAuthenticated) navigate("/authenticatedhomepage");
     else navigate("/homepage");
     const fetchProjects = async () => {
+      console.log("fetching projects");
+      console.log(filters);
       const response = await projectService.getFilteredProjects(
         pageNumber,
         pageSize,

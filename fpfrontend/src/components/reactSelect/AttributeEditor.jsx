@@ -31,6 +31,7 @@ const AttributeEditor = ({
   registeredExecutors,
   setTaskData,
   taskData,
+  projectState,
 }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -730,13 +731,13 @@ const AttributeEditor = ({
       )}
       {title === "users" && !creationMode && (
         <>
-              {isPossibleToJoin ? (
+              {(isPossibleToJoin && projectState !== 'CANCELLED' && projectState !== 'FINISHED') ? (
             <button onClick={askToJoinProject} className={styles.upperButton}>
               {" "}
               <FormattedMessage id="askToJoin" defaultMessage="Ask To Join" />
             </button>
           ) : null}
-          {isProjectMemberNotCreator && (
+          {(isProjectMemberNotCreator && projectState !== 'CANCELLED' && projectState !== 'FINISHED')  && (
             <button onClick={removeFromProject} className={styles.upperButton}>
               <FormattedMessage
                 id="removeFromProject"

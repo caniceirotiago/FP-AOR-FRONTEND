@@ -286,6 +286,7 @@ const ProjectPage = () => {
                 creationMode={false}
                 projectId={id}
                 createdBy={projectInfo.createdBy}
+                projectState= {projectInfo.state}
               />
               <AttributeEditor
                 className={styles.attribute}
