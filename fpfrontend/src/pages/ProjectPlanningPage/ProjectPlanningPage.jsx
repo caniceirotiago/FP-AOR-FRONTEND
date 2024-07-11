@@ -100,6 +100,7 @@ const ProjectPlanningPage = () => {
             ))}
           </select>
         </div>
+        <div className={styles.btns}></div>
       </div>
       <TaskManager className={styles.taskManager}handleEditTaskClick={handleEditTaskClick} projectId={selectedProjectId} tasksUpdated={tasksUpdated}/>
     </div>

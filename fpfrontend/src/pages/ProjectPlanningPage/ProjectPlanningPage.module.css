@@ -74,11 +74,11 @@
   opacity: 1;
 }
 .selectProjectDiv {
-  justify-self: right;
+  justify-self: center;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  justify-content:flex-end;
+  justify-content:center;
   width: 100%;
   padding-top: 7px;
   margin-right: 20px;
