@@ -559,6 +559,7 @@ const AttributeEditor = ({
   const askToJoinProject = async () => {
     try {
       const response = await projectService.askToJoinProject(projectId);
+      console.log("response", response);
       if (response.status === 204) {
         setAttributes([
           ...attributes,
