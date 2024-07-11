@@ -13,7 +13,7 @@
 
 .controlPanel {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   background-color: var(--atribute-editor-background);
   padding-right: 5px;
@@ -81,11 +81,24 @@
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
+.controlPanel button {
+  margin-left: 1rem;
+  padding: 10px;
+  background-color: var(--btn-background1);
+  color: var(--btn-color1);
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
+.controlPanel button:hover {
+  background-color: var(--btn-background2);
+}
 
 /* Styles for smaller screens */
-@media (max-width: 550px) {
-
+@media (max-width: 768px) {
   .container h2 {
     font-size: 14px;
     text-align: left;
@@ -94,23 +107,14 @@
   .userListContainer {
     min-height: 20px;
     max-height: 150px;
+    font-size: 12px;
   }
 
   .searchInput {
     font-size: 12px;
   }
 
-  .addBtn {
-    padding: 2px 4px;
+  .controlPanel button {
+    font-size: 12px;
   }
-
-  .addBtn span {
-    display: none;
-  }
-
-  .addBtn svg {
-    width: 16px;
-    height: 16px;
-  }
-  
 }

@@ -268,5 +268,6 @@
   "listSortBy": "Sort by:",  
   "sortByStatus": "Status",
   "listOrder": "Order:",
-  "myProjectsTitle": "My Projects"
+  "myProjectsTitle": "My Projects",
+  "clearButton": "Clear"
 }

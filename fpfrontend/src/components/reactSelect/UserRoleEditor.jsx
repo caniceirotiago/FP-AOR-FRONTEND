@@ -79,6 +79,10 @@ const UserRoleEditor = () => {
     const { value } = e.target;
     setSearchText(value.trim()); // Update search text state
   };
+
+  const handleClearSearch = () => {
+    setSearchText(''); // Clear search text state
+  };
   
   // Filter users based on search text
   const filteredUsers = users.filter((user) =>
@@ -101,6 +105,15 @@ const UserRoleEditor = () => {
           onChange={handleFilterChange}
           className={styles.searchInput}
         />
+        <button
+          onClick={handleClearSearch}
+          className={styles.clearButton}
+        >
+          <FormattedMessage
+            id="clearButton"
+            defaultMessage="Clear"
+          />
+        </button>
       </div>
       <div className={styles.userListContainer}>
         <ul className={styles.userList}>
