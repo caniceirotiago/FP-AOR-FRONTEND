@@ -9,13 +9,6 @@ import HomepageMobileFooter from '../../components/footers/homePageFooters/homeP
 
 const PublicMainLayout = ({ children }) => {
     const { dimensions, setDimensions, setDeviceType } = useDeviceStore(); 
-    //const { isAsideExpanded } = useLayoutStore();
-    // const onNotification = useCallback((notification) => {
-    //     console.log("Received notification: ", notification);
-    //     useNotificationStore.getState().addNotification(notification.content, notification);
-    //   }, []);
-    //  const wsUrl = `ws://localhost:8080/projeto5backend/globalws/${sessionStorage.getItem('token')}`; 
-    // useGlobalWebSocket(wsUrl, true, onNotification);
 
     useEffect(() => {
     const handleResize = () => {

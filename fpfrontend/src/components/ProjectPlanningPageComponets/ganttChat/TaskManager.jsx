@@ -44,6 +44,7 @@ const TaskManager = ({ projectId, tasksUpdated, handleEditTaskClick }) => {
   };
 
   const fetchProjectGeneralInfo = async () => {
+    if (!projectId) return;
     try {
       const response = await projectService.getProjectById(projectId);
       const data = await response.json();

@@ -82,7 +82,6 @@ const ProfileForm = ({userProfileInfo,isOwnProfile,fetchUserData,isEditing,}) =>
         localStorage.setItem("photo", downloadURL);
       }
       const { email, id, username, ...profileData } = profile;
-      console.log(profileData);
       const result = await userService.updateUser(profileData);
       if (result.status === 204) {
         onUpdateSuccess();

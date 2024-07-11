@@ -80,9 +80,6 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(taskData);
-
-
     if(!taskData.responsibleId)
     {
       setDialogMessage(intl.formatMessage({ id: "noResponsible", defaultMessage: "No responsible selected!" }));

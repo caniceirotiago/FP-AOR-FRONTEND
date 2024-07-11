@@ -150,13 +150,11 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, initialSelectedMessag
     if (initialSelectedMessage && messagesModal.length > 0) {
       const messageElement = document.getElementById(`message-${initialSelectedMessage.id}`);
       if (messageElement) {
-        console.log(`Scrolling to message: ${initialSelectedMessage.id}`);
         messageElement.scrollIntoView({ behavior: 'smooth' });
       } else {
         console.log(`Message element not found for id: message-${initialSelectedMessage.id}`);
       }
     } else if (messagesModal.length > 0) {
-      console.log('Scrolling to bottom without animation');
       messagesEndRef.current?.scrollIntoView();
     }
   }, [messagesModal, initialSelectedMessage]);

@@ -94,6 +94,7 @@ const generalService = {
       data = { ...data, projectId: mainEntityId };
     }
     try {
+      console.log(data);
       const response = await fetch(
         `${API_BASE_URL}${apiUrl}/add/${mainEntity}`,
         {
@@ -103,6 +104,7 @@ const generalService = {
           body: JSON.stringify(data),
         }
       );
+      console.log("response", response);
       return response;
     } catch (error) {
       console.error("Error adding item:", error.message);

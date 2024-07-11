@@ -93,7 +93,6 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
         username: user.user.username,
       })),
     };
-    console.log(dataToSend);
     try {
       const response = await projectService.createProject(dataToSend);
     if (response.status === 204) {
@@ -122,7 +121,6 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
       });
     } else {
       const data = await response.json();
-      console.log(data);
       // Using the DialogMultipleMessagesModalStore to display multiple messages and divide messages by "," carachter
       setDialogMultipleMessagesTitle("Error");
       setDialogMultipleMessages(data.message.split(","));

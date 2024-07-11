@@ -164,8 +164,6 @@ const GroupChatModal = ({
 
   if (!isGroupChatModalOpen) return null;
 
-  console.log(messages);
-
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>

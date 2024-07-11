@@ -42,11 +42,10 @@ const ApprovalModal = ({
         justification,
         isToApprove
       );
-      console.log("Project handled successfully");
       setJustification("");
       onClose();
     } catch (error) {
-      console.log("Failed to process request.");
+      console.error("Failed to process request.");
     }
   };
 

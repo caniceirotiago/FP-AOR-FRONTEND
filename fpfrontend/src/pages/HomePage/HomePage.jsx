@@ -41,9 +41,7 @@ const HomePage = () => {
     laboratory: "",
     showMyProjectsOnly: "", 
   };
-  const [filters, setFilters] = useState({
-    defaultFilters,
-  });
+  const [filters, setFilters] = useState(defaultFilters);
   const { states, fetchProjectStates } = useProjectStatesStore();
   const [filterType, setFilterType] = useState("name");
   const intl = useIntl();

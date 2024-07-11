@@ -473,6 +473,10 @@ const AttributeEditor = ({
             projectId
           );
         } else {
+          console.log("data", data);
+          console.log("mainEntity", mainEntity);
+          console.log("projectId", projectId);
+          console.log("title", title);
           response = await generalService.addItem(
             title,
             data,
@@ -625,7 +629,6 @@ const AttributeEditor = ({
             projectId,
             attributeToRemove.user.username
           );
-          console.log("response", response);
         } else if (title === "Responsible user" && !creationMode) {
           setAttributes([]);
           setTaskData({ ...taskData, responsibleId: null });

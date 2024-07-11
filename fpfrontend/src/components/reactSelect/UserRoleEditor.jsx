@@ -27,7 +27,7 @@ const UserRoleEditor = () => {
           }));
           setUsers(usersWithRoles);
         } else {
-          console.log("Error loading users list basic info");
+          console.error("Error loading users list basic info");
         }
       } catch (error) {
         console.error("Error fetching users:", error.message);

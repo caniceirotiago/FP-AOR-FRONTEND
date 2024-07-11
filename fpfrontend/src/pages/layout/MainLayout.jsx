@@ -11,14 +11,6 @@ import useConfigurationStore from '../../stores/useConfigurationStore.jsx';
 
 const MainLayout = ({ children }) => {
     const { dimensions, setDimensions, setDeviceType } = useDeviceStore(); 
-    //const { isAsideExpanded } = useLayoutStore();
-    // const onNotification = useCallback((notification) => {
-    //     console.log("Received notification: ", notification);
-    //     useNotificationStore.getState().addNotification(notification.content, notification);
-    //   }, []);
-    //  const wsUrl = `ws://localhost:8080/projeto5backend/globalws/${sessionStorage.getItem('token')}`; 
-    // useGlobalWebSocket(wsUrl, true, onNotification);
-    
     const{configurations, fetchConfigurations} = useConfigurationStore();
     const {wssDomain} = useDomainStore();
     useGlobalWebSocket(`${wssDomain}/ws`, true);

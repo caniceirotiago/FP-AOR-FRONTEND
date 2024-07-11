@@ -137,27 +137,37 @@ function ProjectTable({ projects, pageCount, setPageNumber }) {
       <div className={styles.tblHeader}>
         <table {...getTableProps()} className={styles.table}>
           <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()} className={styles.header}>
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
+          {headerGroups.map((headerGroup) => {
+                const { key, ...rest } = headerGroup.getHeaderGroupProps();
+                return (
+                  <tr key={key} {...rest}>
+                    {headerGroup.headers.map((column) => {
+                      const { key, ...rest } = column.getHeaderProps();
+                      return (
+                        <th key={key} {...rest} className={styles.header}>
+                          {column.render("Header")}
+                        </th>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
           </thead>
 
           <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
+          {page.map((row) => {
               prepareRow(row);
+              const { key, ...rest } = row.getRowProps();
               return (
-                <tr {...row.getRowProps()} className={styles.row}>
-                  {row.cells.map((cell) => (
-                    <td {...cell.getCellProps()} className={styles.cell}>
-                      {cell.render("Cell")}
-                    </td>
-                  ))}
+                <tr key={key} {...rest} className={styles.row}>
+                  {row.cells.map((cell) => {
+                    const { key, ...rest } = cell.getCellProps();
+                    return (
+                      <td key={key} {...rest} className={styles.cell}>
+                        {cell.render("Cell")}
+                      </td>
+                    );
+                  })}
                 </tr>
               );
             })}

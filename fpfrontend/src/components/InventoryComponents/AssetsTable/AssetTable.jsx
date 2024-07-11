@@ -145,27 +145,37 @@ function AssetTable({ pageCount, assets }) {
       <div className={styles.tblHeader}>
         <table {...getTableProps()} className={styles.table}>
           <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()} className={styles.header}>
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
+            {headerGroups.map((headerGroup) => {
+              const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
+              return (
+                <tr key={key} {...restHeaderGroupProps}>
+                  {headerGroup.headers.map((column) => {
+                    const { key, ...restColumnProps } = column.getHeaderProps();
+                    return (
+                      <th key={key} {...restColumnProps} className={styles.header}>
+                        {column.render("Header")}
+                      </th>
+                    );
+                  })}
+                </tr>
+              );
+            })}
           </thead>
 
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row);
+              const { key, ...restRowProps } = row.getRowProps();
               return (
-                <tr {...row.getRowProps()} className={styles.row}>
-                  {row.cells.map((cell) => (
-                    <td {...cell.getCellProps()} className={styles.cell}>
-                      {cell.render("Cell")}
-                    </td>
-                  ))}
+                <tr key={key} {...restRowProps} className={styles.row}>
+                  {row.cells.map((cell) => {
+                    const { key, ...restCellProps } = cell.getCellProps();
+                    return (
+                      <td key={key} {...restCellProps} className={styles.cell}>
+                        {cell.render("Cell")}
+                      </td>
+                    );
+                  })}
                 </tr>
               );
             })}
