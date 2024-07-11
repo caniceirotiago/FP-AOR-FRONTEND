@@ -385,7 +385,7 @@ border-bottom: none;
   display: flex;
   flex-direction: column;
   padding: 10px;
-  color: var(--text-color);
+  color: var(--text-color4);
   cursor: pointer;
   transition: background-color 0.3s;
   gap: 5px;

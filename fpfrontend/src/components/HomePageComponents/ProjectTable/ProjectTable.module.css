@@ -51,7 +51,7 @@
 }
 
 .row:hover {
-  background-color: rgba(241, 241, 241, 0.8);
+  background-color: var(--row-hover-color);
 }
 
 .actions {

@@ -75,6 +75,7 @@ body.theme-light {
   --report-graphic-color6: #f3ea9d;
   --report-graphic-background: #f3f3e9;
   --chat-button-background: #80a7ba;
+  --row-hover-color: #b9cbdd;
 }
 
 body.theme-dark {
@@ -131,6 +132,7 @@ body.theme-dark {
   --report-graphic-color6: #ffc107;
   --report-graphic-background: #232324;
   --chat-button-background: #232324;
+  --row-hover-color: #2b435d;
 
   
 }
