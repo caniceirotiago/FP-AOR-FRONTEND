@@ -124,7 +124,7 @@ const LoginModal = () => {
                 onClick={handleLogin}
                 tradId="login"
                 defaultText="Login"
-                btnColor={"var(--btn-color2)"}
+                btnColor={"var(--btn-color4)"}
               />
             </div>
           </form>
@@ -138,7 +138,7 @@ const LoginModal = () => {
                 onClick={handleSignUpNavigation}
                 tradId="signUp"
                 defaultText="Sign Up"
-                btnColor={"var(--btn-color2)"}
+                btnColor={"var(--btn-color4)"}
               />
             </div>
             <div className={styles.forgotPassword}>
@@ -146,7 +146,7 @@ const LoginModal = () => {
                 onClick={handleForgotPasswordNavigation}
                 tradId="forgotThePassword"
                 defaultText="Forgot the password?"
-                btnColor={"var(--btn-color2)"}
+                btnColor={"var(--btn-color4)"}
               />
             </div>
             <div className={styles.resendConfirmation}>
@@ -154,7 +154,7 @@ const LoginModal = () => {
                 onClick={handleResendEmail}
                 tradId="resendEmail"
                 defaultText="Resend Confirmation Email"
-                btnColor={"var(--btn-color2)"}
+                btnColor={"var(--btn-color4)"}
               />
             </div>
           </div>

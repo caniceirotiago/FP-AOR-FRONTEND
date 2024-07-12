@@ -69,13 +69,13 @@ const ResendEmailForm = () => {
             onClick={handleSubmit}
             tradId="askForNewConfirmation"
             defaultText="Ask For New Confirmation"
-            btnColor={"var(--btn-color2)"}
+            btnColor={"var(--btn-color4)"}
           />
           <Button
             onClick={() => navigate("/")}
             tradId="back"
             defaultText="Back"
-            btnColor={"var(--btn-color2)"}
+            btnColor={"var(--btn-color4)"}
           />
         </div>
       </form>

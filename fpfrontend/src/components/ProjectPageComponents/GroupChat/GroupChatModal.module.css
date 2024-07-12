@@ -107,13 +107,13 @@
 
 :global .rce-mbox {
   border-radius: 15px;
-  background-color: var(--card-background);
+  background-color: white;
 }
 
 :global .rce-mbox.rce-mbox-right {
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
-  background-color: var(--card-background);
+  background-color: white;
 }
 
 @media (max-width: 1320px) {

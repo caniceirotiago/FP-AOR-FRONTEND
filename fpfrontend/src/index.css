@@ -30,6 +30,7 @@ body.theme-light {
   --profile-second-background-color: rgba(91, 151, 203, 0.5);
   --profile-thirth-background-color: rgba(240, 248, 255);
   --card-background: rgba(255, 255, 255, 1);
+  --card-background-hover: rgba(211, 183, 183, 0.262);
   --card-border: rgba(0, 0, 0, 0.1);
   --color-planning: #f3ea9d;
   --color-ready: #8dd28f;
@@ -88,6 +89,7 @@ body.theme-dark {
   --profile-second-background-color: rgba(60, 60, 60, 0.5);
   --profile-thirth-background-color: rgb(50, 52, 54);
   --card-background: rgba(60, 60, 60, 1);
+  --card-background-hover: rgba(60, 60, 60, 0.9);
   --card-border: rgba(255, 255, 255, 0.1);
   --color-planning: #ffc107;
   --color-ready: #28a745;

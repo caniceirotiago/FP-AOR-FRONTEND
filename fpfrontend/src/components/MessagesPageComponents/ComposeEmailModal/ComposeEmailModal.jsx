@@ -288,6 +288,7 @@ const ComposeEmailModal = ({ onClose, initialSelectedUser, initialSelectedMessag
                       status={msg.viewed ? "read" : "sent"}
                       onAvatarClick={() => handleRedirectToUserProfile(msg.sender.username)}
                       onTitleClick={() => handleRedirectToUserProfile(msg.sender.username)}
+                    
                     />
                   </div>
                 );

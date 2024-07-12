@@ -87,7 +87,7 @@
   margin: 0;
   padding: 0;
   font-size: 14px;
-  color: #333;
+  color: var(--text-color4);
   font-weight: 600;
   align-self: center;
 }
