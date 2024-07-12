@@ -9,7 +9,8 @@ import taskService from "../../services/taskService";
 import ReactQuill from "react-quill";
 
 const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
-  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } = useDialogModalStore();
+  const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
+    useDialogModalStore();
   const intl = useIntl();
   const today = new Date();
   const quillRef = useRef(null);
@@ -22,7 +23,10 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
     responsibleId: "",
   });
   const handleDescriptionChange = (value) => {
-    const cleanValue = value.replace(/[^a-zA-Z0-9 .,;!?'"@#$%^&*()_+=\-\[\]\{\}:<>\/\\|`~]/g, "");
+    const cleanValue = value.replace(
+      /[^a-zA-Z0-9 .,;!?'"@#$%^&*()_+=\-\[\]\{\}:<>\/\\|`~]/g,
+      ""
+    );
     if (cleanValue.length <= 200) {
       setTaskData((prevData) => ({ ...prevData, description: cleanValue }));
     }
@@ -31,17 +35,23 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
   useEffect(() => {
     if (quillRef.current) {
       const quill = quillRef.current.getEditor();
-      quill.on('text-change', () => {
+      quill.on("text-change", () => {
         const content = quill.getText();
         if (content.length > 200) {
           quill.deleteText(200, quill.getLength());
         }
-        const cleanContent = content.replace(/[^a-zA-Z0-9 .,;!?'"@#$%^&*()_+=\-\[\]\{\}:<>/\\|`~]/g, "");
+        const cleanContent = content.replace(
+          /[^a-zA-Z0-9 .,;!?'"@#$%^&*()_+=\-\[\]\{\}:<>/\\|`~]/g,
+          ""
+        );
         if (cleanContent.length !== content.length) {
           quill.deleteText(0, quill.getLength());
           quill.clipboard.dangerouslyPasteHTML(0, cleanContent);
         }
-        setTaskData((prevData) => ({ ...prevData, description: quill.root.innerHTML }));
+        setTaskData((prevData) => ({
+          ...prevData,
+          description: quill.root.innerHTML,
+        }));
       });
     }
   }, []);
@@ -51,7 +61,7 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
     const endDate = addDays(startDate, taskData.duration);
     setTaskData((prevData) => ({
       ...prevData,
-      plannedEndDate: format(endDate, "yyyy-MM-dd'T'00:00:00'Z'")
+      plannedEndDate: format(endDate, "yyyy-MM-dd'T'00:00:00'Z'"),
     }));
   }, [taskData.plannedStartDate, taskData.duration]);
 
@@ -69,9 +79,12 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
 
   const handleDurationChange = (e) => {
     const duration = parseInt(e.target.value, 10);
+    //ensure that the duration value is valid before updating the state
+    if (isNaN(duration) || duration < 1 || duration > 30) {
+      return;
+    }
     setTaskData((prevData) => ({ ...prevData, duration: duration }));
   };
-
 
   const onAddingResponsibleChange = (newResponsible) => {
     const responsibleId = newResponsible[0]?.user?.id;
@@ -80,9 +93,13 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!taskData.responsibleId)
-    {
-      setDialogMessage(intl.formatMessage({ id: "noResponsible", defaultMessage: "No responsible selected!" }));
+    if (!taskData.responsibleId) {
+      setDialogMessage(
+        intl.formatMessage({
+          id: "noResponsible",
+          defaultMessage: "No responsible selected!",
+        })
+      );
       setAlertType(true);
       setIsDialogOpen(true);
       setOnConfirm(() => {
@@ -100,7 +117,12 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
     };
     const response = await taskService.createTask(dataToSend, projectId);
     if (response.status === 204) {
-      setDialogMessage(intl.formatMessage({ id: "taskCreatedSuccess", defaultMessage: "Task created successfully!" }));
+      setDialogMessage(
+        intl.formatMessage({
+          id: "taskCreatedSuccess",
+          defaultMessage: "Task created successfully!",
+        })
+      );
       setAlertType(true);
       setIsDialogOpen(true);
       setOnConfirm(() => {
@@ -127,7 +149,9 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
 
   if (!isOpen) return null;
 
-  const maxStartDate = taskData.plannedEndDate ? new Date(taskData.plannedEndDate) : null;
+  const maxStartDate = taskData.plannedEndDate
+    ? new Date(taskData.plannedEndDate)
+    : null;
   if (maxStartDate) {
     maxStartDate.setDate(maxStartDate.getDate() - 1);
   }
@@ -157,34 +181,41 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
               <FormattedMessage id="description" defaultMessage="Description" />
             </label>
             <ReactQuill
-                theme="snow"
-                value={taskData.description}
-                onChange={handleDescriptionChange}
-                className={styles.quillEditor}
-                
-                modules={{
-                  toolbar: [
-                    [{ font: [] }],
-                    [{ color: [] }, { background: [] }],
-                    [{ size: [] }],
-                    ["bold", "italic", "underline", "strike"],
-                    ["clean"]
-                  ],
-                }}
-              />
+              theme="snow"
+              value={taskData.description}
+              onChange={handleDescriptionChange}
+              className={styles.quillEditor}
+              modules={{
+                toolbar: [
+                  [{ font: [] }],
+                  [{ color: [] }, { background: [] }],
+                  [{ size: [] }],
+                  ["bold", "italic", "underline", "strike"],
+                  ["clean"],
+                ],
+              }}
+            />
             <label className={styles.label}>
-              <FormattedMessage id="initialPlannedDate" defaultMessage="Initial Planned Date" />
+              <FormattedMessage
+                id="initialPlannedDate"
+                defaultMessage="Initial Planned Date"
+              />
             </label>
             <input
               type="date"
               className={styles.datePicker}
               value={taskData.plannedStartDate.substring(0, 10)}
-              onChange={(e) => handleDateChange(new Date(e.target.value), "plannedStartDate")}
+              onChange={(e) =>
+                handleDateChange(new Date(e.target.value), "plannedStartDate")
+              }
               required
               min={format(today, "yyyy-MM-dd")}
             />
             <label className={styles.label}>
-              <FormattedMessage id="duration" defaultMessage="Duration (days)" />
+              <FormattedMessage
+                id="duration"
+                defaultMessage="Duration (days)"
+              />
             </label>
             <input
               type="number"
