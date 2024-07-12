@@ -189,6 +189,8 @@ const ProjectBasicInfo = ({
               value={projectInfo.name}
               onChange={handleInputChange}
               disabled={!isEditing}
+              maxLength={25}
+              minLength={3}
             />
             <label className={styles.label}>
               <FormattedMessage id="laboratoryId" defaultMessage="Laboratory" />
@@ -249,6 +251,8 @@ const ProjectBasicInfo = ({
               value={projectInfo.description}
               onChange={handleInputChange}
               disabled={!isEditing}
+              maxLength={2048}
+              minLength={3}
             />
             <label className={styles.label}>
               <FormattedMessage id="motivation" defaultMessage="Motivation" />
@@ -259,6 +263,8 @@ const ProjectBasicInfo = ({
               value={projectInfo.motivation}
               onChange={handleInputChange}
               disabled={!isEditing}
+              maxLength={2048}
+              minLength={3}
             />
           </div>
         </form>
