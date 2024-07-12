@@ -173,8 +173,6 @@ const HomePage = () => {
       showMyProjectsOnly: filters.showMyProjectsOnly ? "" : localStorage.getItem("userId"), 
     });
   };
-  
-  
 
   const handleClick = () => {
     setIsModalOpen(true);
@@ -206,7 +204,6 @@ const HomePage = () => {
   const toggleFiltersVisibility = () => {
     setFiltersVisible(!filtersVisible);
   };
-
 
   return (
     <div className={styles.homePage}>

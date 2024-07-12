@@ -1,51 +1,57 @@
-import React from 'react';
-import styles from './UserProfilePage.module.css';
-import UserProfileBasicElements from '../../components/UserProfilePageComponents/UserProfileBasicElements.jsx';   
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import userService from '../../services/userService';
-import AttributeEditor from '../../components/reactSelect/AttributeEditor.jsx';
-import { Link } from 'react-router-dom';
-import { FaLock } from 'react-icons/fa';
-import { FaExclamationTriangle } from 'react-icons/fa';
-import { FormattedMessage } from 'react-intl';
-import ProjectList from '../../components/UserProfilePageComponents/userProjectList/ProjectList.jsx';
+import React from "react";
+import styles from "./UserProfilePage.module.css";
+import UserProfileBasicElements from "../../components/UserProfilePageComponents/UserProfileBasicElements.jsx";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import userService from "../../services/userService";
+import AttributeEditor from "../../components/reactSelect/AttributeEditor.jsx";
+import { Link } from "react-router-dom";
+import { FaLock } from "react-icons/fa";
+import { FaExclamationTriangle } from "react-icons/fa";
+import { FormattedMessage } from "react-intl";
+import ProjectList from "../../components/UserProfilePageComponents/userProjectList/ProjectList.jsx";
 
 const UserProfilePage = () => {
-  const [isEditing, setIsEditing] = useState(false); 
+  // State hooks for managing the component's internal state
+  const [isEditing, setIsEditing] = useState(false);
+  // Extracts the username from the URL parameters
   const { username: usernameProfile } = useParams();
   const [isOwnProfile, setIsOwnProfile] = useState();
   const [isAPrivateProfile, setIsAPrivateProfile] = useState();
   const [isTheProfileNotExistant, setIsTheProfileNotExistant] = useState();
+  // State for holding the user's profile information
   const [userProfileInfo, setUserProfileInfo] = useState({
-    email: '',
-    firstName: '',
-    lastName: '',
-    photo: '',
-    biography: '',
-    laboratoryId: '',
-    private: '',
+    email: "",
+    firstName: "",
+    lastName: "",
+    photo: "",
+    biography: "",
+    laboratoryId: "",
+    private: "",
   });
 
+  // Check if the profile being viewed belongs to the logged-in user
   useEffect(() => {
     const checkIfOwnProfile = () => {
-      const loggedInUsername = localStorage.getItem('username');
+      const loggedInUsername = localStorage.getItem("username");
       setIsOwnProfile(loggedInUsername === usernameProfile);
     };
-
     checkIfOwnProfile();
   }, [userProfileInfo, usernameProfile]);
 
+  // Fetch private profile data if the profile is private
   const fetchPrivateProfileDataByUsername = async () => {
-    if(usernameProfile === undefined){
+    if (usernameProfile === undefined) {
       return;
     }
     try {
-      const response = await userService.fetchUserBasicInfoByUsenameInfo(usernameProfile);
+      const response = await userService.fetchUserBasicInfoByUsenameInfo(
+        usernameProfile
+      );
       console.log(response);
       const data = await response.json();
       console.log(data);
-      setUserProfileInfo(prevState => ({
+      setUserProfileInfo((prevState) => ({
         ...prevState,
         ...data,
         photo: data.photo,
@@ -55,64 +61,115 @@ const UserProfilePage = () => {
     }
   };
 
+  // Fetch user profile data based on the username
   const fetchUserData = async () => {
-        try {
-          const response = await userService.fetchUserInfo(usernameProfile);
-          const data = await response.json();
-          if(response.status === 403){
-            setIsAPrivateProfile(true);
-          }else if(response.status === 400){
-            setIsTheProfileNotExistant(true);
-          }else{
-            setIsAPrivateProfile(false);
-            setIsTheProfileNotExistant(false);
-            setUserProfileInfo(data);
-          }
-        } catch (error) {
-          console.error("Failed to fetch user data:", error);
-        }
-    };
+    try {
+      const response = await userService.fetchUserInfo(usernameProfile);
+      const data = await response.json();
+      if (response.status === 403) {
+        setIsAPrivateProfile(true); // Profile is private
+      } else if (response.status === 400) {
+        setIsTheProfileNotExistant(true); // Profile does not exist
+      } else {
+        setIsAPrivateProfile(false);
+        setIsTheProfileNotExistant(false);
+        setUserProfileInfo(data); // Profile is public and exists
+      }
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+    }
+  };
+
+  // Fetch user data when the component mounts or the username changes
   useEffect(() => {
     fetchUserData();
   }, [usernameProfile]);
 
-
-
-  return (
+   // Render the user profile page with conditional rendering for private/non-existent profiles
+   return (
     <>
-    {isAPrivateProfile ? (
-      
-      <div className={styles.userProfilePageAlt}>
-      <UserProfileBasicElements isPrivate={true} isOwnProfile={isOwnProfile} userProfileInfo={userProfileInfo} usernameProfile={usernameProfile} fetchPrivateProfileDataByUsername={fetchPrivateProfileDataByUsername}/>
+      {isAPrivateProfile ? (
+        <div className={styles.userProfilePageAlt}>
+          <UserProfileBasicElements
+            isPrivate={true}
+            isOwnProfile={isOwnProfile}
+            userProfileInfo={userProfileInfo}
+            usernameProfile={usernameProfile}
+            fetchPrivateProfileDataByUsername={
+              fetchPrivateProfileDataByUsername
+            }
+          />
 
-      <FaLock size={50} style={{ color: 'var(--negative-color)', marginBottom: '20px' }} />
-      <h1><FormattedMessage id="privateProfile" >Private Profile </FormattedMessage></h1>
-      <p><FormattedMessage id="thisProfileIsPrivateAndCannotBeViewed" >This profile is private and cannot be viewed.</FormattedMessage></p>
-      <Link to="/authenticatedhomepage" className={styles.backButton}><FormattedMessage id="goToHomePage" >Go to Home</FormattedMessage></Link>
-    </div>
-    ) : isTheProfileNotExistant ? (
-      <div className={styles.userProfilePageAlt}>
-      <FaExclamationTriangle size={50} style={{ color: 'orange', marginBottom: '20px' }} />
-      <h1><FormattedMessage id="profileNotFound" >Profile Not Found</FormattedMessage></h1>
-      <p><FormattedMessage id="theProfileYouAreLookingForDoesNotExist." >The profile you are looking for does not exist.</FormattedMessage></p>
-      <Link to="/authenticatedhomepage" className={styles.backButton}><FormattedMessage id="goToHomePage" >Go to Home</FormattedMessage></Link>
-    </div>
-    ) : (
-      <div className={styles.userProfilePage} >
-        <UserProfileBasicElements fetchUserData={fetchUserData} isOwnProfile={isOwnProfile} userProfileInfo={userProfileInfo} isEditing={isEditing} setIsEditing={setIsEditing}/>
-        <div className={styles.sec2}>
-          <div className={styles.otherAtributes}>
-            <AttributeEditor title="skills" mainEntity= "user" editMode={isOwnProfile && isEditing} creationMode={false} username={usernameProfile}/>
-            <AttributeEditor title="interests" mainEntity= "user" editMode={isOwnProfile && isEditing} creationMode={false} username={usernameProfile}/>
-            <ProjectList id={userProfileInfo.id} />
+          <FaLock
+            size={50}
+            style={{ color: "var(--negative-color)", marginBottom: "20px" }}
+          />
+          <h1>
+            <FormattedMessage id="privateProfile">
+              Private Profile{" "}
+            </FormattedMessage>
+          </h1>
+          <p>
+            <FormattedMessage id="thisProfileIsPrivateAndCannotBeViewed">
+              This profile is private and cannot be viewed.
+            </FormattedMessage>
+          </p>
+          <Link to="/authenticatedhomepage" className={styles.backButton}>
+            <FormattedMessage id="goToHomePage">Go to Home</FormattedMessage>
+          </Link>
+        </div>
+      ) : isTheProfileNotExistant ? (
+        <div className={styles.userProfilePageAlt}>
+          <FaExclamationTriangle
+            size={50}
+            style={{ color: "orange", marginBottom: "20px" }}
+          />
+          <h1>
+            <FormattedMessage id="profileNotFound">
+              Profile Not Found
+            </FormattedMessage>
+          </h1>
+          <p>
+            <FormattedMessage id="theProfileYouAreLookingForDoesNotExist.">
+              The profile you are looking for does not exist.
+            </FormattedMessage>
+          </p>
+          <Link to="/authenticatedhomepage" className={styles.backButton}>
+            <FormattedMessage id="goToHomePage">Go to Home</FormattedMessage>
+          </Link>
+        </div>
+      ) : (
+        <div className={styles.userProfilePage}>
+          <UserProfileBasicElements
+            fetchUserData={fetchUserData}
+            isOwnProfile={isOwnProfile}
+            userProfileInfo={userProfileInfo}
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
+          />
+          <div className={styles.sec2}>
+            <div className={styles.otherAtributes}>
+              <AttributeEditor
+                title="skills"
+                mainEntity="user"
+                editMode={isOwnProfile && isEditing}
+                creationMode={false}
+                username={usernameProfile}
+              />
+              <AttributeEditor
+                title="interests"
+                mainEntity="user"
+                editMode={isOwnProfile && isEditing}
+                creationMode={false}
+                username={usernameProfile}
+              />
+              <ProjectList id={userProfileInfo.id} />
+            </div>
           </div>
         </div>
-      </div>
-      
-    )}
-      </>
+      )}
+    </>
   );
-
 };
 
 export default UserProfilePage;

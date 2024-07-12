@@ -7,24 +7,31 @@ import EditAssetModal from "../AssetsModal/EditAssetModal.jsx";
 import useAssetsStore from "../../../stores/useAssetsStore.jsx";
 
 function AssetTable({ pageCount, assets }) {
+  // Access modal state management from the store
   const { isEditModalOpen, setEditModalOpen } = useAssetsStore();
+  // State to keep track of the selected asset ID
   const [selectedAssetId, setSelectedAssetId] = useState(null);
+  // State to determine if the modal is view-only or editable
   const [isViewOnly, setIsViewOnly] = useState(false);
 
+  // Handler for viewing an asset
   const handleViewAsset = (assetId) => () => {
     setSelectedAssetId(assetId);
     setIsViewOnly(true);
     setEditModalOpen(true);
   };
 
+  // Handler for editing an asset
   const handleEditAsset = (assetId) => {
     setSelectedAssetId(assetId);
     setIsViewOnly(false);
     setEditModalOpen(true);
   };
 
+  // Memoize the assets data to prevent unnecessary re-renders
   const data = useMemo(() => assets, [assets]);
 
+  // Define the columns for the table
   const columns = useMemo(
     () => [
       {
@@ -122,6 +129,7 @@ function AssetTable({ pageCount, assets }) {
     []
   );
 
+  // Destructure table properties and methods from the useTable hook
   const {
     getTableProps,
     getTableBodyProps,
@@ -133,9 +141,9 @@ function AssetTable({ pageCount, assets }) {
     {
       columns,
       data,
-      initialState: { pageIndex: 0 },
+      initialState: { pageIndex: 0 }, // Initial state of the pagination
       manualPagination: true,
-      pageCount: pageCount,
+      pageCount: pageCount, // Total number of pages
     },
     usePagination
   );
@@ -146,13 +154,18 @@ function AssetTable({ pageCount, assets }) {
         <table {...getTableProps()} className={styles.table}>
           <thead>
             {headerGroups.map((headerGroup) => {
-              const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
+              const { key, ...restHeaderGroupProps } =
+                headerGroup.getHeaderGroupProps();
               return (
                 <tr key={key} {...restHeaderGroupProps}>
                   {headerGroup.headers.map((column) => {
                     const { key, ...restColumnProps } = column.getHeaderProps();
                     return (
-                      <th key={key} {...restColumnProps} className={styles.header}>
+                      <th
+                        key={key}
+                        {...restColumnProps}
+                        className={styles.header}
+                      >
                         {column.render("Header")}
                       </th>
                     );

@@ -8,8 +8,12 @@ import useAssetTypeStore from "../../../stores/useAssetsStore.jsx";
 
 
 const CreateAssetModal = ({ isOpen, onClose }) => {
+    // Destructure state management functions from the dialog modal store
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
     useDialogModalStore();
+    // Destructure asset types and fetch function from the asset type store
+  const { types, fetchAssetTypes } = useAssetTypeStore();
+    // Initialize state for the asset form data
   const [assetData, setAssetData] = useState({
     name: "",
     type: "",
@@ -21,12 +25,12 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
     observations: "",
   });
 
-  const { types, fetchAssetTypes } = useAssetTypeStore();
-
+  // Fetch asset types when the component mounts
   useEffect(() => {
     fetchAssetTypes();
   }, [fetchAssetTypes]);
 
+  // Handle form input changes and update the asset data state
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAssetData({
@@ -35,6 +39,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
     });
   };
 
+  // Handle form submission to create a new asset
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -52,6 +57,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
           onClose();
           setIsDialogOpen(false);
         });
+        // Reset asset data form to initial state
         setAssetData({
           name: "",
           type: "",
@@ -63,6 +69,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
           observations: "",
         });
       } else {
+         // Handle errors in asset creation
         console.error("Error creating asset:", response.statusText);
         const data = await response.json();
         setDialogMessage(data.message);
@@ -75,6 +82,7 @@ const CreateAssetModal = ({ isOpen, onClose }) => {
     }
   };
 
+   // Render nothing if the modal is not open
   if (!isOpen) return null;
 
   return (
