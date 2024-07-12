@@ -11,7 +11,14 @@ import useLabStore from "../../stores/useLabStore.jsx";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router";
 import useProjectStatesStore from "../../stores/useProjectStatesStore.jsx";
-import { FaTable, FaTh, FaPlus, FaFilter, FaCheckSquare, FaSquare } from "react-icons/fa";
+import {
+  FaTable,
+  FaTh,
+  FaPlus,
+  FaFilter,
+  FaCheckSquare,
+  FaSquare,
+} from "react-icons/fa";
 import useAuthStore from "../../stores/useAuthStore.jsx";
 import useDeviceStore from "../../stores/useDeviceStore.jsx";
 import useLayoutStore from "../../stores/useLayoutStore.jsx";
@@ -38,13 +45,14 @@ const HomePage = () => {
     sortBy: "",
     orderBy: "",
     laboratory: "",
-    showMyProjectsOnly: "", 
+    showMyProjectsOnly: "",
   };
   const [filters, setFilters] = useState(defaultFilters);
   const { states, fetchProjectStates } = useProjectStatesStore();
   const [filterType, setFilterType] = useState("name");
   const intl = useIntl();
 
+  // Function to determine the initial page size based on the window width
   function getInitialPageSize() {
     const width = dimensions.width;
     if (width < 600) {
@@ -59,6 +67,7 @@ const HomePage = () => {
     return 5;
   }
 
+  // Function to update the page size based on the window width
   const updatePageSize = () => {
     const width = dimensions.width;
     let newPageSize;
@@ -75,6 +84,7 @@ const HomePage = () => {
     setPageSize(newPageSize);
   };
 
+  // Function to handle window resize events and update the view mode and page size
   const handleResize = () => {
     if (deviceType === "mobile") {
       if (view !== "cards") {
@@ -87,6 +97,7 @@ const HomePage = () => {
     }
   };
 
+  // useEffect to update the page size and handle window resize events
   useEffect(() => {
     updatePageSize();
     handleResize();
@@ -98,14 +109,13 @@ const HomePage = () => {
     };
   }, [selectedView, view, dimensions.width]);
 
+  // useEffect to update filters based on URL search parameters
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const newFilters = {};
-
     searchParams.forEach((value, key) => {
       newFilters[key] = value;
     });
-
     setFilters((prevFilters) => ({
       ...prevFilters,
       ...newFilters,
@@ -113,12 +123,12 @@ const HomePage = () => {
     fetchProjectStates();
   }, [location.search]);
 
+  // useEffect to fetch projects and laboratories when component mounts or state changes
   useEffect(() => {
     if (isAuthenticated) navigate("/authenticatedhomepage");
     else navigate("/homepage");
     const fetchProjects = async () => {
       console.log("fetching projects");
-      console.log(filters);
       const response = await projectService.getFilteredProjects(
         pageNumber,
         pageSize,
@@ -141,6 +151,7 @@ const HomePage = () => {
     fetchLaboratories();
   }, [isModalOpen, pageNumber, pageSize, filters]);
 
+  // Handler for changing filter values
   const handleFilterChange = (e) => {
     setFilters({
       ...filters,
@@ -148,6 +159,7 @@ const HomePage = () => {
     });
   };
 
+  // Handler for changing sort value
   const handleSortChange = (e) => {
     setFilters({
       ...filters,
@@ -155,6 +167,7 @@ const HomePage = () => {
     });
   };
 
+  // Handler for changing order value
   const handleOrderChange = (e) => {
     setFilters({
       ...filters,
@@ -162,29 +175,35 @@ const HomePage = () => {
     });
   };
 
+  // Handler for changing filter type
   const handleFilterTypeChange = (e) => {
     setFilterType(e.target.value);
   };
 
+  // Handler for toggling "My Projects Only" filter
   const handleToggleMyProjects = () => {
     setFilters({
       ...filters,
-      showMyProjectsOnly: filters.showMyProjectsOnly ? "" : localStorage.getItem("userId"), 
+      showMyProjectsOnly: filters.showMyProjectsOnly
+        ? ""
+        : localStorage.getItem("userId"),
     });
   };
 
+  // Handler for opening the create project modal
   const handleClick = () => {
     setIsModalOpen(true);
   };
 
+  // Handler for clearing all filters
   const handleClearFilters = () => {
     setFilters(defaultFilters);
-    setFilterType("name"); 
+    setFilterType("name");
     setPageSize(getInitialPageSize());
     setPageNumber(1);
-
   };
 
+  // Handler for toggling between table and card view
   const toggleView = () => {
     if (selectedView === "table") {
       setSelectedView("cards");
@@ -200,6 +219,7 @@ const HomePage = () => {
       ? intl.formatMessage({ id: "cardsButtonText" })
       : intl.formatMessage({ id: "tableButtonText" });
 
+  // Handler for toggling the visibility of filters
   const toggleFiltersVisibility = () => {
     setFiltersVisible(!filtersVisible);
   };
@@ -353,9 +373,12 @@ const HomePage = () => {
             </select>
             {isAuthenticated && (
               <div className={styles.myProjects}>
-                 <h5 className={styles.myProjectH5}>
-                        <FormattedMessage id="myProjectsTitle" defaultMessage="My Projects" />
-                    </h5>
+                <h5 className={styles.myProjectH5}>
+                  <FormattedMessage
+                    id="myProjectsTitle"
+                    defaultMessage="My Projects"
+                  />
+                </h5>
                 <label className={styles.switch}>
                   <input
                     type="checkbox"
@@ -363,8 +386,13 @@ const HomePage = () => {
                     onChange={handleToggleMyProjects}
                   />
                   <span className={styles.slider}></span>
-                </label></div>)}
-            <button onClick={handleClearFilters} className={styles.clearFiltersBtn}>
+                </label>
+              </div>
+            )}
+            <button
+              onClick={handleClearFilters}
+              className={styles.clearFiltersBtn}
+            >
               {" "}
               <FormattedMessage
                 id="clearFilters"
