@@ -7,16 +7,19 @@ import DialogModalStore from "../../stores/useDialogModalStore";
 const ProjectConfirmationPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  // Destructure dialog modal store actions
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
     DialogModalStore();
+  // Internationalization hook for language translation
   const intl = useIntl();
 
   useEffect(() => {
+    // Parse query parameters from the URL
     const searchParams = new URLSearchParams(location.search);
     const token = searchParams.get("token");
     const approve = searchParams.get("approve");
     const approver = searchParams.get("approver");
-
+    // If token is missing, show error message and navigate to home
     if (!token) {
       setDialogMessage(
         intl.formatMessage({
@@ -32,7 +35,7 @@ const ProjectConfirmationPage = () => {
       navigate("/");
       return;
     }
-
+    // Function to perform project association confirmation
     const performConfirmation = async () => {
       try {
         const response = await userService.confirmProjectAssociation(
@@ -81,7 +84,7 @@ const ProjectConfirmationPage = () => {
         });
       }
     };
-
+    // Call the confirmation function on component mount
     performConfirmation();
   }, [navigate, location.search, intl]);
 
