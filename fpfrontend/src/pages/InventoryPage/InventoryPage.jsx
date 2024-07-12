@@ -10,6 +10,7 @@ import useDeviceStore from "../../stores/useDeviceStore.jsx";
 import useAssetsStore from "../../stores/useAssetsStore.jsx";
 
 const InventoryPage = () => {
+  // State and store hooks
   const { dimensions } = useDeviceStore();
   const location = useLocation();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -19,6 +20,7 @@ const InventoryPage = () => {
   const [filtersVisible, setFiltersVisible] = useState(false);
   const [pageCount, setPageCount] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
+  // Define the default filter values, no filters or sorting applied initially, for the asset search and sorting criteria.
   const defaultFilters = {
     name: "",
     type: "",
@@ -31,6 +33,7 @@ const InventoryPage = () => {
   const [filterType, setFilterType] = useState("name", "type");
   const intl = useIntl();
 
+  // Function to get initial page size based on screen width
   function getInitialPageSize() {
     const width = dimensions.width;
     if (width < 600) {
@@ -43,6 +46,7 @@ const InventoryPage = () => {
     return 5;
   }
 
+  // Update page size based on screen width
   const updatePageSize = () => {
     const width = dimensions.width;
     let newPageSize;
@@ -57,6 +61,7 @@ const InventoryPage = () => {
     setPageSize(newPageSize);
   };
 
+  // Effect to handle window resize and update page size
   useEffect(() => {
     updatePageSize();
     window.addEventListener("resize", updatePageSize);
@@ -65,8 +70,7 @@ const InventoryPage = () => {
     };
   }, [dimensions.width]);
 
-  
-
+  // Effect to update filters based on URL search params and fetch asset types
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const newFilters = {};
@@ -82,6 +86,7 @@ const InventoryPage = () => {
     fetchAssetTypes();
   }, [location.search]);
 
+  // Handlers for filter changes
   const handleFilterChange = (e) => {
     setFilters({
       ...filters,
@@ -113,10 +118,12 @@ const InventoryPage = () => {
   const handleFilterTypeChange = (e) => {
     setFilterType(e.target.value);
   };
+
   const toggleFiltersVisibility = () => {
     setFiltersVisible(!filtersVisible);
   };
 
+  // Effect to fetch assets based on current filters, page number, and page size
   useEffect(() => {
     const fetchAssets = async () => {
       const response = await assetService.getFilteredAssets(
@@ -141,6 +148,7 @@ const InventoryPage = () => {
     fetchAssets();
   }, [isCreateModalOpen, pageNumber, pageSize, filters, isEditModalOpen]);
 
+  // Handler to open create asset modal
   const handleClick = () => {
     setIsCreateModalOpen(true);
   };
@@ -264,7 +272,10 @@ const InventoryPage = () => {
                 />
               </option>
             </select>
-            <button onClick={handleClearFilters} className={styles.clearFiltersBtn}>
+            <button
+              onClick={handleClearFilters}
+              className={styles.clearFiltersBtn}
+            >
               <FormattedMessage
                 id="clearFilters"
                 defaultMessage="Clear Filters"
@@ -280,37 +291,39 @@ const InventoryPage = () => {
           assets={assets}
         />
         {pageCount > 1 && (
-        <div className={styles.pagination}>
-          <button onClick={() => setPageNumber(1)} disabled={pageNumber === 1}>
-            {"<<"}
-          </button>
-          <button
-            onClick={() => setPageNumber(pageNumber - 1)}
-            disabled={pageNumber === 1}
-          >
-            {"<"}
-          </button>
-          <button
-            onClick={() => setPageNumber(pageNumber + 1)}
-            disabled={pageNumber === pageCount}
-          >
-            {">"}
-          </button>
-          <button
-            onClick={() => setPageNumber(pageCount)}
-            disabled={pageNumber === pageCount}
-          >
-            {">>"}
-          </button>
-          <span>
-            <FormattedMessage id="pageInfo" defaultMessage="Page" />{" "}
-            <strong>
-              {pageNumber}
-               <FormattedMessage id="ofInfo" defaultMessage="of" />{" "}
-              {pageCount}
-            </strong>
-          </span>
-        </div>
+          <div className={styles.pagination}>
+            <button
+              onClick={() => setPageNumber(1)}
+              disabled={pageNumber === 1}
+            >
+              {"<<"}
+            </button>
+            <button
+              onClick={() => setPageNumber(pageNumber - 1)}
+              disabled={pageNumber === 1}
+            >
+              {"<"}
+            </button>
+            <button
+              onClick={() => setPageNumber(pageNumber + 1)}
+              disabled={pageNumber === pageCount}
+            >
+              {">"}
+            </button>
+            <button
+              onClick={() => setPageNumber(pageCount)}
+              disabled={pageNumber === pageCount}
+            >
+              {">>"}
+            </button>
+            <span>
+              <FormattedMessage id="pageInfo" defaultMessage="Page" />{" "}
+              <strong>
+                {pageNumber}
+                <FormattedMessage id="ofInfo" defaultMessage="of" /> {pageCount}
+              </strong>
+            </span>
+          </div>
         )}
       </div>
     </div>
