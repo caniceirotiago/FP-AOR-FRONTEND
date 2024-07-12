@@ -141,7 +141,7 @@ function AssetTable({ pageCount, assets }) {
     {
       columns,
       data,
-      initialState: { pageIndex: 0 }, // Initial state of the pagination
+      initialState: { pageIndex: 0 },
       manualPagination: true,
       pageCount: pageCount, // Total number of pages
     },
