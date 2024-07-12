@@ -12,6 +12,7 @@ import { FaEdit } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { FaKey } from "react-icons/fa";
 import { FaEnvelope } from "react-icons/fa";
+import { stateColorsBriefcaseBackground } from "../../utils/colors/projectColors";
 
 
 
@@ -41,7 +42,11 @@ const UserProfileBasicElements = ({ fetchPrivateProfileDataByUsername, usernameP
 
     return(
         <div className={styles.profileContainer}>
-          <div className={styles.innerHead}>
+          <div className={styles.innerHead}
+          style={{
+            backgroundImage:
+              stateColorsBriefcaseBackground["PLANNING"],
+          }}>
         <section className={styles.userHeader}>
           
           <img src={userProfileInfo?.photo} alt="User" className={styles.userPhoto} />
