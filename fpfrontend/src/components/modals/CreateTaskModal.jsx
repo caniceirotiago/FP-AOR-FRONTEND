@@ -22,14 +22,9 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
     plannedEndDate: format(addDays(today, 1), "yyyy-MM-dd'T'00:00:00'Z'"),
     responsibleId: "",
   });
+
   const handleDescriptionChange = (value) => {
-    const cleanValue = value.replace(
-      /[^a-zA-Z0-9 .,;!?'"@#$%^&*()_+=\-\[\]\{\}:<>\/\\|`~]/g,
-      ""
-    );
-    if (cleanValue.length <= 200) {
-      setTaskData((prevData) => ({ ...prevData, description: cleanValue }));
-    }
+    setTaskData((prevData) => ({ ...prevData, description: value }));
   };
 
   useEffect(() => {
@@ -39,14 +34,6 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
         const content = quill.getText();
         if (content.length > 200) {
           quill.deleteText(200, quill.getLength());
-        }
-        const cleanContent = content.replace(
-          /[^a-zA-Z0-9 .,;!?'"@#$%^&*()_+=\-\[\]\{\}:<>/\\|`~]/g,
-          ""
-        );
-        if (cleanContent.length !== content.length) {
-          quill.deleteText(0, quill.getLength());
-          quill.clipboard.dangerouslyPasteHTML(0, cleanContent);
         }
         setTaskData((prevData) => ({
           ...prevData,
@@ -84,9 +71,7 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
 
   const handleDurationBlur = () => {
     const duration = parseInt(taskData.duration, 10);
-
     if (isNaN(duration) || duration < 1 || duration > 30) {
-      // Handle the invalid value case, e.g., reset to the default value
       setTaskData((prevData) => ({ ...prevData, duration: 1 }));
     } else {
       setTaskData((prevData) => ({ ...prevData, duration: duration }));

@@ -123,9 +123,9 @@ body.theme-dark {
   --dependency-line-hover-color: #55ff00;
   --gantt-graphic-line-color: #0f0e0e;
   --weekend-color: #100f0f67;
-  --today-color: #6f6f6964;
+  --today-color: #baba6864;
   --timeline-background-color: #4b624d;
-  --task-title-gantt-color: #fefefe;
+  --task-title-gantt-color: #797e7e;
   --gantt-graphic-background: #232324;
   --report-graphic-color1: #ffc107;
   --report-graphic-color2: #28a745;

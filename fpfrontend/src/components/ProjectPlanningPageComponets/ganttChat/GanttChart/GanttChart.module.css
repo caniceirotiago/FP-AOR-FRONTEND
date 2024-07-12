@@ -59,6 +59,7 @@
   overflow: hidden;
   position: relative;
   background: var(--timeline-background-color);
+  color:var(--text-color4);
 }
 
 .timelineDate:after {
