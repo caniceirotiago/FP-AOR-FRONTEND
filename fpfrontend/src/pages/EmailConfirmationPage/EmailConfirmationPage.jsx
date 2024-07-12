@@ -16,6 +16,7 @@ const EmailConfirmationPage = () => {
     const token = searchParams.get("token");
 
     if (!token) {
+       // If token is not present, show error dialog
       setDialogMessage(
         intl.formatMessage({
           id: "errorTokenNotReceived",
@@ -30,6 +31,8 @@ const EmailConfirmationPage = () => {
       navigate("/");
       return;
     }
+
+      // Function to perform account confirmation
     const performConfirmation = async () => {
       try {
         const response = await userService.confirmAccount(token);

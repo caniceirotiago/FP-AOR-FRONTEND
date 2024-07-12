@@ -10,7 +10,7 @@ import EditTaskModal from "../../components/modals/EditTaskModal";
 import usePlanningPageStore from "../../stores/usePlanningPageStore";
 
 const ProjectPlanningPage = () => {
-  const {isThePlanEditable} = usePlanningPageStore();
+  const { isThePlanEditable } = usePlanningPageStore();
   const [accessibleProjectsIds, setAccessibleProjectsIds] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
@@ -19,6 +19,7 @@ const ProjectPlanningPage = () => {
   const { selectedProjectId, setSelectedProjectId } = useProjectStore();
   const intl = useIntl();
 
+  // Function to fetch projects accessible by logged-in user
   const fetchProjetsIdByloggedUser = async () => {
     let userId = localStorage.getItem("userId");
     try {
@@ -34,27 +35,33 @@ const ProjectPlanningPage = () => {
     }
   };
 
+  // Fetch projects on component mount and when selectedProjectId changes
   useEffect(() => {
     fetchProjetsIdByloggedUser();
   }, [selectedProjectId]);
 
+  // Handler for opening create task modal
   const handleClick = () => {
     setIsModalOpen(true);
   };
 
+  // Handler for opening edit task modal
   const handleEditTaskClick = (taskId) => {
     setSelectedTaskId(taskId);
     setIsEditTaskModalOpen(true);
   };
 
+  // Callback for when a task is created (to trigger update)
   const handleTaskCreated = () => {
     setTasksUpdated(!tasksUpdated);
   };
 
+  // Callback for when a task is updated (to trigger update)
   const handleTaskUpdate = () => {
     setTasksUpdated(!tasksUpdated);
   };
 
+  // Handler for selecting a different project
   const handleSelectProject = (e) => {
     setSelectedProjectId(e.target.value);
   };
@@ -76,17 +83,22 @@ const ProjectPlanningPage = () => {
       />
       <div className={styles.controlPanel}>
         <div className={styles.btns}>
-          {isThePlanEditable && <button
-            onClick={handleClick}
-            className={`${styles.iconButton} ${styles.createButton}`}
-            data-text={intl.formatMessage({ id: "task" })}
-          >
-            <FaPlus className={styles.svgIcon} />
-          </button>}
+          {isThePlanEditable && (
+            <button
+              onClick={handleClick}
+              className={`${styles.iconButton} ${styles.createButton}`}
+              data-text={intl.formatMessage({ id: "task" })}
+            >
+              <FaPlus className={styles.svgIcon} />
+            </button>
+          )}
         </div>
         <div className={styles.selectProjectDiv}>
-        <h4>
-            <FormattedMessage id="changeProject" defaultMessage="Change Project" />
+          <h4>
+            <FormattedMessage
+              id="changeProject"
+              defaultMessage="Change Project"
+            />
           </h4>
           <select
             className={styles.selectProject}
@@ -102,7 +114,12 @@ const ProjectPlanningPage = () => {
         </div>
         <div className={styles.btns}></div>
       </div>
-      <TaskManager className={styles.taskManager}handleEditTaskClick={handleEditTaskClick} projectId={selectedProjectId} tasksUpdated={tasksUpdated}/>
+      <TaskManager
+        className={styles.taskManager}
+        handleEditTaskClick={handleEditTaskClick}
+        projectId={selectedProjectId}
+        tasksUpdated={tasksUpdated}
+      />
     </div>
   );
 };
