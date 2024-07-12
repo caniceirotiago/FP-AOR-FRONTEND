@@ -261,4 +261,8 @@
 .chatButtonContainer {
   bottom: 60px; 
 }
+.controlPanel {
+    flex-direction: column;
+    height: 400px;
+}
 }

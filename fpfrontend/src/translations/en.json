@@ -269,5 +269,9 @@
   "sortByStatus": "Status",
   "listOrder": "Order:",
   "myProjectsTitle": "My Projects",
-  "clearButton": "Clear"
+  "clearButton": "Clear",
+  "noMessages": "No Messages Yet!",
+  "noMessagesDescription": "Be the first to send a message and start a conversation!",
+  "noProjectsAvailable": "No Projects Available",
+  "noProjectsAvailableMessage": "You currently do not have access to any projects. Please ask to join one project or create one."
 }

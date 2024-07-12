@@ -8,6 +8,9 @@ import useProjectStore from "../../stores/useProjectStore";
 import CreateTaskModal from "../../components/modals/CreateTaskModal";
 import EditTaskModal from "../../components/modals/EditTaskModal";
 import usePlanningPageStore from "../../stores/usePlanningPageStore";
+import { Link } from "react-router-dom";
+import { FaInfoCircle } from "react-icons/fa";
+
 
 const ProjectPlanningPage = () => {
   const { isThePlanEditable } = usePlanningPageStore();
@@ -65,10 +68,25 @@ const ProjectPlanningPage = () => {
   const handleSelectProject = (e) => {
     setSelectedProjectId(e.target.value);
   };
-
+  
+  
   return (
     <div className={styles.container}>
-      <CreateTaskModal
+      {(accessibleProjectsIds && accessibleProjectsIds.length === 0) ?
+          <div className={styles.noProjects}>
+          <FaInfoCircle size={50} style={{ color: "orange", marginBottom: "20px" }} />
+          <h1>
+            <FormattedMessage id="noProjectsAvailable" defaultMessage="No Projects Available" />
+          </h1>
+          <p>
+            <FormattedMessage id="noProjectsAvailableMessage" defaultMessage="You currently do not have access to any projects. Please ask to join one project or create one." />
+          </p>
+          <Link to="/authenticatedhomepage" className={styles.backButton}>
+            <FormattedMessage id="goToHomePage" defaultMessage="Go to Home" />
+          </Link>
+        </div>
+        :<>
+        <CreateTaskModal
         onTaskCreated={handleTaskCreated}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -120,7 +138,9 @@ const ProjectPlanningPage = () => {
         projectId={selectedProjectId}
         tasksUpdated={tasksUpdated}
       />
-    </div>
+    </>
+    }
+     </div>
   );
 };
 

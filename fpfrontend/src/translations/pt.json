@@ -268,5 +268,9 @@
   "sortByStatus": "Estado",
   "listOrder": "Ordenar:",
   "myProjectsTitle": "Meus Projetos",
-  "clearButton": "Limpar"
+  "clearButton": "Limpar",
+  "noMessages": "Ainda não há mensagens!",
+  "noMessagesDescription": "Seja o primeiro a enviar uma mensagem e começar uma conversa!",
+  "noProjectsAvailable": "Nenhum Projeto Disponível",
+  "noProjectsAvailableMessage": "Atualmente, você não tem acesso a nenhum projeto. Por favor, peça para se juntar a um projeto ou crie um."
 }
