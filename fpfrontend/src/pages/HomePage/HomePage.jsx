@@ -16,7 +16,6 @@ import useAuthStore from "../../stores/useAuthStore.jsx";
 import useDeviceStore from "../../stores/useDeviceStore.jsx";
 import useLayoutStore from "../../stores/useLayoutStore.jsx";
 
-
 const HomePage = () => {
   const { dimensions, deviceType } = useDeviceStore();
   const { isAuthenticated } = useAuthStore();
@@ -97,7 +96,7 @@ const HomePage = () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("resize", updatePageSize);
     };
-  }, [selectedView, view]);
+  }, [selectedView, view, dimensions.width]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
