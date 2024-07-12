@@ -8,12 +8,14 @@ import { FaFilePdf, FaDownload } from "react-icons/fa";
 const ReportPage = () => {
   const intl = useIntl();
   const { setDialogMessage, setIsDialogOpen, setAlertType, setOnConfirm } =
-  useDialogModalStore();
+    useDialogModalStore();
 
+  // Function to generate PDF report based on reportType ('project' or 'asset')
   const generateReport = async (reportType) => {
     try {
       const response = await reportService.generatePdfReport(reportType);
       if (response.ok) {
+        // If report generation is successful, create a download link for the PDF
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -51,8 +53,9 @@ const ReportPage = () => {
   return (
     <div className={styles.ReportPage}>
       <div className={styles.container}>
-
-        <div className={styles.dashboard}><Dashboard/></div>
+        <div className={styles.dashboard}>
+          <Dashboard />
+        </div>
         <h3>
           <FormattedMessage id="reportGenerator" />
         </h3>
@@ -61,13 +64,15 @@ const ReportPage = () => {
             onClick={() => generateReport("project")}
             className={styles.GenerateButton}
           >
-            <FaFilePdf /> <FaDownload /> <FormattedMessage id="generateProjectsReport" />
+            <FaFilePdf /> <FaDownload />{" "}
+            <FormattedMessage id="generateProjectsReport" />
           </button>
           <button
             onClick={() => generateReport("asset")}
             className={styles.GenerateButton}
           >
-            <FaFilePdf /> <FaDownload /> <FormattedMessage id="generateAssetsReport" />
+            <FaFilePdf /> <FaDownload />{" "}
+            <FormattedMessage id="generateAssetsReport" />
           </button>
         </div>
       </div>

@@ -30,7 +30,13 @@ const ProjectPage = () => {
   const { fetchProjectStates } = useProjectStatesStore();
   const { fetchProjectRoles } = useProjectRolesStore();
   const { laboratories, fetchLaboratories } = useLabStore();
-
+  const intl = useIntl();
+  const {
+    isGroupChatModalOpen,
+    setGroupChatModalOpen,
+    selectedChatProject,
+    setSelectedChatProject,
+  } = useGroupChatModalStore();
   const [projectInfo, setProjectInfo] = useState({
     name: "",
     description: "",
@@ -43,15 +49,7 @@ const ProjectPage = () => {
     assets: [],
   });
 
-  const {
-    isGroupChatModalOpen,
-    setGroupChatModalOpen,
-    selectedChatProject,
-    setSelectedChatProject,
-  } = useGroupChatModalStore();
-
-  const intl = useIntl();
-
+  // Function to fetch project data by ID
   const fetchProjectData = useCallback(async () => {
     try {
       const response = await projectService.getProjectById(id);
@@ -60,19 +58,18 @@ const ProjectPage = () => {
         return;
       }
       const projectData = await response.json();
+      // Update projectInfo state with fetched project data
       setProjectInfo({
         ...projectInfo,
         name: projectData.name,
         description: projectData.description,
         motivation: projectData.motivation,
         state: projectData.state,
-        laboratoryId: projectData.laboratory.id, 
+        laboratoryId: projectData.laboratory.id,
         conclusionDate: projectData.conclusionDate,
         createdBy: projectData.createdBy,
         members: projectData.members,
         id: projectData.id,
-
-        
       });
     } catch (error) {
       console.error("Error fetching project data:", error.message);
@@ -80,6 +77,7 @@ const ProjectPage = () => {
   }, [id]);
 
   useEffect(() => {
+    // Fetch initial project data and related entities
     fetchProjectData();
     fetchLaboratories();
     fetchProjectRoles();
@@ -94,6 +92,7 @@ const ProjectPage = () => {
     setIsEditing(false);
   };
 
+  // Update project information
   const handleUpdateProjectInfo = async () => {
     const projectUpdateData = {
       name: projectInfo.name,
@@ -115,21 +114,25 @@ const ProjectPage = () => {
     }
   };
 
+  // Open approval modal for project
   const handleApproveProject = async (approve) => {
     setApproveOrReject(approve);
     setIsApprovalModalOpen(true);
   };
 
+  // Navigate to project planning page
   const handleClickToOpenProjectPlanningPage = () => {
     setSelectedProjectId(id);
     navigate(`/projectplanning`);
   };
 
+  // Open group chat modal for project
   const handleOpenGroupChat = () => {
     setSelectedChatProject({ projectId: id, projectName: projectInfo.name });
     setGroupChatModalOpen(true);
   };
 
+  // Determine if current user can edit project
   const canEdit =
     projectInfo.members &&
     projectInfo.members.some(
@@ -138,6 +141,8 @@ const ProjectPage = () => {
         user.role === PROJECT_ROLES.PROJECT_MANAGER &&
         user.accepted
     );
+
+  // Determine if current user can see and edit project planning
   const canSeeAndEditProjectPlanning =
     projectInfo.members &&
     projectInfo.members.some(
@@ -148,7 +153,8 @@ const ProjectPage = () => {
 
   // Verifies if the user is "admin" level and the project is in the ready state
   const isInApprovalMode =
-    localStorage.getItem("role") === "1" && projectInfo.state === PROJECT_STATES.READY;
+    localStorage.getItem("role") === "1" &&
+    projectInfo.state === PROJECT_STATES.READY;
 
   return (
     <>
@@ -286,7 +292,7 @@ const ProjectPage = () => {
                 creationMode={false}
                 projectId={id}
                 createdBy={projectInfo.createdBy}
-                projectState= {projectInfo.state}
+                projectState={projectInfo.state}
               />
               <AttributeEditor
                 className={styles.attribute}
@@ -314,8 +320,7 @@ const ProjectPage = () => {
               />
             </div>
             <div className={styles.attributesContainer}>
-              {canSeeAndEditProjectPlanning &&
-               <LogsList id={id} />}
+              {canSeeAndEditProjectPlanning && <LogsList id={id} />}
             </div>
             <div className={styles.chatButtonContainer}>
               {canSeeAndEditProjectPlanning && (
