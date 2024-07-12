@@ -141,7 +141,7 @@ function ProjectCards({ projects, isAuthenticated }) {
                     />
                   </span>
                 </div>
-                <div className={styles.item}>
+                <div className={styles.item} style={project.state === "READY" ? { backgroundColor: "var(--ready-state-aux-color)", borderRadius: "15px" } : {}}>
                   <span className={styles.bigText}>{project.state}</span>
                   <span className={styles.regularText}>
                     <FormattedMessage

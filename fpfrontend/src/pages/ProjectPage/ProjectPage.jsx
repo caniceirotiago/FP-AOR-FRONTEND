@@ -84,7 +84,7 @@ const ProjectPage = () => {
     fetchLaboratories();
     fetchProjectRoles();
     fetchProjectStates();
-  }, [isApprovalModalOpen]);
+  }, [isApprovalModalOpen, id]);
 
   const handleEditModeTrue = (e) => {
     setIsEditing(true);

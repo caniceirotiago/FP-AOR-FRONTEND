@@ -163,7 +163,7 @@ function ProjectTable({ projects, pageCount, setPageNumber }) {
                   {row.cells.map((cell) => {
                     const { key, ...rest } = cell.getCellProps();
                     return (
-                      <td key={key} {...rest} className={styles.cell}>
+                      <td key={key} {...rest} className={styles.cell} style={cell.value === "READY" ? { backgroundColor: "var(--ready-state-aux-color)" } : {}}>
                         {cell.render("Cell")}
                       </td>
                     );
