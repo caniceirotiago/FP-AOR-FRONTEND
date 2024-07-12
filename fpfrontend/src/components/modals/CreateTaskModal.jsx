@@ -78,12 +78,19 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
   };
 
   const handleDurationChange = (e) => {
-    const duration = parseInt(e.target.value, 10);
-    //ensure that the duration value is valid before updating the state
+    const value = e.target.value;
+    setTaskData((prevData) => ({ ...prevData, duration: value }));
+  };
+
+  const handleDurationBlur = () => {
+    const duration = parseInt(taskData.duration, 10);
+
     if (isNaN(duration) || duration < 1 || duration > 30) {
-      return;
+      // Handle the invalid value case, e.g., reset to the default value
+      setTaskData((prevData) => ({ ...prevData, duration: 1 }));
+    } else {
+      setTaskData((prevData) => ({ ...prevData, duration: duration }));
     }
-    setTaskData((prevData) => ({ ...prevData, duration: duration }));
   };
 
   const onAddingResponsibleChange = (newResponsible) => {
@@ -223,6 +230,7 @@ const CreateTaskModal = ({ isOpen, onClose, projectId, onTaskCreated }) => {
               name="duration"
               value={taskData.duration}
               onChange={handleDurationChange}
+              onBlur={handleDurationBlur}
               required
               min={1}
               max={30}
