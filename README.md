@@ -59,7 +59,7 @@ Real-time data updates will be reflected instantly in the UI through WebSocket c
     display: flex;
     flex-wrap: wrap; 
     justify-content: center;
-    flex-direction: row
+    flex-direction: collumn;
   }
   .image-container img {
     margin: 10px; 
