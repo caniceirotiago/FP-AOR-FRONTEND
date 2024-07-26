@@ -57,7 +57,7 @@ Real-time data updates will be reflected instantly in the UI through WebSocket c
 Captures
 
 <div align="center">
-  <img width="325" alt="Captura de ecrã 2024-07-26, às 09 51 46" src="https://github.com/user-attachments/assets/2f2b1794-9596-44e3-96aa-d98ac937d4b7">
+  <img margin="40" width="325" alt="Captura de ecrã 2024-07-26, às 09 51 46" src="https://github.com/user-attachments/assets/2f2b1794-9596-44e3-96aa-d98ac937d4b7">
   <img width="400" alt="Captura de ecrã 2024-07-26, às 09 52 00" src="https://github.com/user-attachments/assets/00e551b5-b364-49bc-935d-ba5648192d13">
   <img width="433" alt="Captura de ecrã 2024-07-26, às 09 52 45" src="https://github.com/user-attachments/assets/02bfe61e-0bfb-4d67-b4f1-3b888d65b70c">
   <img width="435" alt="Captura de ecrã 2024-07-26, às 09 52 35" src="https://github.com/user-attachments/assets/ddc52368-1af7-4822-9221-1add2a41f8b8">
