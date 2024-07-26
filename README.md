@@ -56,14 +56,16 @@ Real-time data updates will be reflected instantly in the UI through WebSocket c
 
 Captures
 
-<div align="center">
-  <img margin="40" width="325" alt="Captura de ecrã 2024-07-26, às 09 51 46" src="https://github.com/user-attachments/assets/2f2b1794-9596-44e3-96aa-d98ac937d4b7">
-  <img width="400" alt="Captura de ecrã 2024-07-26, às 09 52 00" src="https://github.com/user-attachments/assets/00e551b5-b364-49bc-935d-ba5648192d13">
-  <img width="433" alt="Captura de ecrã 2024-07-26, às 09 52 45" src="https://github.com/user-attachments/assets/02bfe61e-0bfb-4d67-b4f1-3b888d65b70c">
-  <img width="435" alt="Captura de ecrã 2024-07-26, às 09 52 35" src="https://github.com/user-attachments/assets/ddc52368-1af7-4822-9221-1add2a41f8b8">
-  <img width="366" alt="Captura de ecrã 2024-07-26, às 09 53 51" src="https://github.com/user-attachments/assets/448ac928-8d9c-48ea-8f29-7b1a9f105b3c">
-  <img width="369" alt="Captura de ecrã 2024-07-26, às 09 54 03" src="https://github.com/user-attachments/assets/aeec2242-a542-4bf9-a2c8-7d60ede12eb0">
-  <img width="457" alt="Captura de ecrã 2024-07-26, às 09 53 40" src="https://github.com/user-attachments/assets/a472041b-88c0-43e3-9c28-5c050e8edc78">
-  <img width="344" alt="Captura de ecrã 2024-07-26, às 09 53 07" src="https://github.com/user-attachments/assets/fb4ed690-2ba6-4ee3-8f1e-2732b7a7145e">
-  <img width="487" alt="Captura de ecrã 2024-07-26, às 09 53 26" src="https://github.com/user-attachments/assets/427df209-851b-408c-b874-fe3fee61360b">
-</div>
+<p align="center">
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <img width="325" alt="Captura de ecrã 2024-07-26, às 09 51 46" src="https://github.com/user-attachments/assets/2f2b1794-9596-44e3-96aa-d98ac937d4b7">
+    <img width="400" alt="Captura de ecrã 2024-07-26, às 09 52 00" src="https://github.com/user-attachments/assets/00e551b5-b364-49bc-935d-ba5648192d13">
+    <img width="433" alt="Captura de ecrã 2024-07-26, às 09 52 45" src="https://github.com/user-attachments/assets/02bfe61e-0bfb-4d67-b4f1-3b888d65b70c">
+    <img width="435" alt="Captura de ecrã 2024-07-26, às 09 52 35" src="https://github.com/user-attachments/assets/ddc52368-1af7-4822-9221-1add2a41f8b8">
+    <img width="366" alt="Captura de ecrã 2024-07-26, às 09 53 51" src="https://github.com/user-attachments/assets/448ac928-8d9c-48ea-8f29-7b1a9f105b3c">
+    <img width="369" alt="Captura de ecrã 2024-07-26, às 09 54 03" src="https://github.com/user-attachments/assets/aeec2242-a542-4bf9-a2c8-7d60ede12eb0">
+    <img width="457" alt="Captura de ecrã 2024-07-26, às 09 53 40" src="https://github.com/user-attachments/assets/a472041b-88c0-43e3-9c28-5c050e8edc78">
+    <img width="344" alt="Captura de ecrã 2024-07-26, às 09 53 07" src="https://github.com/user-attachments/assets/fb4ed690-2ba6-4ee3-8f1e-2732b7a7145e">
+    <img width="487" alt="Captura de ecrã 2024-07-26, às 09 53 26" src="https://github.com/user-attachments/assets/427df209-851b-408c-b874-fe3fee61360b">
+  </div>
+</p>
