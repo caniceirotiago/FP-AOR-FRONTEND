@@ -53,10 +53,11 @@ Data Visualization: View charts and graphs created with Recharts.
 Real-Time Updates:
 Real-time data updates will be reflected instantly in the UI through WebSocket communication.
 
-## Captures
+
 <style>
   .image-container {
-    text-align: center;
+    display: flex;
+    allign-items: center;
   }
   .image-container img {
     margin: 10px; 
