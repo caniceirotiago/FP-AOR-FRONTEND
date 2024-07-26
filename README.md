@@ -57,16 +57,11 @@ Real-time data updates will be reflected instantly in the UI through WebSocket c
 Captures
 
 <p align="center">
+<img width="329" alt="Captura de ecrã 2024-07-26, às 10 21 07" src="https://github.com/user-attachments/assets/000c2747-08cc-484c-8124-d67ded08d09b">
+<img width="435" alt="Captura de ecrã 2024-07-26, às 10 21 31" src="https://github.com/user-attachments/assets/b170689b-fb3a-4565-b956-a3855c9ff02f">
+<img width="429" alt="Captura de ecrã 2024-07-26, às 10 21 44" src="https://github.com/user-attachments/assets/98d24abf-71d5-49cd-8d9d-137720dca559">
+<img width="345" alt="Captura de ecrã 2024-07-26, às 10 22 01" src="https://github.com/user-attachments/assets/60aa294c-8e51-444f-93e2-5e7474a0b6a5">
+<img width="485" alt="Captura de ecrã 2024-07-26, às 10 22 14" src="https://github.com/user-attachments/assets/4735bf81-0b73-4179-a223-d093b2d5c74c">
 
-    <img width="325" alt="Captura de ecrã 2024-07-26, às 09 51 46" src="https://github.com/user-attachments/assets/2f2b1794-9596-44e3-96aa-d98ac937d4b7">
-    <br>
-    <img width="400" alt="Captura de ecrã 2024-07-26, às 09 52 00" src="https://github.com/user-attachments/assets/00e551b5-b364-49bc-935d-ba5648192d13">
-    <img width="433" alt="Captura de ecrã 2024-07-26, às 09 52 45" src="https://github.com/user-attachments/assets/02bfe61e-0bfb-4d67-b4f1-3b888d65b70c">
-    <img width="435" alt="Captura de ecrã 2024-07-26, às 09 52 35" src="https://github.com/user-attachments/assets/ddc52368-1af7-4822-9221-1add2a41f8b8">
-    <img width="366" alt="Captura de ecrã 2024-07-26, às 09 53 51" src="https://github.com/user-attachments/assets/448ac928-8d9c-48ea-8f29-7b1a9f105b3c">
-    <img width="369" alt="Captura de ecrã 2024-07-26, às 09 54 03" src="https://github.com/user-attachments/assets/aeec2242-a542-4bf9-a2c8-7d60ede12eb0">
-    <img width="457" alt="Captura de ecrã 2024-07-26, às 09 53 40" src="https://github.com/user-attachments/assets/a472041b-88c0-43e3-9c28-5c050e8edc78">
-    <img width="344" alt="Captura de ecrã 2024-07-26, às 09 53 07" src="https://github.com/user-attachments/assets/fb4ed690-2ba6-4ee3-8f1e-2732b7a7145e">
-    <img width="487" alt="Captura de ecrã 2024-07-26, às 09 53 26" src="https://github.com/user-attachments/assets/427df209-851b-408c-b874-fe3fee61360b">
 
 </p>
