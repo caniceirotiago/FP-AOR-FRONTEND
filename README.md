@@ -41,22 +41,9 @@ The application will be available at http://localhost:3000.
 
 ## Configuration
 
-Set Up API Endpoints:
 Ensure that the API endpoints point to your backend server.
-Internationalization Configuration:
-Real-Time Features:
+
 Verify WebSocket connections and ensure the backend server is correctly set up to handle WebSocket communication.
-
-## Usage
-
-Navigating the Application:
-Use the navigation bar to move between different sections of the application. The routing is handled seamlessly by React Router.
-Interacting with the UI:
-Dropdown Lists: Use React-Select components for dropdown interactions.
-Date Selection: Utilize React-Datepicker for selecting dates.
-Data Visualization: View charts and graphs created with Recharts.
-Real-Time Updates:
-Real-time data updates will be reflected instantly in the UI through WebSocket communication.
 
 
 ## Captures
@@ -70,3 +57,7 @@ Real-time data updates will be reflected instantly in the UI through WebSocket c
 
 
 </p>
+
+#  Authors
+-Tiago Caniceiro
+-Vasco Castro
