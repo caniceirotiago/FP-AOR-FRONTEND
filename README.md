@@ -3,6 +3,8 @@
 
 The frontend for the "Innovation Lab Management" project is designed to deliver a dynamic and responsive user experience. Built with React.js, this application leverages modern web technologies to provide an intuitive and interactive interface.
 
+see: https://github.com/caniceirotiago/FP-AOR-BACKEND
+
 ## Technologies Used
 
 React.js: Utilized as the main library for building the user interface. React's component-based architecture allows for the creation of reusable and high-performance components, ensuring a dynamic and responsive user experience.
