@@ -8,15 +8,16 @@ see: https://github.com/caniceirotiago/FP-AOR-BACKEND
 ## Technologies Used
 
 React.js: Utilized as the main library for building the user interface. React's component-based architecture allows for the creation of reusable and high-performance components, ensuring a dynamic and responsive user experience.
-React Router: Manages routing within the application, enabling efficient navigation between different pages without the need for full page reloads. This ensures smooth transitions for users.
-CSS: Employed for detailed and aesthetic styling of interface elements, allowing for a customized look and feel of the application.
-React Intl: Integrated for internationalization, supporting multiple languages and cultures to ensure global accessibility and an inclusive user experience.
-WebSockets: Facilitates real-time communication between the frontend and backend, enabling instant updates and interactive features within the user interface.
-FontAwesome: Provides intuitive icons to enhance the visual appeal and usability of the interface.
-React-Select: Used for creating configurable dropdown lists, improving user interaction with form elements.
-React-Datepicker: Offers an intuitive date selection interface, making it easier for users to pick dates.
-Recharts: Utilized for data visualization, allowing clear and efficient presentation of charts and graphs.
 
+React Router: Manages routing within the application, enabling efficient navigation between different pages without the need for full page reloads. This ensures smooth transitions for users.
+
+CSS: Employed for detailed and aesthetic styling of interface elements, allowing for a customized look and feel of the application.
+
+React Intl: Integrated for internationalization, supporting multiple languages and cultures to ensure global accessibility and an inclusive user experience.
+
+WebSockets: Facilitates real-time communication between the frontend and backend, enabling instant updates and interactive features within the user interface.
+
+etc...
 ## Installation
 
 To get started with the frontend application, follow these steps:
