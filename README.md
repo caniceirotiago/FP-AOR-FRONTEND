@@ -50,7 +50,7 @@ Verify WebSocket connections and ensure the backend server is correctly set up t
 
 ## Captures
 
-<p style="display: flex; gap: 50px;">
+<div  style="text-align: center;">
   <p align="center">
     <img width="329" alt="Captura de ecrã 2024-07-26, às 10 21 07" src="https://github.com/user-attachments/assets/000c2747-08cc-484c-8124-d67ded08d09b">
     <img width="435" alt="Captura de ecrã 2024-07-26, às 10 21 31" src="https://github.com/user-attachments/assets/b170689b-fb3a-4565-b956-a3855c9ff02f">
