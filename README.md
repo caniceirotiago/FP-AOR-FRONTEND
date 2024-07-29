@@ -1,4 +1,6 @@
 # FP-AOR-FRONTEND
+<img width="325" alt="Captura de ecrã 2024-07-29, às 10 25 04" src="https://github.com/user-attachments/assets/f8518385-0f04-4905-b4c8-05b4667cf462">
+
 ## Description
 
 The frontend for the "Innovation Lab Management" project is designed to deliver a dynamic and responsive user experience. Built with React.js, this application leverages modern web technologies to provide an intuitive and interactive interface.
