@@ -3,6 +3,10 @@
 
 The frontend for the "Innovation Lab Management" project is designed to deliver a dynamic and responsive user experience. Built with React.js, this application leverages modern web technologies to provide an intuitive and interactive interface.
 
+This repository contains the frontend source code for the "Innovation Lab Management" application, developed as part of the 11th edition of the "Acertar o Rumo" program at the University of Coimbra, promoted by Critical Software. This project received the highest grade.
+
+The primary goal of this project is to create a robust and intuitive web application to facilitate the management of an Innovation Lab. The application aims to provide a centralized environment for organizing, coordinating, and monitoring innovative projects, promoting team collaboration and optimizing the use of available resources.
+
 see: https://github.com/caniceirotiago/FP-AOR-BACKEND
 
 ## Technologies Used
