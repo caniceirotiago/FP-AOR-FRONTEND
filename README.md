@@ -23,17 +23,15 @@ etc...
 To get started with the frontend application, follow these steps:
 
 Clone the Repository
+
 Install Dependencies:
+
 Make sure you have Node.js installed. Then, run:
 
 npm install
-Configure Environment Variables:
-Create a .env file in the root of the project and add the necessary environment variables. For example:
-env
-REACT_APP_API_URL=https://api.your-backend.com
-Run the Application:
-Start the development server with:
+
 npm start
+
 The application will be available at http://localhost:3000.
 
 
