@@ -50,15 +50,16 @@ Verify WebSocket connections and ensure the backend server is correctly set up t
 
 ## Captures
 
-<div  style="text-align: center;">
-  <p align="center">
-    <img width="329" alt="Captura de ecrã 2024-07-26, às 10 21 07" src="https://github.com/user-attachments/assets/000c2747-08cc-484c-8124-d67ded08d09b">
-    <img width="435" alt="Captura de ecrã 2024-07-26, às 10 21 31" src="https://github.com/user-attachments/assets/b170689b-fb3a-4565-b956-a3855c9ff02f">
-    <img width="429" alt="Captura de ecrã 2024-07-26, às 10 21 44" src="https://github.com/user-attachments/assets/98d24abf-71d5-49cd-8d9d-137720dca559">
-    <img width="345" alt="Captura de ecrã 2024-07-26, às 10 22 01" src="https://github.com/user-attachments/assets/60aa294c-8e51-444f-93e2-5e7474a0b6a5">
-    <img width="485" alt="Captura de ecrã 2024-07-26, às 10 22 14" src="https://github.com/user-attachments/assets/4735bf81-0b73-4179-a223-d093b2d5c74c">
-  </p>
-</div>
+<p align="center">
+  <img width="329" alt="Captura de ecrã 2024-07-26, às 10 21 07" src="https://github.com/user-attachments/assets/000c2747-08cc-484c-8124-d67ded08d09b">
+</p>
+<p align="center">
+  <img width="435" alt="Captura de ecrã 2024-07-26, às 10 21 31" src="https://github.com/user-attachments/assets/b170689b-fb3a-4565-b956-a3855c9ff02f">
+</p>
+  <img width="429" alt="Captura de ecrã 2024-07-26, às 10 21 44" src="https://github.com/user-attachments/assets/98d24abf-71d5-49cd-8d9d-137720dca559">
+  <img width="345" alt="Captura de ecrã 2024-07-26, às 10 22 01" src="https://github.com/user-attachments/assets/60aa294c-8e51-444f-93e2-5e7474a0b6a5">
+  <img width="485" alt="Captura de ecrã 2024-07-26, às 10 22 14" src="https://github.com/user-attachments/assets/4735bf81-0b73-4179-a223-d093b2d5c74c">
+
 
 
 #  Authors
